@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="application/javascript">
+            function checkdata() {
+                var username = document.getElementById("name")
+                var emailid = document.getElementById("email")
+
+                if (username.value == "") {
+                    alert("Please enter the name")
+                    username.focus()
+                    return false
+                }
+
+                if (emailid.value == "") {
+                    alert("Pleaser enter the email")
+                    emailid.focus()
+                    return false
+                }
+                alert("Form validation is successful.")
+                return true
+            }
+            let USERNAME = user_input => console.log(user_input)
+        </script>
+        <title>Contact Details</title>
+    </head>
+    <body>
+        <h2>Enter Your Contact Details</h2><br>
+        <form id="form1" onsubmit="return checkdata()">
+            <label for="name">Name :</label>
+            <input type="text" id="name" name="name">
+            <br><br>
+            <label for="email">E-mail ID :</label>
+            <input type="email" id="email" name="email">
+            <br><br>
+            <input type="submit" value="Submit">
+            <input type="submit" value="Reset">
+        </form>
+    </body>
+</html>
+
