@@ -54,6 +54,17 @@ ___
   - [Module 6 Summary](#module-6-summary)
     - [Cloudant enables the following:](#cloudant-enables-the-following)
   - [Glossary - Introduction to Data Services in IBM Cloud](#glossary---introduction-to-data-services-in-ibm-cloud)
+- [Final project](#final-project)
+  - [lab 1](#lab-1)
+  - [lab 2](#lab-2)
+  - [lab 3](#lab-3)
+  - [lab 4](#lab-4)
+  - [lab 5](#lab-5)
+  - [lab 6](#lab-6)
+  - [lab 7](#lab-7)
+  - [Natural language syntaxes](#natural-language-syntaxes)
+    - [Analyze target phrases and keywords](#analyze-target-phrases-and-keywords)
+- [Certificate](#certificate)
 
 
 # Introduction to Cloud Native
@@ -272,10 +283,55 @@ Hello! Welcome to Getting Started with IBM Cloudant. After watching this video, 
 - Scalable NoSQL Database as a Service  
 - GeoJSON storage with built-in spatial querying and map visualization, 
 - Offline First mobile data synchronization capabilities, 
-- Multiple language-specific libraries for application development 
-- The VCAP_SERVICES environment variable contains your Cloudant database credentials. 
+- Multiple language-specific libraries for application development
+- The VCAP_SERVICES environment variable contains your Cloudant database dentials. 
 - Cloudant enables web-based HTTP REST API data access that includes wrappers for various languages that includes Java and JavaScript.
 
 ## Glossary - Introduction to Data Services in IBM Cloud
 
 - [Click here](Assets/C3M6%20Glossary%20v1.1%20.pdf) to view and download "Introduction to Data Services in IBM Cloud" module glossary
+
+# Final project
+
+## lab 1  
+![resourcepage](./Assets/finalProject/resourcepage.JPG)
+## lab 2  
+![resourcepage-application](./Assets/finalProject/resourcepage-application.jpg)
+## lab 3  
+![connections](Assets/finalProject/connections.jpg)
+## lab 4  
+![database](./Assets/finalProject/database.jpg)
+## lab 5  
+![cicdtoolchain](Assets/finalProject/cicdtoolchain.jpg)
+## lab 6  
+![gitrepository](Assets/finalProject/gitrepository.jpg)
+## lab 7  
+![resourcepage-cicd](Assets/finalProject/resourcepage-cicd.jpg)
+
+## Natural language syntaxes
+
+### Analyze target phrases and keywords  
+```
+curl -X POST -u "apikey:o1lLAj9CxN-_6PKfJWaeDS92ybEMGRHFUudn_Ct3A8q5" \
+--header "Content-Type: application/json" \
+--data '{
+  "text": "I love apples! I hate oranges.",
+  "features": {
+    "sentiment": {
+      "targets": [
+        "apples",
+        "oranges",
+        "broccoli"
+      ]
+    },
+    "keywords": {
+      "emotion": true
+    }
+  }
+}' \
+"https://api.us-south.natural-language-understanding.watson.cloud.ibm.com/instances/eb128231-0d43-485f-97d8-bd21ea6f3e08/v1/analyze?version=2019-07-12"
+```
+
+# Certificate
+
+- [Click here]() to view and download the course certificate
