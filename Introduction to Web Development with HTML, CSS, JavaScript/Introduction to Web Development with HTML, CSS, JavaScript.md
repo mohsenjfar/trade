@@ -36,6 +36,7 @@ ___
   - [Module Summary](#module-summary-1)
   - [Cheatsheet- JavaScript Programming for Web Applications](#cheatsheet--javascript-programming-for-web-applications)
 - [Certificate](#certificate)
+- [Badge](#badge)
 
 # Introduction to Programming for the Cloud
 
@@ -200,3 +201,6 @@ Hello and welcome to HTML Features. After watching this video, you will be able 
 # Certificate
 
 - [Click here](./Assets/Coursera%20JSPG4USHM78R.pdf) to view and download the course certificate
+
+# Badge
+![credly](Assets/web-development-with-html-css-javascript-essentials.png)

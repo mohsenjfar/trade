@@ -65,6 +65,7 @@ ___
   - [Natural language syntaxes](#natural-language-syntaxes)
     - [Analyze target phrases and keywords](#analyze-target-phrases-and-keywords)
 - [Certificate](#certificate)
+- [Badge](#badge)
 
 
 # Introduction to Cloud Native
@@ -334,4 +335,7 @@ curl -X POST -u "apikey:o1lLAj9CxN-_6PKfJWaeDS92ybEMGRHFUudn_Ct3A8q5" \
 
 # Certificate
 
-- [Click here]() to view and download the course certificate
+- [Click here](./Assets/Coursera%20J2MZBBHRXBSX.pdf) to view and download the course certificate
+
+# Badge
+![credly](./Assets/developing-cloud-native-applications.1.png)
