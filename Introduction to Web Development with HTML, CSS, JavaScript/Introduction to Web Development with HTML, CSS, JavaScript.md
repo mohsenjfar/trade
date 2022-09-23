@@ -1,4 +1,4 @@
-[Go back to getting started](/IBM%20Full%20Stack%20Software%20Developer/Getting_started.md) |
+[Go back to getting started](../Getting_started.md) |
 [Course content online](https://www.coursera.org/learn/introduction-to-web-development-with-html-css-javacript/home/welcome)
 ___
 

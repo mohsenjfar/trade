@@ -1,4 +1,4 @@
-[Go back to getting started](/IBM%20Full%20Stack%20Software%20Developer/Getting_started.md) |
+[Go back to getting started](../Getting_started.md) |
 [Course content online](https://www.coursera.org/learn/node-js/home/welcome)
 ___
 
@@ -18,6 +18,14 @@ ___
   - [Module 1 Summary](#module-1-summary)
   - [Glossary - Introduction to Server-Side JavaScript](#glossary---introduction-to-server-side-javascript)
   - [Cheatsheet - Introduction to Server-Side JavaScript](#cheatsheet---introduction-to-server-side-javascript)
+- [Asynchronous I/O with callback programming](#asynchronous-io-with-callback-programming)
+  - [Asynchronous I/O with Callback Programming](#asynchronous-io-with-callback-programming-1)
+  - [Creating Callback Functions](#creating-callback-functions)
+  - [Promises](#promises)
+  - [Working with JSON](#working-with-json)
+  - [An introduction to Async Await](#an-introduction-to-async-await)
+  - [Module 2 Summary](#module-2-summary)
+  - [Glossary - Asynchronous I/O with Callback Programming](#glossary---asynchronous-io-with-callback-programming)
 
 # Introduction to serverside JavaScript
 
@@ -96,3 +104,140 @@ Welcome to Working with Node.js Modules. After watching this video, you will be 
 ## Cheatsheet - Introduction to Server-Side JavaScript
 
 - [Click here](../Developing%20Cloud%20Native%20Applications/Assets/C4M1%20cheat%20sheet%20v1.2.pdf) to view and download "Introduction to Server-Side JavaScript" module cheatsheet
+
+# Asynchronous I/O with callback programming
+
+## Asynchronous I/O with Callback Programming
+
+Welcome to Asynchronous I/O with Callback Programming. After watching this video, you should be able to: Explain the concept of asynchronous callback functions and handle inbound hypertext transfer protocol (HTTP) method calls for a server resource. Network operations run in an asynchronous manner. For example, the response from a web service call might not return immediately. When an application blocks (or waits) for a network operation to complete, that application wastes processing time on the server. Node.js makes all network operations in a non-blocking manner. Every network operation returns immediately. To handle the result from a network call, write a callback function that Node.js calls when the network operation completes. This sequence diagram for a scenario shows the interaction between the application, the Node.js framework, the web service call to the remote server, and the call back to the callback function. In the first step, the application makes a call to HTTP.request. This function makes a call to the remote web server and requests the web service. Before the Node.js framework receives the HTTP response message from the remote web server, it immediately returns a result for the HTTP.request function call. This result simply indicates that the request message was sent successfully. It does not say anything about the response message. When the Node.js framework receives an HTTP response message from the remote server, it calls the callback function that you defined during the HTTP.request function call. This function handles the HTTP response message. In a slightly more complex scenario, your application calls a custom Node.js module, which then makes an HTTP.request function call. The Node.js framework then calls the remote server's web service by sending an HTTP request message. In the same manner as in the first scenario, the Node.js framework returns a value to the HTTP function call in the Node.js module. This response simply states that the HTTP request was successfully sent out. The Node.js module then returns from the exported function call. At this point, the application continues processing on to the next step, while the response message has not yet been sent. When the remote server returns an HTTP response message, the Node.js framework calls the callback function defined by the custom Node.js module. The purpose of the callback function is to handle two events: request.on('data') and request.on('end'). In this case, the callback function simply prints the HTTP response message body to the console log. This code example shows you how to make an HTTP request call from a function inside a Node.js module. The first parameter in the HTTP request function is an options variable. The options variable included at least two variables: the hostname of the remote server, and a uniform resource locator (URL) resource path that you want to act upon. In the example here, you are making a call to the US National Weather Service to retrieve the weather observation from San Francisco International Airport (KSFO). The second parameter of the HTTP request function is a callback function. In this case, it is an anonymous function that receives one parameter: the response object. When the Node.js module calls this anonymous function, events occur while it is receiving parts of the HTTP response object. In this example, there are two specific events: a 'data' event and an 'end' event. For these two events, you define more callback functions to handle each event type. In the actual coding, you may need to use HTTPS instead of HTTP. The result object is passed into the callback function of a parseString module. The HTTP.request function takes in a URL and a set of options. If both are passed, the two are merged, with options taking precedence. You can define the host, ports, authentication, protocol, and other headers in the options object. The HTTP.request method also accepts an optional callback function that is invoked immediately once a response is received. When HTTP.request calls the callback function, it passes a response object in the first parameter of the callback function. This callback function has the response object as the first parameter. The Node.js framework emits several events during the course of the request function. You can listen to these events by using the object.on() method and passing in the event name as the first parameter. If the request is successful, a 'data' event is emitted on the response object every time data comes in, followed by an 'end' event when the response finishes. If the request fails, there is an 'error' event followed by the 'close' event. Let's see how to handle such errors. The request method returns an object of type HTTP.ClientRequest. This object represents the request in progress. You can append to the request body, make changes to the headers, and listen for error events as shown here. The code simply outputs the error message if there is an error. To end the request, call clientRequest.end(). In this video, you learned that: When an application blocks for a network operation to complete, that application wastes processing time on the server. Node.js makes all network operations in a non-blocking manner. and when the Node.js framework receives an HTTP response message from the remote server, it calls the callback function that handles the HTTP response message.
+
+## Creating Callback Functions
+
+Welcome to Creating Callback Functions. After watching this video, you should be able to: Create a callback function to intercept hypertext transfer protocol (HTTP) method calls. As an asynchronous framework, Node.js makes extensive use of callback functions to return the result to the calling function. Node.js modules in the software development kit (SDK) pass an error object as the first parameter in a callback function. Here, the function is defined with an error as the first parameter. With this convention, the callback function checks if the first parameter holds an error object. If error is defined, the callback function handles the error and cleans up any open network or database connections. If error is not defined, then the callback function examines the result from the call. If error is defined, print the error message. Otherwise, the weather.current function call completed successfully. Print the result from the function call. The codes are in the main app, which has a weather object (the Node.js module) that calls the weather’s current function. The location is an input parameter: in this example, an airport. To print temp_f in the browser, we can use response.end(`The current weather reading is ${temp_f} degrees’). Now we’ll look at an example of passing an error object to the callback function. Recall how callback functions check the first parameter to see if an error condition occurred. Instead of printing the result in the console, you call the resultCallback callback function with the error object. You pass back the error object to the resultCallback callback function of the main application. If no error occurred, you call the resultCallback function with null as the first parameter. The codes are in the custom Node.js module. The callback handler printed the contents of the HTTP response message body to the console. What if you wanted it to return the response message to the original calling application? If you use a return function, Node.js might call the callback function after the http.request() call completes. The application calls the exported function. The module that implements the function calls http.request so that the Node.js framework can make a web service call on its behalf. When that request is sent successfully, the framework returns control to the Node.js module. Then the Node.js module returns control to the application. When the remote server sends back a HTTP response message to the Node.js framework, the framework calls the callback handler that was defined by the Node.js module. However, there is no connection between the callback function and the main application. so how do you link the callback function to the main application? The pattern is that when one Node.js application calls a module in a non-blocking manner, the application provides a callback function to process the result. If the main application calls http.request(), it must provide a callback handler to process the HTTP response message. If the main application calls a function that calls http.request(), there are two callback functions: The custom module has a callback function that handles the HTTP response message from http.request(). And the main application has a callback function that processes the result captured in the first callback function. Let’s see how this solution works. We’ll create a callback function to capture the result from the http.request function call. The application makes a call to the Node.js module. The Node.js module makes an http.request function call in order to send an HTTP request message to a remote server. Before the remote service returns an HTTP response message, the http.request function call returns control to the Node.js module as the request message was successfully sent. Then the Node.js module replies with a value to the main application. At a future point, the remote server sends back an HTTP response message. The Node.js framework calls the callback function defined by the Node.js module. This callback function calls another callback function defined by the main application. Having one callback function invoke another callback function is the only way to pass a message from the Node.js module to the main application when the Node.js module receives a response message. Here, when the main application calls weather.current(), it passes an anonymous callback function to process the result from the call. In this case, the anonymous function “function (temp_f)” takes in one input parameter, temp_f. The purpose of this callback function is to take the weather reading in degrees Fahrenheit and print the result in the console log. The resultCallback callback function in the function of the custom Node.js module links to the anonymous callback function, function (temp_f), of the weather object’s .current function in the main application. Now you can see a Node.js module that returns a result to the main application with a callback function. Here, a function is defined for the property named "current." This property will be exported as part of the module. The anonymous function takes a parameter named "resultCallback" from the main application. This is how you pass a reference to the main application's callback function to the Node.js module's callback function. The resultCallback parameter stores the anonymous callback function from the main application. Look at the bottom of the current property. A "response.on('end')" event handler handles the transmission of the HTTP response message. When the remote server finishes sending back the response message, the code makes a call to resultCallback and passes it the current weather reading in degrees Fahrenheit. This is how you pass a value from one callback handler to another. In this video, you learned that: Node.js makes extensive use of callback functions to return the result to the calling function. Node.js modules in the SDK pass an error object as the first parameter in a callback function. and there is one callback function at each level.
+
+## Promises
+
+Welcome to Promises. After watching this video, you will be able to:​ Define promises. Explain the different states of a promise and describe how to use promises with asynchronous methods. A promise is an object returned by an asynchronous method. The promise has three states, which are pending, resolved, and rejected. Promises are most useful for application programming interface (API) requests, input/output (I/O) operations, and other operations that are time consuming and can block resources. A method can be defined to return a promise object, if you know it is going to take time for execution and thereby block resources. When you call a method that returns a promise, a promise object is created. The initial state of the promise is the pending state. It is in this state until the operation is complete or some error has caused the operation to abort. When the operation is complete, the promise is said to be resolved. When there is an error, the promise is said to be rejected. You can also create a promise object if you know that the operations you are going to perform could be blocking. In this example, methCall is a promise which is fulfilled or rejected depending on whether the file is successfully read or not. You can see on the output screen that the content of the file is read if the filename is valid and displayed. In this case the promise is resolved. If the filename is invalid, the promise is rejected and the error message is displayed. You know that hypertext transfer protocol (HTTP) requests when called synchronously can be blocking. There are many packages in the Node.js ecosystem that wrap promises around HTTP requests. The axios package is one such package to handle HTTP requests. It returns a promise object. The status of the promise until it hears back from the uniform resource locator (URL) requested is pending. The promise object has a "then" method which is called after the promise is fulfilled. The catch is executed if the promise is rejected. In this example, you first pass a valid URL. It creates a pending promise. Once the promise is fulfilled, then the response is logged on the console. Next, you pass an invalid URL. This also creates a promise object which is pending. This promise will be rejected. This state is being dealt with in the catch block. You can see the console log for the resolve and reject. In this video you learned that: A promise is an object that is returned by an asynchronous method. The initial state of the promise object is the pending state. The axios package is used in Node.js to handle HTTP requests and you can create a promise if you know that the operations could be blocking.
+
+## Working with JSON
+
+Welcome to Working with JSON. After watching this video, you should be able to: Parse JavaScript Object Notation (JSON) data from a hypertext transfer protocol (HTTP) message. JSON is the standard format for application programming interface (API) data exchange. It is the standard representation of native JavaScript objects, and Node.js handles it easily. In this example, the object consists of attribute-value pairs. The first attribute is "Company" and the value is "IBM". The second attribute is "Country" and the value is "USA". The third attribute is "Headquarters" and the value is "Armonk, New York". To parse a JSON string to a JavaScript object, use method JSON.parse. Method JSON.stringify() converts a JavaScript object to a JSON string. Now that you know what JSON is and two important methods that you can use to parse a string into JSON and also convert JSON into a string. Let us see an example of using a real endpoint that returns JSON. You can use JSON to find out how many astronauts are in the International Space Station (ISS). You have found that the number of astronauts is five. In this video, you learned that: Node.js handles JSON easily, and you can use two important methods to parse a string into JSON and also convert JSON into a string.
+
+## An introduction to Async Await
+
+As you might have already learnt, Java Script is a single-threaded scripting language. That means the process can happen only sequentially and no two processes can happen simultaneously. This is a big deterrent to any language and JS solved this by introducing asynchronous programming through Promises. We have learnt about promises and seen some examples of the same. While Promises solved the issues with synchronous programming, nested then can compilcate the structure and readability of the code. In ES 2017, Async/Await was introduced which addressed this issue and gave way to cleaner, readable code. We will understand the working of async/await in the light of the some examples we used for Promise, for better understanding. By awaiting a promise, we can process the result as and when the promise is fulfilled (or rejected).  
+
+In the following code sample, we have created a Promise with a callback where we handle reolve and reject.
+
+```
+const axios = require('axios').default;
+
+const connectToURL = (url)=>{
+  const req = axios.get(url);
+  console.log(req);
+  req.then(resp => {
+      let listOfWork = resp.data.work;
+      listOfWork.forEach((work)=>{
+        console.log(work.titleAuth);
+      });
+    })
+  .catch(err => {
+      console.log(err.toString())
+  });
+}
+console.log("Before connect URL")
+connectToURL('https://reststop.randomhouse.com/resources/works/?expandLevel=1&search=Grisham');
+console.log("After connect URL")
+```  
+
+We will see how the same is accomplished with async/await.  
+
+```
+const axios = require('axios').default;
+const connectToURL = async(url)=>{
+    const outcome = axios.get(url);
+    let listOfWork = (await outcome).data.work;
+    listOfWork.forEach((work)=>{
+      console.log(work.titleAuth);
+    });
+}
+
+console.log("Before connect URL")
+connectToURL('https://reststop.randomhouse.com/resources/works/?expandLevel=1&search=Grisham').catch(err=>console.log(err.toString()));
+console.log("After connect URL")
+```  
+
+The best use of async/await can be realized when we have a scenario where some async methods have to happen in sequence. Taking the same example as above, let's first get a list of all books ids by an author and based on book ids, send request to get the details of each book. So, these two actions have to happen one after the other but asynchronously. These can be accomplished with or wothout async/await. But chaining actions is much cleaner with async await, as you can observe below. In actual situations, the nesting can be multiple level and rendering the code difficult to read and maintain. In such situations, we could use async/await.  
+
+The below code is done by nesting the second set of promises into the first.  
+
+```
+const axios = require('axios').default;
+
+/*
+In the following code we try to get list of all book ids from remote url and then based on that make request about each of the 
+id. Finally print them all out. We are using axios get, which returns a promise. 
+*/
+const connectToURL = (url)=>{
+  const req = axios.get(url);
+  req.then(resp => {
+      let listOfWork = resp.data.work;
+      return listOfWork.map((work)=>{
+          return work.workid
+      })
+    }).then((workids)=>{
+        let promisesArr = [];
+        workids.forEach((workid)=>{
+            const req = axios.get("https://reststop.randomhouse.com/resources/works/"+workid);
+            promisesArr.push(req);
+            req.then(resp=>{
+                console.log(resp.data.titleAuth);
+            })
+        });
+    })
+  .catch(err => {
+      console.log(err.toString())
+  });
+}
+connectToURL('https://reststop.randomhouse.com/resources/works/?expandLevel=1&search=Grisham');
+```  
+
+The same objective is attained using async/await.  
+
+```
+const axios = require('axios').default;
+
+/*
+In the following code we try to get list of all book ids from remote url and then based on that make request about each of the 
+id. Finally print them all out. We are using axios get, which returns a promise. 
+*/
+async function connectToURL(url){
+    const resp = await axios.get(url);
+    let listOfWork = resp.data.work;
+    let workids = listOfWork.map((work)=>{
+          return work.workid
+    });
+    workids.forEach(async (workid)=>{
+            const req = await axios.get("https://reststop.randomhouse.com/resources/works/"+workid);
+            console.log(req.data.titleAuth);
+
+    });
+}
+connectToURL('https://reststop.randomhouse.com/resources/works/?expandLevel=1&search=Grisham').catch(err => {
+    console.log(err.toString())
+});
+```  
+
+You can only await a promise inside an async method. This is because await blocks the thread. This will defeat the primary purpose. So the sunction within which an await is used HAS TO BE async.  
+
+## Module 2 Summary
+
+- Network operations run in an asynchronous manner and can block your JavaScript code if not handled properly
+- To handle the result from a network call, you can write a callback function that Node.js calls when the network operation completes.
+- If you have multiple asynchronous calls, there must be a callback function for each level.
+- Promise objects are most useful for operations that are time-consuming and can block resources.
+- JSON.parse() and JSON.stringify() are two methods used to handle JSON objects.
+
+## Glossary - Asynchronous I/O with Callback Programming
+
+- [Click here](./Assets/C4M2%20Glossary%20v1.1%20APPROVED.pdf) to view and download "Asynchronous I/O with Callback Programming" module glossary
