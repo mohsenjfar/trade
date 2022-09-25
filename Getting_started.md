@@ -18,13 +18,13 @@
 ## Financial aid:
 ```
 Annual income: 3428
-
-Why are you applying for financial aid?
-
+```
+**Why are you applying for financial aid?**
+```
 I live in a country with low overall salary (Iran) and it is really difficult for me to pay 49 euro every month. The average salary in my country is about 250 euro per month and unfortunately it is getting worse months and months because the rate of inflation is very high (for example some basic products inflated about twice their primary price since the beginning of this year and unfortunately this trend is raising rapidly (even daily). I hope to finish this course and be able to find a better job with higher salary or may have a world acceptable certificate from a well known institute to have the fortune of immigrate to another country in the future. I spend most of my time in IT filed and I am passionate about technology and also learning new skills, I believe learning new thing is critical in today's world situation.
-
-How will your selected course help with your goals?
-
+```
+**How will your selected course help with your goals?**
+```
 I graduated from a well known university in my country but in a field that is not useful at all (customs affairs from Kharazmi university in my country's capital) it was some how arbitrary to pick a filed of study  in the time we (students of my generation) applied for university because we were selected by the score we got from university entrance exam (named konkoor in Iran). so I couldn't find a job and to be honest I even didn't like my first major at the university and I forced to select it because we didn't have to many options. 
 If I pass this course:
 First: It is in my fields of passion.
