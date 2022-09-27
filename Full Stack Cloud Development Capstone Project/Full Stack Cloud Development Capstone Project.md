@@ -1,1 +1,0 @@
-[Go back to getting started](/IBM%20Full%20Stack%20Software%20Developer/Getting_started.md)

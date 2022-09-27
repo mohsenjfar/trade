@@ -1,4 +1,4 @@
-[Go back to getting started](../Getting_started.md) |
+[<=](../index.md) |
 [Course content online](https://www.coursera.org/learn/introduction-to-cloud/home/welcome)
 ___
 

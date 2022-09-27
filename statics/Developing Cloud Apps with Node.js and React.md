@@ -1,4 +1,4 @@
-[Go back to getting started](../Getting_started.md) |
+[<=](../index.md) |
 [Course content online](https://www.coursera.org/learn/node-js/home/welcome)
 ___
 
@@ -40,13 +40,13 @@ ___
   - [Working with React Components](#working-with-react-components)
   - [Passing Data and States between Components](#passing-data-and-states-between-components)
   - [Connecting React to External Services](#connecting-react-to-external-services)
-  - [Testing Cloud Applications](#testing-cloud-applications)
-  - [Introduction to Logging](#introduction-to-logging)
-  - [IBM Cloud Monitoring with LogDNA and Sysdig](#ibm-cloud-monitoring-with-logdna-and-sysdig)
   - [Module 4 Summary](#module-4-summary)
   - [Glossary - Building a Rich Front-End Application using REACT & ES6](#glossary---building-a-rich-front-end-application-using-react--es6)
   - [Cheatsheet - Building a Rich Front-End Application using REACT & ES6](#cheatsheet---building-a-rich-front-end-application-using-react--es6)
   - [Bonus Lesson Introduction and Learning Objectives](#bonus-lesson-introduction-and-learning-objectives)
+  - [Testing Cloud Applications](#testing-cloud-applications)
+  - [Introduction to Logging](#introduction-to-logging)
+  - [IBM Cloud Monitoring with LogDNA and Sysdig](#ibm-cloud-monitoring-with-logdna-and-sysdig)
   - [Lesson Summary](#lesson-summary)
 
 # Introduction to serverside JavaScript
@@ -293,653 +293,86 @@ Welcome to Routing, Middleware, and Templating. After watching this video, you w
 
 ## Glossary - Express Web Application Framework
 
-[Click here](https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0220EN-SkillsNetwork/Cheatsheets/C4M3%20Glossary%20v1.1%20APPROVED.pdf) to view and download "Express Web Application Framework" module glossary 
+- [Click here](./Assets/C4M3%20Glossary%20v1.1%20APPROVED.pdf) to view and download "Express Web Application Framework" module glossary 
 
 ## Cheatsheet - Express Web Application Framework
 
-[Click here](https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0220EN-SkillsNetwork/Cheatsheets/C4M3%20cheat%20sheet%20v1.2.pdf) to view and download "Express Web Application Framework" module cheatsheet 
+- [Click here](./Assets/C4M3%20cheat%20sheet%20v1.2.pdf) to view and download "Express Web Application Framework" module cheatsheet 
 
 # Building a Rich Front-End Application using REACT & ES6
 
 ## Introduction to ES6
 
-Welcome to Introduction to ES6. 
-After watching this video, you will be able to: 
-Define ECMAScript 6 (ES6) 
-and describe how to use new features that have been added to JavaScript as a part of 
-ES6. 
-ES is short for EcmaScript. 
-Ecma is a standards organization that creates a wide range of global information and communications 
-technology standards. 
-JavaScript adheres to Ecma’s specification ES6, which came out in 2015. 
-The newer versions of ES are named after the year of release. 
-The most recent is EcmaScript 2020. ES.Next is a dynamic name used to refer to the forthcoming 
-version of EcmaScript. 
-ES6 is a version with changes that had a major impact. 
-In JavaScript, the main changes are let, const, arrow functions, promises, and class. 
-You are familiar with using variables (vars). A var has global scope. Once declared, a var 
-can be used or referred from anywhere in the code. 
-This is challenging, especially with huge projects where you have many variables to 
-maintain. 
-In ES6, you use let and const in addition to var. 
-let allows you to restrict the scope of variables within the block where they are declared. 
-This limited scope is called "local scope." 
-In this example, num has scope just within that block. 
-Line 7 will throw an error as num is out of scope. 
-const allows you to declare constants whose values cannot be changed. 
-Line 3 throws an error because num is defined as a constant whose value is 5. 
-You use both let and const in React programming. 
-Arrow functions allow you to declare functions the same way that you declare variables. 
-Using this syntax is a shorter and cleaner way to work with functions. 
-What you see here is how a function was written in the older ES5 JavaScript. 
-Below you can see how it is written in ES6. 
-A function can also be declared with let and const just like a variable. 
-This function doesn't take any parameters and has only one statement. 
-Notice that there are no curly brackets. 
-Arrow functions are called like normal functions. 
-They can also be passed as parameters for callbacks. 
-Here, the arrow function, sayHello, is passed as a callback parameter to setTimeout. 
-Arrow functions also take parameters like normal functions. 
-They can return a data type or an object. 
-Here, you can see a function that takes one parameter. 
-The function brackets are not mandatory. 
-There is also only one line of code. 
-But because the code returns a value, it must be in curly brackets. 
-This is a function that takes two parameters. 
-The function brackets must be put around the parameters list. This function also has just 
-one line of code and returns nothing. 
-So, it doesn’t need curly brackets. 
-This is a function that takes two parameters and returns one value 
-and this is a function that takes two parameters and has two lines of code. 
-The promise object represents the eventual completion of an asynchronous operation and 
-its return value. 
-When you invoke an asynchronous operation, a promise is in a pending state. 
-When the operation executes successfully, the promise is said to be fulfilled. 
-When the operation fails, the promise is said to be rejected. 
-In the first example, you have an arrow function, promiseArgument, which takes two parameters (resolve and reject). 
-If the current time in milliseconds is divisible by 2, this arrow function invokes resolve 
-with "Success" as a parameter; if not, it invokes reject with "Failed" as a parameter. 
-This function is passed to the constructor of the promise object. 
-In the second example, instead of creating promiseArgument, you are directly creating 
-the function in time with the promise constructor. The behavior in both cases is identical. 
-Object-oriented programming was made feasible in JavaScript with the introduction of class. 
-Class is a template or blueprint for creating objects. 
-Classes in JavaScript are built on prototypes. Prototype is a property of all JavaScript 
-objects, including functions. A function can be used to create an object instance. 
-Here, "this" refers to the current object. But not all object-oriented programming concepts 
-are available with function prototypes. 
-The concept of class was built on the premise of function prototype to extend object-oriented 
-programming to JavaScript. 
-Here, the first console log will print the entire prototype of the person1 object. 
-The second console log will print the name and the third console log will print the age. 
-Class can have a constructor, which is a method that is called when you want to create an 
-object of class. 
-The body of a class is the part that is in curly brackets. 
-The code is subject to stricter syntax for increased performance. 
-Here, rectangle is the general class. 
-All rectangles have some height and width, which are the properties. 
-When you create a rectangle object, you pass the height and width as parameters to the 
-constructor. 
-MyRectangle is an object constructed with the Rectangle class. 
-In this example, an object of the class can be created using the new keyword. 
-The properties are set to the current object that is being created, using "this" as the 
-keyword. 
-Rectangle is the blueprint. The keyword helps to set the properties for the myRectangle 
-object. 
-In JavaScript ES6, a class can inherit from another class. 
-The class that is inheriting one other class is called the subclass. 
-The superclass is the class being inherited by the subclass. 
-The subclass inherits all the attributes and methods of the superclass. 
-React components use inheritance to build user-defined components. 
-The subclass has a special privilege to call the superclass constructor with the super( 
-) method call. 
-A square is a rectangle with the same value for width and height. 
-Here, if the height is not the same as the width specified, the width will become equal 
-to the height. 
-In this video, you learned that: 
-New features that were introduced in JavaScript as a part of ES6 are let, const, arrow functions, 
-promise, and class. 
-You can create different types of arrow functions depending on the parameters, return values, 
-and lines of code 
-and object-oriented programming was made feasible in JavaScript with the introduction of class. 
+Welcome to Introduction to ES6. After watching this video, you will be able to: Define ECMAScript 6 (ES6) and describe how to use new features that have been added to JavaScript as a part of ES6. ES is short for EcmaScript. Ecma is a standards organization that creates a wide range of global information and communications technology standards. JavaScript adheres to Ecma’s specification ES6, which came out in 2015. The newer versions of ES are named after the year of release. The most recent is EcmaScript 2020. ES.Next is a dynamic name used to refer to the forthcoming version of EcmaScript. ES6 is a version with changes that had a major impact. In JavaScript, the main changes are let, const, arrow functions, promises, and class. You are familiar with using variables (vars). A var has global scope. Once declared, a var can be used or referred from anywhere in the code. This is challenging, especially with huge projects where you have many variables to maintain. In ES6, you use let and const in addition to var. let allows you to restrict the scope of variables within the block where they are declared. This limited scope is called "local scope." In this example, num has scope just within that block. Line 7 will throw an error as num is out of scope. const allows you to declare constants whose values cannot be changed. Line 3 throws an error because num is defined as a constant whose value is 5. You use both let and const in React programming. Arrow functions allow you to declare functions the same way that you declare variables. Using this syntax is a shorter and cleaner way to work with functions. What you see here is how a function was written in the older ES5 JavaScript. Below you can see how it is written in ES6. A function can also be declared with let and const just like a variable. This function doesn't take any parameters and has only one statement. Notice that there are no curly brackets. Arrow functions are called like normal functions. They can also be passed as parameters for callbacks. Here, the arrow function, sayHello, is passed as a callback parameter to setTimeout. Arrow functions also take parameters like normal functions. They can return a data type or an object. Here, you can see a function that takes one parameter. The function brackets are not mandatory. There is also only one line of code. But because the code returns a value, it must be in curly brackets. This is a function that takes two parameters. The function brackets must be put around the parameters list. This function also has just one line of code and returns nothing. So, it doesn’t need curly brackets. This is a function that takes two parameters and returns one value and this is a function that takes two parameters and has two lines of code. The promise object represents the eventual completion of an asynchronous operation and its return value. When you invoke an asynchronous operation, a promise is in a pending state. When the operation executes successfully, the promise is said to be fulfilled. When the operation fails, the promise is said to be rejected. In the first example, you have an arrow function, promiseArgument, which takes two parameters (resolve and reject). If the current time in milliseconds is divisible by 2, this arrow function invokes resolve with "Success" as a parameter; if not, it invokes reject with "Failed" as a parameter. This function is passed to the constructor of the promise object. In the second example, instead of creating promiseArgument, you are directly creating the function in time with the promise constructor. The behavior in both cases is identical. Object-oriented programming was made feasible in JavaScript with the introduction of class. Class is a template or blueprint for creating objects. Classes in JavaScript are built on prototypes. Prototype is a property of all JavaScript objects, including functions. A function can be used to create an object instance. Here, "this" refers to the current object. But not all object-oriented programming concepts are available with function prototypes. The concept of class was built on the premise of function prototype to extend object-oriented programming to JavaScript. Here, the first console log will print the entire prototype of the person1 object. The second console log will print the name and the third console log will print the age. Class can have a constructor, which is a method that is called when you want to create an object of class. The body of a class is the part that is in curly brackets. The code is subject to stricter syntax for increased performance. Here, rectangle is the general class. All rectangles have some height and width, which are the properties. When you create a rectangle object, you pass the height and width as parameters to the constructor. MyRectangle is an object constructed with the Rectangle class. In this example, an object of the class can be created using the new keyword. The properties are set to the current object that is being created, using "this" as the keyword. Rectangle is the blueprint. The keyword helps to set the properties for the myRectangle object. In JavaScript ES6, a class can inherit from another class. The class that is inheriting one other class is called the subclass. The superclass is the class being inherited by the subclass. The subclass inherits all the attributes and methods of the superclass. React components use inheritance to build user-defined components. The subclass has a special privilege to call the superclass constructor with the super( ) method call. A square is a rectangle with the same value for width and height. Here, if the height is not the same as the width specified, the width will become equal to the height. In this video, you learned that: New features that were introduced in JavaScript as a part of ES6 are let, const, arrow functions, promise, and class. You can create different types of arrow functions depending on the parameters, return values, and lines of code and object-oriented programming was made feasible in JavaScript with the introduction of class. 
 
 ## Introduction to Front End Frameworks and React.JS
 
-Welcome to Introduction to Front-End Frameworks and React. 
-After watching this video, you will be able to: 
-Define React. 
-Explain how React makes it easier to develop JavaScript applications. 
-Describe how to create a React component 
-and run a simple React application. 
-Front-end frameworks are used to create a dynamic client that can connect to the server. 
-These frameworks are made available through open-source libraries which can be used as 
-a part of the hypertext markup language (HTML), JavaScript, and cascading style sheets (CSS) 
-in the browser. 
-AngularJS, Vue.js, and React are some of the most-used front-end frameworks. 
-AngularJS is an open-source framework from Google that can be used in any HTML by including 
-the library. 
-It is based on HTML and JavaScript, and it is easy to implement. 
-To make HTML dynamic, AngularJS uses directives. 
-All the directives are available to the HTML where the library is included. 
-Here, you see HTML using AngularJS with model-bind directives. 
-The input component is used as a model to which the label component is bound. 
-Vue.js is also an open-source front-end framework. 
-It uses a virtual document object model (DOM). 
-The HTML is considered as an entire object. 
-As it is very lightweight, it renders fast. 
-Here, you see a simple Vue.js page which is rendered as HTML. 
-The attributes of the Vue.js object are similar to those of AngularJS, and binding is available. 
-React is a framework for building client-side dynamic web applications. 
-React uses dynamic data binding and a virtual DOM to extend HTML syntax and to eliminate 
-the need for code that keeps the user interface (UI) elements synchronized with the application 
-state. 
-This image shows HTML as a DOM. 
-This includes the document, which is the entire HTML page, root element HTML, and a body element. 
-Inside the body we have h1 with a text element inside, p with a text element inside, and 
-a form element with two input elements. 
-The document will be rendered as a page. 
-In React, some of these elements will be rendered as a React component. 
-React uses a special markup language called JavaScript XML (JSX) which resembles HTML. 
-JSX can be compiled and interpreted as JavaScript by Babel, a special in-memory tool. 
-JSX is embedded inside special script tags where the type attribute specifies the content 
-that requires Babel. 
-Three important packages that you use to build React applications are React package, ReactDOM 
-package, and Babel package. 
-The React package holds the React source for components and their states and properties. 
-The ReactDOM package is the glue between React and the DOM. 
-And Babel is the module which is available in most modern browsers. 
-It is used to compile and interpret the JSX. 
-A normal HTML page can be changed to render a React component. 
-Most modern browsers support Babel scripts. 
-You must include react.production.min.js, react-dom.production.min.js, and babel.min.js 
-in the HTML. Then the browser will handle the rest. 
-The React component is defined inside a script tag which is of type text/babel. 
-Here, the defined component is MyComp, which inherits from React.Component. You may recall 
-inheritance from what you have learned about classes. 
-All React components must implement the render() method. 
-You can then render the component using the ReactDOM.render method specifying the component 
-name like a HTML tag and any attribute that you want to set, in this case the name attribute. 
-Then specify where in the HTML the component should be rendered. 
-In this example, it is rendered in comp1. When you open the HTML, you will see the page 
-with the HTML component. 
-Facebook has provided a utility called Create React App, 
-which simplifies the process of creating React applications. 
-If you have Node.js installed, you should be able to run npx create-react-app with the 
-name of the application you want to create. 
-Here, the name of the application is todoapp. 
-When you run the npx create-react-app command, a directory structure with all the necessary 
-files is created. 
-The directory structure contains all the resources required to create and run a React application. 
-The main folder in which you will make changes is the src folder. 
-The src folder contains App.js and index.js. 
-App.js contains App, which is the root React component that you will add into your HTML 
-page, 
-and index.js is where you will add App to the HTML. 
-To run the React application, you go into the application directory and run npm start, 
-which starts the server, mostly on port 3000. 
-When you connect to the application from the browser, you can see the React component. 
-The page that you see is the default React application that has been created. 
-You can make changes and add more nested components to make it a full-fledged React front-end 
-application. 
-In this video you learned that: 
-React is an efficient, flexible JavaScript library for building user interfaces. 
-React uses a special markup language called JSX. 
-A React application is a tree of components and an extension of the HTML DOM 
-and with Create React App, you can easily create a React application. 
+Welcome to Introduction to Front-End Frameworks and React. After watching this video, you will be able to: Define React. Explain how React makes it easier to develop JavaScript applications. Describe how to create a React component and run a simple React application. Front-end frameworks are used to create a dynamic client that can connect to the server. These frameworks are made available through open-source libraries which can be used as a part of the hypertext markup language (HTML), JavaScript, and cascading style sheets (CSS) in the browser. AngularJS, Vue.js, and React are some of the most-used front-end frameworks. AngularJS is an open-source framework from Google that can be used in any HTML by including the library. It is based on HTML and JavaScript, and it is easy to implement. To make HTML dynamic, AngularJS uses directives. All the directives are available to the HTML where the library is included. Here, you see HTML using AngularJS with model-bind directives. The input component is used as a model to which the label component is bound. Vue.js is also an open-source front-end framework. It uses a virtual document object model (DOM). The HTML is considered as an entire object. As it is very lightweight, it renders fast. Here, you see a simple Vue.js page which is rendered as HTML. The attributes of the Vue.js object are similar to those of AngularJS, and binding is available. React is a framework for building client-side dynamic web applications. React uses dynamic data binding and a virtual DOM to extend HTML syntax and to eliminate the need for code that keeps the user interface (UI) elements synchronized with the application state. This image shows HTML as a DOM. This includes the document, which is the entire HTML page, root element HTML, and a body element. Inside the body we have h1 with a text element inside, p with a text element inside, and a form element with two input elements. The document will be rendered as a page. In React, some of these elements will be rendered as a React component. React uses a special markup language called JavaScript XML (JSX) which resembles HTML. JSX can be compiled and interpreted as JavaScript by Babel, a special in-memory tool. JSX is embedded inside special script tags where the type attribute specifies the content that requires Babel. Three important packages that you use to build React applications are React package, ReactDOM package, and Babel package. The React package holds the React source for components and their states and properties. The ReactDOM package is the glue between React and the DOM. And Babel is the module which is available in most modern browsers. It is used to compile and interpret the JSX. A normal HTML page can be changed to render a React component. Most modern browsers support Babel scripts. You must include react.production.min.js, react-dom.production.min.js, and babel.min.js in the HTML. Then the browser will handle the rest. The React component is defined inside a script tag which is of type text/babel. Here, the defined component is MyComp, which inherits from React.Component. You may recall inheritance from what you have learned about classes. All React components must implement the render() method. You can then render the component using the ReactDOM.render method specifying the component name like a HTML tag and any attribute that you want to set, in this case the name attribute. Then specify where in the HTML the component should be rendered. In this example, it is rendered in comp1. When you open the HTML, you will see the page with the HTML component. Facebook has provided a utility called Create React App, which simplifies the process of creating React applications. If you have Node.js installed, you should be able to run npx create-react-app with the name of the application you want to create. Here, the name of the application is todoapp. When you run the npx create-react-app command, a directory structure with all the necessary files is created. The directory structure contains all the resources required to create and run a React application. The main folder in which you will make changes is the src folder. The src folder contains App.js and index.js. App.js contains App, which is the root React component that you will add into your HTML page, and index.js is where you will add App to the HTML. To run the React application, you go into the application directory and run npm start, which starts the server, mostly on port 3000. When you connect to the application from the browser, you can see the React component. The page that you see is the default React application that has been created. You can make changes and add more nested components to make it a full-fledged React front-end application. In this video you learned that: React is an efficient, flexible JavaScript library for building user interfaces. React uses a special markup language called JSX. A React application is a tree of components and an extension of the HTML DOM and with Create React App, you can easily create a React application. 
 
 ## Working with React Components
 
-Welcome to Working with React Components. 
-In this video, you will learn about React components and their properties and states. 
-After watching this video, you will be able to:​ 
-Define functional and class components. 
-Describe how to set and access properties 
-and explain how to create and access states of a React component. 
-React is a JavaScript user interface (UI) library created and maintained as an open 
-source by Facebook and a community of developers. 
-It is a tool used for building UI components. 
-Any graphical user interface (GUI) that you see is made of many components. 
-A React application is a tree of components. 
-There is a root component, which is like a container to which all components are added. 
-All the component names, whether functional 
-or class, must start with an uppercase character. 
-An application is made up of one or more components. 
-The components in a React application can be styled by using a className attribute and 
-applying any cascading style sheets (CSS) styling to it. 
-Now you will see an example of a React application. 
-This application is rendering a calculator made up of components. 
-The structure of the document object model (DOM) tree appears on the right. 
-The application has a div with the className "App," which is the root component. 
-Inside App is calc_box, which is like a box holding all the buttons. 
-In calc_box there are six div components of className button rows. 
-The first button rows div contains an input component. 
-The second, third, fourth, and fifth components each contain four button components. 
-The last div component contains only one button. 
-You can see how all the components come together to work as one application. 
-Functional components are most useful when the component has properties (props) but the 
-lifecycle of the component doesn’t have to be managed. 
-The properties can be user defined and are passed as parameters to the function. 
-In this example, you are setting the component's size and color. 
-These are user-defined properties. 
-Properties cannot have uppercase characters. 
-When you run the React application with just the App component, the page will render like 
-this. 
-You can see that the properties that you passed have been used to style the component. 
-Event handles for functional components can be set through properties. 
-The onClick handler is the most used for functional components, but the React component supports 
-other event handlers, too. 
-They can be set the same way that onClick is set. 
-In this example, you can see which properties are being set to the App component. 
-Here you are setting the handler to the property clickEvent. 
-The App component will use the clickEvent property to handle the event. 
-Any function that the clickEvent property is set to is invoked when the button is clicked. 
-When you run the React application with just the App component, the page renders with the 
-button. 
-When you click the button, the event handler that you set through the property handles 
-the click event and the method that you passed is invoked. 
-You can see the alert box. 
-Class components are preferred more than functional components because of their versatility. 
-They inherit React.Component and must override the render method. 
-Class components can have states and props. 
-These components have a lifecycle that can be managed and maintained. 
-This is how you can create a class component instead of a functional component app. 
-You may recall that you need to inherit the class component from the React module. 
-To do this you import the React module. 
-Then you create the App class which extends or inherits from React.Component. 
-To set properties to the component, you pass the props to the constructor. 
-You call the super, in this case the constructor of the React.Component class, with the props. 
-Super refers to the super class and "this" refers to the current object. 
-In the case of the React component, the constructor in the derived class must call the super constructor. 
-You override the render method. 
-This is the method which actually renders the component. 
-The render method can only return one component. 
-However, that component can have multiple child components. 
-You don’t have to make any changes in the index.js file where the component is actually 
-instantiated. 
-The output is the same as you saw before for the functional component. 
-Props are set from outside the class. 
-State is internal to the class. 
-Every time the state changes, the component rerenders. 
-Here you define the state counter of the component App. 
-This state will change. 
-Here you define a method, incrementCounter, which increments the counter value by 1. 
-With the onClick of the button, the incrementCounter method is called. 
-The state is updated, and the component is rendered again. 
-Every time the state changes, the component rerenders. 
-You can see the counter increase by 1 for every click and one again and another one. 
-In this video you learned that: 
-React has two types of components: functional and class. 
-Functional components are most useful when the lifecycle of the component doesn’t have 
-to be managed. 
-Class components are more versatile 
-and every time the state changes, the class component rerenders. 
+Welcome to Working with React Components. In this video, you will learn about React components and their properties and states. After watching this video, you will be able to:​ Define functional and class components. Describe how to set and access properties and explain how to create and access states of a React component. React is a JavaScript user interface (UI) library created and maintained as an open source by Facebook and a community of developers. It is a tool used for building UI components. Any graphical user interface (GUI) that you see is made of many components. A React application is a tree of components. There is a root component, which is like a container to which all components are added. All the component names, whether functional or class, must start with an uppercase character. An application is made up of one or more components. The components in a React application can be styled by using a className attribute and applying any cascading style sheets (CSS) styling to it. Now you will see an example of a React application. This application is rendering a calculator made up of components. The structure of the document object model (DOM) tree appears on the right. The application has a div with the className "App," which is the root component. Inside App is calc_box, which is like a box holding all the buttons. In calc_box there are six div components of className button rows. The first button rows div contains an input component. The second, third, fourth, and fifth components each contain four button components. The last div component contains only one button. You can see how all the components come together to work as one application. Functional components are most useful when the component has properties (props) but the lifecycle of the component doesn’t have to be managed. The properties can be user defined and are passed as parameters to the function. In this example, you are setting the component's size and color. These are user-defined properties. Properties cannot have uppercase characters. When you run the React application with just the App component, the page will render like this. You can see that the properties that you passed have been used to style the component. Event handles for functional components can be set through properties. The onClick handler is the most used for functional components, but the React component supports other event handlers, too. They can be set the same way that onClick is set. In this example, you can see which properties are being set to the App component. Here you are setting the handler to the property clickEvent. The App component will use the clickEvent property to handle the event. Any function that the clickEvent property is set to is invoked when the button is clicked. When you run the React application with just the App component, the page renders with the button. When you click the button, the event handler that you set through the property handles the click event and the method that you passed is invoked. You can see the alert box. Class components are preferred more than functional components because of their versatility. They inherit React.Component and must override the render method. Class components can have states and props. These components have a lifecycle that can be managed and maintained. This is how you can create a class component instead of a functional component app. You may recall that you need to inherit the class component from the React module. To do this you import the React module. Then you create the App class which extends or inherits from React.Component. To set properties to the component, you pass the props to the constructor. You call the super, in this case the constructor of the React.Component class, with the props. Super refers to the super class and "this" refers to the current object. In the case of the React component, the constructor in the derived class must call the super constructor. You override the render method. This is the method which actually renders the component. The render method can only return one component. However, that component can have multiple child components. You don’t have to make any changes in the index.js file where the component is actually instantiated. The output is the same as you saw before for the functional component. Props are set from outside the class. State is internal to the class. Every time the state changes, the component rerenders. Here you define the state counter of the component App. This state will change. Here you define a method, incrementCounter, which increments the counter value by 1. With the onClick of the button, the incrementCounter method is called. The state is updated, and the component is rendered again. Every time the state changes, the component rerenders. You can see the counter increase by 1 for every click and one again and another one. In this video you learned that: React has two types of components: functional and class. Functional components are most useful when the lifecycle of the component doesn’t have to be managed. Class components are more versatile and every time the state changes, the class component rerenders. 
 
 ## Passing Data and States between Components
 
-Welcome to Passing Data and States between Components. 
-After watching this video, you will be able to:​ 
-Describe the lifecycle of React components 
-and explain how to pass data and states to components. 
-Each React component has three phases in its lifecycle. 
-Mounting is when the component is first created. 
-Updating is when the component is rendered on a change of state or properties (props). 
-And unmounting is when the component is removed from the document object model (DOM). 
-In mounting, four methods are called in this order. 
-The constructor() method constructs the object. This may call the super constructor with the 
-props object if any specific props are being set. 
-The getDerivedStateFromProps() method is used only when the state depends on the changes 
-to props. 
-The render() method is mandatory in a React component. 
-This method makes the component appear. It must return a DOM element 
-and it can return only one root element, which may or may not have many nested child elements. 
-The componentDidMount() method is invoked immediately after a component is mounted or 
-inserted into the DOM tree. 
-When the component App is created, the constructor is invoked. 
-The constructor first calls the super and then logs on to the console. 
-Then the render method is invoked. This method logs on to the console and then renders the 
-component. 
-And lastly, the componentDidMount method is invoked. 
-You can see this in the order of the console logs in the page rendered. 
-In updating, five methods are called in this order. 
-The getDerivedStateFromProps() method is used only when the state depends on the changes 
-to props. 
-The shouldComponentUpdate() method by default returns true. 
-Every time there is a change in state, this method is called to check if the component 
-should update. It is not called during the initial creation of the component. 
-Make this method return false only if you don’t want to render the changes in state. 
-The render() method is the same render() method used in mounting, but here it updates the 
-component. 
-The getSnapshotBeforeUpdate() method is invoked just before the changes are rendered. 
-It helps keep track of what has changed. 
-Any value returned by this lifecycle will be passed as a parameter to the componentDidUpdate() 
-method and 
-componentDidUpdate() is invoked immediately after updating occurs. 
-When the state of the component App is changed, it is updated. 
-Consider an App component with a click counter maintained as the state. 
-With the onClick of the button, incrementCounter is invoked, increasing the counter state by 
-1. 
-Every time the state changes, the component is rerendered. 
-But this can be controlled. 
-The shouldComponentUpdate method returns true by default. 
-This method is rarely overridden that is, its behavior is rarely changed. 
-It usually inherits from the super class and returns true. 
-The render method logs on to the console and then renders the component. 
-Lastly, the componentDidUpdate method is invoked. 
-You can see this in the order of the console logs in the page rendered. 
-When a component is unmounted or removed from the DOM tree, the componentWillUnmount() method 
-is called. 
-In this example you have two components. 
-AppInner and App. 
-AppInner is rendered inside App with a state, componentDidMount of the App component’s 
-mounting phase is handled, and a timer for 5 seconds is started. 
-After 5 seconds, a callback is invoked, changing the state of the inner component to a div 
-element instead of the AppInner component, which removes or unmounts the component. 
-Then componentWillUnmount of AppInner is called. 
-You can see this in the order of the console logs in the page rendered. 
-You can pass data between React components. 
-Consider the relationship between components. 
-Three types of relationships are parent to child using props, child to parent using callbacks, 
-and between siblings using Redux. 
-Redux is not within the scope of this module. 
-Here, you have two classes AppInner and App. 
-The App component contains the AppInner component. 
-App is the parent and AppInner is the child. 
-App sets the property color and name for AppInner. 
-The data is passed to the child every time a new value is entered in the input boxes 
-in the parent. 
-On the browser, when the component loads you see the default name John and color green. 
-When the values of color and name are changed in the parent component, they are passed to 
-the child component, which is rerendered. 
-Here, you will pass data from child to parent. 
-You pass a callback to the child as a property and then, through the callback, pass data 
-to the parent. Callback is a normal method but is called 
-at a later time when a condition is met. 
-In this example, App is the parent component which contains a child component: AppInner. 
-In the parent, you pass the callback func1 as a property to the child. 
-Func1 is a parent component function which takes a string argument. 
-On componentDidMount of AppInner, you invoke the sendData method. 
-This method invokes setInterval at a 1 second interval. setInterval takes a callback as 
-a first parameter and a time interval in which the callback should be invoked as the second 
-parameter. 
-In this case, every 1 second, the current time is obtained and the method set as parentCallback 
-is invoked, passing the time. 
-The method set as parentCallback is the parent class method which sets the state of the parent 
-component, thereby rerendering it. 
-You can see the current time being passed from the child to the parent through callback. 
-The parent is rerendered every second. 
-In this video you learned that: 
-Each React component has three phases in its lifecycle: mounting, updating, and unmounting. 
-When a component is created or updated, methods are called in the same order and 
-you can pass data between components from parent to child using properties, from child 
-to parent using callbacks, and between siblings. 
+Welcome to Passing Data and States between Components. After watching this video, you will be able to:​ Describe the lifecycle of React components and explain how to pass data and states to components. Each React component has three phases in its lifecycle. Mounting is when the component is first created. Updating is when the component is rendered on a change of state or properties (props). And unmounting is when the component is removed from the document object model (DOM). In mounting, four methods are called in this order. The constructor() method constructs the object. This may call the super constructor with the props object if any specific props are being set. The getDerivedStateFromProps() method is used only when the state depends on the changes to props. The render() method is mandatory in a React component. This method makes the component appear. It must return a DOM element and it can return only one root element, which may or may not have many nested child elements. The componentDidMount() method is invoked immediately after a component is mounted or inserted into the DOM tree. When the component App is created, the constructor is invoked. The constructor first calls the super and then logs on to the console. Then the render method is invoked. This method logs on to the console and then renders the component. And lastly, the componentDidMount method is invoked. You can see this in the order of the console logs in the page rendered. In updating, five methods are called in this order. The getDerivedStateFromProps() method is used only when the state depends on the changes to props. The shouldComponentUpdate() method by default returns true. Every time there is a change in state, this method is called to check if the component should update. It is not called during the initial creation of the component. Make this method return false only if you don’t want to render the changes in state. The render() method is the same render() method used in mounting, but here it updates the component. The getSnapshotBeforeUpdate() method is invoked just before the changes are rendered. It helps keep track of what has changed. Any value returned by this lifecycle will be passed as a parameter to the componentDidUpdate() method and componentDidUpdate() is invoked immediately after updating occurs. When the state of the component App is changed, it is updated. Consider an App component with a click counter maintained as the state. With the onClick of the button, incrementCounter is invoked, increasing the counter state by 1. Every time the state changes, the component is rerendered. But this can be controlled. The shouldComponentUpdate method returns true by default. This method is rarely overridden that is, its behavior is rarely changed. It usually inherits from the super class and returns true. The render method logs on to the console and then renders the component. Lastly, the componentDidUpdate method is invoked. You can see this in the order of the console logs in the page rendered. When a component is unmounted or removed from the DOM tree, the componentWillUnmount() method is called. In this example you have two components. AppInner and App. AppInner is rendered inside App with a state, componentDidMount of the App component’s mounting phase is handled, and a timer for 5 seconds is started. After 5 seconds, a callback is invoked, changing the state of the inner component to a div element instead of the AppInner component, which removes or unmounts the component. Then componentWillUnmount of AppInner is called. You can see this in the order of the console logs in the page rendered. You can pass data between React components. Consider the relationship between components. Three types of relationships are parent to child using props, child to parent using callbacks, and between siblings using Redux. Redux is not within the scope of this module. Here, you have two classes AppInner and App. The App component contains the AppInner component. App is the parent and AppInner is the child. App sets the property color and name for AppInner. The data is passed to the child every time a new value is entered in the input boxes in the parent. On the browser, when the component loads you see the default name John and color green. When the values of color and name are changed in the parent component, they are passed to the child component, which is rerendered. Here, you will pass data from child to parent. You pass a callback to the child as a property and then, through the callback, pass data to the parent. Callback is a normal method but is called at a later time when a condition is met. In this example, App is the parent component which contains a child component: AppInner. In the parent, you pass the callback func1 as a property to the child. Func1 is a parent component function which takes a string argument. On componentDidMount of AppInner, you invoke the sendData method. This method invokes setInterval at a 1 second interval. setInterval takes a callback as a first parameter and a time interval in which the callback should be invoked as the second parameter. In this case, every 1 second, the current time is obtained and the method set as parentCallback is invoked, passing the time. The method set as parentCallback is the parent class method which sets the state of the parent component, thereby rerendering it. You can see the current time being passed from the child to the parent through callback. The parent is rerendered every second. In this video you learned that: Each React component has three phases in its lifecycle: mounting, updating, and unmounting. When a component is created or updated, methods are called in the same order and you can pass data between components from parent to child using properties, from child to parent using callbacks, and between siblings. 
 
 ## Connecting React to External Services
 
-Welcome to Connecting React to External Services. 
-After watching this video, you will be able to:​ 
-Explain how to connect to an external server from a React page 
-and describe how to use asynchronous calls to an external server. 
-A router can connect to an external server to do one of many actions, including GET to 
-obtain information, POST to send information, UPDATE to change information, and DELETE to 
-remove information. 
-Most requests to external servers are blocking. 
-To make the call asynchronous, you can use promises. 
-This is an example of a GET request. 
-Here, a component with a state, user, is initially set to “None Logged In.” 
-With the componentDidMount event, you connect to a server through an axios request. 
-When the promise is fulfilled, you parse the response and extract the data from it to change 
-user to have the same name as its value. 
-You can send data to the server with a POST request and receive a response. 
-In this example, an Express server takes 
-a POST request at endpoint /user, extracts the name and gender sent as query parameters, 
-creates a JavaScript Object Notation (JSON) object, and pushes that into the usercollection 
-array. 
-Another GET request at endpoint /user is where all the objects in the usercollection destination 
-are sent as the response. 
-This server uses the CORS middleware to allow cross-origin requests to the server. 
-A client from anywhere can connect to this Express server. 
-Now you will see how a React client can connect to this server. 
-Here, you send data to the server with a POST request and receive a response. 
-The React root component has two input components and one button. 
-It has a state, completionStatus, which is initially empty. 
-When the user adds data in the name and gender text boxes and clicks the button, the postDataToServer 
-method is called. 
-This sends the data to the server and updates the response from the server to the component's 
-state completionStatus. 
-In the same way, you can send UPDATE and DELETE requests to the server. 
-In this video you learned that: 
-You can use promises to make calls to an external server asynchronous. 
-With middleware, you can enable a client from anywhere to connect to an Express server 
-and you can receive and send information from a React client to an external server with 
-GET, POST, UPDATE, and DELETE requests. 
-
-## Testing Cloud Applications
-
-Welcome to Testing Cloud Applications. 
-After watching this video, you will be able to:​ 
-Explain why testing is required. 
-Explain different types of testing recommended for cloud applications 
-and describe tools available for testing cloud applications. 
-Testing helps to ensure that the code works as expected. 
-You can use testing to ensure that any changes to existing code do not affect the behavior. 
-Testing can also be useful to check the health of the application, answering questions like 
-is the application susceptible to errors? or can the application handle all scenarios? 
-You will find many types of testing useful. 
-Test-driven development (TDD), which was a paradigm shift to coding, is a type of testing 
-in which the tests are identified before the code is written. 
-As the name indicates, these tests drive the development. 
-Other useful types of testing are: 
-Unit testing, 
-Integration testing, 
-System testing, 
-and acceptance testing. 
-TDD is the accepted new norm in development. 
-It is a style of programming that closely intertwines coding, testing, and designing. 
-So, when designing the functionality of your application, you first write unit tests and 
-then implement the code afterward. 
-Jest is a popular framework for testing Node.js cloud applications with TDD. 
-As the diagram here shows, you write a failing test case, then write code to make the test 
-case pass, and then refactor the code. 
-A unit is the smallest testable part of software. 
-In unit testing, individual units are tested to ensure that when the units are put together 
-or integrated, they work as intended. 
-In the example here, you have three units. 
-Each unit must work independently, and so you need to test each unit at the unit level. 
-Unit testing is often the result of TDD, where the units are identified, test cases are written 
-to test them, and then the units are developed. 
-Mocha is a testing framework for Node.js that is popular with developers for unit testing 
-because of its simplicity and ease of use. 
-Integration testing focuses on how units are integrated and tested. 
-It mainly focuses on the interaction between the units. 
-Integration is an important part of the continuous integration (CI) process. 
-Any change to one of the units, even if it has passed unit testing, will impact how it 
-works when integrated. 
-System testing is end-to-end testing. 
-A system in a normal application development world would mean an entire system that works 
-as one piece of software. 
-But in the microservice architecture, each microservice is a system. 
-There are many testing frameworks that you may use for system testing. 
-Jest is a popular framework for end-to-end testing of microservices. 
-There are two kinds of acceptance testing. 
-Alpha acceptance testing is for the internal team to test and see if the software, cloud 
-application, or microservice is working to acceptable standards. 
-This is usually done by the dedicated quality assurance (QA) team. 
-User acceptance testing is done by the team for whom the software, cloud application, 
-or microservice is being developed. 
-For the React front-end tool, you may test the basic functionality with popular testing 
-frameworks like Jest, Mocha, Chai, or Enzyme. 
-The user interface (UI) layout is tested as a part of the acceptance test 
-and the tests range from slow to reasonable and fast in milliseconds. 
-In this video, you learned that: 
-Testing helps to ensure that code works as expected. 
-TDD, unit, integration, system, and acceptance testing are useful types of testing and 
-in TDD, you write tests first and then implement the code. 
-
-## Introduction to Logging
-
-[Muisc] Welcome to Introduction to Logging. 
-After watching this video, you will be able to:​ 
-Define logging. 
-Explain the purpose of logging 
-Describe the information that should be in logs. 
-Describe the different types of logs 
-and identify logging libraries. 
-Logging is a service that gives you information about your application or system by tracking 
-and recording events. 
-It can work for any event happening in your system of any degree of importance. 
-This image shows a console log of a Coursera course when it is loaded in the browser. 
-Logging will help you to keep track of events and to debug code easily. 
-Logs are most useful when you want to debug your application or system, especially when 
-the application or system is in the production environment. 
-Consider a car log book. 
-You use it to know when the car was serviced and what service was performed like an oil 
-change or a tire alignment. 
-Logging these events gives you information about the condition of the car. 
-The types of information that should be present in logs include: 
-Where the log event is happening- 
-This information is very important in any type of log. 
-When a particular log event is recorded 
-and what kind of event is being logged as well as some context for the event. 
-There are four types of logs: 
-Info, 
-Debug, 
-Warn, 
-And error. 
-Info logs give you information when an event is happening or has happened. 
-Debug logs give you information that you can use to debug the code; for example, logging 
-when the control enters a function and exits a function. 
-Warning logs alert or warn you about events, especially events that may deter the expected 
-functionality later. 
-The example here shows the warning icon to the left of the message. 
-Error logs clearly indicate that an error has happened and the application is unable 
-to proceed as expected. 
-You will find a console log in Node.js. 
-But because the console logs can be easily cleared out, they are useful only to log and 
-test small applications. 
-There are many open-source logging libraries, all which provide the functionality with different 
-types of logs and other minor variations. 
-Log4js and Winston logging libraries are two of the most used logging libraries among the 
-Node.js community. 
-The example here shows a simple log printed to the console using the log4js package. 
-The library uses different colors for each type of log for readability. 
-In this video, you learned that: 
-Logging is a service that gives you information about your application or system by tracking 
-and recording events. 
-Logging can work for any event happening in your system of any degree of importance. 
-Logs are most useful when you want to debug your application or system 
-and the four types of logs include info, debug, warn, and error. 
-
-## IBM Cloud Monitoring with LogDNA and Sysdig
-
-Welcome to IBM Cloud Monitoring with LogDNA and Sysdig. 
-After watching this video, you will be able to:​ 
-Explain the complexities of logging and monitoring in cloud computing. 
-Explain what LogDNA and Sysdig are. 
-Describe how to use LogDNA for logging 
-and describe how to monitor applications using Sysdig. 
-Logging and monitoring for cloud applications at scale are different than logging for a 
-single application. 
-Your application on cloud might comprise of several hundred services. 
-Tracking logs from all these services is cumbersome. 
-The nodes or pods that your application runs on in the cloud are generally ephemeral. 
-If the application crashes, the application may come up on a different node. 
-It is essential that the logs be captured in a central place outside the nodes. 
-It is often hard to search and filter through millions of lines of log captures in log files. 
-Logs are a very good source to start with when you are trying to debug an application 
-or figure out the reason for a crash. 
-In a similar way, monitoring is absolutely necessary to understand the behavior of 
-a service or an end user. 
-There are two services available on IBM Cloud for logging and monitoring: LogDNA and Sysdig. 
-LogDNA provides a central place for logging system- and application-level events. 
-Some of the key features include: 
-Troubleshooting applications in real time. 
-Filtering and search. 
-Alerts definition 
-and custom views. 
-Sysdig provides real-time operational visibility into your application stack. 
-It also provides a visual representation of your infrastructure 
-and supports full stack with in-depth telemetry and health checking. 
-Sysdig supports multiple runtimes on IBM Cloud including 
-Kubernetes, OpenShift, 
-Docker containers, Mesos, 
-and Linux installations. 
-Sysdig collects many key metrics including but not limited to 
-Average CPU usage percentage, 
-CPU usage, 
-CPU usage percentage, 
-Network received in bytes per second, 
-Free memory, 
-and total memory. 
-In this video, you learned that: 
-Logging and monitoring are 100 percent necessary in modern application development. 
-You can use LogDNA to manage system and application logs on IBM Cloud 
-and you can use Sysdig to monitor applications, services, and platforms on IBM Cloud. 
+Welcome to Connecting React to External Services. After watching this video, you will be able to:​ Explain how to connect to an external server from a React page and describe how to use asynchronous calls to an external server. A router can connect to an external server to do one of many actions, including GET to obtain information, POST to send information, UPDATE to change information, and DELETE to remove information. Most requests to external servers are blocking. To make the call asynchronous, you can use promises. This is an example of a GET request. Here, a component with a state, user, is initially set to “None Logged In.” With the componentDidMount event, you connect to a server through an axios request. When the promise is fulfilled, you parse the response and extract the data from it to change user to have the same name as its value. You can send data to the server with a POST request and receive a response. In this example, an Express server takes a POST request at endpoint /user, extracts the name and gender sent as query parameters, creates a JavaScript Object Notation (JSON) object, and pushes that into the usercollection array. Another GET request at endpoint /user is where all the objects in the usercollection destination are sent as the response. This server uses the CORS middleware to allow cross-origin requests to the server. A client from anywhere can connect to this Express server. Now you will see how a React client can connect to this server. Here, you send data to the server with a POST request and receive a response. The React root component has two input components and one button. It has a state, completionStatus, which is initially empty. When the user adds data in the name and gender text boxes and clicks the button, the postDataToServer method is called. This sends the data to the server and updates the response from the server to the component's state completionStatus. In the same way, you can send UPDATE and DELETE requests to the server. In this video you learned that: You can use promises to make calls to an external server asynchronous. With middleware, you can enable a client from anywhere to connect to an Express server and you can receive and send information from a React client to an external server with GET, POST, UPDATE, and DELETE requests. 
 
 ## Module 4 Summary
 
-JavaScript adheres to ECMAScript 6 (ES6), which had a major impact. 
-
-You can use features like let, const, and arrow functions in React programming. 
-
-Arrow functions allow a shorter and cleaner way to work with functions than global scope variables. 
-
-Front-end frameworks like React are made available through open-source libraries that you can use to build applications that run in the browser. 
-
-React uses a special markup language called JSX. 
-
-The two types of React components are functional and class. 
-
-Each React component has three phases in its lifecycle: mounting, updating, and unmounting. 
-
-React manages the internal state of the application using states and props.
-
+- JavaScript adheres to ECMAScript 6 (ES6), which had a major impact. 
+- You can use features like let, const, and arrow functions in React programming. 
+- Arrow functions allow a shorter and cleaner way to work with functions than global scope variables. 
+- Front-end frameworks like React are made available through open-source libraries that you can use to build applications that run in the browser. 
+- React uses a special markup language called JSX. 
+- The two types of React components are functional and class. 
+- Each React component has three phases in its lifecycle: mounting, updating, and unmounting. 
+- React manages the internal state of the application using states and props.
 
 ## Glossary - Building a Rich Front-End Application using REACT & ES6
 
-[Click here](https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0220EN-SkillsNetwork/Cheatsheets/C4M4%20Glossary%20v1.1%20APPROVED.pdf) to view and download "Building a Rich Front-End Application using REACT & ES6" module glossary 
+- [Click here](./Assets/C4M4%20Glossary%20v1.1%20APPROVED.pdf) to view and download "Building a Rich Front-End Application using REACT & ES6" module glossary 
 
 ## Cheatsheet - Building a Rich Front-End Application using REACT & ES6
 
-[Click here](https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0220EN-SkillsNetwork/Cheatsheets/C4M4%20cheat%20sheet%20v1.2.pdf) to view and download "Building a Rich Front-End Application using REACT & ES6" module cheatsheet 
+- [Click here](./Assets/C4M4%20cheat%20sheet%20v1.2.pdf) to view and download "Building a Rich Front-End Application using REACT & ES6" module cheatsheet 
 
 ## Bonus Lesson Introduction and Learning Objectives
 
 You can create applications on the cloud without logging and monitoring, but it is very important to deliver successful applications. In this module, you will find out why logging and monitoring are such important aspects in cloud application delivery. You will explore both these essential areas. You will discover which types of testing, services, libraries, and other resources you can use to strengthen your testing and monitoring activities. 
 
+**After completing this module, you will be able to:**
+- Explain the purpose of testing cloud applications and systems. 
+- Explain the purpose of monitoring cloud applications and systems. 
+- Describe resources that are popular among the Node.js community for monitoring and testing. 
+- Define logging. 
+- Describe the types of information that you need to log. 
+- Explain the key features of IBM Cloud LogDNA. 
+- Describe how IBM Cloud Sysdig supports monitoring. 
 
-After completing this module, you will be able to: 
+## Testing Cloud Applications
 
-Explain the purpose of testing cloud applications and systems. 
+Welcome to Testing Cloud Applications. After watching this video, you will be able to:​ Explain why testing is required. Explain different types of testing recommended for cloud applications and describe tools available for testing cloud applications. Testing helps to ensure that the code works as expected. You can use testing to ensure that any changes to existing code do not affect the behavior. Testing can also be useful to check the health of the application, answering questions like is the application susceptible to errors? or can the application handle all scenarios? You will find many types of testing useful. Test-driven development (TDD), which was a paradigm shift to coding, is a type of testing in which the tests are identified before the code is written. As the name indicates, these tests drive the development. Other useful types of testing are: Unit testing, Integration testing, System testing, and acceptance testing. TDD is the accepted new norm in development. It is a style of programming that closely intertwines coding, testing, and designing. So, when designing the functionality of your application, you first write unit tests and then implement the code afterward. Jest is a popular framework for testing Node.js cloud applications with TDD. As the diagram here shows, you write a failing test case, then write code to make the test case pass, and then refactor the code. A unit is the smallest testable part of software. In unit testing, individual units are tested to ensure that when the units are put together or integrated, they work as intended. In the example here, you have three units. Each unit must work independently, and so you need to test each unit at the unit level. Unit testing is often the result of TDD, where the units are identified, test cases are written to test them, and then the units are developed. Mocha is a testing framework for Node.js that is popular with developers for unit testing because of its simplicity and ease of use. Integration testing focuses on how units are integrated and tested. It mainly focuses on the interaction between the units. Integration is an important part of the continuous integration (CI) process. Any change to one of the units, even if it has passed unit testing, will impact how it works when integrated. System testing is end-to-end testing. A system in a normal application development world would mean an entire system that works as one piece of software. But in the microservice architecture, each microservice is a system. There are many testing frameworks that you may use for system testing. Jest is a popular framework for end-to-end testing of microservices. There are two kinds of acceptance testing. Alpha acceptance testing is for the internal team to test and see if the software, cloud application, or microservice is working to acceptable standards. This is usually done by the dedicated quality assurance (QA) team. User acceptance testing is done by the team for whom the software, cloud application, or microservice is being developed. For the React front-end tool, you may test the basic functionality with popular testing frameworks like Jest, Mocha, Chai, or Enzyme. The user interface (UI) layout is tested as a part of the acceptance test and the tests range from slow to reasonable and fast in milliseconds. In this video, you learned that: Testing helps to ensure that code works as expected. TDD, unit, integration, system, and acceptance testing are useful types of testing and in TDD, you write tests first and then implement the code. 
 
-Explain the purpose of monitoring cloud applications and systems. 
+## Introduction to Logging
 
-Describe resources that are popular among the Node.js community for monitoring and testing. 
+[Muisc] Welcome to Introduction to Logging. After watching this video, you will be able to:​ Define logging. Explain the purpose of logging Describe the information that should be in logs. Describe the different types of logs and identify logging libraries. Logging is a service that gives you information about your application or system by tracking and recording events. It can work for any event happening in your system of any degree of importance. This image shows a console log of a Coursera course when it is loaded in the browser. Logging will help you to keep track of events and to debug code easily. Logs are most useful when you want to debug your application or system, especially when the application or system is in the production environment. Consider a car log book. You use it to know when the car was serviced and what service was performed like an oil change or a tire alignment. Logging these events gives you information about the condition of the car. The types of information that should be present in logs include: Where the log event is happening- This information is very important in any type of log. When a particular log event is recorded and what kind of event is being logged as well as some context for the event. There are four types of logs: Info, Debug, Warn, And error. Info logs give you information when an event is happening or has happened. Debug logs give you information that you can use to debug the code; for example, logging when the control enters a function and exits a function. Warning logs alert or warn you about events, especially events that may deter the expected functionality later. The example here shows the warning icon to the left of the message. Error logs clearly indicate that an error has happened and the application is unable to proceed as expected. You will find a console log in Node.js. But because the console logs can be easily cleared out, they are useful only to log and test small applications. There are many open-source logging libraries, all which provide the functionality with different types of logs and other minor variations. Log4js and Winston logging libraries are two of the most used logging libraries among the Node.js community. The example here shows a simple log printed to the console using the log4js package. The library uses different colors for each type of log for readability. In this video, you learned that: Logging is a service that gives you information about your application or system by tracking and recording events. Logging can work for any event happening in your system of any degree of importance. Logs are most useful when you want to debug your application or system and the four types of logs include info, debug, warn, and error. 
 
-Define logging. 
+## IBM Cloud Monitoring with LogDNA and Sysdig
 
-Describe the types of information that you need to log. 
-
-Explain the key features of IBM Cloud LogDNA. 
-
-Describe how IBM Cloud Sysdig supports monitoring. 
-
+Welcome to IBM Cloud Monitoring with LogDNA and Sysdig. After watching this video, you will be able to:​ Explain the complexities of logging and monitoring in cloud computing. Explain what LogDNA and Sysdig are. Describe how to use LogDNA for logging and describe how to monitor applications using Sysdig. Logging and monitoring for cloud applications at scale are different than logging for a single application. Your application on cloud might comprise of several hundred services. Tracking logs from all these services is cumbersome. The nodes or pods that your application runs on in the cloud are generally ephemeral. If the application crashes, the application may come up on a different node. It is essential that the logs be captured in a central place outside the nodes. It is often hard to search and filter through millions of lines of log captures in log files. Logs are a very good source to start with when you are trying to debug an application or figure out the reason for a crash. In a similar way, monitoring is absolutely necessary to understand the behavior of a service or an end user. There are two services available on IBM Cloud for logging and monitoring: LogDNA and Sysdig. LogDNA provides a central place for logging system- and application-level events. Some of the key features include: Troubleshooting applications in real time. Filtering and search. Alerts definition and custom views. Sysdig provides real-time operational visibility into your application stack. It also provides a visual representation of your infrastructure and supports full stack with in-depth telemetry and health checking. Sysdig supports multiple runtimes on IBM Cloud including Kubernetes, OpenShift, Docker containers, Mesos, and Linux installations. Sysdig collects many key metrics including but not limited to Average CPU usage percentage, CPU usage, CPU usage percentage, Network received in bytes per second, Free memory, and total memory. In this video, you learned that: Logging and monitoring are 100 percent necessary in modern application development. You can use LogDNA to manage system and application logs on IBM Cloud and you can use Sysdig to monitor applications, services, and platforms on IBM Cloud. 
 
 ## Lesson Summary
 
-You can use testing to ensure that any changes to code do not break existing behavior. 
-
-Useful types of testing are test-driven development (TDD), unit testing, integration testing, system testing, and acceptance testing. 
-
-Jest, Mocha, Chai, and Enzyme are popular testing frameworks among the Node.js community. 
-
-Logging will help you to keep track of events and to debug code easily. 
-
-Logs should contain information including where the event happens, when the event occurs, and what type of event is recorded along with context. 
-
-Log4js and Winston are two of the many open-source logging libraries that provide functionality beyond what you get using the native Node.js console log. 
-
-Logging and monitoring for cloud applications at scale are different than logging for a single application. 
-
-LogDNA provides a central place for logging system- and application-level events. 
-
-Sysdig provides real-time operational visibility into your application stack.
+- You can use testing to ensure that any changes to code do not break existing behavior. 
+- Useful types of testing are test-driven development (TDD), unit testing, integration testing, system testing, and acceptance testing. 
+- Jest, Mocha, Chai, and Enzyme are popular testing frameworks among the Node.js community. 
+- Logging will help you to keep track of events and to debug code easily. 
+- Logs should contain information including where the event happens, when the event occurs, and what type of event is recorded along with context. 
+- Log4js and Winston are two of the many open-source logging libraries that provide functionality beyond what you get using the native Node.js console log. 
+- Logging and monitoring for cloud applications at scale are different than logging for a single application. 
+- LogDNA provides a central place for logging system- and application-level events. 
+- Sysdig provides real-time operational visibility into your application stack.
