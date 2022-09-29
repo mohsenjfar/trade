@@ -48,6 +48,12 @@ ___
   - [Introduction to Logging](#introduction-to-logging)
   - [IBM Cloud Monitoring with LogDNA and Sysdig](#ibm-cloud-monitoring-with-logdna-and-sysdig)
   - [Lesson Summary](#lesson-summary)
+- [Final project](#final-project)
+  - [Guided Example - Node.js and React.js Client Side](#guided-example---nodejs-and-reactjs-client-side)
+    - [IBM watson NLU service](#ibm-watson-nlu-service)
+      - [service](#service)
+      - [Credentials](#credentials)
+    - [Fork repository](#fork-repository)
 
 # Introduction to serverside JavaScript
 
@@ -376,3 +382,26 @@ Welcome to IBM Cloud Monitoring with LogDNA and Sysdig. After watching this vide
 - Logging and monitoring for cloud applications at scale are different than logging for a single application. 
 - LogDNA provides a central place for logging system- and application-level events. 
 - Sysdig provides real-time operational visibility into your application stack.
+
+# Final project
+
+## Guided Example - Node.js and React.js Client Side
+
+- [Guided Example - Node.js and React.js Client Side part 1](./guided-example-node.js-and-react.js-client-side-part-1.webm)
+- [Guided Example - Node.js and React.js Client Side part 2](./guided-example-node.js-and-react.js-client-side-part-2.webm)
+
+### IBM watson NLU service
+
+#### service
+
+![service](./watsonnluservice.jpg)
+
+#### Credentials
+
+![creds](./watsonnlucreds.jpg)
+
+### Fork repository
+- [link](https://github.com/jfar/cazgi-IBM-Watson-NLU-Project)
+
+
+
