@@ -50,9 +50,6 @@ ___
   - [Lesson Summary](#lesson-summary)
 - [Final project](#final-project)
   - [Guided Example - Node.js and React.js Client Side](#guided-example---nodejs-and-reactjs-client-side)
-    - [IBM watson NLU service](#ibm-watson-nlu-service)
-      - [service](#service)
-      - [Credentials](#credentials)
     - [Fork repository](#fork-repository)
 
 # Introduction to serverside JavaScript
@@ -390,17 +387,7 @@ Welcome to IBM Cloud Monitoring with LogDNA and Sysdig. After watching this vide
 - [Guided Example - Node.js and React.js Client Side part 1](./guided-example-node.js-and-react.js-client-side-part-1.webm)
 - [Guided Example - Node.js and React.js Client Side part 2](./guided-example-node.js-and-react.js-client-side-part-2.webm)
 
-### IBM watson NLU service
-
-#### service
-
-![service](./watsonnluservice.jpg)
-
-#### Credentials
-
-![creds](./watsonnlucreds.jpg)
-
-### Fork repository
+## Fork repository
 - [link](https://github.com/jfar/cazgi-IBM-Watson-NLU-Project)
 
 
