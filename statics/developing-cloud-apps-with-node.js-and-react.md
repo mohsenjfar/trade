@@ -49,8 +49,7 @@ ___
   - [IBM Cloud Monitoring with LogDNA and Sysdig](#ibm-cloud-monitoring-with-logdna-and-sysdig)
   - [Lesson Summary](#lesson-summary)
 - [Final project](#final-project)
-  - [Guided Example - Node.js and React.js Client Side](#guided-example---nodejs-and-reactjs-client-side)
-    - [Fork repository](#fork-repository)
+  - [Fork repository](#fork-repository)
 
 # Introduction to serverside JavaScript
 
@@ -124,11 +123,11 @@ Welcome to Working with Node.js Modules. After watching this video, you will be 
 
 ##  Glossary - Introduction to Server-Side JavaScript
 
-- [Click here](../Developing%20Cloud%20Native%20Applications/Assets/C4M1%20Glossary%20v1.1%20APPROVED.pdf) to view and download "Introduction to Server-Side JavaScript" module glossary
+- [Click here](./c4m1-glossary-v1.1.pdf) to view and download "Introduction to Server-Side JavaScript" module glossary
 
 ## Cheatsheet - Introduction to Server-Side JavaScript
 
-- [Click here](../Developing%20Cloud%20Native%20Applications/Assets/C4M1%20cheat%20sheet%20v1.2.pdf) to view and download "Introduction to Server-Side JavaScript" module cheatsheet
+- [Click here](./c4m1-cheatsheet-v1.2.pdf) to view and download "Introduction to Server-Side JavaScript" module cheatsheet
 
 # Asynchronous I/O with callback programming
 
@@ -265,7 +264,7 @@ You can only await a promise inside an async method. This is because await block
 
 ## Glossary - Asynchronous I/O with Callback Programming
 
-- [Click here](./Assets/C4M2%20Glossary%20v1.1%20APPROVED.pdf) to view and download "Asynchronous I/O with Callback Programming" module glossary
+- [Click here](./c4m2-glossary-v1.1.pdf) to view and download "Asynchronous I/O with Callback Programming" module glossary
 
 # Express Web Application Framework
 
@@ -296,11 +295,11 @@ Welcome to Routing, Middleware, and Templating. After watching this video, you w
 
 ## Glossary - Express Web Application Framework
 
-- [Click here](./Assets/C4M3%20Glossary%20v1.1%20APPROVED.pdf) to view and download "Express Web Application Framework" module glossary 
+- [Click here](./c4m3-glossary-v1.1.pdf) to view and download "Express Web Application Framework" module glossary 
 
 ## Cheatsheet - Express Web Application Framework
 
-- [Click here](./Assets/C4M3%20cheat%20sheet%20v1.2.pdf) to view and download "Express Web Application Framework" module cheatsheet 
+- [Click here](./c4m3-glossary-v1.1.pdf) to view and download "Express Web Application Framework" module cheatsheet 
 
 # Building a Rich Front-End Application using REACT & ES6
 
@@ -337,11 +336,11 @@ Welcome to Connecting React to External Services. After watching this video, you
 
 ## Glossary - Building a Rich Front-End Application using REACT & ES6
 
-- [Click here](./Assets/C4M4%20Glossary%20v1.1%20APPROVED.pdf) to view and download "Building a Rich Front-End Application using REACT & ES6" module glossary 
+- [Click here](./c4m4-glossary-v1.1.pdf) to view and download "Building a Rich Front-End Application using REACT & ES6" module glossary 
 
 ## Cheatsheet - Building a Rich Front-End Application using REACT & ES6
 
-- [Click here](./Assets/C4M4%20cheat%20sheet%20v1.2.pdf) to view and download "Building a Rich Front-End Application using REACT & ES6" module cheatsheet 
+- [Click here](./c4m4-cheatsheet-v1.2.pdf) to view and download "Building a Rich Front-End Application using REACT & ES6" module cheatsheet 
 
 ## Bonus Lesson Introduction and Learning Objectives
 
@@ -381,11 +380,6 @@ Welcome to IBM Cloud Monitoring with LogDNA and Sysdig. After watching this vide
 - Sysdig provides real-time operational visibility into your application stack.
 
 # Final project
-
-## Guided Example - Node.js and React.js Client Side
-
-- [Guided Example - Node.js and React.js Client Side part 1](./guided-example-node.js-and-react.js-client-side-part-1.webm)
-- [Guided Example - Node.js and React.js Client Side part 2](./guided-example-node.js-and-react.js-client-side-part-2.webm)
 
 ## Fork repository
 - [link](https://github.com/jfar/cazgi-IBM-Watson-NLU-Project)

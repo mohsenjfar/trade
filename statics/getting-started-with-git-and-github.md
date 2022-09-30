@@ -141,21 +141,9 @@ To add an SSH key to GitHub, you need to copy the SSH key that you generated in 
     **Note**: If clip doesn't work, run cat ~/.ssh/id_rsa.pub in the command line and the copy the output.
 
 2. Sign in to GitHub. At the top right, click the drop-down menu on your profile image and select Settings.
-  
-    <img src=".//Assets/settings.png">
-  
 3. From the "Personal settings" menu, select SSH and GPG keys
-
-    <img src=".//Assets/SSHKey_option_new.png">
-
 4. Click New SSH key.
-
-    <img src=".//Assets/AddNewSSH.png">
-
 5. Enter a title for the new SSH key. In the Key field, paste the key that you copied in step 1, above. The pasted key should include Your email address at the end
-
-    <img src=".//Assets/add_ssh_keytoaccount_new.png">
-
 6. Click Add SSH Key. The SSH key is added to your account.
 
 # Final project: Part 1 - GitHub UI
@@ -201,4 +189,4 @@ https://github.com/ibm-developer-skills-network/jbbmo-Introduction-to-Git-and-Gi
 
 # Certificate
 
-- [Click here](./Assets/Coursera%20LADH4KMTAZCK.pdf) to view and download the course certificate
+- [Click here](./coursera-ladh4kmtazck.pdf) to view and download the course certificate

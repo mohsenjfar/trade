@@ -43,7 +43,6 @@ ___
   - [JavaScript Object Notation (JSON)](#javascript-object-notation-json)
   - [Using REST APIs with Watson AI Services](#using-rest-apis-with-watson-ai-services)
   - [Introduction to Postman](#introduction-to-postman)
-  - [Config file](#config-file)
   - [Module 5 Summary](#module-5-summary)
   - [Cheatsheet - REST Architecture and Watson API](#cheatsheet---rest-architecture-and-watson-api)
   - [Glossary - REST Architecture and Watson API](#glossary---rest-architecture-and-watson-api)
@@ -55,13 +54,6 @@ ___
     - [Cloudant enables the following:](#cloudant-enables-the-following)
   - [Glossary - Introduction to Data Services in IBM Cloud](#glossary---introduction-to-data-services-in-ibm-cloud)
 - [Final project](#final-project)
-  - [lab 1](#lab-1)
-  - [lab 2](#lab-2)
-  - [lab 3](#lab-3)
-  - [lab 4](#lab-4)
-  - [lab 5](#lab-5)
-  - [lab 6](#lab-6)
-  - [lab 7](#lab-7)
   - [Natural language syntaxes](#natural-language-syntaxes)
     - [Analyze target phrases and keywords](#analyze-target-phrases-and-keywords)
 - [Certificate](#certificate)
@@ -111,7 +103,7 @@ Welcome to Continuous Integration/ContinuousDelivery: Site Reliability Enginee
 
 ## Glossary - Introduction to Cloud Native
 
-- [Click here](./Assets/C3M1%20Glossary%20v1.1.pdf) to view and download the "Introduction to Cloud Native" module glossary
+- [Click here](./c3m1-glossary-v1.1.pdf) to view and download the "Introduction to Cloud Native" module glossary
 
 # Getting started with IBM cloud
 
@@ -153,7 +145,7 @@ Welcome to Managing Access to IBM Cloud Resources. After watching this video, yo
 
 ## Glossary - Getting Started with IBM Cloud
 
-[Click here](./Assets/C3M2%20Glossary%20v1.1.pdf) to view and download "Getting Started with IBM Cloud" module glossary
+[Click here](./c3m2-glossary-v1.1.pdf) to view and download "Getting Started with IBM Cloud" module glossary
 
 # IBM Cloud CLI
 
@@ -179,11 +171,11 @@ Welcome to Installing CLIs! After watching this video, you will be able to: Mana
 
 ## Glossary - IBM Cloud CLI
 
-- [Click here](./Assets/C3M3%20Glossary%20v1.1%20APPROVED.pdf) to view and download "IBM Cloud CLI" module glossary
+- [Click here](./c3m3-glossary-v1.1.pdf) to view and download "IBM Cloud CLI" module glossary
 
 ## Cheatsheet - IBM Cloud CLI
 
-- [Click here](./Assets/C3M3%20cheatsheet%20v1.1.pdf) to view and download IBM Cloud CLI" module cheatsheet
+- [Click here](./c3m3-cheatsheet-v1.1.pdf) to view and download IBM Cloud CLI" module cheatsheet
 
 # DevOps on IBM Cloud
 
@@ -242,10 +234,6 @@ Welcome to Using REST APIs with Watson AI Services. After watching this video, y
 
 Welcome to Introduction to Postman. After watching this video, you will be able to: Use a REST client to make calls to web services and Describe how to use a popular API client called Postman. Postman is an application for interacting with HTTP APIs. It presents a friendly graphical user interface (GUI) for constructing requests and reading responses. You can download postman from https://www.getpostman.com/. We'll use Postman to send a request to the Watson Natural Language Understanding (NLU) service. First we need to send a REST command to the IBM Cloud Identity and Access Management (IAM) service to get an IAM token using the service API key. With the token, we can then send a request to the NLU service with our data to extract entities and other features. The different features of the service can be requested by sending the appropriate request options. For more information, look in the official API documentation. In this example we are going to test a REST command for the IBM NLU. The example assumes that you already have the service created on your IBM account and have the credentials handy. If you don’t, you can follow along through the example in the lab. As you can see in the screenshot below on the left, we are making a POST call to the identity URL to get an access token. Postman lets you past the curl command and will populate the request fields appropriately. As you can see in the result on the right, a token is indeed returned to us with the same call if we were to use the command line terminal and the curl command. Next we'll use this token to make the call to the NLU service. Now that we have a token, let's make a call to the NLU service. We'll send a news article from Reuters to the service by using the body of the POST request. Using Postman, you can easily attach different types of content to the body of your request as well as specify query parameters. Once the request is made, you can see the NLU service identified "George Obulutsa" as the author of the article. On the header tab, click on Import and paste the command, replacing your access token with the one we generated in the previous step. The import will convert the curl command into Postman format. Then you click Send. Let's look at the result. The response shows that the NLU service identified "George Obulutsa" as the author of the article. In this video, you learned: Postman is an application for interacting with HTTP APIs. You can send a REST command to the IAM service to get a token from the user’s NLU service API key and you can use the IAM token to send a REST command to the NLU service.
 
-## Config file
-
-- [Click here](Assets/couchdb.postman_collection.json) to see and edit config file
-
 ## Module 5 Summary
 
 - REST provides a simple approach to building services for client/server interactions that are based on web resources.  
@@ -255,10 +243,10 @@ Welcome to Introduction to Postman. After watching this video, you will be able 
 - You can use a REST client like Postman to make calls to web services.
 
 ## Cheatsheet - REST Architecture and Watson API
-- [Click here](./Assets/C3M5%20cheatsheet%20v1.1.pdf) to view and download "REST Architecture and Watson API" module cheatsheet
+- [Click here](./c3m5-cheatsheet-v1.1.pdf) to view and download "REST Architecture and Watson API" module cheatsheet
 
 ## Glossary - REST Architecture and Watson API
-- [Click here](Assets/C3M5%20Glossary%20v1.1%20APPROVED.pdf) to view and download "REST Architecture and Watson API" module glossary
+- [Click here](./c3m5-glossary-v1.1.pdf) to view and download "REST Architecture and Watson API" module glossary
 
 # Introduction to Data services in IBM Cloud
 
@@ -290,29 +278,14 @@ Hello! Welcome to Getting Started with IBM Cloudant. After watching this video, 
 
 ## Glossary - Introduction to Data Services in IBM Cloud
 
-- [Click here](Assets/C3M6%20Glossary%20v1.1%20.pdf) to view and download "Introduction to Data Services in IBM Cloud" module glossary
+- [Click here](./c3m6-glossary-v1.1.pdf) to view and download "Introduction to Data Services in IBM Cloud" module glossary
 
 # Final project
-
-## lab 1  
-![resourcepage](./Assets/finalProject/resourcepage.JPG)
-## lab 2  
-![resourcepage-application](./Assets/finalProject/resourcepage-application.jpg)
-## lab 3  
-![connections](Assets/finalProject/connections.jpg)
-## lab 4  
-![database](./Assets/finalProject/database.jpg)
-## lab 5  
-![cicdtoolchain](Assets/finalProject/cicdtoolchain.jpg)
-## lab 6  
-![gitrepository](Assets/finalProject/gitrepository.jpg)
-## lab 7  
-![resourcepage-cicd](Assets/finalProject/resourcepage-cicd.jpg)
 
 ## Natural language syntaxes
 
 ### Analyze target phrases and keywords  
-```
+```bash
 curl -X POST -u "apikey:o1lLAj9CxN-_6PKfJWaeDS92ybEMGRHFUudn_Ct3A8q5" \
 --header "Content-Type: application/json" \
 --data '{
@@ -335,7 +308,7 @@ curl -X POST -u "apikey:o1lLAj9CxN-_6PKfJWaeDS92ybEMGRHFUudn_Ct3A8q5" \
 
 # Certificate
 
-- [Click here](./Assets/Coursera%20J2MZBBHRXBSX.pdf) to view and download the course certificate
+- [Click here](./coursera-j2mzbbhrxbsx.pdf) to view and download the course certificate
 
 # Badge
-![credly](./Assets/developing-cloud-native-applications.1.png)
+![credly](./developing-cloud-native-applications.1.png)

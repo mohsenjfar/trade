@@ -2,18 +2,18 @@
 
 **IBM Full Stack Software Developer** is a professional course offered by [Coursera](https://www.coursera.org/professional-certificates/ibm-full-stack-cloud-developer) in corporate with [IBM](https://ibm.com/) skills network and include the following modules:
 
-1. [Introduction to Cloud Computing](./statics/Introduction%20to%20Cloud%20Computing.md)
-2. [Introduction to Web Development with HTML, CSS, JavaScript](./statics/Introduction%20to%20Web%20Development%20with%20HTML%2C%20CSS%2C%20JavaScript.md)
-3. [Getting Started with Git and GitHub](./statics/Getting%20Started%20with%20Git%20and%20GitHub.md)
-4. [Developing Cloud Native Applications](./statics/Developing%20Cloud%20Native%20Applications.md)
-5. [Developing Cloud Apps with Node.js and React](./statics/Developing%20Cloud%20Apps%20with%20Node.js%20and%20React.md)
-6. [Introduction to Containers w/ Docker, Kubernetes & OpenShift](./statics/Introduction%20to%20Containers%20w%20Docker%2C%20Kubernetes%20%26%20OpenShift.md)
-7. [Python for Data Science, AI & Development](./statics/Python%20for%20Data%20Science%2C%20AI%20%26%20Development.md)
-8. [Python Project for AI & Application Development](./statics/Python%20Project%20for%20AI%20%26%20Application%20Development.md)
-9. [Developing Applications with SQL, Databases, and Django](./statics/Developing%20Applications%20with%20SQL%2C%20Databases%2C%20and%20Django.md)
-10. [Application Development using Microservices and Serverless](./statics/Application%20Development%20using%20Microservices%20and%20Serverless.md)
-11. [Full Stack Cloud Development Capstone Project](./statics/Full%20Stack%20Cloud%20Development%20Capstone%20Project.md)
-12. [Full Stack Software Developer Assessment](./statics/Full%20Stack%20Software%20Developer%20Assessment.md)
+1. [Introduction to Cloud Computing](./statics/introduction-to-cloud-computing.md)
+2. [Introduction to Web Development with HTML, CSS, JavaScript](./statics/introduction-to-web-development-with-html-css-javascript.md)
+3. [Getting Started with Git and GitHub](./statics/getting-started-with-git-and-github.md)
+4. [Developing Cloud Native Applications](./statics/developing-cloud-native-applications.md)
+5. [Developing Cloud Apps with Node.js and React](./statics/developing-cloud-apps-with-node.js-and-react.md)
+6. [Introduction to Containers w/ Docker, Kubernetes & OpenShift](./statics/introduction-to-containers-w-docker-kubernetes-and-openshift.md)
+7. [Python for Data Science, AI & Development](./statics/python-for-data-science-aI-and-development.md)
+8. [Python Project for AI & Application Development](./statics/python-project-for-aI-and-application-development.md)
+9. [Developing Applications with SQL, Databases, and Django](./statics/developing-applications-with-sql-databases-and-django.md)
+10. [Application Development using Microservices and Serverless](./statics/application-development-using-microservices-and-serverless.md)
+11. [Full Stack Cloud Development Capstone Project](./statics/full-stack-cloud-development-capstone-project.md)
+12. [Full Stack Software Developer Assessment](./statics/full-stack-software-developer-assessment.md)
 
 ## Financial aid:
 ```
