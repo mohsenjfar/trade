@@ -9,17 +9,20 @@ ___
   - [Building Container Images](#building-container-images)
   - [Container Registries](#container-registries)
   - [Running Containers](#running-containers)
+  - [Lab 1: Introduction to Containers, Docker, and IBM Cloud Container Registry](#lab-1-introduction-to-containers-docker-and-ibm-cloud-container-registry)
   - [CheatSheet - Docker CLI](#cheatsheet---docker-cli)
-  - [Glossary - Understanding the Benefits of Containers](#glossary---understanding-the-benefits-of-containers)
+  - [Glossary - Container Basics](#glossary---container-basics)
+  - [Lab 2: Creating an IBM Cloud Container Registry Namespace](#lab-2-creating-an-ibm-cloud-container-registry-namespace)
 - [Understanding Kubernetes Architecture](#understanding-kubernetes-architecture)
   - [Container Orchestration](#container-orchestration)
   - [Kubernetes Architecture](#kubernetes-architecture)
-  - [Introduction to Kubernetes Objects](#introduction-to-kubernetes-objects)
+  - [Introduction to Kubernetes Objects (here)](#introduction-to-kubernetes-objects-here)
   - [Basic Kubernetes Objects](#basic-kubernetes-objects)
   - [Kubectl CLI](#kubectl-cli)
   - [Using Kubernetes](#using-kubernetes)
+  - [Lab - Introduction to Kubernetes](#lab---introduction-to-kubernetes)
   - [CheatSheet - Understanding Kubernetes Architecture](#cheatsheet---understanding-kubernetes-architecture)
-  - [Glossary - Understanding Kubernetes Architecture](#glossary---understanding-kubernetes-architecture)
+  - [Glossary - Kubernetes Basics](#glossary---kubernetes-basics)
 - [Managing Applications with Kubernetes](#managing-applications-with-kubernetes)
   - [Replica Sets](#replica-sets)
   - [Autoscaling](#autoscaling)
@@ -51,572 +54,73 @@ In this module, we will look at containers. You'll learn what containers are, ho
 
 ## Introduction to Docker
 
-When you hear about containers, you’ll often hear the word "Docker" thrown into the mix. You might hear phrases like “Docker container,” you might recognize the company called Docker, and you might hear Docker referred to as a toolset for working with containers. These are all appropriate uses of the term "Docker," but there are obviously a lot of different meanings out there. Let’s begin this video by describing what each use of these terms means. Docker is a software platform for building and running applications as containers. Although containerization technology existed long before Docker emerged on the scene, Docker has become inextricably linked to containers. This is because the launch of the Docker open source project in 2013 fueled the rapid growth in popularity of containers and the various technologies and practices that accompany them. Docker provided a straightforward way to build and run containers through an open source platform. This led to an explosion of not only Docker and containerization, but also a myriad of complementary tools, technologies, and development methodologies that still prevail and continue to grow. A Docker image is simply an image that was built using Docker technologies. People often tack the word "Docker" onto “container” and “image” and use “Docker image” and “image” interchangeably. Given the growing ecosystem of container tools, we’ll use the simpler and more general terms “container” and “image” throughout this course. The open source Docker community develops these technologies for the benefit of its users. Docker, the company, builds on the existing open source technologies, contributes back to the community, and provides technologies for enterprise customers. One of the most used tools from Docker is the command line interface, or "CLI." This tool is used extensively in modern software development, and it will also be used in a variety of ways throughout this course. In the course labs, you will have the opportunity to use several Docker commands. Let’s briefly discuss a few of the most common Docker CLI commands. Given appropriate input, the "docker build" command is used to create container images. Developers provide a "Dockerfile," a file that serves as the blueprint for building a container image. The "docker build" command takes that file and performs the heavy lifting to build an image. The command also enables users to tag their images, which basically means giving them a name. You can directly tag images using the "docker tag" command. If you have an existing image that you want to rename—for example, if you received the image from someone else, or if you want to store it in another location, you can use the "tag" command to, in effect, copy the image and give the copy a new name. The "tag" command won’t overwrite the existing image that you have on your machine; it will create a new tag that points to that image. The "images" command will list all the images, their repositories and tags, and their sizes. Once you build or tag an image, there should be an updated entry in the "docker images" output. This provides a simple way to check that your "build" and "tag" commands executed successfully. As the name indicates, the "docker run" command is used to run a container. If you are developing container images and you want to test an image that you have developed, you can run it as a container locally. The "docker run" command is perfectly suited for this task. Finally, we have the "push" and "pull" commands. We’ll discuss these commands in more detail in our video on container registries, but for now you simply need to know that these commands are used for storing images in a remote location and then retrieving those images. Remember, we’ll get to use all these commands in our labs throughout the course. Docker is also a container runtime. A container runtime is software that executes containers, much like the "docker run" command that we just referenced. Let’s see how the container runtime fits into a typical stack. As we’ve discussed, we first have the hardware or infrastructure as the bottom layer. This is the physical machine or machines on which our software will run. On top of that we have the operating system. Remember that we said containers share the operating system, rather than just the hardware as virtual machines do. With containers, we have both the hardware and the operating system on the bottom of our stack. Next comes the container runtime, like Docker. Again, this is the layer that will run our containers. Finally, on top, we have the applications that we run as containers. Docker is probably the most popular and best-known container runtime, but Docker has also introduced the "containerd" runtime (pronounced "container-dee"), which is quickly gaining popularity. Other runtimes such as rkt are also used in the market. Watch IBM Developer Advocate Sai Vennam as he introduces Docker and the benefits of running an application with containers. In this video you’ve learned about the many uses of the word "Docker" and how it applies to the software platform, the company, and the open-source community. In addition, you’ve learned about the Docker CLI and some of the more commonly used commands it provides. Finally, you’ve learned about the Docker container runtime and its place in the containerization stack. In the next video, you’ll learn about building container images with Docker. 
+When you hear about containers, you’ll often hear the word "Docker" thrown into the mix. You might hear phrases like “Docker container,” you might recognize the company called Docker, and you might hear Docker referred to as a toolset for working with containers. These are all appropriate uses of the term "Docker," but there are obviously a lot of different meanings out there. Let’s begin this video by describing what each use of these terms means. `Docker` is **a software platform for building and running applications as containers**. Although containerization technology existed long before Docker emerged on the scene, Docker has become inextricably linked to containers. This is because the launch of the Docker open source project in 2013 fueled the rapid growth in popularity of containers and the various technologies and practices that accompany them. Docker provided a straightforward way to build and run containers through an open source platform. This led to an explosion of not only Docker and containerization, but also a myriad of complementary tools, technologies, and development methodologies that still prevail and continue to grow. A Docker image is simply an image that was built using Docker technologies. People often tack the word "Docker" onto “container” and “image” and use “Docker image” and “image” interchangeably. Given the growing ecosystem of container tools, we’ll use the simpler and more general terms “container” and “image” throughout this course. The open source Docker community develops these technologies for the benefit of its users. Docker, the company, builds on the existing open source technologies, contributes back to the community, and provides technologies for enterprise customers. One of the most used tools from Docker is the command line interface, or "CLI." This tool is used extensively in modern software development, and it will also be used in a variety of ways throughout this course. In the course labs, you will have the opportunity to use several Docker commands. Let’s briefly discuss a few of the most common Docker CLI commands. Given appropriate input, the "`docker build`" command is **used to create container images**. Developers provide a "`Dockerfile`," **a file that serves as the blueprint for building a container image**. The "docker build" command takes that file and performs the heavy lifting to build an image. The command also enables users to tag their images, which basically means giving them a name. You can directly tag images using the "`docker tag`" command. **If you have an existing image that you want to rename—for example, if you received the image from someone else, or if you want to store it in another location, you can use the "tag" command to, in effect, copy the image and give the copy a new name**. The "tag" command won’t overwrite the existing image that you have on your machine; it will create a new tag that points to that image. The "`images`" command will **list all the images**, their repositories and tags, and their sizes. Once you build or tag an image, there should be an updated entry in the "docker images" output. This provides a simple way to check that your "build" and "tag" commands executed successfully. As the name indicates, the "`docker run`" command is **used to run a container**. If you are developing container images and you want to test an image that you have developed, you can **run it as a container locally**. The "docker run" command is perfectly suited for this task. Finally, we have the "`push`" and "`pull`" commands. We’ll discuss these commands in more detail in our video on container registries, but for now you simply need to know that **these commands are used for storing images in a remote location and then retrieving those images**. Remember, we’ll get to use all these commands in our labs throughout the course. Docker is also a container runtime. A `container runtime` is **software that executes containers**, much like the "docker run" command that we just referenced. Let’s see how the container runtime fits into a typical stack. As we’ve discussed, we first have the hardware or infrastructure as the bottom layer. This is the physical machine or machines on which our software will run. On top of that we have the operating system. Remember that we said containers share the operating system, rather than just the hardware as virtual machines do. With containers, we have both the hardware and the operating system on the bottom of our stack. Next comes the container runtime, like Docker. Again, this is the layer that will run our containers. Finally, on top, we have the applications that we run as containers. Docker is probably the most popular and best-known container runtime, but Docker has also introduced the "**containerd**" runtime (pronounced "container-dee"), which is quickly gaining popularity. Other runtimes such as **rkt** are also used in the market. Watch IBM Developer Advocate Sai Vennam as he introduces Docker and the benefits of running an application with containers. In this video you’ve learned about the many uses of the word "Docker" and how it applies to the software platform, the company, and the open-source community. In addition, you’ve learned about the Docker CLI and some of the more commonly used commands it provides. Finally, you’ve learned about the Docker container runtime and its place in the containerization stack. In the next video, you’ll learn about building container images with Docker. 
 
 ## Building Container Images
 
-Let’s look at what makes up container images, and how we build them. This diagram shows the development process of a running container. A Dockerfile is the blueprint from which an image is built. The Dockerfile outlines all the steps to be taken to build the desired image; Docker then builds that image. It's important to note the difference between a container and an image, which can also be called a container image. These are not interchangeable terms, but rather two distinct things. An image is an immutable file that contains the source code, libraries, and dependencies that are necessary for an application to run. That immutability means that images are read-only; if you change an image, you create a new image. In a sense, images are templates or blueprints for a container. You can also think of images as snapshots of a container. A container is therefore a running image. Since images are read-only, a write layer is placed on top of images to enable the container to execute. To relate this to object-oriented programming, a container image is like a class, and a container is an instantiated object of that class. As this diagram shows, you begin with a Dockerfile that indicates what to include in an image. You build an image using that Dockerfile. Then, when you run that image, you have a running container. These are the three basic steps in the container development process. Docker can automatically build container images by using the instructions from a Dockerfile. A Dockerfile is simply a text file that contains all the commands a user would call on the command line to create the image. We’ll learn more about them shortly. Docker provides a set of instructions that make this process a bit more straightforward. Images are then built layer by layer, with each Docker instruction creating a new layer on top of the existing layers. It looks something like this. As Docker instructions are run, new read-only layers are created for the image. Depending on the size of an image, there can be a few layers or many. In this example we have four layers. When all the Docker instructions from a Dockerfile have been executed, the image is built and complete. Again, this is a read-only image; making a change would result in a new image. As we just observed, running an image results in a container. When we instantiate this image, we get a running container. At this point, a writeable container layer is added on top of the read-only layers. Remember, containers are not immutable like images are. Containers are running, performing operations, and performing whatever function the developers have written. This writeable layer enables the container to execute its function. Note that layers can be shared between images. If two images have a layer in common, that layer can be used by both images without having to recreate it. This can save a lot of disk space and network bandwidth when sending and receiving images. There are several instructions recognized and provided by Docker for use in Dockerfiles. Any valid Dockerfile must first begin with a FROM instruction, which initializes a new build stage and specifies the base image that subsequent instructions will build upon. This base image is often from a public repository, like an operating system or a base image for a specific language like Go or Node.js. This base image is the starting point for the rest of your image. Let’s go over some other instructions that Docker provides. The RUN instruction executes commands. So, for example, you can put a "bash" command in a RUN instruction to perform a desired action. Each instruction is a new layer added on top of your previous layers. The ENV command enables you to set environment variables in the image. The ADD and COPY commands are similar and enable you to copy files into your image. You would use this to, for example, put your application code or executable into your image. The main difference between these two is that COPY can only copy local files or directories, while ADD can also add files from remote URLs. Then there's the CMD instruction. There can only be one CMD instruction in a Dockerfile. If you include more than one, only the last one will take effect. The main purpose for this instruction is to provide a default for executing a container. This instruction often defines the executable that should run in your container. Let’s have a look at a Dockerfile to see these commands in action. Here is a simple Dockerfile. Note that the first command, as always, is a FROM command. Remember that this command defines the base image. In this case, our base image is Ubuntu version 18.04. This image is freely available on Docker Hub, so we don’t need any authorization and we can also omit the hostname. Next is the COPY command. This command presumes that we have a directory called "app" in our working directory. Assuming that we do, the directory and its contents will be copied into our image as a new layer. The RUN command performs a "make" operation to build the application. Finally, the CMD instruction provides a default mechanism for running this container. In this instance, the Python application will be run. As you can see, Dockerfiles are simple to construct and use. There are more advanced patterns for optimizing your Dockerfiles and building images more efficiently but in general, these basic operations open to you the powerful world of containerization. You should now be familiar with how to build container images using Dockerfiles. You should understand how images are made up of layers and how those layers relate to Dockerfile instructions. You should also know the difference between containers and images. In the next video, you’ll learn about using container registries to store container images. 
+Let’s look at what makes up container images, and how we build them. This diagram shows the development process of a running container. A Dockerfile is the blueprint from which an image is built. The Dockerfile outlines all the steps to be taken to build the desired image; Docker then builds that image. It's important to note the difference between a container and an image, which can also be called a container image. These are not interchangeable terms, but rather two distinct things. An `image` is **an immutable file that contains the source code, libraries, and dependencies that are necessary for an application to run**. That immutability means that images are read-only; if you change an image, you create a new image. In a sense, images are templates or blueprints for a container. You can also think of images as snapshots of a container. A container is therefore a running image. Since images are read-only, a write layer is placed on top of images to enable the container to execute. To relate this to object-oriented programming, a container image is like a class, and a container is an instantiated object of that class. As this diagram shows, you begin with a Dockerfile that indicates what to include in an image. You build an image using that Dockerfile. Then, when you run that image, you have a running container. These are the three basic steps in the container development process. Docker can automatically build container images by using the instructions from a Dockerfile. A Dockerfile is simply a text file that contains all the commands a user would call on the command line to create the image. We’ll learn more about them shortly. Docker provides a set of instructions that make this process a bit more straightforward. Images are then built layer by layer, with each Docker instruction creating a new layer on top of the existing layers. It looks something like this. As Docker instructions are run, new read-only layers are created for the image. Depending on the size of an image, there can be a few layers or many. In this example we have four layers. When all the Docker instructions from a Dockerfile have been executed, the image is built and complete. Again, this is a read-only image; making a change would result in a new image. As we just observed, running an image results in a container. When we instantiate this image, we get a running container. At this point, a writeable container layer is added on top of the read-only layers. Remember, containers are not immutable like images are. Containers are running, performing operations, and performing whatever function the developers have written. This writeable layer enables the container to execute its function. Note that layers can be shared between images. If two images have a layer in common, that layer can be used by both images without having to recreate it. This can save a lot of disk space and network bandwidth when sending and receiving images. There are several instructions recognized and provided by Docker for use in Dockerfiles. Any valid Dockerfile must first begin with a FROM instruction, which initializes a new build stage and specifies the base image that subsequent instructions will build upon. This base image is often from a public repository, like an operating system or a base image for a specific language like Go or Node.js. This base image is the starting point for the rest of your image. Let’s go over some other instructions that Docker provides. The RUN instruction executes commands. So, for example, you can put a "bash" command in a RUN instruction to perform a desired action. Each instruction is a new layer added on top of your previous layers. The ENV command enables you to set environment variables in the image. The ADD and COPY commands are similar and enable you to copy files into your image. You would use this to, for example, put your application code or executable into your image. The main difference between these two is that COPY can only copy local files or directories, while ADD can also add files from remote URLs. Then there's the CMD instruction. There can only be one CMD instruction in a Dockerfile. If you include more than one, only the last one will take effect. The main purpose for this instruction is to provide a default for executing a container. This instruction often defines the executable that should run in your container. Let’s have a look at a Dockerfile to see these commands in action. Here is a simple Dockerfile. Note that the first command, as always, is a FROM command. Remember that this command defines the base image. In this case, our base image is Ubuntu version 18.04. This image is freely available on Docker Hub, so we don’t need any authorization and we can also omit the hostname. Next is the COPY command. This command presumes that we have a directory called "app" in our working directory. Assuming that we do, the directory and its contents will be copied into our image as a new layer. The RUN command performs a "make" operation to build the application. Finally, the CMD instruction provides a default mechanism for running this container. In this instance, the Python application will be run. As you can see, Dockerfiles are simple to construct and use. There are more advanced patterns for optimizing your Dockerfiles and building images more efficiently but in general, these basic operations open to you the powerful world of containerization. You should now be familiar with how to build container images using Dockerfiles. You should understand how images are made up of layers and how those layers relate to Dockerfile instructions. You should also know the difference between containers and images. In the next video, you’ll learn about using container registries to store container images. 
 
 ## Container Registries
 
-So, we've now learned what containers are. But where do we store and manage them? The answer? Container registries! Container images can be stored on your local machine. If you run the "docker build" command and build a container image, it's now stored on your computer. But this isn’t particularly helpful for distributing that image to others or using it in a staging or production environment. You need a place where container images can be easily stored and retrieved. A container registry is used for the storage and distribution of named container images. While many features can be built on top of a registry, its most basic function is storing images and allowing someone (or anyone) to later retrieve them. Registries can be public or private. When an image is pushed to a public registry, anyone can pull that image. This is useful for open source projects or personal development where you don’t mind if others use or inspect your images. Most enterprises will opt to use a private registry, which restricts access to the images so that only authorized users can view and use them. Registries can also be hosted or self-hosted. Several hosted registries are available, such as IBM Cloud Container Registry. In this case, the user doesn't need to deploy or maintain the registry in any way; that's done by the provider. The user can use the registry as they wish. However, there are also registry offerings that can be run in private data centers or on a cloud. The functionality is largely the same in either case, but different individuals and enterprises will have different constraints and intentions that guide their choices. So far we've referred to storing and retrieving images, but there's some formal terminology that's often used for these operations. When storing an image in a registry, we say that you "push" an image to the registry. Similarly, when retrieving an image from a registry, we say that you "pull" an image from a registry. Keep that language in mind: "pushing images to" and "pulling images from" a registry. Images are often pushed by developers, or through automation and a build pipeline that they've set up. Those images can then be pulled to a local machine, although they're often pulled by systems running in the cloud or on premises, such as Kubernetes. We mentioned that registries store named images, and we know that the "docker build" and "docker tag" commands can be used to name images. But there's a specific format that is generally followed for image naming. The image name usually consists of three parts: the "hostname," the "repository," and the "tag." The hostname identifies the registry to which this image should be pushed. For Docker Hub, the registry is "docker.io." For IBM Cloud Container Registry, the registry is "us.icr.io," if you’re pushing to the registry in the U.S. Next is the repository. A repository is a group of related container images. Usually these will be different versions of the same application or service, so the name of the application or service makes a good repository name. Finally, we have the tag. The tag provides information about a specific version or variant of an image. The tag is often a version number, or it could indicate some other characteristic of the image, such as the operating system on which it was built. Let’s look at an example. This image name is straightforward. The hostname "docker.io" shows that we are pulling the image from Docker Hub. The repository name is "ubuntu," so we know we are pulling an Ubuntu image. Finally, the tag is "18.04," so we are pulling that version of Ubuntu. In fact, the Docker CLI infers the docker.io hostname if it is excluded, so we could run this simpler command to pull this image. Since there are many different container registries available, the additional features they provide help distinguish them. Consider IBM Cloud Container Registry, depicted in this image. The top left box shows capabilities provided by IBM Cloud Container Registry. There is an API for interacting with images, as well as IBM-provided public images and private repositories to which users can push their own images. A feature called Vulnerability Advisor scans images for common vulnerabilities and exposures. By ensuring security before a vulnerability can be exploited, companies are safeguarded from financial losses and negative press. The bottom left shows that users can interact with the registry through a command line or graphical user interface. Finally, at the far right is IBM Cloud Kubernetes Service, which provides authentication to IBM Cloud Container Registry out of the box, making it is easy to deploy images from the registry as containers on the Kubernetes Service. These are just a few examples, but they show that container registries are much more capable and powerful than a mere storage service. The functionality built on top of container registries boosts their appeal and helps developers work more securely and productively. You should now be familiar with the basic purpose of container registries and how users interact with them. You should also understand the conventions for naming images and the additional functionality that registries can provide to distinguish themselves. In the next video, you’ll learn about how to take an image and run it as a container. 
+So, we've now learned what containers are. But where do we store and manage them? The answer? Container registries! Container images can be stored on your local machine. If you run the "docker build" command and build a container image, it's now stored on your computer. But this isn’t particularly helpful for distributing that image to others or using it in a staging or production environment. You need a place where container images can be easily stored and retrieved. A `container registry` is used for the **storage and distribution of named container images**. While many features can be built on top of a registry, its most basic function is storing images and allowing someone (or anyone) to later retrieve them. Registries can be public or private. When an image is pushed to a public registry, anyone can pull that image. This is useful for open source projects or personal development where you don’t mind if others use or inspect your images. Most enterprises will opt to use a private registry, which restricts access to the images so that only authorized users can view and use them. Registries can also be hosted or self-hosted. Several hosted registries are available, such as IBM Cloud Container Registry. In this case, the user doesn't need to deploy or maintain the registry in any way; that's done by the provider. The user can use the registry as they wish. However, there are also registry offerings that can be run in private data centers or on a cloud. The functionality is largely the same in either case, but different individuals and enterprises will have different constraints and intentions that guide their choices. So far we've referred to storing and retrieving images, but there's some formal terminology that's often used for these operations. When storing an image in a registry, we say that you "push" an image to the registry. Similarly, when retrieving an image from a registry, we say that you "pull" an image from a registry. Keep that language in mind: "pushing images to" and "pulling images from" a registry. Images are often pushed by developers, or through automation and a build pipeline that they've set up. Those images can then be pulled to a local machine, although they're often pulled by systems running in the cloud or on premises, such as Kubernetes. We mentioned that registries store named images, and we know that the "docker build" and "docker tag" commands can be used to name images. But there's a specific format that is generally followed for image naming. `The image name usually consists of three parts`: the "**hostname**," the "**repository**," and the "**tag**." The `hostname` identifies **the registry to which this image should be pushed**. For Docker Hub, the registry is "docker.io." For IBM Cloud Container Registry, the registry is "us.icr.io," if you’re pushing to the registry in the U.S. Next is the `repository`. A repository is **a group of related container images**. Usually these will be different versions of the same application or service, so the name of the application or service makes a good repository name. Finally, we have the `tag`. The **tag provides information about a specific version or variant of an image**. The tag is often a version number, or it could indicate some other characteristic of the image, such as the operating system on which it was built. Let’s look at an example. This image name is straightforward. The hostname "docker.io" shows that we are pulling the image from Docker Hub. The repository name is "ubuntu," so we know we are pulling an Ubuntu image. Finally, the tag is "18.04," so we are pulling that version of Ubuntu. In fact, the Docker CLI infers the docker.io hostname if it is excluded, so we could run this simpler command to pull this image. Since there are many different container registries available, the additional features they provide help distinguish them. Consider IBM Cloud Container Registry, depicted in this image. The top left box shows capabilities provided by IBM Cloud Container Registry. There is an API for interacting with images, as well as IBM-provided public images and private repositories to which users can push their own images. A feature called Vulnerability Advisor scans images for common vulnerabilities and exposures. By ensuring security before a vulnerability can be exploited, companies are safeguarded from financial losses and negative press. The bottom left shows that users can interact with the registry through a command line or graphical user interface. Finally, at the far right is IBM Cloud Kubernetes Service, which provides authentication to IBM Cloud Container Registry out of the box, making it is easy to deploy images from the registry as containers on the Kubernetes Service. These are just a few examples, but they show that container registries are much more capable and powerful than a mere storage service. The functionality built on top of container registries boosts their appeal and helps developers work more securely and productively. You should now be familiar with the basic purpose of container registries and how users interact with them. You should also understand the conventions for naming images and the additional functionality that registries can provide to distinguish themselves. In the next video, you’ll learn about how to take an image and run it as a container. 
 
 ## Running Containers
 
 Now that we've learned about the fundamentals of containers and Docker, as well as the usefulness of container registries, let’s build our first container image and store it in a registry. We'll put everything that we've learned so far into practice. This Dockerfile provides the steps for building an image that will run a Node.js application. Assuming we have written this application and the files exist, we can use the Dockerfile to create an image. The commands are the same as we've seen before. A Node base image is used, the artifacts are copied to our image, the Node dependencies are installed along with some updates, and the "node" command is used to execute the application in a container. The "docker build" command uses the Dockerfile to create an image. Here's what the command looks like. The "t" indicates the "tag" option. This specifies the name that we want to give to our image. Remember, the name consists of the hostname, which can be omitted if we're pushing to Docker Hub; the repository; and the tag. In this case, we'll push to Docker Hub, so we don’t have a hostname. The repository name will be "my-app", and the tag is our version, "v1". Last, you see a period at the end of this command. This isn’t a typo -- a period is shorthand for the current directory. The last argument for this command is what’s known as the build context. This is the set of files located at this path or URL that will be used for generating your image. The Dockerfile is normally located here. In our example, we use the current working directory as the build context, which is why we pass the period as an argument. Note that you could also write out a full path to the build context. Here is a look at the output of this command. First, the build context is sent to the Docker daemon. Then the Docker instructions are executed in order. You can see that each step in this output corresponds to one of the instructions from our Dockerfile. At the end, the image is successfully built, and it is tagged as we stipulated. To verify, we can use the "docker images" command. Here’s a look at that output. You can see that our image is right here in the output. The repository is "my-app", as we expect, and the tag is our version. You can also see when the image was created and its size. What if we want to use this image in another context? We can tag it and use it again! Let’s use the "docker tag" command to accomplish this. This command will create a new tag for this image. The "docker tag" command first takes the image that you want to tag—in this case, "my-app:v1"—and it takes the new tag that you want to apply, "second-app:v1". If we run this command, we will end up with a second tag in our "docker images" output. Let’s take a look. Now we see not only our first app, but also our second app. Notice that the image IDs are the same in both cases. This is because the image itself is unchanged. There is nothing different about these two images, and they will perform the same function. The only difference is that they are tagged in two different ways. Now that we have an image, let’s run it as a container! We simply need to use the "docker run" command along with our image tag. You can also see the output here. This is a "hello, world" application, so it prints a simple message before exiting. Finally, let’s push the image to a registry so that we can distribute it and store it for later use. Remember that the repository name identifies the registry that the image will be pushed to, so all we need to do is perform a "docker push" command. The output here shows that each layer of our image was pushed successfully. If we went to Docker Hub, we could then view our image. Congratulations! You now know how to write a Dockerfile, build an image, run that image as a container, and push that image to a registry. You should now better understand how to apply all that we’ve learned so far about containers, Docker, and registries in a practical setting. Specifically, you should understand how to create a simple Dockerfile and build an image from it. You should also understand how to tag an existing image and push it to a registry. Finally, you should understand how to use Docker to run an image locally. Congratulations on finishing this module! You're now familiar with containers, containerization, and a variety of tools that assist with these technologies. In the lab for this module, you'll have the opportunity to use all of these tools and get hands-on experience with everything you've learned. 
 
+## Lab 1: Introduction to Containers, Docker, and IBM Cloud Container Registry
+
+- [Click here](./introduction-to-containers-docker-and-ibm-cloud-container-registry.pdf) to view and download the lab instruction. 
+
 ## CheatSheet - Docker CLI
 
-- [Click here](https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/cc201/Cheatsheets/C5M1%20cheatsheet%20v1.1%20.pdf) to view and download the "Docker CLI" module cheatsheet. 
+- [Click here](./cheat-sheet-docker-cli.pdf) to view and download the "Docker CLI" module cheatsheet. 
 
-## Glossary - Understanding the Benefits of Containers
+## Glossary - Container Basics
 
-- [Click here](https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/cc201/Cheatsheets/C5M1%20Glossary%20v1.1.pdf) to view and download the "Understanding the Benefits of Containers" module glossary.
+- [Click here](./glossary-container-basics.pdf) to view and download the "Container Basics" module glossary.
+
+## Lab 2: Creating an IBM Cloud Container Registry Namespace
+
+- [Click here](./creating-an-ibm-cloud-container-registry-namespace.pdf) to view and download the lab instruction.
 
 # Understanding Kubernetes Architecture
 
 ## Container Orchestration
 
-Now that we have learned the basics of container images, including how to build and store an 
-image and run a container, we’ll talk about container orchestration so that we can better 
-understand how to create complex environments of many running containers. 
-Everyone’s container journey starts with one container. 
-You started this way in our last module! 
-But of course, things don’t stay this way for long. 
-Over time, new applications are written and deployed, applications grow and take on new 
-components that are deployed independently, and projects spread across the globe to increase 
-availability. 
-That one initial container inevitably becomes many containers. 
-At first, that growth is easy to handle. 
-But soon it is overwhelming. 
-Chaos reigns! 
-As your container footprint grows and evolves, a tool for managing the lifecycle of your 
-containers becomes increasingly necessary. 
-Container orchestration encompasses a variety of topics; here are six that are particularly 
-important. 
-Container orchestration aids in the provisioning and deployment of containers to make this 
-a more automated, unified, and smooth process. 
-Container orchestration also ensures that containers are redundant and available so 
-that applications experience minimal downtime. 
-It scales containers up and down to meet demand, and it load-balances requests across instances 
-so that no one instance is overwhelmed. 
-It handles the scheduling of containers to underlying infrastructure. 
-Lastly, container orchestration tools can perform health checks to ensure that applications 
-are running, and these tools can take necessary actions when checks fail. 
-While these are just some of the aspects of the container lifecycle that are controlled 
-or automated by container orchestration tools, they're the ones that we will focus on in 
-the ensuing lessons and labs. 
-Although several container orchestration tools exist, Kubernetes has established itself as 
-the premier platform of choice. 
-The official Kubernetes documentation describes Kubernetes as “a portable, extensible, open-source 
-platform for managing containerized workloads and services that facilitates both declarative 
-configuration and automation. 
-It has a large, rapidly growing ecosystem. 
-Kubernetes services, support, and tools are widely available.” 
-This description highlights a few key points about Kubernetes. 
-First, Kubernetes is open source software. 
-Contributors from all over the world, from a variety of companies and industries, contribute 
-to Kubernetes, and the code, roadmap, and much more can be found online. 
-Kubernetes is designed specifically as a container orchestration platform. 
-Kubernetes facilitates declarative management, a topic we will get into shortly. 
-In brief, declarative management means that a desired state can be expressed–for example, 
-the number of replicas of a specific application–and Kubernetes will actively work to ensure that 
-the observed state matches the desired state. 
-There is a large and growing ecosystem around Kubernetes. 
-Many other open and proprietary projects exist to facilitate and further your use of Kubernetes. 
-And finally, Kubernetes is widely available, and has positioned itself as the de facto 
-choice for container orchestration. 
-When some people hear the term “platform as a service,” or “PaaS,” they might 
-think of an opinionated, all-inclusive platform. 
-Such platforms can be quite capable and provide a lot of services out of the box. 
-But their opinionated nature can also be more restrictive as it prevents users from adopting 
-certain other solutions that they might want. 
-In contrast, Kubernetes provides a flexible model that maintains choice for users wherever 
-appropriate. 
-For example, Kubernetes does not limit the types of applications that can run on it. 
-Whatever languages and frameworks that you choose to use are suitable, as long as they 
-can be containerized. 
-If an application runs in containers, it can run on Kubernetes. 
-Kubernetes also does not provide Continuous Integration/Continuous Deployment pipelines 
-to build applications or deploy source code. 
-Such tools can be chosen and leveraged by organizations as they desire. 
-Similarly, logging, monitoring, and alerting solutions are not prescribed. 
-Third-party or open source tools can be chosen and integrated. 
-Now that we have learned about container orchestration, and specifically what Kubernetes is and isn’t, 
-let’s dig into the specifics of the Kubernetes architecture. 
-You should now understand why container orchestration is needed and recognize today’s most popular 
-container orchestration tool, Kubernetes. 
-You should also have a high-level understanding of what Kubernetes is and what it is not. 
-With that information as a foundation, we’ll dig into the specifics of the Kubernetes architecture 
-in the next video
+Now that we have learned the basics of container images, including how to build and store an image and run a container, we’ll talk about container orchestration so that we can better understand how to create complex environments of many running containers. Everyone’s container journey starts with one container. You started this way in our last module! But of course, things don’t stay this way for long. Over time, new applications are written and deployed, applications grow and take on new components that are deployed independently, and projects spread across the globe to increase availability. That one initial container inevitably becomes many containers. At first, that growth is easy to handle. But soon it is overwhelming. Chaos reigns! As your container footprint grows and evolves, a tool for managing the lifecycle of your containers becomes increasingly necessary. Container orchestration encompasses a variety of topics; here are `six` that are particularly important. Container orchestration **aids in the provisioning and deployment of containers** to make this a more automated, unified, and smooth process. Container orchestration also **ensures that containers are redundant and available** so that applications experience minimal downtime. It **scales containers up and down to meet demand**, and it **load-balances requests across instances** so that no one instance is overwhelmed. It **handles the scheduling of containers to underlying infrastructure**. Lastly, container orchestration tools can **perform health checks** to ensure that applications are running, and these tools can take necessary actions when checks fail. While these are just some of the aspects of the container lifecycle that are controlled or automated by container orchestration tools, they're the ones that we will focus on in the ensuing lessons and labs. Although several container orchestration tools exist, Kubernetes has established itself as the premier platform of choice. The official Kubernetes documentation describes `Kubernetes` as “**a portable, extensible, open-source platform for managing containerized workloads and services that facilitates both declarative configuration and automation. It has a large, rapidly growing ecosystem. Kubernetes services, support, and tools are widely available.**” This description highlights a few `key points` about Kubernetes. First, Kubernetes is **open source** software. Contributors from all over the world, from a variety of companies and industries, contribute to Kubernetes, and the code, roadmap, and much more can be found online. Kubernetes is designed specifically as a **container orchestration platform**. Kubernetes **facilitates declarative management**, a topic we will get into shortly. In brief, declarative management means that a desired state can be expressed–for example, the number of replicas of a specific application–and Kubernetes will actively work to ensure that the observed state matches the desired state. There is **a large and growing ecosystem** around Kubernetes. Many other open and proprietary projects exist to facilitate and further your use of Kubernetes. And finally, Kubernetes is widely available, and has positioned itself as the de facto choice for container orchestration. When some people hear the term “platform as a service,” or “PaaS,” they might think of an opinionated, all-inclusive platform. Such platforms can be quite capable and provide a lot of services out of the box. But their opinionated nature can also be more restrictive as it prevents users from adopting certain other solutions that they might want. In contrast, Kubernetes provides a flexible model that maintains choice for users wherever appropriate. For example, Kubernetes does not limit the types of applications that can run on it. Whatever languages and frameworks that you choose to use are suitable, as long as they can be containerized. If an application runs in containers, it can run on Kubernetes. Kubernetes also does not provide Continuous Integration/Continuous Deployment pipelines to build applications or deploy source code. Such tools can be chosen and leveraged by organizations as they desire. Similarly, logging, monitoring, and alerting solutions are not prescribed. Third-party or open source tools can be chosen and integrated. Now that we have learned about container orchestration, and specifically what Kubernetes is and isn’t, let’s dig into the specifics of the Kubernetes architecture. You should now understand why container orchestration is needed and recognize today’s most popular container orchestration tool, Kubernetes. You should also have a high-level understanding of what Kubernetes is and what it is not. With that information as a foundation, we’ll dig into the specifics of the Kubernetes architecture in the next video
 
 ## Kubernetes Architecture
 
-In this video, we will learn about the architecture of the Kubernetes system. 
-This diagram from the Kubernetes documentation highlights the main components in a Kubernetes 
-system. 
-A deployment of Kubernetes is called a "cluster." 
-On the left side of this diagram is the control plane, which makes decisions about the cluster 
-and detects and responds to events in the cluster. 
-An example of a decision made by the control plane is scheduling of workloads. 
-An example of responding to an event is creating new resources when an application is deployed. 
-The control plane consists of several components. 
-First is the Kubernetes API server, which exposes the Kubernetes API. 
-All communication in the cluster utilizes this API. 
-For example, the Kubernetes API server accepts commands to view or change the state of the 
-cluster. 
-Next is "etcd," a highly available key value store that contains all the cluster data. 
-When you tell Kubernetes to deploy your application, that deployment configuration is stored in 
-etcd. 
-Etcd is thus the source of truth for the state in a Kubernetes cluster, and the system works 
-to bring the cluster state into line with what is stored in etcd. 
-The Kubernetes scheduler assigns newly created Pods to nodes. 
-This means that the scheduler determines where your workloads should run within the cluster. 
-We’ll learn more about Pods and nodes soon. 
-The Kubernetes controller manager runs all the controller processes that monitor the 
-cluster state and ensure that the actual state of a cluster matches the desired state. 
-We'll discuss controllers shortly as well. 
-Finally, the cloud controller manager runs controllers that interact with the underlying 
-cloud providers. 
-These controllers effectively link clusters into a cloud provider’s API. 
-Since Kubernetes is open source software and would ideally be adopted by a variety of cloud 
-providers and organizations, it strives to be as cloud-agnostic as possible. 
-The cloud controller manager enables both Kubernetes and the cloud providers to evolve 
-freely without introducing dependencies on the other. 
-That covers the control plane on the left side of the diagram. 
-Let’s now zoom in on the right side to learn more about the worker nodes. 
-Nodes are the worker machines in a Kubernetes cluster. 
-In other words, user applications are run on nodes. 
-Nodes can be virtual or physical machines. 
-Each node is managed by the control plane and is able to run Pods, which, again, we 
-will learn about in the next video. 
-Nodes are not created by Kubernetes itself, but rather by the cloud provider. 
-This enables Kubernetes to run on a variety of infrastructures. 
-The nodes are then managed by the control plane. 
-The components on a node enable that node to run Pods. 
-First is the "kubelet," the most important component. 
-This controller communicates with the Kubernetes API server to receive new and modified Pod 
-specifications and ensure that those Pods and their associated containers are running 
-as desired. 
-The kubelet also reports to the control plane on health and status. 
-In order to start a Pod, the kubelet uses the container runtime, which we touched on 
-in our first module. 
-The container runtime is responsible for downloading images and running containers. 
-Rather than providing a single container runtime, Kubernetes implements a Container Runtime 
-Interface that permits pluggability of the container runtime. 
-While Docker is likely the best-known runtime, rkt and CRI-O are two other commonly used 
-container runtimes. 
-Lastly, the Kubernetes proxy is a network proxy that runs on each node in a cluster. 
-This proxy maintains network rules that allow communication to Pods running on nodes, in 
-other words, communication to workloads running on your cluster. 
-This communication can come from within or outside of the cluster. 
-We've mentioned controllers a few times. 
-Controllers ensure that the actual state of the cluster matches the desired state. 
-But to understand this better, the Kubernetes documentation gives a great definition of 
-and analogy for controllers. 
-A control loop is defined as a non-terminating loop that regulates the state of a system. 
-A great example of a control loop is a thermostat. 
-When you set the temperature on a thermostat, you specify the desired state: you would like 
-the room to be, say, 70°F. The thermostat then works continually to make the actual 
-state, the temperature in the room, closer to the desired state, the temperature set 
-on the thermostat. 
-Controllers in Kubernetes work the same way, but they watch the state of a Kubernetes cluster 
-and take action to ensure that the cluster’s state matches the desired state. 
-Generally, the controller will send a message to the API server to initiate an action that 
-will help bring the current state in line with the desired state. 
-A Kubernetes controller tracks a Kubernetes object. 
-If, for example, you specify that you’d like three instances of your application to 
-run in Kubernetes, controllers will monitor the state of your cluster and ensure, to the 
-best of their ability and within the constraints of the system, that three instances of your 
-application are in fact running at any given time. 
-We’ll learn more about Kubernetes objects and controllers in the next video. 
-You should now be familiar with the architecture of a Kubernetes cluster. 
-Specifically, you should understand that there is a control plane, made up of several components, 
-which makes global decisions about the cluster. 
-You should also understand that there are separate nodes that run important Kubernetes 
-components as well as user workloads deployed on the cluster. 
-Finally, you should know what a controller is and how Kubernetes uses it to realize the 
-appropriate state in a cluster. 
-In the next video, we’ll learn about Kubernetes objects, which are resources that can be created 
-in a cluster.
+In this video, we will learn about the architecture of the Kubernetes system. This diagram from the Kubernetes documentation highlights the main components in a Kubernetes system. A `deployment of Kubernetes` is called a "**cluster**." On the left side of this diagram is the `control plane`, which **makes decisions about the cluster and detects and responds to events in the cluster**. An example of a decision made by the control plane is scheduling of workloads. An example of responding to an event is creating new resources when an application is deployed. The control plane consists of several `components`. First is the **Kubernetes API server**, which exposes the Kubernetes API. All communication in the cluster utilizes this API. For example, the Kubernetes API server accepts commands to view or change the state of the cluster. Next is "**etcd**," a highly available key value store that contains all the cluster data. When you tell Kubernetes to deploy your application, that deployment configuration is stored in etcd. Etcd is thus the source of truth for the state in a Kubernetes cluster, and the system works to bring the cluster state into line with what is stored in etcd. The Kubernetes **scheduler** assigns newly created Pods to nodes. This means that the scheduler determines where your workloads should run within the cluster. We’ll learn more about Pods and nodes soon. The Kubernetes **controller manager** runs all the controller processes that monitor the cluster state and ensure that the actual state of a cluster matches the desired state. We'll discuss controllers shortly as well. Finally, the **cloud controller manager** runs controllers that interact with the underlying cloud providers. These controllers effectively link clusters into a cloud provider’s API. Since Kubernetes is open source software and would ideally be adopted by a variety of cloud providers and organizations, it strives to be as cloud-agnostic as possible. The cloud controller manager enables both Kubernetes and the cloud providers to evolve freely without introducing dependencies on the other. That covers the control plane on the left side of the diagram. Let’s now zoom in on the right side to learn more about the worker nodes. `Nodes` are the **worker machines in a Kubernetes cluster**. In other words, user applications are run on nodes. Nodes can be virtual or physical machines. Each node is managed by the control plane and is able to run Pods, which, again, we will learn about in the next video. Nodes are not created by Kubernetes itself, but rather by the cloud provider. This enables Kubernetes to run on a variety of infrastructures. The nodes are then managed by the control plane. The components on a node enable that node to run Pods. First is the "**kubelet**," the most important component. This controller communicates with the Kubernetes API server to receive new and modified Pod specifications and ensure that those Pods and their associated containers are running as desired. The kubelet also reports to the control plane on health and status. In order to start a Pod, the kubelet uses the container runtime, which we touched on in our first module. The container runtime is responsible for downloading images and running containers. Rather than providing a single container runtime, Kubernetes implements a Container Runtime Interface that permits pluggability of the container runtime. While Docker is likely the best-known runtime, rkt and CRI-O are two other commonly used container runtimes. Lastly, the Kubernetes `proxy` is a network proxy that runs on each node in a cluster. This proxy maintains network rules that allow communication to Pods running on nodes, in other words, communication to workloads running on your cluster. This communication can come from within or outside of the cluster. We've mentioned controllers a few times. `Controllers` ensure that the **actual state of the cluster matches the desired state**. But to understand this better, the Kubernetes documentation gives a great definition of and analogy for controllers. A `control loop` is defined as a **non-terminating loop that regulates the state of a system**. A great example of a control loop is a thermostat. When you set the temperature on a thermostat, you specify the desired state: you would like the room to be, say, 70°F. The thermostat then works continually to make the actual state, the temperature in the room, closer to the desired state, the temperature set on the thermostat. Controllers in Kubernetes work the same way, but they watch the state of a Kubernetes cluster and take action to ensure that the cluster’s state matches the desired state. Generally, the controller will send a message to the API server to initiate an action that will help bring the current state in line with the desired state. A Kubernetes controller tracks a Kubernetes object. If, for example, you specify that you’d like three instances of your application to run in Kubernetes, controllers will monitor the state of your cluster and ensure, to the best of their ability and within the constraints of the system, that three instances of your application are in fact running at any given time. We’ll learn more about Kubernetes objects and controllers in the next video. You should now be familiar with the architecture of a Kubernetes cluster. Specifically, you should understand that there is a control plane, made up of several components, which makes global decisions about the cluster. You should also understand that there are separate nodes that run important Kubernetes components as well as user workloads deployed on the cluster. Finally, you should know what a controller is and how Kubernetes uses it to realize the appropriate state in a cluster. In the next video, we’ll learn about Kubernetes objects, which are resources that can be created in a cluster.
 
-## Introduction to Kubernetes Objects
-In this video, we will discuss Kubernetes objects. 
-Kubernetes objects are persistent entities in Kubernetes. 
-"Persistent" means that when you create an object, Kubernetes continually works to ensure 
-that that object exists in the system, until and unless you modify or remove that object. 
-In this way, Kubernetes objects define the state of your cluster. 
-By creating an object, you tell Kubernetes that you expect that object to exist. 
-The system is then responsible for ensuring that that object does in fact exist. 
-Some examples of Kubernetes objects are Pods, namespaces, Deployments, ConfigMaps, and volumes, 
-which we will discuss in this course. 
-To work with these objects—that is, to create, update, or delete them—you use the Kubernetes 
-API. 
-The most common way to perform these actions is to use the "kubectl" command-line interface. 
-The CLI makes the necessary Kubernetes API calls on your behalf. 
-You can also use the API directly by using one of the many client libraries provided 
-by Kubernetes. 
-Kubernetes objects consist of two main fields. 
-The first is the object "spec," which is provided by the user. 
-The spec dictates the desired state for this object. 
-The second field is the "status," which is provided by Kubernetes. 
-The status describes the current state of the object—its actual state as opposed to 
-its desired state. 
-The status is updated if at any time the status of the object changes. 
-The goal, of course, is for the desired state to match the current state, and Kubernetes 
-continually works toward that end. 
-Before we talk about a few specific object types, let’s look at some characteristics 
-of objects that will help set the stage. 
-Namespaces provide a convenient way to virtualize a physical cluster. 
-With namespaces, you can make one cluster appear to be several distinct clusters. 
-This is useful when several teams want to share a cluster, such as for cost-saving purposes, 
-or when a team maintains multiple projects and wants to keep these projects segregated. 
-However, namespaces are most useful when there's a large number of cluster users. 
-A cluster will automatically have several namespaces created that are used to house 
-elements of the Kubernetes architecture, which we spoke about in a previous video. 
-For instance, the kube-system namespace is present to hold some of these components. 
-Since this namespace is intended for the Kubernetes system, users should not put applications 
-into the namespace. 
-Instead, there might be a default namespace, which can be used to hold the users’ applications. 
-In some circumstances, this situation can be suitable for a user. 
-Perhaps they only have one team using a cluster, and that team only has one project that it 
-deploys into this cluster. 
-In this case, further division might not be necessary. 
-If, however, there are many teams or many projects, or perhaps a lot of users who have 
-different needs, additional namespaces can be created to keep things separate. 
-A team can have its own namespace, or a project can have its own. 
-Administrators can divvy up a cluster with namespaces at their own discretion. 
-These are just a few common patterns, but the key point is that namespaces can be used 
-to provide logical separation of a cluster into virtual clusters. 
-One final point about namespaces: they provide a scope for the names of objects 
-Each object has a name, and that name must be unique for that resource type within that 
-namespace. 
-For example, if you have a Pod that is named "myPod" in the default namespace, then no 
-other Pod in the default namespace can use that name. 
-However, a Pod in another namespace can use the same name, since that namespace provides 
-a new scope for that name, and a Deployment in the same namespace can use the same name, 
-since the resource type is different. 
-If we refer to our cluster with several namespaces, we can deploy named objects into these namespaces. 
-In this diagram, the top row displays the object type and the bottom row, the 
-object name. 
-So here we have two different object types deployed, Type A and Type B. In both namespaces, 
-the names of the Type A and Type B objects are the same. 
-That’s okay because the object types are different. 
-Since "team" is a separate namespace, we can also create a Type-A object with the same 
-name as the one in the default namespace. 
-There is no collision here because the names only have to be unique within a namespace. 
-However, if in the project namespace we try to deploy another Type A object with the same 
-name as the one already deployed there, it will fail because we cannot have two objects 
-of the same type with the same name in the same namespace. 
-Names obviously provide a level of uniqueness within a namespace. 
-But if you want to provide attributes to an object without specifying any uniqueness, 
-labels are a great place to start. 
-Labels are key/value pairs that can be attached to objects in order to identify those objects. 
-However, a label does not uniquely identify a single object. 
-Many objects carry the same labels, which enables those objects to be grouped and organized. 
-This is where selectors come into play. 
-Label selectors are the core grouping primitive in Kubernetes. 
-They enable you to identify a set of objects. 
-We’ll see later that these are used by Kubernetes controllers to determine which set of objects 
-ought to be controlled. 
-In this diagram, we have three objects of Type A deployed into the default namespace. 
-All have different names for uniqueness, but we also have a third row that indicates the 
-label name. 
-In this case, all the objects are labeled "app." 
-This label now serves to group these three objects together, which is useful for a variety 
-of Kubernetes constructs. 
-You should now be familiar with the basics of Kubernetes objects. 
-Specifically, you should understand how namespaces can be used to virtualize a cluster, as well 
-as how to avoid naming collisions for objects in one or many namespaces. 
-You should also understand how labels can be applied to Kubernetes objects, that they 
-do not provide uniqueness, and that they are used by selectors to group objects together. 
-In the next video, we’ll begin to learn about some of the basic objects available 
-in Kubernetes. 
+## Introduction to Kubernetes Objects (here)
+
+In this video, we will discuss Kubernetes objects. Kubernetes `objects` are **persistent entities in Kubernetes**. "Persistent" means that when you create an object, Kubernetes continually works to ensure that that object exists in the system, until and unless you modify or remove that object. In this way, Kubernetes objects define the state of your cluster. By creating an object, you tell Kubernetes that you expect that object to exist. The system is then responsible for ensuring that that object does in fact exist. Some `examples of Kubernetes objects` are **Pods**, **namespaces**, **Deployments**, **ConfigMaps**, and **volumes**, which we will discuss in this course. To work with these objects—that is, to create, update, or delete them—you use the Kubernetes API. The most common way to perform these actions is to use the "kubectl" command-line interface. The CLI makes the necessary Kubernetes API calls on your behalf. You can also use the API directly by using one of the many client libraries provided by Kubernetes. Kubernetes objects consist of `two main fields`. The first is the object "**spec**," which is provided by the user. The spec dictates the desired state for this object. The second field is the "**status**," which is provided by Kubernetes. The status describes the current state of the object—its actual state as opposed to its desired state. The status is updated if at any time the status of the object changes. The goal, of course, is for the desired state to match the current state, and Kubernetes continually works toward that end. Before we talk about a few specific object types, let’s look at some characteristics of objects that will help set the stage. `Namespaces` provide **a convenient way to virtualize a physical cluster**. With namespaces, you can make one cluster appear to be several distinct clusters. This is useful when several teams want to share a cluster, such as for cost-saving purposes, or when a team maintains multiple projects and wants to keep these projects segregated. However, namespaces are most useful when there's a large number of cluster users. A cluster will automatically have several namespaces created that are used to house elements of the Kubernetes architecture, which we spoke about in a previous video. For instance, the kube-system namespace is present to hold some of these components. Since this namespace is intended for the Kubernetes system, users should not put applications into the namespace. Instead, there might be a default namespace, which can be used to hold the users’ applications. In some circumstances, this situation can be suitable for a user. Perhaps they only have one team using a cluster, and that team only has one project that it deploys into this cluster. In this case, further division might not be necessary. If, however, there are many teams or many projects, or perhaps a lot of users who have different needs, additional namespaces can be created to keep things separate. A team can have its own namespace, or a project can have its own. Administrators can divvy up a cluster with namespaces at their own discretion. These are just a few common patterns, but the key point is that namespaces can be used to provide logical separation of a cluster into virtual clusters. One final point about namespaces: they provide a scope for the names of objects Each object has a name, and that name must be unique for that resource type within that namespace. For example, if you have a Pod that is named "myPod" in the default namespace, then no other Pod in the default namespace can use that name. However, a Pod in another namespace can use the same name, since that namespace provides a new scope for that name, and a Deployment in the same namespace can use the same name, since the resource type is different. If we refer to our cluster with several namespaces, we can deploy named objects into these namespaces. In this diagram, the top row displays the object type and the bottom row, the object name. So here we have two different object types deployed, Type A and Type B. In both namespaces, the names of the Type A and Type B objects are the same. That’s okay because the object types are different. Since "team" is a separate namespace, we can also create a Type-A object with the same name as the one in the default namespace. There is no collision here because the names only have to be unique within a namespace. However, if in the project namespace we try to deploy another Type A object with the same name as the one already deployed there, it will fail because we cannot have two objects of the same type with the same name in the same namespace. Names obviously provide a level of uniqueness within a namespace. But if you want to provide attributes to an object without specifying any uniqueness, labels are a great place to start. Labels are key/value pairs that can be attached to objects in order to identify those objects. However, a label does not uniquely identify a single object. Many objects carry the same labels, which enables those objects to be grouped and organized. This is where selectors come into play. Label selectors are the core grouping primitive in Kubernetes. They enable you to identify a set of objects. We’ll see later that these are used by Kubernetes controllers to determine which set of objects ought to be controlled. In this diagram, we have three objects of Type A deployed into the default namespace. All have different names for uniqueness, but we also have a third row that indicates the label name. In this case, all the objects are labeled "app." This label now serves to group these three objects together, which is useful for a variety of Kubernetes constructs. You should now be familiar with the basics of Kubernetes objects. Specifically, you should understand how namespaces can be used to virtualize a cluster, as well as how to avoid naming collisions for objects in one or many namespaces. You should also understand how labels can be applied to Kubernetes objects, that they do not provide uniqueness, and that they are used by selectors to group objects together. In the next video, we’ll begin to learn about some of the basic objects available in Kubernetes. 
 
 ## Basic Kubernetes Objects
 
-Now that you’ve learned what a Kubernetes object is, along with some related concepts, 
-let’s learn some of the basic objects available in Kubernetes. 
-The first object we’ll learn about is the Pod. 
-This is the simplest unit that you deploy in Kubernetes. 
-A Pod represents a process running in your cluster; it also represents a single instance 
-of an application running in your cluster. 
-Usually, a Pod wraps a single container, although in some cases a Pod can encapsulate multiple 
-tightly coupled containers that share resources. 
-This is a more advanced use case; in general, consider a Pod as a wrapper for a single container. 
-Since a Pod is intended to represent a single instance of an application, creating replicas 
-of a Pod serves to scale an application horizontally. 
-As we discussed in the video on Kubernetes architecture, a container runtime is required 
-to run containers in a Pod. 
-When using the "kubectl" CLI to create objects, you often provide a YAML file that defines 
-the object or objects that you want to create. 
-Here is an example of a YAML file that defines a simple Pod. 
-Let’s discuss some of the fields in this file. 
-The "kind" field is, quite simply, the kind of object that you want to create. 
-In this case, we will create a Pod. 
-The next field that we’ll highlight is the "spec." 
-This field differs depending on which kind of object you are creating, so you need to 
-provide the appropriate fields within the spec. 
-In this case, our spec includes the containers that will run in this Pod. 
-A Pod spec must contain at least one container. 
-Remember, there can be multiple containers, but there is usually just one. 
-The container is named; in this case the name is "nginx". 
-The image field dictates which image will be run in this Pod. 
-When using a private registry like IBM Cloud Container Registry, this image name will be 
-longer as it includes the domain as well as the repo and tag. 
-Finally, the ports array lists the ports to expose from the container. 
-The next object we’ll discuss is a ReplicaSet. 
-As the name suggests, a ReplicaSet is a group of identical Pods that are running. 
-We previously mentioned that your application can be horizontally scaled by running replicas 
-of a Pod. 
-ReplicaSets are the object used to do this. 
-A ReplicaSet includes a few key fields that differentiate it from a simple Pod definition. 
-The kind is now ReplicaSet, as that is the object we wish to create. 
-Since a ReplicaSet is different from a Pod, the spec for this object is different and 
-requires different fields. 
-Perhaps the most important field here is the "replicas" field. 
-This field specifies the number of replicas of the defined Pod that should be running 
-at any given time. 
-As this field is set and updated, the ReplicaSet will create or delete Pods to meet the desired 
-number of replicas. 
-A Pod template is also defined in the ReplicaSet spec. 
-This field is important because it defines the Pods that should be created by the ReplicaSet. 
-As the number of replicas changes, this template dictates how to create the newly desired Pods. 
-In this way, a ReplicaSet encapsulates a Pod definition and adds additional information 
-needed to replicate it. 
-The last field we’ll discuss is the "selector" field. 
-Remember that labels are not unique, and selectors are the core grouping primitive in Kubernetes. 
-This is a great example of how they're used. 
-The labels supplied in this field specify how to identify Pods that can be acquired 
-by the ReplicaSet. 
-Put simply, Pods that are acquired by a ReplicaSet possess a reference to the owning ReplicaSet. 
-This link provides the ReplicaSet with needed information on the state of the Pods. 
-Notice that the label identified in the "matchLabels" field is the same as the label in the Pod 
-template. 
-Both are "app: nginx". 
-Interestingly, it is not recommended that you create ReplicaSets directly. 
-Instead, the Deployment object, a higher-level concept that in turn manages ReplicaSets, 
-offers more features and better management, so these are more often created directly by 
-users. 
-In fact, it’s quite possible that you’ll never manipulate ReplicaSet objects directly 
-because the Deployment will do that for you. 
-But it’s still important to understand the ReplicaSet object so you see how replication 
-works and so that you’ll recognize a ReplicaSet object when you see it. 
-A Deployment is an object that provides updates for both Pods and ReplicaSets. 
-Deployments run multiple replicas of an application by creating ReplicaSets and offering additional 
-management capabilities on top of those ReplicaSets. 
-In addition, deployments are suitable for stateless applications. 
-Deployments are used in a variety of situations. 
-You might want to deploy a replicated application, or update the Pods that are managed by a Deployment, 
-or scale up an application. 
-You’ll notice something interesting about the Deployment specification on the right 
-side of the screen. 
-Other than a simple name change, the definition is identical to the ReplicaSet definition 
-from the previous slide. 
-This is not to say that the Deployment and ReplicaSet definitions are identical; Deployments 
-are more robust and provide additional objects. 
-However, a minimalist Deployment can look exactly like a ReplicaSet, as we defined here. 
-The kind obviously changes to Deployment, but you’ll still see the number of replicas, 
-a selector to identify which Pods can be acquired, and a Pod template. 
-This is all the same information we discussed with ReplicaSets. 
-The replicas field indicates that we want to replicate the Pods in this Deployment, 
-and that causes a ReplicaSet to be created. 
-One key feature that Deployments provide that ReplicaSets do not provide is rolling updates. 
-A ReplicaSet can only define a single Pod template; if you want to roll out a new version 
-of your application, you need to create a new Deployment that defines this Pod template. 
-A rolling update scales up the new version to the appropriate number of replicas and 
-scales down the old version to zero replicas. 
-A ReplicaSet is therefore effectively responsible for counting Pods and ensuring that the appropriate 
-number of Pods exist, and the Deployment object is responsible for orchestrating the rollout 
-of a new version. 
-You should now be familiar with Pods, which are the simplest unit in Kubernetes. 
-You should also understand how ReplicaSets are used to maintain a set of Pods and scale 
-an application. 
-Finally, you should understand how Deployments are a higher-level construct than ReplicaSets, 
-and provide updates for ReplicaSets and Pods. 
-In the next video, we’ll discuss the Kubernetes CLI, "kubectl", and learn how to use it to 
-manipulate objects in a Kubernetes cluster.
+Now that you’ve learned what a Kubernetes object is, along with some related concepts, let’s learn some of the basic objects available in Kubernetes. The first object we’ll learn about is the Pod. This is the simplest unit that you deploy in Kubernetes. A Pod represents a process running in your cluster; it also represents a single instance of an application running in your cluster. Usually, a Pod wraps a single container, although in some cases a Pod can encapsulate multiple tightly coupled containers that share resources. This is a more advanced use case; in general, consider a Pod as a wrapper for a single container. Since a Pod is intended to represent a single instance of an application, creating replicas of a Pod serves to scale an application horizontally. As we discussed in the video on Kubernetes architecture, a container runtime is required to run containers in a Pod. When using the "kubectl" CLI to create objects, you often provide a YAML file that defines the object or objects that you want to create. Here is an example of a YAML file that defines a simple Pod. Let’s discuss some of the fields in this file. The "kind" field is, quite simply, the kind of object that you want to create. In this case, we will create a Pod. The next field that we’ll highlight is the "spec." This field differs depending on which kind of object you are creating, so you need to provide the appropriate fields within the spec. In this case, our spec includes the containers that will run in this Pod. A Pod spec must contain at least one container. Remember, there can be multiple containers, but there is usually just one. The container is named; in this case the name is "nginx". The image field dictates which image will be run in this Pod. When using a private registry like IBM Cloud Container Registry, this image name will be longer as it includes the domain as well as the repo and tag. Finally, the ports array lists the ports to expose from the container. The next object we’ll discuss is a ReplicaSet. As the name suggests, a ReplicaSet is a group of identical Pods that are running. We previously mentioned that your application can be horizontally scaled by running replicas of a Pod. ReplicaSets are the object used to do this. A ReplicaSet includes a few key fields that differentiate it from a simple Pod definition. The kind is now ReplicaSet, as that is the object we wish to create. Since a ReplicaSet is different from a Pod, the spec for this object is different and requires different fields. Perhaps the most important field here is the "replicas" field. This field specifies the number of replicas of the defined Pod that should be running at any given time. As this field is set and updated, the ReplicaSet will create or delete Pods to meet the desired number of replicas. A Pod template is also defined in the ReplicaSet spec. This field is important because it defines the Pods that should be created by the ReplicaSet. As the number of replicas changes, this template dictates how to create the newly desired Pods. In this way, a ReplicaSet encapsulates a Pod definition and adds additional information needed to replicate it. The last field we’ll discuss is the "selector" field. Remember that labels are not unique, and selectors are the core grouping primitive in Kubernetes. This is a great example of how they're used. The labels supplied in this field specify how to identify Pods that can be acquired by the ReplicaSet. Put simply, Pods that are acquired by a ReplicaSet possess a reference to the owning ReplicaSet. This link provides the ReplicaSet with needed information on the state of the Pods. Notice that the label identified in the "matchLabels" field is the same as the label in the Pod template. Both are "app: nginx". Interestingly, it is not recommended that you create ReplicaSets directly. Instead, the Deployment object, a higher-level concept that in turn manages ReplicaSets, offers more features and better management, so these are more often created directly by users. In fact, it’s quite possible that you’ll never manipulate ReplicaSet objects directly because the Deployment will do that for you. But it’s still important to understand the ReplicaSet object so you see how replication works and so that you’ll recognize a ReplicaSet object when you see it. A Deployment is an object that provides updates for both Pods and ReplicaSets. Deployments run multiple replicas of an application by creating ReplicaSets and offering additional management capabilities on top of those ReplicaSets. In addition, deployments are suitable for stateless applications. Deployments are used in a variety of situations. You might want to deploy a replicated application, or update the Pods that are managed by a Deployment, or scale up an application. You’ll notice something interesting about the Deployment specification on the right side of the screen. Other than a simple name change, the definition is identical to the ReplicaSet definition from the previous slide. This is not to say that the Deployment and ReplicaSet definitions are identical; Deployments are more robust and provide additional objects. However, a minimalist Deployment can look exactly like a ReplicaSet, as we defined here. The kind obviously changes to Deployment, but you’ll still see the number of replicas, a selector to identify which Pods can be acquired, and a Pod template. This is all the same information we discussed with ReplicaSets. The replicas field indicates that we want to replicate the Pods in this Deployment, and that causes a ReplicaSet to be created. One key feature that Deployments provide that ReplicaSets do not provide is rolling updates. A ReplicaSet can only define a single Pod template; if you want to roll out a new version of your application, you need to create a new Deployment that defines this Pod template. A rolling update scales up the new version to the appropriate number of replicas and scales down the old version to zero replicas. A ReplicaSet is therefore effectively responsible for counting Pods and ensuring that the appropriate number of Pods exist, and the Deployment object is responsible for orchestrating the rollout of a new version. You should now be familiar with Pods, which are the simplest unit in Kubernetes. You should also understand how ReplicaSets are used to maintain a set of Pods and scale an application. Finally, you should understand how Deployments are a higher-level construct than ReplicaSets, and provide updates for ReplicaSets and Pods. In the next video, we’ll discuss the Kubernetes CLI, "kubectl", and learn how to use it to manipulate objects in a Kubernetes cluster.
 
 ## Kubectl CLI
 
-In this video, we’ll talk about the Kubernetes CLI, which is called "kubectl." 
-The internet is full of debates about how to pronounce this word. 
-We’ve gone with the canonical pronunciation provided by the Cloud Native Computing Foundation, 
-but know that you might hear a lot of different pronunciations. 
-When you work with Kubernetes, one of the key tools you need to familiarize yourself 
-with is the Kubernetes CLI, called "kubectl." 
-This tool provides a wide range of functionality for working with Kubernetes clusters and managing 
-the workloads that run in a cluster. 
-It will become your best friend as you become a Kubernetes expert. 
-There are many different types of commands available with kubectl, but let’s first 
-discuss two key types of commands: "imperative" and "declarative." 
-Imperative commands enable users to quickly create, update, and delete Kubernetes objects. 
-Imperative commands are easiest to learn and therefore present the lowest barrier to entry. 
-For example, to create a Pod that runs a specific container, in this case, "nginx"–, you 
-can simply run the “kubectl run nginx --image nginx” command. 
-This command is simple to write and understand because it only contains a name and the image 
-that should be run as a container. 
-However, it doesn’t provide an audit trail, which is important in clusters so that operators 
-can know what changes are made. 
-It's also not very flexible: the options are limited, and additional commands must be run 
-to expose the Deployment as an externally available service, for example. 
-So you could have one developer run a "kubectl run" command, which would create a Pod that 
-runs an application. 
-Another developer on the team might want to deploy that application again. 
-But how does she know how to deploy the application? 
-There is no configuration file stored in a repository anywhere. 
-The second developer would need to ask the first developer for the exact command he ran, 
-and she would need to ensure that she ran it in the exact same way. 
-What we need is a template that both developers can use to deploy their application. 
-And as a matter of fact, there are imperative commands that possess a template; this is 
-known as "imperative object configuration." 
-In this model, a file contains the configuration template, and the command specifies an operation 
-such as create, replace, or delete. 
-[Advance slide to show second kubectl command] 
-For example, this second command specifies a YAML file that contains the object configuration, 
-and it specifies that this object should be created. 
-This is an improvement over basic imperative commands because the configuration template 
-makes replicating the changes much simpler. 
-All the configuration is available in the file, so it's easy to perform this operation 
-multiple times or in multiple environments. 
-Using our previous example, both developers can now refer to a configuration file to ensure 
-that they are deploying the same thing into their respective environments. 
-However, specifying the operation is a limitation of this model. 
-If, for example, the first developer performs an update operation, that will manipulate 
-the existing object. 
-But if that update isn’t merged into the object’s configuration file, then the second 
-developer won’t be able to use that new configuration when she subsequently deploys 
-the application. 
-She will instead use the old configuration. 
-A better option is to define a desired state in that shared configuration file, and when 
-that file is applied, have Kubernetes determine which operations need to occur. 
-In fact, this is what declarative commands do. 
-Declarative resource management is the most advanced and powerful form of command available 
-in kubectl. 
-In this model, configuration files are still used to hold the configuration for an object 
-or several objects. 
-But in this case, the operation is not specified by the user. 
-Rather, the needed operations are detected by kubectl. 
-Changes can be made to one file or set of files, and the "apply" command can be used 
-to realize the necessary changes. 
-Regardless of whether what's needed is to create new objects or update existing objects, 
-the user doesn’t need to know. 
-By applying the configuration files, Kubernetes takes care of the needed work to actualize 
-the state specified in the files. 
-In addition, declarative object configuration commands work better on directories, whereas 
-imperative object configuration commands work better on files. 
-In this case, the first developer can make several updates to the running application. 
-But since he is storing the new configuration in the shared configuration file, there is 
-still one source of truth for the configuration for this object. 
-Now even if the second developer missed several of these updates, she only has to apply the 
-current configuration file and she will be sure that the deployed object is as expected. 
-Kubernetes will determine which operations must occur to take her cluster’s current 
-state to the desired state, even though she might have missed several intermediate steps 
-taken by the first developer along the way. 
-Here you can see a basic "kubectl apply" command acting on a directory. 
-All files in that directory will be applied, and all necessary changes will be realized 
-in the system. 
-The user doesn’t even need to know what those changes are. 
-Do any nginx Deployments exist already? 
-It doesn’t matter. 
-Hopefully, an operations person will know the current state and the desired changes 
-just so they're aware of what’s going on in the system they're administering. 
-But the point is that those changes don’t need to be explicitly stated by the people 
-creating the configuration objects. 
-Performing an "apply" command will make the relevant changes automatically. 
-This is the preferred method for production systems. 
-Imperative commands can be useful during development, but they're not recommended for production 
-systems. 
-In the rest of this course, we will rely extensively on declarative commands. 
-You should now be familiar with the kubectl CLI, one of the most important tools for interacting 
-with a Kubernetes cluster. 
-You should also know a few basic commands, but it's more important at this point to understand 
-the different types of commands offered by kubectl, both imperative and declarative 
-commands—and the relative benefits and shortcomings of each. 
-In the next video, we’ll look at some specific kubectl commands and how to use them in practice.
+In this video, we’ll talk about the Kubernetes CLI, which is called "kubectl." The internet is full of debates about how to pronounce this word. We’ve gone with the canonical pronunciation provided by the Cloud Native Computing Foundation, but know that you might hear a lot of different pronunciations. When you work with Kubernetes, one of the key tools you need to familiarize yourself with is the Kubernetes CLI, called "kubectl." This tool provides a wide range of functionality for working with Kubernetes clusters and managing the workloads that run in a cluster. It will become your best friend as you become a Kubernetes expert. There are many different types of commands available with kubectl, but let’s first discuss two key types of commands: "imperative" and "declarative." Imperative commands enable users to quickly create, update, and delete Kubernetes objects. Imperative commands are easiest to learn and therefore present the lowest barrier to entry. For example, to create a Pod that runs a specific container, in this case, "nginx"–, you can simply run the “kubectl run nginx --image nginx” command. This command is simple to write and understand because it only contains a name and the image that should be run as a container. However, it doesn’t provide an audit trail, which is important in clusters so that operators can know what changes are made. It's also not very flexible: the options are limited, and additional commands must be run to expose the Deployment as an externally available service, for example. So you could have one developer run a "kubectl run" command, which would create a Pod that runs an application. Another developer on the team might want to deploy that application again. But how does she know how to deploy the application? There is no configuration file stored in a repository anywhere. The second developer would need to ask the first developer for the exact command he ran, and she would need to ensure that she ran it in the exact same way. What we need is a template that both developers can use to deploy their application. And as a matter of fact, there are imperative commands that possess a template; this is known as "imperative object configuration." In this model, a file contains the configuration template, and the command specifies an operation such as create, replace, or delete. [Advance slide to show second kubectl command] For example, this second command specifies a YAML file that contains the object configuration, and it specifies that this object should be created. This is an improvement over basic imperative commands because the configuration template makes replicating the changes much simpler. All the configuration is available in the file, so it's easy to perform this operation multiple times or in multiple environments. Using our previous example, both developers can now refer to a configuration file to ensure that they are deploying the same thing into their respective environments. However, specifying the operation is a limitation of this model. If, for example, the first developer performs an update operation, that will manipulate the existing object. But if that update isn’t merged into the object’s configuration file, then the second developer won’t be able to use that new configuration when she subsequently deploys the application. She will instead use the old configuration. A better option is to define a desired state in that shared configuration file, and when that file is applied, have Kubernetes determine which operations need to occur. In fact, this is what declarative commands do. Declarative resource management is the most advanced and powerful form of command available in kubectl. In this model, configuration files are still used to hold the configuration for an object or several objects. But in this case, the operation is not specified by the user. Rather, the needed operations are detected by kubectl. Changes can be made to one file or set of files, and the "apply" command can be used to realize the necessary changes. Regardless of whether what's needed is to create new objects or update existing objects, the user doesn’t need to know. By applying the configuration files, Kubernetes takes care of the needed work to actualize the state specified in the files. In addition, declarative object configuration commands work better on directories, whereas imperative object configuration commands work better on files. In this case, the first developer can make several updates to the running application. But since he is storing the new configuration in the shared configuration file, there is still one source of truth for the configuration for this object. Now even if the second developer missed several of these updates, she only has to apply the current configuration file and she will be sure that the deployed object is as expected. Kubernetes will determine which operations must occur to take her cluster’s current state to the desired state, even though she might have missed several intermediate steps taken by the first developer along the way. Here you can see a basic "kubectl apply" command acting on a directory. All files in that directory will be applied, and all necessary changes will be realized in the system. The user doesn’t even need to know what those changes are. Do any nginx Deployments exist already? It doesn’t matter. Hopefully, an operations person will know the current state and the desired changes just so they're aware of what’s going on in the system they're administering. But the point is that those changes don’t need to be explicitly stated by the people creating the configuration objects. Performing an "apply" command will make the relevant changes automatically. This is the preferred method for production systems. Imperative commands can be useful during development, but they're not recommended for production systems. In the rest of this course, we will rely extensively on declarative commands. You should now be familiar with the kubectl CLI, one of the most important tools for interacting with a Kubernetes cluster. You should also know a few basic commands, but it's more important at this point to understand the different types of commands offered by kubectl, both imperative and declarative commands—and the relative benefits and shortcomings of each. In the next video, we’ll look at some specific kubectl commands and how to use them in practice.
 
 ## Using Kubernetes
 
-Over the last few videos, we have learned a lot about Kubernetes—its architecture, 
-how it works to host highly available containerized applications, basic Kubernetes system objects, 
-and how to use the CLI. 
-Armed with all this knowledge, we're now ready to deploy our first application. 
-We'll be reiterating the concepts we've learned previously, but we'll apply those concepts 
-from a more practical standpoint. 
-We'll use kubectl CLI and show actual terminal output to give you a feel for what it’s 
-like to work with Kubernetes. 
-Then, in the lab for this module, you will get your hands dirty with these tools. 
-In the last video, you were introduced to an extremely important command: the "apply" 
-command. 
-This is the bread and butter of object management in Kubernetes. 
-As you've seen, at its most basic, the "apply" command simply requires a file or directory 
-of files. 
-When the "apply" command is run, the state of the targeted Kubernetes cluster is made 
-to match the state that's defined in the provided files. 
-This is fully declarative. Users don’t need to specify the exact operations that 
-should be carried out. 
-The desired state is all that's required, and kubectl will determine the specific actions 
-to take. 
-This is an incredibly powerful method. 
-When you create resources, you'll want to view them. 
-The "get" and "describe" commands enable you to do this. 
-The "get" command lists one or many resources, while the "describe" command shows details 
-about a specific resource or group of resources. 
-Both commands are namespace-scoped, meaning that by default they will operate on the resources 
-in the targeted namespace. 
-The "get" command lists all the deployments in the kube-system namespace. 
-"Kube-system" is a namespace for objects created by the Kubernetes system; that is, it's not 
-a user-created namespace. 
-As you can see in this figure, there are multiple deployments in the kube-system namespace. 
-The "get" command lists all of those deployments. 
-The "describe" command shows details of a specific deployment in the kube-system namespace 
-called "kube-dns-amd64". 
-Let’s look at the output of these commands. 
-Here is a copy of terminal output from running the previous "get" command. 
-As you can see, the command lists all the deployments that are present in the kube-system 
-namespace. 
-It also lists how many of the requested replicas are ready, up to date, and available, as well 
-as when they were created. 
-You’ll notice the kube-dns-amd64 deployment in this output. 
-Let’s get more information on that. 
-The output of this command is too long to show, but the first few lines are displayed 
-here. 
-This shows basic information like the name, namespace, labels, and so on. 
-The truncated output shows the Pod template, as well as some history for this resource. 
-Using these basic commands, let’s create our first deployment. 
-We’ll use the same "nginx" YAML file that we displayed in the previous video on Kubernetes 
-objects. 
-We won’t display it again, but it’s a basic Deployment configuration that creates 
-three replicas of nginx using the "nginx" container image. 
-Here's the output of this command. 
-We used the "apply" command, which is declarative. 
-That command inferred that a new deployment needed to be created. 
-The output shows that the object was created in the system, but what we don’t yet know 
-is whether the object is running successfully. 
-Problems could have occurred pulling the image from a registry, for example. 
-So let’s list our deployments so that we can see its status. 
-As you can see, this resource has three replicas, and all three are ready, up to date, and available. 
-If we ran a "describe" command on this object, we would see output as in the last slide. 
-You should now be familiar with a few more basic Kubernetes commands: the "apply", "get", 
-and "describe" commands. 
-You should understand how to use these commands together to create a resource in Kubernetes, 
-ensure that it is created successfully, and get additional information about it. 
-Congratulations on completing this module! 
-You're now familiar with container orchestration and Kubernetes. 
-You learned about the architecture of a Kubernetes system so that you understand the components 
-of a Kubernetes cluster. 
-You also learned about basic Kubernetes objects that can be created in a cluster, and you 
-learned how to use the kubectl CLI to create, list, and get information on those resources. 
-In the lab for this module, you will have the opportunity to use the kubectl CLI to 
-create resources on an actual Kubernetes cluster.
+Over the last few videos, we have learned a lot about Kubernetes—its architecture, how it works to host highly available containerized applications, basic Kubernetes system objects, and how to use the CLI. Armed with all this knowledge, we're now ready to deploy our first application. We'll be reiterating the concepts we've learned previously, but we'll apply those concepts from a more practical standpoint. We'll use kubectl CLI and show actual terminal output to give you a feel for what it’s like to work with Kubernetes. Then, in the lab for this module, you will get your hands dirty with these tools. In the last video, you were introduced to an extremely important command: the "apply" command. This is the bread and butter of object management in Kubernetes. As you've seen, at its most basic, the "apply" command simply requires a file or directory of files. When the "apply" command is run, the state of the targeted Kubernetes cluster is made to match the state that's defined in the provided files. This is fully declarative. Users don’t need to specify the exact operations that should be carried out. The desired state is all that's required, and kubectl will determine the specific actions to take. This is an incredibly powerful method. When you create resources, you'll want to view them. The "get" and "describe" commands enable you to do this. The "get" command lists one or many resources, while the "describe" command shows details about a specific resource or group of resources. Both commands are namespace-scoped, meaning that by default they will operate on the resources in the targeted namespace. The "get" command lists all the deployments in the kube-system namespace. "Kube-system" is a namespace for objects created by the Kubernetes system; that is, it's not a user-created namespace. As you can see in this figure, there are multiple deployments in the kube-system namespace. The "get" command lists all of those deployments. The "describe" command shows details of a specific deployment in the kube-system namespace called "kube-dns-amd64". Let’s look at the output of these commands. Here is a copy of terminal output from running the previous "get" command. As you can see, the command lists all the deployments that are present in the kube-system namespace. It also lists how many of the requested replicas are ready, up to date, and available, as well as when they were created. You’ll notice the kube-dns-amd64 deployment in this output. Let’s get more information on that. The output of this command is too long to show, but the first few lines are displayed here. This shows basic information like the name, namespace, labels, and so on. The truncated output shows the Pod template, as well as some history for this resource. Using these basic commands, let’s create our first deployment. We’ll use the same "nginx" YAML file that we displayed in the previous video on Kubernetes objects. We won’t display it again, but it’s a basic Deployment configuration that creates three replicas of nginx using the "nginx" container image. Here's the output of this command. We used the "apply" command, which is declarative. That command inferred that a new deployment needed to be created. The output shows that the object was created in the system, but what we don’t yet know is whether the object is running successfully. Problems could have occurred pulling the image from a registry, for example. So let’s list our deployments so that we can see its status. As you can see, this resource has three replicas, and all three are ready, up to date, and available. If we ran a "describe" command on this object, we would see output as in the last slide. You should now be familiar with a few more basic Kubernetes commands: the "apply", "get", and "describe" commands. You should understand how to use these commands together to create a resource in Kubernetes, ensure that it is created successfully, and get additional information about it. Congratulations on completing this module! You're now familiar with container orchestration and Kubernetes. You learned about the architecture of a Kubernetes system so that you understand the components of a Kubernetes cluster. You also learned about basic Kubernetes objects that can be created in a cluster, and you learned how to use the kubectl CLI to create, list, and get information on those resources. In the lab for this module, you will have the opportunity to use the kubectl CLI to create resources on an actual Kubernetes cluster.
+
+## Lab - Introduction to Kubernetes
+
+- [Click here](./introduction-to-kubernetes.pdf) to view and download the lab instructions.
 
 ## CheatSheet - Understanding Kubernetes Architecture
 
-- [Click here](https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/cc201/Cheatsheets/C5M2_cheatsheet_v1.1.pdf) to view and download the "Understanding Kubernetes Architecture" cheatsheet. 
+- [Click here](./cheat-sheet-understanding-kubernetes-architecture.pdf) to view and download the "Understanding Kubernetes Architecture" cheatsheet. 
 
-## Glossary - Understanding Kubernetes Architecture
+## Glossary - Kubernetes Basics
 
-- [Click here](https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/cc201/Cheatsheets/C5M2%20Glossary%20v1.2.pdf) to view and download the "Understanding Kubernetes Architecture" module glossary. 
+- [Click here](./glossary-kubernetes-basics.pdf) to view and download the "Kubernetes Basics" module glossary. 
 
 # Managing Applications with Kubernetes
 
