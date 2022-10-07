@@ -31,12 +31,19 @@ ___
   - [CheatSheet - Understanding Kubernetes Architecture](#cheatsheet---understanding-kubernetes-architecture)
   - [Glossary - Kubernetes Basics](#glossary---kubernetes-basics)
 - [Managing Applications with Kubernetes](#managing-applications-with-kubernetes)
+  - [Replica Sets (old module)](#replica-sets-old-module)
   - [Replica Sets](#replica-sets)
+  - [Autoscaling (old module)](#autoscaling-old-module)
   - [Autoscaling](#autoscaling)
+  - [Deployment strategies](#deployment-strategies)
+  - [Rolling Updates (old module)](#rolling-updates-old-module)
   - [Rolling Updates](#rolling-updates)
+  - [Config Maps and Secrets (old module)](#config-maps-and-secrets-old-module)
   - [Config Maps and Secrets](#config-maps-and-secrets)
+  - [Service Binding (old module)](#service-binding-old-module)
   - [Service Binding](#service-binding)
   - [Glossary - Managing Applications with Kubernetes](#glossary---managing-applications-with-kubernetes)
+  - [Cheat-sheet: Managing Applications with Kubernetes](#cheat-sheet-managing-applications-with-kubernetes)
 - [The Kubernetes Ecosystem: OpenShift, Istio, etc.](#the-kubernetes-ecosystem-openshift-istio-etc)
   - [The Kubernetes Ecosystem](#the-kubernetes-ecosystem)
   - [Introduction to Red Hat OpenShift](#introduction-to-red-hat-openshift)
@@ -172,326 +179,57 @@ Welcome to “Using Kubectl.” After watching this video, you will be able to d
 
 # Managing Applications with Kubernetes
 
+## Replica Sets (old module)
+
+In this module, we'll look at key concepts for managing Kubernetes applications, including ReplicaSets, autoscaling, rolling updates, ConfigMaps, secrets, and service bindings. This video focuses on ReplicaSets highlighted in our architecture in the red box. `ReplicaSets` help us **scale applications to meet increasing demand**. Let’s dive in! So what is a ReplicaSet? It manages your pods ensuring the right number of pods are always up and running. This can mean adding or deleting pods as needed. ReplicaSets provide the ability to replicate pods and restart or spin up new pods when existing ones fail. A ReplicaSet can pick an existing pod to add to the deployment or create a new one if there are no existing pods. It does so by asking for a list of pods from the Kubernetes API and then filtering on the labels, as defined in the descriptor. The ReplicaSet object supersedes the ReplicationController and should be used instead. IBM Cloud Kubernetes Service will create a ReplicaSet for you when you create a deployment in your cluster. One of the main design philosophies of Kubernetes is to keep each object type independent of the others. True to this loose-coupling idea, the ReplicaSet does not own any of the pods, instead it uses the pod labels to decide which pods to acquire when bringing a deployment to the desired state. The template metadata inside the YAML spec defines the labels of potential pod candidates to add or delete. The next question you might ask is, "how do I create a ReplicaSet?" Well, one is automatically created for you when you create a deployment. If you remember, we created the “hello-Kubernetes” deployment in the previous section. If you issue a “get replicaset” command as shown here, you will see a ReplicaSet with the name “hello-Kubernetes-randomnumber” generated for you by default. It currently replicates to a single pod, but we'll change that shortly. If you describe the pod, you will see that it is “Controlled by:” the same ReplicaSet. As explained previously, this is a loose coupling based on the pod labels. To create one from scratch, you can simply apply a YAML file with the "kind" attribute set to “ReplicaSet” as shown. You can see that the number of ReplicaSets is defined as "1," so you get a single pod, as when you create a default without specifying the number of replicas in the YAML file. While it's possible to create a ReplicaSet without a deployment, it's recommended that you create a deployment instead. A deployment gives you a couple of additional features that we'll soon explore. Note that kubectl uses “rs” as a short form for ReplicaSet, because nobody wants to type more than absolutely necessary! If you already have a deployment that you want to scale, you can simply use the “scale” command as shown here. The first command creates a deployment. The second command gets the pods to show it was created. You see the “hello-Kubernetes-longnumber” pod created. The third command gets the “hello-Kubernetes” deployment. The command after that sets the “replicas” to "3". If you issue another “get pods” command as shown here, you should see three pods running. The ReplicaSet that was created with the deployment created two more pods, one ending in “flw” and the second ending in “b7v”. How do we know the ReplicaSet is working as intended? Well, we could just trust that IKS is doing its job. But another way to check is to delete a pod and see what happens! Remember that we have a ReplicaSet that manages three pods. Let’s list all the pods and then delete one. As you can see, the pod ending in “flw” was deleted and the ReplicaSet immediately created a new pod ending in “w4r” to get the total number of pods back to three! Let’s summarize. We started by identifying some gaps in our current application related to scaling and outages. Specifically, we saw that our application is not able to accommodate sudden spikes in demand or provide failovers in case of crashes. We added some redundancy by using ReplicaSets, which enable us to scale our application by running duplicate deployments. In the next video, we will talk about making this scaling dynamic based on demand. We'll also look at dynamically scaling your deployments without hardcoding a fixed number of pods. See you soon! 
+
 ## Replica Sets
 
-In this module, we'll look at key concepts for managing Kubernetes applications, including 
-ReplicaSets, autoscaling, rolling updates, ConfigMaps, secrets, and service bindings. 
-This video focuses on ReplicaSets highlighted in our architecture in the red box. ReplicaSets 
-help us scale applications to meet increasing demand. Let’s dive in! So what is a ReplicaSet? 
-It manages your pods ensuring the right number of pods are always up and running. This can 
-mean adding or deleting pods as needed. ReplicaSets provide the ability to replicate pods and 
-restart or spin up new pods when existing ones fail. A ReplicaSet can pick an existing 
-pod to add to the deployment or create a new one if there are no existing pods. It does 
-so by asking for a list of pods from the Kubernetes API and then filtering on the labels, as defined 
-in the descriptor. The ReplicaSet object supersedes the ReplicationController and should be used 
-instead. IBM Cloud Kubernetes Service will create a ReplicaSet for you when you create 
-a deployment in your cluster. One of the main design philosophies of Kubernetes is to keep 
-each object type independent of the others. True to this loose-coupling idea, the ReplicaSet 
-does not own any of the pods, instead it uses the pod labels to decide which pods to acquire 
-when bringing a deployment to the desired state. The template metadata inside the YAML 
-spec defines the labels of potential pod candidates to add or delete. The next question you might 
-ask is, "how do I create a ReplicaSet?" Well, one is automatically created for you when 
-you create a deployment. If you remember, we created the “hello-Kubernetes” deployment 
-in the previous section. If you issue a “get replicaset” command as shown here, you will 
-see a ReplicaSet with the name “hello-Kubernetes-randomnumber” generated for you by default. It currently 
-replicates to a single pod, but we'll change that shortly. If you describe the pod, you 
-will see that it is “Controlled by:” the same ReplicaSet. As explained previously, 
-this is a loose coupling based on the pod labels. To create one from scratch, you can 
-simply apply a YAML file with the "kind" attribute set to “ReplicaSet” as shown. You can 
-see that the number of ReplicaSets is defined as "1," so you get a single pod, as when you 
-create a default without specifying the number of replicas in the YAML file. While it's possible 
-to create a ReplicaSet without a deployment, it's recommended that you create a deployment 
-instead. A deployment gives you a couple of additional features that we'll soon explore. 
-Note that kubectl uses “rs” as a short form for ReplicaSet, because nobody wants 
-to type more than absolutely necessary! If you already have a deployment that you want 
-to scale, you can simply use the “scale” command as shown here. The first command creates 
-a deployment. The second command gets the pods to show it was created. You see the “hello-Kubernetes-longnumber” 
-pod created. The third command gets the “hello-Kubernetes” deployment. The command after that sets the 
-“replicas” to "3". If you issue another “get pods” command as shown here, you 
-should see three pods running. The ReplicaSet that was created with the deployment created 
-two more pods, one ending in “flw” and the second ending in “b7v”. How do we 
-know the ReplicaSet is working as intended? Well, we could just trust that IKS is doing 
-its job. But another way to check is to delete a pod and see what happens! Remember that 
-we have a ReplicaSet that manages three pods. Let’s list all the pods and then delete 
-one. As you can see, the pod ending in “flw” was deleted and the ReplicaSet immediately 
-created a new pod ending in “w4r” to get the total number of pods back to three! Let’s 
-summarize. We started by identifying some gaps in our current application related to 
-scaling and outages. Specifically, we saw that our application is not able to accommodate 
-sudden spikes in demand or provide failovers in case of crashes. We added some redundancy 
-by using ReplicaSets, which enable us to scale our application by running duplicate deployments. 
-In the next video, we will talk about making this scaling dynamic based on demand. We'll 
-also look at dynamically scaling your deployments without hardcoding a fixed number of pods. 
-See you soon! 
+Welcome to “ReplicaSet.” After watching this video, you will be able to define a ReplicaSet, explain how a ReplicaSet works, and list the benefits of using a ReplicaSet. If an application is deployed on a single pod, the pod will be unable to perform certain actionsif requests increase manifold or outages occur. Single-pod deployments cannot: Accommodate growing demands of theapplication and load balancing across pods; Handle outages by eliminatinga single point of failure; Minimize downtime and service interruptions byproviding high availability through redundant pods; Or automatically restartdeployments if something goes wrong. We can work around theselimitations with a ReplicaSet. A ReplicaSet ensures the right numberof pods are always up and running. It always tries to match the actual stateof the replicas to the desired state. A ReplicaSet: Adds or deletes pods for scaling andredundancy, which helps maintain availability. It replaces failing pods or deletes additionalpods to maintain the desired state. And it supersedes a ReplicaControllerand should be used instead. A ReplicaSet is created for you whenyou create a deployment in your cluster. Deployments manage ReplicaSets, send pods declarative updates, andhave many other useful features. That’s why a ReplicaSet isbest managed by a Deployment. Kubernetes is designed tokeep object types independent. That is why the ReplicaSetdoes not own any of the pods. Instead, it uses pod labels todecide which pods to acquire when bringing a deployment to the desired state. Let’s look at a deployment template. Here, the template metadata defines the labels andspec of potential pod candidates to add or delete. A ReplicaSet is automatically createdfor you when you create a deployment. To check this, create a deployment andthen use a ‘get ReplicaSet’ command to verify that the ReplicaSet isgenerated for you by default. The ReplicaSet only replicates to a single pod. Additionally, if you describe the pod, you will see the pod’s details and that itis “controlled by:” the same ReplicaSet. To create a ReplicaSet from scratch, apply a yaml file with the kindattribute set to “ReplicaSet” as shown. If you define the number ofreplicas as 1, you get 1 pod. This is similar to creatinga default without specifying the number of replicas in your yaml file. Let’s step through creatinga ReplicaSet from scratch: Use the ‘create ReplicaSet’ command. Output shows a ReplicaSet was created. Confirm it was created by using the ‘get pods’command and observe the status as ‘Running’ And then, use the ‘get rs’ command(rs is short for ReplicaSet). Output shows the name and other details ofthe newly created ReplicaSet and its pod. But remember, creating a Deployment that includes a ReplicaSet is recommendedover creating a standalone ReplicaSet. Before you scale a deployment, you mustensure you have a deployment and pod. To do this: Create a deployment using the ‘create’ command. The output will confirm a deployment was created. The deployment creates a pod by default. You can confirm this with the ‘get pods’ command. The output shows the pod name and other details. You can check the deployment detailswith the ‘get deploy’ command. The output shows the deploymentis named ‘hello-Kubernetes’. Now, once the deployment and pod are in place, use the ‘scale’ command to scale the deploymentand set the desired number of replicas. Here we set the number of replicas to 3, andthe output confirms the deployment is scaled. If you use the ‘get pods’ command,you will see 3 pods running. The ReplicaSet created two new pods: one endingin “5mflw”, and the other ending in “htb7v”. Let’s observe how the ReplicaSet maintainsthe desired state when a pod is deleted. First, use the ‘get pods’ command. Our 3 pods appear in the output, as expected. Now, use the ‘delete pod’ commandto delete the pod ending in ‘5mflw’. The pod ending in “5mflw” is deleted, and notice that the desired statedoes not match the actual state. And that the deleted pod isreplaced by a new pod automatically. Now, use the ‘get pods’ command again. The output shows the ReplicaSetimmediately created a new pod ending in “6lw4r” to get the total number of pods back to 3. The ReplicaSet maintains the desired state. Now let’s observe how the ReplicaSetmaintains desired state when a pod is created. The ‘get pods’ command showsour 3 pods from before. Use the ‘create pod’ command tocreate a pod ending in ‘mx9rp’. Then use the ‘get pods’ command again. The output now shows 4 pods. Desired state does not match actual state. Since the ReplicaSet always strives tomatch the actual state to the desired state, the new pod (ending in “mx9rp”) is markedfor deletion and removed automatically. The ‘get pods’ command now shows thetotal number of pods restored to 3. And once again, the ReplicaSetmaintains the desired state. In this video, you learned that a ReplicaSet provides highavailability through redundancy, a ReplicaSet enables scalingby creating or deleting pods, you can create a ReplicaSet usingthe CLI or the YAML descriptor, a ReplicaSet always tries to matchthe actual state to the desired state, and a best practice is to use a Deploymentinstead of a ReplicaSet directly.
+
+## Autoscaling (old module)
+
+We looked at how to scale our application to a fixed number of pods using ReplicaSets in the last video. This video focuses on autoscaling instead of providing a fixed number. Let’s dive in! ReplicaSets provide a good start for scaling, but we don’t always want 10 instances of our resource running. We should be able to scale up as needed. `Horizontal Pod Autoscaler`, or HPA, **enables the application to increase the number of pods based on traffic**. You can configure the desired state in HPA for example, the CPU and memory. The master node will periodically check pod metrics and scale to meet the desired state by updating the replicas field of the scaled resource, such as ReplicaSets or deployment. As we did before, we start by: Getting our current state of pods. We have one pod in this scenario. Having a ReplicaSet automatically created for us, since we created a deployment. Using the "autoscale" command with some attributes in order to autoscale. "min" is the minimum number of pods "max" is the maximum number of pods "cpu-percent" is the trigger to create new pods. This tells the system, “If the CPU usage hits 10% across the cluster, create a new pod.” We are using a very small number here because we don’t really have a CPU-intensive application. Behind the scenes, the deployment is still using the ReplicaSet to scale up and down as we saw before. As you can see here, the number of replicas in the ReplicaSet or this ”autoscaled” deployment has been set to "2." As noted before, a Horizontal Pod Autoscaler is created behind the scenes to manage the autoscaling feature of the deployment. The other way to enable autoscaling for your application is to manually create a HorizontalPodAutoscaler kind of object as described in the YAML file. You can set the min and max number of pods as you did with the "autoscale" command. The cpu-percentage flag displays as “targetCPUUtilizationPercentage”. This description would create the same autoscaler as we saw before. Even though you can use this method, it's simpler to use the autoscale command instead. To summarize, you now know how to use the Kubernetes autoscaling feature to scale up and down based on demand. This feature can be added to your deployment from the CLI by using the “autoscale” flag or specified in the deployment descriptor by using the “HorizontalPodAutoScaler” object. Now that we have a way to scale our application, we'll learn how to publish updates or changes to a running application. Next, we will look at how to perform changes to your application by using the Kubernetes “Rolling updates” feature. 
 
 ## Autoscaling
 
-We looked at how to scale our application to a fixed number of pods using ReplicaSets 
-in the last video. 
-This video focuses on autoscaling instead of providing a fixed number. 
-Let’s dive in! 
-ReplicaSets provide a good start for scaling, but we don’t always want 10 instances of 
-our resource running. 
-We should be able to scale up as needed. 
-Horizontal Pod Autoscaler, or HPA, enables the application to increase the number of 
-pods based on traffic. 
-You can configure the desired state in HPA for example, the CPU and memory. 
-The master node will periodically check pod metrics and scale to meet the desired state 
-by updating the replicas field of the scaled resource, such as ReplicaSets or deployment. 
-As we did before, we start by: 
-Getting our current state of pods. 
-We have one pod in this scenario. 
-Having a ReplicaSet automatically created for us, since we created a deployment. 
-Using the "autoscale" command with some attributes in order to autoscale. 
-"min" is the minimum number of pods 
-"max" is the maximum number of pods 
-"cpu-percent" is the trigger to create new pods. 
-This tells the system, “If the CPU usage hits 10% across the cluster, create a new 
-pod.” We are using a very small number here because we don’t really have a CPU-intensive application. 
-Behind the scenes, the deployment is still using the ReplicaSet to scale up and down 
-as we saw before. 
-As you can see here, the number of replicas in the ReplicaSet or this ”autoscaled” 
-deployment has been set to "2." 
-As noted before, a Horizontal Pod Autoscaler is created behind the scenes to manage the 
-autoscaling feature of the deployment. 
-The other way to enable autoscaling for your 
-application is to manually create a HorizontalPodAutoscaler 
-kind of object as described in the YAML file. 
-You can set the min and max number of pods as you did with the "autoscale" command. 
-The cpu-percentage flag displays as “targetCPUUtilizationPercentage”. 
-This description would create the same autoscaler as we saw before. 
-Even though you can use this method, it's simpler to use the autoscale command instead. 
-To summarize, you now know how to use the Kubernetes autoscaling feature to scale up 
-and down based on demand. 
-This feature can be added to your deployment from the CLI by using the “autoscale” 
-flag or specified in the deployment descriptor by using the “HorizontalPodAutoScaler” 
-object. 
-Now that we have a way to scale our application, we'll learn how to publish updates or changes 
-to a running application. 
-Next, we will look at how to perform changes to your application by using the Kubernetes 
-“Rolling updates” feature. 
+Hello, and welcome to “Autoscaling.” After watching this video, you will be able to: Define autoscaling, Explain the three types of autoscalers, And demonstrate how each autoscaler works. ReplicaSets provide a good start for scaling, but you don’t always want 10 instances of your resource running. You should be able to scale as needed. Kubernetes autoscaling helps optimize resource usage and costs by automatically scaling a cluster in line with demand. Kubernetes enables autoscaling at `two different layers`: the **cluster or node level** and the **pod level**. Three `types of autoscalers` are available in Kubernetes: **Horizontal Pod Autoscaler** (or HPA), **Vertical Pod Autoscaler** (or VPA), and **Cluster Autoscaler** (or CA). To create autoscaling: List the current number and state of pods. You have one pod in this scenario. A ReplicaSet is automatically created when you create a deployment. In order to autoscale, you simply use the autoscale command with the requisite attributes. Min is the number of minimum pods – notice that we have changed the value of “Min” to 2. Max is the number of maximum pods. And CPU-percent acts as a trigger that tells the system to create a new pod when the CPU usage reaches 50% across the cluster. In the background, the deployment still uses the ReplicaSet to scale up and down. Notice the number of replicas in this “autoscaled” ReplicaSet has changed to 2 since the minimum number specified in the previous autoscale command was changed to 2. Now, in Kubernetes, there are three autoscaling types: The Horizontal Pod Autoscaler (or HPA) adjusts the number of replicas of an application by increasing or decreasing the number of pods. The Vertical Pod Autoscaler (or VPA) adjusts the resource requests and limits of a container by increasing or decreasing the resource size or speed of the pods. And the Cluster Autoscaler (or CA) adjusts the number of nodes in the cluster when pods fail to schedule, or demand increases or decreases in relation to the nodes’ capacity. In Kubernetes, an HPA automatically updates a workload resource (like a deployment) by horizontally scaling the workload to match the demand. Horizontal scaling, or “scaling out,” automatically increases or decreases the number of running pods as application usage changes. An HPA uses a cluster operator that sets targets for metrics like CPU or memory utilization and the maximum and minimum desired number of replicas. For example, the system load is low early in the morning, so one pod is sufficient. The HPA autoscales the workload resource to meet usage demand. By 11am, peak load drives a need for three pods, so the HPA autoscales the workload resource to meet usage demand. Usage drops in the afternoon, so the third pod is marked for deletion and removed. And usage drops even lower by 5pm, so another pod is marked for deletion and removed. And another way to enable autoscaling is to manually create the HPA object from a YAML file. Similar to the autoscale command, you can set the minimum and maximum number of pods. The CPU-percent flag shows up as “targetCPUUtilizationPercentage”. And even though you can create an HPA autoscaler from scratch, you should use the autoscale command instead. A best practice is to scale horizontally, but there are some services you may want to run in a cluster where horizontal scaling is impossible or not ideal. Vertical scaling, or “scaling up,” refers to adding more resources to an existing machine. A VPA lets you scale a service vertically within a cluster. The cluster operator sets targets for metrics like CPU or memory utilization, similar to an HPA. The cluster then reconciles the size of the service’s pod or pods based on their current usage and the desired target. For example, the system load is low early in the morning, so system resources used by the pod are low. By 11am, peak load drives a need for more capacity. The VPA autoscales the pod by adding more system resources (CPU and memory) to meet the demand. Usage drops in the afternoon, so the pod is autoscaled to use fewer system resources. And usage drops even lower by 5pm, so the pod is autoscaled further to match the 7am levels. You should not use VPAs with HPAs on resource metrics like CPU or memory. However, you can use them together on custom or external metrics. A CA autoscales the cluster itself, increasing and decreasing the number of available nodes that pods can run on. Pods are autoscaled using HPA or VPA, but when the nodes themselves are overloaded with pods, you can use a CA to autoscale the nodes so that the pods can rebalance themselves across the cluster. For example, the system load is low early in the morning, so existing nodes can handle the load. When demand increases, new pod requests come in, and the CA autoscales the cluster by adding a new node and pods to meet the demand. By 11 am, peak load brings the new node to full capacity. When usage drops in the afternoon, unused pods are marked for deletion and removed. And when usage drops even lower by 5 pm, all pods in the new node are marked for deletion and removed. And then the node itself is marked and removed. A cluster autoscaler ensures there is always enough compute power to run your tasks, and that you aren’t paying extra for unused nodes. For example, nights and weekends may have fewer development or continuous integration testing loads. And clusters may have periods where all batch processing jobs are complete, and the new batch doesn’t start until later in the day. Each autoscaler type is suitable in specific scenarios, so you should analyze the pros and cons of each to find the best choice. Using a combination of all three types ensures that services run stably at peak load times, and costs are minimized in times of lower demand. In this video, you learned that: Autoscaling enables scaling as needed at the cluster or node level, and the pod level You can autoscale a deployment or a ReplicaSet Autoscaler types include horizontal pod (or HPA), vertical pod (or VPA), and cluster (or CA) And a combination of all three autoscaler types often provides the most optimized solution.
+
+## Deployment strategies
+
+- [Click here](./deployment-strategies.pdf) to view and download "Deployment strategies" pdt file.
+
+## Rolling Updates (old module)
+
+Now that you have a good understanding of deployments, ReplicaSets, and autoscaling, let’s talk about rolling updates. These are essential to any application running on a Kubernetes production environment. ReplicaSet and autoscaling are important to minimize downtime and service interruptions. Rolling updates provide a way to roll out app changes in an automated and controlled fashion throughout your pods. Rolling updates work with pod templates such as deployments. Rolling updates allow for rollback if something goes wrong. Here are the `steps` to prepare your application to enable rolling updates. First, **add liveness and readiness probes to your deployments**. This ensures deployments are marked "ready" appropriately. Next, **add a rolling update strategy to your YAML file**. Here, we are creating a deployment with 10 pods and our strategy states that we want at least 50% of the pods to always be available. The maxSurge of "2" says that there can only be 2 additional pods to the 10 we defined previously in order to finish the rollout. You can also set the maxUnavailable to "0" for a zero-downtime system. Setting the maxSurge to "100%" would essentially mean doubling the number of pods and creating a complete replica before taking the original set down after the rollout is complete. Sometimes it's also useful to use the minReadySeconds attribute to wait a certain number of seconds before moving on to the next pod in the rollout stage. Here is a working example of rolling out an update on our application. This is the original application that shows the text “Hello world!” We have created a deployment with three pods in our ReplicaSet, as shown here. We have a new request from the client and we need to show "Hello world v2!" to our users instead of the original text. The catch, however, is that we cannot have any downtime in our application. Users must always be able to get to one version of the site while the rollout is happening in the background. As you can see, our new software has been Dockerized and updated to Docker Hub with a tag of “hello-kubernetes upkar/hello-kubernetes:2.0". These are simple Docker commands and not related to Kubernetes at all. Here we can see how the rollout happens. We have three pods, as shown in the result of the first command. The second command sets the image to the tagged image on Docker Hub. We get a message saying the image has been updated. Let’s see if that actually happened! We can further check the status of the rollout using the “rollout status” command. As you can see in the first command, the API comes back with “deployment "hello-kubernetes" successfully rolled out”. That's great! If you go to the URL as before, you will see the new message, “Hello world v2!” As happens sometimes, the client has now changed their mind and they would like the application to show the original message again. Rollbacks to the rescue! This is easy in Kubernetes. You can simply “undo” the rollout. The first command shows how to do it. The second command shows that the original pods after the rollout are being terminated. And we have three new pods that were created as part of this rollback! So, in this section, we saw how to rollout changes to your application and also how to rollback any changes that are not needed anymore or were made by mistake. If you visit the site again, you should see the original text. And if you're not running these commands during this video, don't worry! You'll get another chance in the lab to work through all these wonderful Kubernetes features! To summarize, rolling updates give us a way to publish changes to our applications without noticeable interruptions for the user. Additionally, rolling updates give us a way to roll back any changes so the application can revert to a stable state in the event of errors. Next, we will look at ConfigMaps and Secrets to provide variables to our application. 
 
 ## Rolling Updates
 
-Now that you have a good understanding of deployments, ReplicaSets, and autoscaling, 
-let’s talk about rolling updates. 
-These are essential to any application running on a Kubernetes production environment. 
-ReplicaSet and autoscaling are important to minimize downtime and service interruptions. 
-Rolling updates provide a way to roll out app changes in an automated and controlled 
-fashion throughout your pods. 
-Rolling updates work with pod templates such as deployments. 
-Rolling updates allow for rollback if something goes wrong. 
-Here are the steps to prepare your application to enable rolling updates. 
-First, add liveness and readiness probes to your deployments. 
-This ensures deployments are marked "ready" appropriately. 
-Next, add a rolling update strategy to your YAML file. 
-Here, we are creating a deployment with 10 pods and our strategy states that we want 
-at least 50% of the pods to always be available. 
-The maxSurge of "2" says that there can only be 2 additional pods to the 10 we defined 
-previously in order to finish the rollout. 
-You can also set the maxUnavailable to "0" for a zero-downtime system. 
-Setting the maxSurge to "100%" would essentially mean doubling the number of pods and creating 
-a complete replica before taking the original set down after the rollout is complete. 
-Sometimes it's also useful to use the minReadySeconds attribute to wait a certain number of seconds 
-before moving on to the next pod in the rollout stage. 
-Here is a working example of rolling out an update on our application. 
-This is the original application that shows the text “Hello world!” 
-We have created a deployment with three pods in our ReplicaSet, as shown here. 
-We have a new request from the client and we need to show "Hello world v2!" to our users 
-instead of the original text. 
-The catch, however, is that we cannot have any downtime in our application. 
-Users must always be able to get to one version of the site while the rollout is happening 
-in the background. 
-As you can see, our new software has been Dockerized and updated to Docker Hub with 
-a tag of “hello-kubernetes upkar/hello-kubernetes:2.0". 
-These are simple Docker commands and not related to Kubernetes at all. 
-Here we can see how the rollout happens. 
-We have three pods, as shown in the result of the first command. 
-The second command sets the image to the tagged image on Docker Hub. 
-We get a message saying the image has been updated. 
-Let’s see if that actually happened! 
-We can further check the status of the rollout using the “rollout status” command. 
-As you can see in the first command, the API comes back with “deployment "hello-kubernetes" 
-successfully rolled out”. 
-That's great! 
-If you go to the URL as before, you will see the new message, “Hello world v2!” 
-As happens sometimes, the client has now changed their mind and they would like the application 
-to show the original message again. 
-Rollbacks to the rescue! 
-This is easy in Kubernetes. 
-You can simply “undo” the rollout. 
-The first command shows how to do it. 
-The second command shows that the original pods after the rollout are being terminated. 
-And we have three new pods that were created as part of this rollback! 
-So, in this section, we saw how to rollout changes to your application and also how to 
-rollback any changes that are not needed anymore or were made by mistake. 
-If you visit the site again, you should see the original text. 
-And if you're not running these commands during this video, don't worry! 
-You'll get another chance in the lab to work through all these wonderful Kubernetes features! 
-To summarize, rolling updates give us a way to publish changes to our applications without 
-noticeable interruptions for the user. 
-Additionally, rolling updates give us a way to roll back any changes so the application 
-can revert to a stable state in the event of errors. 
-Next, we will look at ConfigMaps and Secrets to provide variables to our application. 
+Welcome to “Rolling Updates.” After watching this video, you will be able to explain what a rolling update is and how it works. List the pre-steps before a rolling update can be applied. And, demonstrate how to roll back a rolling update. Rolling updates are automated updates that occur on a scheduled basis. They roll out automated and controlled app changes across pods, Work with pod templates like deployments, and allow for rollback as needed. To prepare your application to enable rolling updates, Add liveness probes and readiness probes to deployments. That way deployments are appropriately marked as ‘ready.’ Next, add a rolling update strategy to the YAML file. In this example, you are creating a deployment with 10 pods. Your strategy is to have at least 50% of the pods always available. The maxSurge of 2 says that there can only be 2 pods added to the 10 you defined earlier. For a zero-downtime system, set the maxUnavailable to 0. Setting the maxSurge to 100% would double the number of pods and create a complete replica before taking the original set down after the rollout is complete. And sometimes, it is also useful to use the minReadySeconds attribute to wait a few seconds before moving to the next pod in the rollout stage. Let’s look at a working example of rolling out an application update. You have a deployment with three pods in your ReplicaSet. Your application displays the message, “Hello world!” Your client has submitted a new request, and you have a new image for your application with a different message. Instead of the original text, you need to show “Hello world v2!’ to your users. But you cannot have any downtime in your application. First, you need to build, tag, and upload this new image to Docker Hub. Your new software has been dockerized and then updated to Docker Hub with the name and tag “hello-kubernetes upkar/hello-kubernetes:2.0”. These are simple Docker commands, not related to Kubernetes at all. Now, apply this new image to your deployment. You have the three pods from the first command. The second command sets the image flag to the updated tag image on Docker Hub. The output says the image has been updated, but let’s verify if that actually happened. You can see the status of the rollout by using the “rollout status” command. The API shows “deployment ‘hello-kubernetes’ successfully rolled out”. That’s great! Now, if you go back to the URL, you will see the new message “Hello world v2!” Sometimes, there are errors in a deployment, or the clients can change their minds. Rollbacks are easy to implement in Kubernetes. Use an “undo” command on the rollout. Use the “get pods” command to confirm the rollout pods are terminated. You will also see three new pods that were created as part of this rollback. If you visit the site again, you will see the original message. And that’s how you roll back changes to your application. Now let’s take a look at how rolling updates work, both: All-at-once And one-at-a-time. In an all-at-once rollout, all v1 objects must be removed before v2 objects can become active. Here you see version 1 of an app with three pods running that users can access. When version 2 is deployed, new pods are created. The version 1 pods are marked for deletion and removed. User access is blocked. Once the version 1 pods are removed, the version 2 pods become active and user access is restored. Notice the time lag between deployment and pod updates. In an all-at-once rollback, all v2 objects must be removed before v1 objects can become active. Let’s see what an all-at-once rollback looks like. Here you see version 2 of an app with three pods running that users can access. When version 1 of the app is deployed, new pods are created. The version 2 pods are marked for deletion and removed. And user access is blocked. Once the version 2 pods are removed, the version 1 pods become active and user access is restored. In a one-at-a-time rollout, the update is staggered so user access is not interrupted. Here you see version 1 of an app with three running pods that users can access. When version 2 is deployed, a new pod is created. The first version 1 pod is marked for deletion and removed. And the v2 pod becomes active. Then a second v2 pod is created. And the second version 1 pod is marked for deletion and removed. The second v2 pod becomes active. A third v2 pod is created. And the third version 1 pod is marked for deletion and removed. And now the third v2 pod becomes active. With a staggered update, user access is not interrupted. In a one-at-a-time rollback, the update rollback is staggered so user access is not interrupted. Let’s see what a one-at-a-time rollback looks like. Here you see version 2 of an app with three running pods that users can access. When version 1 of the app is deployed, a new pod is created. The first version 2 pod is marked for deletion and removed, and the v1 pod becomes active. Now, a second v1 pod is created. The second version 2 pod is marked for deletion and removed, and the second v1 pod becomes active. Then, a third v1 pod is created, and the third version 2 pod is marked for deletion and removed. And the third v1 pod becomes active. In this video, you learned that: Rolling updates roll out app changes in a controlled and automated way. Rolling updates publish changes to applications without noticeable interruption. Rolling updates can roll back changes when an application needs to revert. And rolling updates and rollbacks can be performed using all-at-once and one-at-a-time strategies.
+
+## Config Maps and Secrets (old module)
+
+This section is about storing configuration. As software developers, we know it’s a good practice not to hard-code configuration variables in code. We keep them separate so that any changes in configuration do not require code changes. Examples of these variables can include non-sensitive information like environments for example, dev, test, and prod or sensitive information such as API keys and account IDs. Let’s look at our example from the previous section. We have two variables in the code that have been given default values. They are the hard-coded values “8080” and “Hello world!” They will be overwritten by the environment variables “process.env.PORT” and “process.env.MESSAGE”, if the environment variables are present. Let’s pass in the MESSSAGE value from a ConfigMap and overwrite the overwrite the “Hello world!” string. This string appears on the index page, as you can see in the screenshot. There are multiple ways to do this. Before we dive into how to create and tell our deployments about ConfigMaps, let’s look at what they are and what value they provide. ConfigMaps give us a way to provide configuration data to pods and deployments so we don't have to hard-code that data in the application code. You can also reuse these ConfigMaps and Secrets for multiple deployments, thereby decoupling the environment from the deployments themselves! Secrets work similarly to ConfigMaps but are meant for sensitive information. ConfigMaps can be created in a couple of different ways: Using string literals, Using an existing properties or ”key”=“value” file, Providing a ConfigMap YAML descriptor file; both the first and second methods can help us create such a YAML file. We'll go into each of these methods in detail in the next section. The deployment or pods can then consume a ConfigMap by using environment variables with the "configMapKeyRef" attribute or mounting a file using the volumes plugin. The ConfigMap and the Secret are applied to the pod or the deployment just before they are run. We can potentially supply the environment variable directly in the YAML file, as shown here. The MESSAGE variable can now be used in the JavaScript file as "process.env.MESSAGE". In fact, if you applied this deployment descriptor to our deployment and viewed the application, you would see the new message as shown here. That's great, but now the string “Hello from the config file” is hard-coded to our deployment in the descriptor file. Let’s change this situation by using a ConfigMap. The simplest way to provide a ConfigMap is to provide a key-value pair in the "create configmap" command. Next, you need to tell your deployment about this new variable and where to pick it up. You do that by adding an "env" section in the deployment descriptor, as shown here, and using the “valueFrom” attribute to point to the ConfigMap created in the first step. In this case, the deployment will look for a key called "MESSAGE" in the ConfigMap named “my-config”. You can list all the ConfigMaps in your cluster using the ”kubectl get configmaps” command, and describing the ConfigMap will give us the descriptor for the ConfigMap. You can see the "env" section from deployment descriptor on the right of the slide. Another way to add the "MESSAGE" variable in the ConfigMap is to use a file. This file will contain all our environment variables in the “key=value” format. This file is useful for adding a large number of variables at the same time instead of listing them on the command line. An example of this kind of file is shown here. It has the one "MESSAGE" key with the string “MESSAGE=hello from the my.properties file” as the value. We can now create the ConfigMap by using the “--from-file” flag. Notice that the deployment descriptor section also looks a little different. The key is now “my.properties” and everything inside the file will appear as subkeys in the environment variable. To use it in the server.js file, you would refer to it as “process.env.MESSAGE.MESSAGE”. If you give a directory to the “--from-file” flag, all files in the directory will be loaded into the Secret ConfigMap. You can also load the file under a specific key by using the “--from-file=key=filename” format. As with the first method, you can describe the deployment descriptor to get the YAML output as shown here. Again, we have listed the "env" section from the deployment descriptor on the right of the screen. Finally, if you already have a YAML file with the ConfigMap descriptor, you can simply apply that file. In our case, we have saved the output from ”kubectl get configmap” as a YAML file called “my-config.yaml”. As you can see from the first command, there is currently no ConfigMap. We can now apply the YAML file to our cluster. This will create our ConfigMap, as shown here. The application should work as before. Working with Secrets is similar to working with ConfigMaps. First, we create a Secret using a string literal. Next, we use the "get" command to see that the Secret was created. Finally, to prove that our Secret is actually a secret, we can use the "describe" command to see that the Secret is not printed out in plain text in the CLI. In fact, if we print out the Secret in YAML format using kubectl, you can see that the encoded value is printed out to the console. To use our Secret, let’s add another "env" to the deployment descriptor, as shown here. We can now use the key as usual in our application by referring to it as “process.env.API_CREDS”. I've changed the code to print out all environment variables in the Node.js file. You can see the printed Secret here. Another way to use the Secret key in our application is to use volume mounts. We first create the same Secret we had previously. Next in the descriptor YAML file, we need to have a volume for the Secret with a corresponding volume mount. Each container in the descriptor file will have its own volume mount but can share the volume itself. In this case, our "api-creds" Secret will be mounted as a file at "/etc/api/api-creds". The program that needs this Secret will have to read and process the file to extract the Secret. Congratulations! You now know how to provide configuration variables and sensitive secret information to your deployments. We can keep our code clean because we don't need to hard-code variables such as environment configuration, API keys, usernames, and passwords. The final video in this module will focus on using external services in your application and will make use of ConfigMaps and Secrets! 
 
 ## Config Maps and Secrets
 
-This section is about storing configuration. 
-As software developers, we know it’s a good practice not to hard-code configuration variables 
-in code. 
-We keep them separate so that any changes in configuration do not require code changes. 
-Examples of these variables can include non-sensitive information like environments for example, 
-dev, test, and prod or sensitive information such as API keys and account IDs. 
-Let’s look at our example from the previous section. 
-We have two variables in the code that have been given default values. 
-They are the hard-coded values “8080” and “Hello world!” 
-They will be overwritten by the environment variables “process.env.PORT” and “process.env.MESSAGE”, 
-if the environment variables are present. 
-Let’s pass in the MESSSAGE value from a ConfigMap and overwrite the overwrite the 
-“Hello world!” string. 
-This string appears on the index page, as you can see in the screenshot. 
-There are multiple ways to do this. 
-Before we dive into how to create and tell our deployments about ConfigMaps, let’s 
-look at what they are and what value they provide. 
-ConfigMaps give us a way to provide configuration data to pods and deployments so we don't have 
-to hard-code that data in the application code. 
-You can also reuse these ConfigMaps and Secrets for multiple deployments, thereby decoupling 
-the environment from the deployments themselves! 
-Secrets work similarly to ConfigMaps but are meant for sensitive information. 
-ConfigMaps can be created in a couple of different ways: 
-Using string literals, 
-Using an existing properties or ”key”=“value” file, 
-Providing a ConfigMap YAML descriptor file; both the first and second methods can help 
-us create such a YAML file. 
-We'll go into each of these methods in detail in the next section. 
-The deployment or pods can then consume a ConfigMap by using environment variables with 
-the "configMapKeyRef" attribute or mounting a file using the volumes plugin. 
-The ConfigMap and the Secret are applied to the pod or the deployment just before they 
-are run. 
-We can potentially supply the environment variable directly in the YAML file, as shown 
-here. 
-The MESSAGE variable can now be used in the JavaScript file as "process.env.MESSAGE". 
-In fact, if you applied this deployment descriptor to our deployment and viewed the application, 
-you would see the new message as shown here. 
-That's great, but now the string “Hello from the config file” is hard-coded to our 
-deployment in the descriptor file. 
-Let’s change this situation by using a ConfigMap. 
-The simplest way to provide a ConfigMap is to provide a key-value pair in the "create 
-configmap" command. 
-Next, you need to tell your deployment about this new variable and where to pick it up. 
-You do that by adding an "env" section in the deployment descriptor, as shown here, 
-and using the “valueFrom” attribute to point to the ConfigMap created in the first 
-step. 
-In this case, the deployment will look for a key called "MESSAGE" in the ConfigMap named 
-“my-config”. 
-You can list all the ConfigMaps in your cluster using the ”kubectl get configmaps” command, 
-and describing the ConfigMap will give us the descriptor for the ConfigMap. 
-You can see the "env" section from deployment descriptor on the right of the slide. 
-Another way to add the "MESSAGE" variable in the ConfigMap is to use a file. 
-This file will contain all our environment variables in the “key=value” format. 
-This file is useful for adding a large number of variables at the same time instead of listing 
-them on the command line. 
-An example of this kind of file is shown here. 
-It has the one "MESSAGE" key with the string “MESSAGE=hello from the my.properties file” 
-as the value. 
-We can now create the ConfigMap by using the “--from-file” flag. 
-Notice that the deployment descriptor section also looks a little different. 
-The key is now “my.properties” and everything inside the file will appear as subkeys in 
-the environment variable. 
-To use it in the server.js file, you would refer to it as “process.env.MESSAGE.MESSAGE”. 
-If you give a directory to the “--from-file” flag, all files in the directory will be loaded 
-into the Secret ConfigMap. 
-You can also load the file under a specific key by using the “--from-file=key=filename” 
-format. 
-As with the first method, you can describe the deployment descriptor to get the YAML 
-output as shown here. 
-Again, we have listed the "env" section from the deployment descriptor on the right of 
-the screen. 
-Finally, if you already have a YAML file with the ConfigMap descriptor, you can simply apply 
-that file. 
-In our case, we have saved the output from ”kubectl get configmap” as a YAML file 
-called “my-config.yaml”. 
-As you can see from the first command, there is currently no ConfigMap. 
-We can now apply the YAML file to our cluster. 
-This will create our ConfigMap, as shown here. 
-The application should work as before. 
-Working with Secrets is similar to working with ConfigMaps. 
-First, we create a Secret using a string literal. 
-Next, we use the "get" command to see that the Secret was created. 
-Finally, to prove that our Secret is actually a secret, we can use the "describe" command 
-to see that the Secret is not printed out in plain text in the CLI. 
-In fact, if we print out the Secret in YAML format using kubectl, you can see that the 
-encoded value is printed out to the console. 
-To use our Secret, let’s add another "env" to the deployment descriptor, as shown here. 
-We can now use the key as usual in our application by referring to it as “process.env.API_CREDS”. 
-I've changed the code to print out all environment variables in the Node.js file. 
-You can see the printed Secret here. 
-Another way to use the Secret key in our application is to use volume mounts. 
-We first create the same Secret we had previously. 
-Next in the descriptor YAML file, we need to have a volume for the Secret with a corresponding 
-volume mount. 
-Each container in the descriptor file will have its own volume mount but can share the 
-volume itself. 
-In this case, our "api-creds" Secret will be mounted as a file at "/etc/api/api-creds". 
-The program that needs this Secret will have to read and process the file to extract the 
-Secret. 
-Congratulations! 
-You now know how to provide configuration variables and sensitive secret information 
-to your deployments. 
-We can keep our code clean because we don't need to hard-code variables such as environment 
-configuration, API keys, usernames, and passwords. 
-The final video in this module will focus on using external services in your application 
-and will make use of ConfigMaps and Secrets! 
+Welcome to “ConfigMaps and Secrets.” After watching this video, you will be able to identify important ConfigMap characteristics, describe ConfigMap capabilities, describe three ways to create a ConfigMap, and describe three ways to create a Secret. As software developers, a good practice to adopt is to avoid hard coding configuration variables in application code by keeping the configuration variables separate so that any changes in configuration settings do not require code changes. A ConfigMap is an API object that stores non-confidential data in key-value pairs. In addition, a configmap provides configuration data to pods and deployments so that the configuration data is not hard coded inside the application code and is meant for non-sensitive information as they do not provide secrecy or encryption. Data stored in a ConfigMap cannot exceed 1 megabyte. For larger amounts of data, consider mounting a volume or use a separate database or file service. A ConfigMap has optional data and binary data fields. And in this case, there is no “spec" field in the template, and the Config name must be a valid DNS subdomain name. A ConfigMap is reusable for multiple deployments, thus decoupling the environment from the deployments themselves! You can create a ConfigMap by using string literals, by using an existing “properties” or ”key” = “value” file, or by providing a ConfigMap YAML descriptor file. You can use the first and second ways to help create such a YAML file. The deployment or Pods consume a ConfigMap by using environment variables with the configMapKeyRef attribute or by mounting a file using the volumes plugin. Kubernetes applies the ConfigMap to the pod or the deployment just before running the pod or deployment. You’ll use the environment variable directly in the YAML file. The message variable is used in the JavaScript file as process.env.MESSAGE. Apply this deployment descriptor to our deployment and the application displays the string “Hello from the config file.” The result is excellent, but the message is hard-coded in the descriptor file. Let’s change this situation by using a ConfigMap. The simplest way to provide a ConfigMap is to provide a key-value pair in the create ConfigMap command. After this first step, the second step is to tell our deployment about the new MESSAGE variable and specify its location for pickup. You do that by adding an environment section in the deployment descriptor as shown and using the “valueFrom” attribute to point to the ConfigMap created in the first step. In this case, the deployment will look for a key named MESSAGE in the ConfigMap named “my-config.” Another way to add the MESSAGE variable in the ConfigMap is to use a file that contains all environment variables in the “key=value” format. Such a file is useful for adding many variables instead of listing those variables one by one on the command line. Here is a file with just one MESSAGE key and a value “hello from the my.properties file.” You can now create the ConfigMap by using the “--from-file” flag. Notice that the key is “my.properties” in the deployment descriptor section. To use the ConfigMap in the server.js file, refer to it as “process.env.MESSAGE.MESSAGE.” Use the “describe” command to get the YAML output. Then view the environment section. If you specify a directory to the “--from-file” flag, the entire directory is loaded into the ConfigMap. You can also load a specific file with a key by using the “--from-file=key=filename” format. Finally, you can use a YAML file with the ConfigMap descriptor; and apply that file. In our case, we have saved the output from ”kubectl get ConfigMap” as a YAML file called “my-config.YAML.” The first command indicates that there is no ConfigMap to begin with. Here you are creating the ConfigMap.yaml file. You’ll now apply the YAML file to your cluster which creates the ConfigMap. Note the MESSAGE in the ConfigMap file description. Using the YAML file will get you the same results as the other methods. Now, working with a Secret is like working with a ConfigMap. First, create a secret using a string literal. Next, the GET command verifies that the secret was created. Finally, to prove that our secret is indeed a secret, use the DESCRIBE command and check that you don’t see any secret, written using displayed text. You can print out the secret in YAML format. You’ll see that the value is fully encoded. To use the secret, add another environment to the deployment descriptor as shown and then use the application key by referring to the application as “process.env.API_CREDS.” The screenshot displays the secret along with other environment variables from the Node.js file. Another way to use the secret key in your application is to use volume mounts. Create the same secret as done previously. In the descriptor YAML file, use a volume for the secret with a corresponding volumeMount. Each container in the descriptor file has its own volumeMount but shares the volume. The api-creds secret is mounted as a file at /etc/api/api-creds. The application will read and process the file to extract the secret. In this video, you learned that you can use a ConfigMap to provide variables for your application, you can create a ConfigMap by using a string literal, by using a properties file, or by using YAML, you can use a Secret to provide sensitive information to your application, and you can create a Secret by using a string literal, by using environment variables, or by using volume mounts.
 
-## Service Binding 
+## Service Binding (old module)
 
-In the final video of this module, let’s look at how to consume external services in 
-our applications. 
-One way to do that in Kubernetes is to bind the external service to our deployment. 
-In this section, we will bind the Watson Tone Analyzer service to our application. 
-Let’s go! 
-Service binding enables you to bind an IBM Cloud service instance to Kubernetes Cluster. 
-The service credentials are available as Secrets to any application deployed on the cluster. 
-By mounting the Kubernetes Secret as a volume to your deployment, you make the IBM Cloud 
-Identity and Access Management (IAM) API key available to the container that runs in your 
-pod. 
-A JSON file called "binding" is created in the volume mount directory. 
-You can see the different services provided on IBM Cloud in the catalog. 
-They range from visual recognition to natural language processing and creating chatbots. 
-We are going to use the Tone Analyzer service to explain binding. 
-This service uses linguistic analysis to detect tone in a given text. 
-The service provides an SDK in JavaScript. 
-To use this service, we will bind it to our deployment so that the credentials are made 
-available to us automatically. 
-The code will then use the credentials form the binding and call the Tone Analyzer service. 
-You can read more about this service in the IBM Cloud documentation. 
-In the first step, we're creating the service using the CLI. 
-You can also use the catalog on the IBM Cloud website to create the service. 
-In the second step, we're binding this newly created service to our cluster by using the 
-”service bind” command. 
-Once you've bound a service to your cluster, you will get access to the service credentials 
-in the Secrets object. 
-The command shows how to retrieve all the Secrets in your Kubernetes cluster. 
-You can view the same Secret in the Kubernetes Dashboard on IBM Cloud Kubernetes Service. 
-Once you have bound a service to your cluster, the service Secrets are made available with 
-the environment variables, as shown here. 
-The binding.apikey, binding.username, and binding.password correspond to the apikey, 
-username, and password of the Watson Tone Analyzer service instance created in the previous 
-step. 
-This slide shows a sample Node.js application using the binding.apikey, binding.username, 
-and binding.password environment variable inside an Express.js application that will 
-be deployed to IBM Cloud Kubernetes Service. 
-To recap, binding an external service to our deployment automatically provides us with 
-the credentials to use the service inside the code. 
-These credentials are stored as a Secret, which can now be consumed by using volumes, 
-as described in the previous video. 
-Congratulations on finishing this module! 
-You should now be able to create an application that scales to demand and uses standards like 
-ConfigMaps and Secrets. 
-You should also be able to bind and use external services in your application. 
+In the final video of this module, let’s look at how to consume external services in our applications. One way to do that in Kubernetes is to bind the external service to our deployment. In this section, we will bind the Watson Tone Analyzer service to our application. Let’s go! Service binding enables you to bind an IBM Cloud service instance to Kubernetes Cluster. The service credentials are available as Secrets to any application deployed on the cluster. By mounting the Kubernetes Secret as a volume to your deployment, you make the IBM Cloud Identity and Access Management (IAM) API key available to the container that runs in your pod. A JSON file called "binding" is created in the volume mount directory. You can see the different services provided on IBM Cloud in the catalog. They range from visual recognition to natural language processing and creating chatbots. We are going to use the Tone Analyzer service to explain binding. This service uses linguistic analysis to detect tone in a given text. The service provides an SDK in JavaScript. To use this service, we will bind it to our deployment so that the credentials are made available to us automatically. The code will then use the credentials form the binding and call the Tone Analyzer service. You can read more about this service in the IBM Cloud documentation. In the first step, we're creating the service using the CLI. You can also use the catalog on the IBM Cloud website to create the service. In the second step, we're binding this newly created service to our cluster by using the ”service bind” command. Once you've bound a service to your cluster, you will get access to the service credentials in the Secrets object. The command shows how to retrieve all the Secrets in your Kubernetes cluster. You can view the same Secret in the Kubernetes Dashboard on IBM Cloud Kubernetes Service. Once you have bound a service to your cluster, the service Secrets are made available with the environment variables, as shown here. The binding.apikey, binding.username, and binding.password correspond to the apikey, username, and password of the Watson Tone Analyzer service instance created in the previous step. This slide shows a sample Node.js application using the binding.apikey, binding.username, and binding.password environment variable inside an Express.js application that will be deployed to IBM Cloud Kubernetes Service. To recap, binding an external service to our deployment automatically provides us with the credentials to use the service inside the code. These credentials are stored as a Secret, which can now be consumed by using volumes, as described in the previous video. Congratulations on finishing this module! You should now be able to create an application that scales to demand and uses standards like ConfigMaps and Secrets. You should also be able to bind and use external services in your application. 
+
+## Service Binding
+
+Welcome to “Service Binding.” After watching this video, you will be able to explain the roles and goals of Service binding, describe how to bind a Kubernetes Cluster to an external Service, identify commands to retrieve the Secrets in your Kubernetes cluster, and describe how to use Service binding in apps. So, what is Service binding? Service binding is the process needed to consume external Services or backing Services, including REST APIs, databases, and event buses in our applications. Service binding manages configuration and credentials for back-end Services while protecting sensitive data. In addition, Service binding makes Service credentials available to you automatically as a Secret. Service binding consumes the external Service by binding the application to a deployment. Then, the application code uses the credentials from the binding and calls the corresponding Service. Here you can see an architectural diagram that illustrates the binding of a Kubernetes Cluster to an external Service. Next, let's learn the steps required to bind the Service to your application. Let’s use an IBM Cloud Service example. Service binding quickly creates Service credentials for an IBM Cloud Service. You create the Service credentials using IBM’s public cloud Service endpoint and then store or “bind” your Service credentials in a Kubernetes Secret in your Cluster. Here’s how to bind an IBM Cloud Service to your Cluster: First, you provision an instance of the Service. Then, you bind the Service to your Cluster to create Service credentials for your Service that use the public cloud Service endpoint. Next, store the credentials in a Kubernetes Secret. Finally, you configure your app to access the Service credentials in the Kubernetes Secret. The IBM Cloud catalog provides various Services that range from visual recognition to natural language processing and creating chatbots. We are using the “Tone Analyzer” Service to explain binding. This Service uses linguistic analysis to detect tone in a given text. The Service provides an SDK in JavaScript. You bind the Service to the deployment so that the credentials are automatically available. The code then uses the credentials from the binding and calls the Tone Analyzer Service. OK, now that you know the steps, let’s examine some code. In the first step, provision an instance of the Service by creating the Service instance using the command line interface. You can also provision an instance of the Service by using the catalog on the IBM Cloud website. In the second step, you bind this newly created Service instance to your Cluster by using the ”service bind” command. IBM Cloud Service binding automatically creates a Kubernetes Secret with the Service credentials. The credentials of a Service instance are base64 encoded, and stored inside your Secret in the JSON format. And now that the Service is bound to your Cluster, here in step 3, you can verify your Secret object. The “get secrets” command shows all the Secrets in your Kubernetes Cluster. Or, you can retrieve the same Secrets in the Kubernetes Dashboard user interface as well on the IBM Cloud Kubernetes Service. To access the data in your Secret, choose one of the following options: Mount the Secret as a volume to your Pod, based on the specifications provided in Step 1. This action creates a JSON-formatted file named “binding” that is stored in the volume Mounts directory. The binding file includes all information and credentials required to access the IBM Cloud Service. Or, reference the Secret in environment variables. The environment variables binding dot APIkey, binding dot username, and binding dot password correspond to the APIkey, username, and password of the Watson Tone Analyzer Service instance created in the previous step. The displayed code snippet shows a sample node.js application using the binding dot APIkey, the binding dot username and the binding dot password environment variable inside an express.js application that will be deployed to the IBM Cloud Kubernetes Service. In this video, you learned that binding an external Service to your deployment automatically provides the credentials to use the Service inside the code. Credentials are stored as a Secret that can be consumed using volumeMounts and volumes. Binding manages configuration and credentials for back-end Services while protecting sensitive data And you can configure your app to use the credentials stored in the Secret either by mounting the Secret as a volume to your Pod or by referencing the Secret in environment variables.
 
 ## Glossary - Managing Applications with Kubernetes
 
-- [Click here](https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/cc201/Cheatsheets/C5M3%20Glossary%20v1.1%20.pdf) to view and download the "Managing Applications with Kubernetes" module glossary. 
+- [Click here](./glossary-managing-applications-with-kubernetes.pdf) to view and download the "Managing Applications with Kubernetes" module glossary. 
+
+## Cheat-sheet: Managing Applications with Kubernetes
+
+- [Click here](./cheat-sheet-managing-applications-with-kubernetes.pdf) to view and download the "Managing Applications with Kubernetes" cheat sheet. 
 
 # The Kubernetes Ecosystem: OpenShift, Istio, etc.
 
@@ -627,8 +365,6 @@ form the OpenShift product.
 In the next video, you’ll learn more about the relationship between Kubernetes and OpenShift. 
 
 ## Red Hat OpenShift and Kubernetes
-
-
 
 Interactive Transcript - Enable basic transcript mode by pressing the escape key
 You may navigate through the transcript using tab. To save a note for a section of text press CTRL + S. To expand your selection you may use CTRL + arrow key. You may contract your selection using shift + CTRL + arrow key. For screen readers that are incompatible with using arrow keys for shortcuts, you can replace them with the H J K L keys. Some screen readers may require using CTRL in conjunction with the alt key
