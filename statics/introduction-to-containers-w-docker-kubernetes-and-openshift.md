@@ -59,8 +59,10 @@ ___
   - [Summary](#summary-1)
   - [CheatSheet - The Kubernetes Ecosystem](#cheatsheet---the-kubernetes-ecosystem)
   - [Glossary - The Kubernetes Ecosystem](#glossary---the-kubernetes-ecosystem)
-- [Final Assignment](#final-assignment)
+- [Final Project](#final-project)
   - [Resources](#resources)
+- [Certificate](#certificate)
+- [Badge](#badge)
 
 # Understanding the Benefits of Containers
 
@@ -304,8 +306,41 @@ Welcome to “Istio.” After watching this video, you will be able to describe 
 
 - [Click here](./glossary-openshift-basics.pdf) to view and download the module glossary. 
 
-# Final Assignment
+# Final Project
+
+```docker
+FROM golang:1.15 as builder
+RUN go get github.com/codegangsta/negroni
+
+RUN go get github.com/gorilla/mux github.com/xyproto/simpleredis
+
+COPY main.go .
+RUN go build main.go
+
+FROM ubuntu:18.04
+
+COPY --from=builder /go//main /app/guestbook
+COPY public/index.html /app/public/index.html
+COPY public/script.js /app/public/script.js
+COPY public/style.css /app/public/style.css
+COPY public/jquery.min.js /app/public/jquery.min.js
+
+WORKDIR /app
+CMD ["./guestbook"]
+EXPOSE 3000
+```
+
+https://moj-3000.theiaopenshift-1-labs-prod-theiaopenshift-4-tor01.proxy.cognitiveclass.ai/
+
 
 ## Resources
 
  After completing this course, you may be ready for your first IBM Cloud certification: [Cloud Solution Advisor](https://www.ibm.com/training/path/41/overview). Continue your cloud learning journey with role-based and product-based training and certifications at the [IBM Center for Cloud Training](https://www.ibm.com/training/cloud).
+
+ # Certificate
+
+- [Click here](./coursera-h6k82nay5jng.pdf) to view and download the course certificate
+
+# Badge
+
+![credly](./container-kubernetes-essentials-v2.png)
