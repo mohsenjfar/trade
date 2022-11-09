@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+</head>
+<body>
+
+<!-- Add a Navigation bar -->
+
+<!-- Stylize Registration form -->
+<form action="{% url 'onlinecourse:registration' %}" method="post">
+  <div class=""> <!--Stylize root div with .container class -->
+    {% csrf_token %}
+    <h1>Sign Up</h1>
+    <hr>
+    <div class=""> <!--Stylize second div with .form-group class -->
+        <label for="username"><b>User Name: </b></label>
+        <input type="text" class="" placeholder="Enter User Name: " name="username" required> <!--Stylize input with .form-control class -->
+        <label for="firstname"><b>First Name: </b></label>
+        <input type="text" class="" placeholder="Enter First Name: " name="firstname" required> <!--Stylize input with .form-control class -->
+        <label for="lastname"><b>Last Name: </b></label>
+        <input type="text" class="" placeholder="Enter Last Name: " name="lastname" required> <!--Stylize input with .form-control class -->
+        <label for="psw"><b>Password: </b></label>
+        <input type="password" class="" placeholder="Enter Password: " name="psw" required> <!--Stylize input with .form-control class -->
+        {% if message %}
+        <div class=""> <!--Stylize the message paragraph with .alert and .alert-warning class -->
+            {{ message }}
+        </div>
+        {% endif %}
+        <button class="" type="submit">Sign up</button> <!--Stylize button with .btn and .btn-primary class -->
+    </div>
+  </div>
+</form>
+
+</body>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Online Courses</title>
+</head>
+<body>
+<!-- Add a Navigation bar -->
+
+<ul>
+    <li>
+    {% if user.is_authenticated %}
+        <a href="#">{{ user.first_name }}({{ user.username }})</a>
+        <a href="{% url 'onlinecourse:logout' %}">Logout</a>
+    {% else %}
+    </li>
+    <li>
+        <form action="{% url 'onlinecourse:login' %}" method="post">
+            {% csrf_token %}
+            <div >
+                <input type="text" placeholder="Username" name="username" >
+                <input type="password" placeholder="Username" name="psw" >
+                <button type="submit">Login</button>
+                <a  href="{% url 'onlinecourse:registration' %}">Sign Up</a>
+            </div>
+        </form>
+    </li>
+    {% endif %}
+</ul>
+
+<!-- Course list section -->
+{% if course_list %}
+    <div class=""> <!--Stylize root div with .container class -->
+        <div class=""> <!--Stylize the second div with .card-deck class -->
+            {% for course in course_list %}
+            <div class="" style="width: 36rem;"> <!--Stylize third div with .card class -->
+                <img class="" src="{{MEDIA_URL}}/{{ course.image }}" width="240px" height="240px"
+                           alt="Course image"> <!--Stylize card image with .card-img-left class -->
+                <div class=""> <!--Stylize root div with .card-body and .bg-light class -->
+                    <h5 class="">{{ course.name }}, <span class=""> <!--Stylize h5 with .card-title and span with .text-success class -->
+                              {{ course.total_enrollment}} enrolled</span></h5>
+                    <p class="">{{ course.description}}</p> <!--Stylize card description with .card-text class -->
+                    <form action="{% url 'onlinecourse:enroll' course.id %}" method="post">
+                        {% csrf_token %}
+                        <input type="submit"
+                               value="Enroll"> <!--Stylize Enroll button with .btn and .btn-primary class -->
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% else %}
+    <p>No courses are available.</p>
+{% endif %}
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+</head>
+<body>
+
+<!-- Add a Navigation bar -->
+
+<!-- Stylize Login form -->
+<form action="{% url 'onlinecourse:login' %}" method="post">
+  {% csrf_token %}
+  <div class=""> <!--Stylize root div with .container class -->
+    <h1>Login</h1>
+    <div class=""> <!--Stylize second div with .form-group class -->
+      <label for="username"><b>User Name: </b></label>
+      <input id="username" class="" type="text" placeholder="Enter User Name: " name="username" required> <!--Stylize input with .form-control class -->
+      <label for="psw"><b>Password: </b></label>
+      <input id="psw" type="password" class="" placeholder="Enter Password: " name="psw" required> <!--Stylize input with .form-control class -->
+    </div>
+    {% if message %}
+      <div class=""> <!--Stylize the message paragraph with .alert and .alert-warning class -->
+        {{ message }}
+      </div>
+    {% endif %}
+    <button class="" type="submit">Login</button> <!--Stylize button with .btn and .btn-primary class -->
+  </div>
+</form>
+</body>
