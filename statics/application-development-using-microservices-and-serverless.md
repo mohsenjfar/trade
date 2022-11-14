@@ -30,6 +30,8 @@ Welcome to "Microservices Patterns and Anti-Patterns.” After watching this vid
 ### Read also
 - [14 software architecture design patterns to know](https://www.redhat.com/architect/14-software-architecture-patterns)
 
+## Lab
+- [Click here](./instructional-labs.pdf) to see lab content.
 ## Module Summary
 
 - Twelve factor app methodology maps to the code, deploy, and operate stages of the software delivery lifecycle enabling developers to create more efficient and more easily maintained SaaS applications​
