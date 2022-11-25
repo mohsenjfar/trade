@@ -83,674 +83,79 @@ Welcome to “IBM Cloud Functions” After watching this video, you will be able
 
 ## Glossary - Introduction to Serverless
 
-[Click here](https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0250EN-SkillsNetwork/cheatsheets/C9M2_Glossary_v1.1.pdf) to view and download "Introduction to Serverless" module glossary 
+[Click here](./c9m2-glossary-v1.1.pdf) to view and download "Introduction to Serverless" module glossary 
 
 # ORM: MicroServices w/ Serverless
 
 ## Create and Invoke Actions - Part 1
 
-Welcome to “Create and Invoke Actions Part 1” 
-After watching this video, you will be able to: 
-Describe how to create and invoke actions using IBM Cloud Functions. 
-List the different modes for invoking actions. 
-Describe how to retrieve the result of an action invocation. 
-How do you create and invoke actions in Cloud Functions? 
-For supported runtimes, source code can be provided directly to Cloud Functions. 
-Since Node.js is supported, you can provide a JavaScript file. 
-For example, this file named hello.js returns a JSON object with a payload of Hello world. 
-To use source code from node.js to create an action, you can use the ibmcloud command 
-line interface and the functions plugin. 
-This command creates a function named hello using the hello.js file that you previously 
-defined. 
-You can list your functions by using the ibmcloud fn action list command. 
-The output of this command displays your hello action under your account’s default namespace. 
-Now that you created an action, you need to invoke the action so that it can perform its 
-task. 
-There are two modes for invoking actions: blocking invocations and non-blocking invocations. 
-Blocking invocations invoke the action and waits for the result. 
-This is accomplished by specifying the blocking flag on the command line. 
-This is the “request and response” invocation style. 
-You can also use a non-blocking invocation, which invokes the action immediately but does 
-not wait for a response. 
-Both block and non-blocking invocations always provide an activation ID that can be used 
-to look up the action’s response, which is part of an activation record created by 
-the platform. 
-A blocking invocation request waits for the activation result to be available. 
-The "hello” action can be invoked as a blocking activation with the action invoke 
-command by including the blocking flag. 
-This command outputs the activation ID so that the result can be reviewed at any time. 
-This command outputs the complete activation record in JSON format. 
-The activation record includes all information about the activation, including the function’s 
-complete response. 
-You can see the Hello world payload in the response. 
-For the sake of space, this slide displays a truncated view of the activation record. 
-No build step is required to run a function because the runtime is already deployed and 
-waiting for function invocations. 
-A non-blocking invocation immediately invokes the action and does not wait for a response. 
-The invocation is accomplished using a similar command, but you do not include the dash dash 
-blocking flag. 
-Since the result is not awaited, you need retrieve the result later with the activation 
-ID. 
-The retrieve activation result command fetches only the result, which is the hello world 
-payload. 
-To retrieve the entire activation record, use the activation get command. 
-Keeping track of the activation IDs can be challenging, and there are activation commands 
-that can help. 
-The activation get command run with the dash dash last flag retrieves the last activation 
-record. 
-You can also retrieve the last activation result by using the last flag with 
-the activation result command. 
-Finally, if you want to retrieve prior activation records or results, use the activation list 
-command to list the most recent activations, which includes their IDs. 
-In this video, you learned that: 
-You can create Cloud Functions actions using source code, 
-You can invoke Actions using either blocking or non-blocking invocations, 
-Activation records are stored for each invocation and can be used to obtain the invocation’s 
-response. 
+Welcome to “Create and Invoke Actions Part 1” After watching this video, you will be able to: Describe how to create and invoke actions using IBM Cloud Functions. List the different modes for invoking actions. Describe how to retrieve the result of an action invocation. How do you create and invoke actions in Cloud Functions? For supported runtimes, source code can be provided directly to Cloud Functions. Since Node.js is supported, you can provide a JavaScript file. For example, this file named hello.js returns a JSON object with a payload of Hello world. To use source code from node.js to create an action, you can use the ibmcloud command line interface and the functions plugin. This command creates a function named hello using the hello.js file that you previously defined. You can list your functions by using the ibmcloud fn action list command. The output of this command displays your hello action under your account’s default namespace. Now that you created an action, you need to invoke the action so that it can perform its task. There are two `modes for invoking actions`: **blocking** invocations and **non-blocking** invocations. Blocking invocations invoke the action and waits for the result. This is accomplished by specifying the blocking flag on the command line. This is the “request and response” invocation style. You can also use a non-blocking invocation, which invokes the action immediately but does not wait for a response. Both block and non-blocking invocations always provide an activation ID that can be used to look up the action’s response, which is part of an activation record created by the platform. A blocking invocation request waits for the activation result to be available. The "hello” action can be invoked as a blocking activation with the action invoke command by including the blocking flag. This command outputs the activation ID so that the result can be reviewed at any time. This command outputs the complete activation record in JSON format. The activation record includes all information about the activation, including the function’s complete response. You can see the Hello world payload in the response. For the sake of space, this slide displays a truncated view of the activation record. No build step is required to run a function because the runtime is already deployed and waiting for function invocations. A non-blocking invocation immediately invokes the action and does not wait for a response. The invocation is accomplished using a similar command, but you do not include the dash dash blocking flag. Since the result is not awaited, you need retrieve the result later with the activation ID. The retrieve activation result command fetches only the result, which is the hello world payload. To retrieve the entire activation record, use the activation get command. Keeping track of the activation IDs can be challenging, and there are activation commands that can help. The activation get command run with the dash dash last flag retrieves the last activation record. You can also retrieve the last activation result by using the last flag with the activation result command. Finally, if you want to retrieve prior activation records or results, use the activation list command to list the most recent activations, which includes their IDs. In this video, you learned that: You can create Cloud Functions actions using source code, You can invoke Actions using either blocking or non-blocking invocations, Activation records are stored for each invocation and can be used to obtain the invocation’s response.
 
 ## Create and Invoke Actions - Part 2
 
-Welcome to “Create and Invoke Actions Part 2” 
-After watching this video, you will be able: 
-Invoke an action with parameters 
-Bind default parameters to an action 
-Call actions from actions 
-Create and invoke sequence actions 
-Functions can be more advanced than a simple “hello world.” 
-Event parameters can be passed to an action when the action is invoked. 
-A function can be updated to look for parameters. 
-The input parameters are passed as a JSON object parameter to the main function. 
-Notice how the name and place parameters are retrieved from the params object in 
-this example. 
-You can then apply the action update command. 
-When invoking actions through the command line, parameter values can be explicitly passed 
-using the param flag. 
-In this case we invoke the hello action and pass Alex as the name parameter and IBM as 
-the place parameter. Using the result flag performs a blocking invocation and outputs 
-only the result and not the full activation record. 
-This action makes the output more manageable. 
-Use a JSON formatted file to pass parameters that include your required content. 
-The filename must then be passed using the param-file flag. 
-This parameters.json file declares the name and place as Alex and IBM. You can then invoke 
-the action using the parameters from this JSON file. 
-You can specify multiple parameters when you invoke actions—such as the name of a 
-person and the place where they’re from. 
-Rather than pass all these multiple parameters to an action every time, you can bind these 
-parameters as default parameters. 
-Default parameters are stored in the platform and automatically passed into the function 
-as input during each invocation. 
-If the invocation includes a parameter that has a default value, the passed value overrides 
-the default parameter value. 
-Parameters are bound when an action is created or updated. 
-If you run the “action update” command and specify the place parameter, you define 
-this value as the default. 
-If this function is invoked and the place parameter is not explicitly provided, the 
-function will use Earth as the default place, as seen in this example. 
-Functions are modular and reusable, so you will often want to call one action from another 
-action. Rather than having to manually construct HTTP requests to trigger actions, libraries 
-pre-installed make requests easier. 
-For example, you could create a proxy action that checks the password parameter and then 
-calls another action if the password is correct. 
-This code uses the Node package manager (NPM) Apache OpenWhisk JavaScript library, which 
-is pre-installed in the Cloud Functions environment, so you don’t need to package the code. 
-Invoking this proxy action with the incorrect password throws an error, while invoking the 
-proxy action with the correct password will call your hello function. 
-Sequence actions are created using a list of existing actions. 
-When the sequence action is invoked, each action is executed in order of the action 
-parameter list. 
-Input parameters are passed to the first action in the sequence. 
-Output from a function in the sequence is passed as the input to the next function and 
-so on. 
-The output from the last action in the sequence is returned as the response result. 
-Sequences behave like normal actions—you can create, invoke, and manage them as actions. 
-Providing the sequence flag to the action create command will create a sequence action. 
-The sequence flag provides the actions in the order in which they will be executed. 
-Since actions ought to perform a single task, creating modular actions lets them be reused 
-in a variety of sequences. 
-A funcs.js file defines three functions: 
-First, the split function takes a single string and slices it into a JSON map of individual 
-strings using a space as the delimiter. 
-Note that the “action create” command assumes the function is named 
-main. 
-However, you can also use the main flag to specify the function name. 
-Next, the reverse function takes a JSON array of strings and transposes the characters in 
-each string. 
-The third and final function is the join function. 
-The join function takes a JSON array of strings and concatenates the array into a space-delimited 
-string. 
-On this slide, you can assume that the action is created using each of these functions. 
-You can create a sequence of actions using the “action create” command and the sequence 
-flag as shown here. Use the “action invoke” command invoke the sequence. 
-But what does each step of this sequence look like? 
-First, the “hello world” string is passed to the split action. 
-The split command slices the string into two words and outputs as the result as a map that 
-includes those two words. 
-These outputs are passed as input to the reverse action, which reverses the characters in each 
-word and outputs a map that includes both of those reversed words. 
-Finally, the output of reverse action is passed into the join action, which then joins those 
-reversed words into a single string. 
-This new string is the output of the entire sequence. 
-In this video, you learned that: 
-Parameters can be passed to actions and given default values 
-Actions can call other actions by using a pre-installed OpenWhisk library 
-Sequences are a type of action and are created by chaining together existing actions 
+Welcome to “Create and Invoke Actions Part 2” After watching this video, you will be able: Invoke an action with parameters Bind default parameters to an action Call actions from actions Create and invoke sequence actions Functions can be more advanced than a simple “hello world.” Event parameters can be passed to an action when the action is invoked. A function can be updated to look for parameters. The input parameters are passed as a JSON object parameter to the main function. Notice how the name and place parameters are retrieved from the params object in this example. You can then apply the action update command. When invoking actions through the command line, parameter values can be explicitly passed using the param flag. In this case we invoke the hello action and pass Alex as the name parameter and IBM as the place parameter. Using the result flag performs a blocking invocation and outputs only the result and not the full activation record. This action makes the output more manageable. Use a JSON formatted file to pass parameters that include your required content. The filename must then be passed using the param-file flag. This parameters.json file declares the name and place as Alex and IBM. You can then invoke the action using the parameters from this JSON file. You can specify multiple parameters when you invoke actions—such as the name of a person and the place where they’re from. Rather than pass all these multiple parameters to an action every time, you can bind these parameters as default parameters. Default parameters are stored in the platform and automatically passed into the function as input during each invocation. If the invocation includes a parameter that has a default value, the passed value overrides the default parameter value. Parameters are bound when an action is created or updated. If you run the “action update” command and specify the place parameter, you define this value as the default. If this function is invoked and the place parameter is not explicitly provided, the function will use Earth as the default place, as seen in this example. Functions are modular and reusable, so you will often want to call one action from another action. Rather than having to manually construct HTTP requests to trigger actions, libraries pre-installed make requests easier. For example, you could create a proxy action that checks the password parameter and then calls another action if the password is correct. This code uses the Node package manager (NPM) Apache OpenWhisk JavaScript library, which is pre-installed in the Cloud Functions environment, so you don’t need to package the code. Invoking this proxy action with the incorrect password throws an error, while invoking the proxy action with the correct password will call your hello function. Sequence actions are created using a list of existing actions. When the sequence action is invoked, each action is executed in order of the action parameter list. Input parameters are passed to the first action in the sequence. Output from a function in the sequence is passed as the input to the next function and so on. The output from the last action in the sequence is returned as the response result. Sequences behave like normal actions—you can create, invoke, and manage them as actions. Providing the sequence flag to the action create command will create a sequence action. The sequence flag provides the actions in the order in which they will be executed. Since actions ought to perform a single task, creating modular actions lets them be reused in a variety of sequences. A funcs.js file defines three functions: First, the split function takes a single string and slices it into a JSON map of individual strings using a space as the delimiter. Note that the “action create” command assumes the function is named main. However, you can also use the main flag to specify the function name. Next, the reverse function takes a JSON array of strings and transposes the characters in each string. The third and final function is the join function. The join function takes a JSON array of strings and concatenates the array into a space-delimited string. On this slide, you can assume that the action is created using each of these functions. You can create a sequence of actions using the “action create” command and the sequence flag as shown here. Use the “action invoke” command invoke the sequence. But what does each step of this sequence look like? First, the “hello world” string is passed to the split action. The split command slices the string into two words and outputs as the result as a map that includes those two words. These outputs are passed as input to the reverse action, which reverses the characters in each word and outputs a map that includes both of those reversed words. Finally, the output of reverse action is passed into the join action, which then joins those reversed words into a single string. This new string is the output of the entire sequence. In this video, you learned that: Parameters can be passed to actions and given default values Actions can call other actions by using a pre-installed OpenWhisk library Sequences are a type of action and are created by chaining together existing actions 
 
 ## Manage Action with Packages
 
-Welcome to “Manage Actions with Packages” 
-After watching this video, you will be able to: 
-Use packages provided by IBM Cloud Functions, 
-Create, use, and share your packages, 
-IBM Cloud Functions is pre-installed with public packages. 
-Public packages include trigger feeds used to register triggers with event sources. 
-Public packages also include actions, which anyone can use. Use the package list command 
-to display the packages available in a specific namespace. 
-The commands displayed onscreen here list the packages available in the whisk.system 
-namespace. 
-The package “get” command lists the entities present in a package. 
-Here you see a portion of the output for the Cloudant package. 
-Note that the package itself defines parameters that, if bound with values, can be used automatically 
-by all actions in the package. 
-This onscreen package includes the host and dbname to identify the database instance. 
-The package also contains authentication parameters, such as the username and password, that all 
-actions will need to access the database. 
-If an application uses a single database, setting these values at the package level 
-is helpful since all actions will authenticate the same way. 
-The package also contains several actions, like creating and reading documents, and a 
-feed named “changes.” 
-All of the entities inherit parameters from the package. For example, the username and 
-password don’t need to be passed to every invocation. 
-The feed is a special action that monitors a specified Cloudant instance and fires causes 
-triggers whenever you make changes to documents, allowing actions to react and perform work. 
-To view the list of known parameters of an entity belonging to a package, you will need 
-to run a get command with the summary flag. 
-This command gets a description of the read document action. Here, you can see five parameters 
-for this action. 
-Three of these parameters—apihost, bluemixServiceName, and dbname—can be predefined at the package 
-level and when invoked, the package inherits the predefined parameter values. 
-As a result, the invocation only requires the document id parameter. 
-Any entity listed under a package inherits specific bound parameters from the package. 
-You can invoke actions in a package, just as with other actions. 
-The next few steps show how to invoke the greeting action in the whisk.system samples package with 
-different parameters. 
-Getting a description of the greeting action shows that it takes two parameters: name and 
-place. 
-If you invoke the action without parameters, a generic message using default values is 
-displayed. 
-Of course, you can pass parameters to create a custom greeting. 
-Although you can use the entities in a package directly, you might find yourself passing 
-the same parameters to the action every time. 
-You can avoid this situation by using the package bind command and specifying default 
-parameters. 
-The actions in the package inherit these parameters. 
-You can bind to the samples package and set USA as the default place parameter. 
-If you then get this package, you’ll see that all the samples' actions are available. 
-If you then invoke the greeting action from the usaSamples package and do not provide 
-the “place” parameter, the package uses default value of “USA.” 
-You can create a custom package by applying the package create command to group your actions, 
-manage default parameters, and share entities with other users. 
-When you run the package get command with the summary flag, you’ll see that the package 
-is empty. 
-The identity.js file contains action code that returns all the input parameters. 
-Use this code to create an action in the custom package using the action create command. 
-You must prefix the package name to the action name. Getting a summary of the package now 
-shows the new action. 
-You can set default parameters for all the entities in a package. 
-You do this by setting package level parameters that are inherited by all actions in the package. 
-You can update the custom package to include two parameters: city and country. 
-Invoking the identity action will now return the default city and country. 
-After the actions and feeds that comprise a package are debugged and tested, you can 
-share the package with all Cloud Functions users. 
-Sharing the package enables other users to bind the package, invoke actions in the package, 
-and author their own rules and sequence actions. 
-Share the package by passing the shared flag and specifying yes to the update command. 
-In this video, you learned that: 
-IBM Cloud Functions provides packages that you can use and bind to specify default parameters, 
-You can create your packages to group your actions, manage default parameters, and share 
-entities with other users. 
+Welcome to “Manage Actions with Packages” After watching this video, you will be able to: Use packages provided by IBM Cloud Functions, Create, use, and share your packages, IBM Cloud Functions is pre-installed with public packages. Public packages include trigger feeds used to register triggers with event sources. Public packages also include actions, which anyone can use. Use the package list command to display the packages available in a specific namespace. The commands displayed onscreen here list the packages available in the whisk.system namespace. The package “get” command lists the entities present in a package. Here you see a portion of the output for the Cloudant package. Note that the package itself defines parameters that, if bound with values, can be used automatically by all actions in the package. This onscreen package includes the host and dbname to identify the database instance. The package also contains authentication parameters, such as the username and password, that all actions will need to access the database. If an application uses a single database, setting these values at the package level is helpful since all actions will authenticate the same way. The package also contains several actions, like creating and reading documents, and a feed named “changes.” All of the entities inherit parameters from the package. For example, the username and password don’t need to be passed to every invocation. The feed is a special action that monitors a specified Cloudant instance and fires causes triggers whenever you make changes to documents, allowing actions to react and perform work. To view the list of known parameters of an entity belonging to a package, you will need to run a get command with the summary flag. This command gets a description of the read document action. Here, you can see five parameters for this action. Three of these parameters—apihost, bluemixServiceName, and dbname—can be predefined at the package level and when invoked, the package inherits the predefined parameter values. As a result, the invocation only requires the document id parameter. Any entity listed under a package inherits specific bound parameters from the package. You can invoke actions in a package, just as with other actions. The next few steps show how to invoke the greeting action in the whisk.system samples package with different parameters. Getting a description of the greeting action shows that it takes two parameters: name and place. If you invoke the action without parameters, a generic message using default values is displayed. Of course, you can pass parameters to create a custom greeting. Although you can use the entities in a package directly, you might find yourself passing the same parameters to the action every time. You can avoid this situation by using the package bind command and specifying default parameters. The actions in the package inherit these parameters. You can bind to the samples package and set USA as the default place parameter. If you then get this package, you’ll see that all the samples' actions are available. If you then invoke the greeting action from the usaSamples package and do not provide the “place” parameter, the package uses default value of “USA.” You can create a custom package by applying the package create command to group your actions, manage default parameters, and share entities with other users. When you run the package get command with the summary flag, you’ll see that the package is empty. The identity.js file contains action code that returns all the input parameters. Use this code to create an action in the custom package using the action create command. You must prefix the package name to the action name. Getting a summary of the package now shows the new action. You can set default parameters for all the entities in a package. You do this by setting package level parameters that are inherited by all actions in the package. You can update the custom package to include two parameters: city and country. Invoking the identity action will now return the default city and country. After the actions and feeds that comprise a package are debugged and tested, you can share the package with all Cloud Functions users. Sharing the package enables other users to bind the package, invoke actions in the package, and author their own rules and sequence actions. Share the package by passing the shared flag and specifying yes to the update command. In this video, you learned that: IBM Cloud Functions provides packages that you can use and bind to specify default parameters, You can create your packages to group your actions, manage default parameters, and share entities with other users.
 
 ## Connect Actions to Event Sources
 
-Welcome to “Connect Actions to Event Sources” 
-After watching this video, you will be able to: 
-Identify and describe a trigger, 
-Identify and describe a rule, 
-Create a trigger and a rule that causes the trigger to invoke an action, and 
-disable a rule. 
-Before you connect actions to event sources, you need to understand triggers and rules, 
-A trigger is a named channel for a class of event. 
-You can use a dictionary of key-value pairs to activate or fire triggers. 
-A user or an external event source can fire a trigger event. 
-Each trigger event fired results in an activation ID. 
-A feed is a way to configure an external event source to fire multiple triggers events that 
-can be consumed by Cloud Functions. 
-A rule associates one trigger with one action. 
-Every firing of the trigger causes the corresponding action to be invoked with the trigger event 
-as input. Imagine a system with two actions, classifyImage and thumbnailImage. 
-There are also two triggers, newTweet and uploadImage. 
-You can set rules so that the newTweet trigger invokes the classifyImage action, and the 
-uploadImage trigger invokes both the classifyImage and the thumbnailImage actions. 
-By enabling these rules, images in new tweets are classified, and uploaded images are both 
-classified and thumbnailed. 
-You can create a trigger to send location updates using the trigger create command. 
-This trigger will fire when a location is updated. 
-Use the trigger list command to verify that the trigger was created. 
-The locationUpdate trigger is present in the output since the trigger was created previously. 
-Then, use the trigger fire command using the provided parameters. 
-For now, you’ll only see a confirmation. 
-Currently, events fired to the locationUpdate trigger don’t do anything. 
-You must create a rule to associate the trigger with an action. 
-Assume that an action which displays a greeting is already created. 
-You can hook up your newly created trigger to invoke that action. 
-The create rule command requires three options: the name of the rule, the trigger, and the 
-action. 
-Getting the rule shows the trigger and the action bound by this rule. 
-Now that the rule is set up for the locationUpdate trigger to fire the hello action, you can 
-test the rule. 
-First, you’ll fire the trigger. 
-Remember that each time you fire the locationUpdate trigger with parameters, the hello action 
-will be called with those parameters. 
-Next, you can verify that the action was invoked by checking the activations list. 
-Not only is the action recorded, but the trigger is recorded as well. 
-Then, you can then use the action’s activation ID to view its result and verify that the 
-correct payload was returned. 
-Rules are automatically enabled when created. 
-Rule can be disabled and re-enabled via the command line. 
-Apply the rule disable command to prevent the associated trigger from invoking the associated 
-action. 
-In this video, you learned that: 
-A rule associates one trigger with one action. 
-Rules cause actions to be invoked when the associated trigger is fired. 
-Using multiple rules can cause a trigger to invoke multiple actions or an action to be 
-invoked by multiple triggers. 
+Welcome to “Connect Actions to Event Sources” After watching this video, you will be able to: Identify and describe a trigger, Identify and describe a rule, Create a trigger and a rule that causes the trigger to invoke an action, and disable a rule. Before you connect actions to event sources, you need to understand triggers and rules, A trigger is a named channel for a class of event. You can use a dictionary of key-value pairs to activate or fire triggers. A user or an external event source can fire a trigger event. Each trigger event fired results in an activation ID. A feed is a way to configure an external event source to fire multiple triggers events that can be consumed by Cloud Functions. A rule associates one trigger with one action. Every firing of the trigger causes the corresponding action to be invoked with the trigger event as input. Imagine a system with two actions, classifyImage and thumbnailImage. There are also two triggers, newTweet and uploadImage. You can set rules so that the newTweet trigger invokes the classifyImage action, and the uploadImage trigger invokes both the classifyImage and the thumbnailImage actions. By enabling these rules, images in new tweets are classified, and uploaded images are both classified and thumbnailed. You can create a trigger to send location updates using the trigger create command. This trigger will fire when a location is updated. Use the trigger list command to verify that the trigger was created. The locationUpdate trigger is present in the output since the trigger was created previously. Then, use the trigger fire command using the provided parameters. For now, you’ll only see a confirmation. Currently, events fired to the locationUpdate trigger don’t do anything. You must create a rule to associate the trigger with an action. Assume that an action which displays a greeting is already created. You can hook up your newly created trigger to invoke that action. The create rule command requires three options: the name of the rule, the trigger, and the action. Getting the rule shows the trigger and the action bound by this rule. Now that the rule is set up for the locationUpdate trigger to fire the hello action, you can test the rule. First, you’ll fire the trigger. Remember that each time you fire the locationUpdate trigger with parameters, the hello action will be called with those parameters. Next, you can verify that the action was invoked by checking the activations list. Not only is the action recorded, but the trigger is recorded as well. Then, you can then use the action’s activation ID to view its result and verify that the correct payload was returned. Rules are automatically enabled when created. Rule can be disabled and re-enabled via the command line. Apply the rule disable command to prevent the associated trigger from invoking the associated action. In this video, you learned that: A rule associates one trigger with one action. Rules cause actions to be invoked when the associated trigger is fired. Using multiple rules can cause a trigger to invoke multiple actions or an action to be invoked by multiple triggers. 
 
 ## Expose Actions as APIs
 
-Welcome to “Expose Actions as APIs.” 
-After watching this video, you will be able to: 
-Describe why you need to expose actions as APIs, 
-Create a web action, 
-Identify the benefits of web actions, 
-Identify the benefits of using the API Gateway service, and 
-describe how IBM Cloud Functions work with an integrated API Gateway. 
-Initially, an action is only usable from the command line interface using the invoke command 
-or the web console. 
-Web apps can’t easily invoke actions using these two methods. 
-For a web app to call the action directly, you must expose the action as a web action 
-via a RESTful API so that other services can call those actions. 
-In a production microservices application that uses Cloud Functions, functions need 
-to be directly accessible without using the command line interface. 
-And Microservices often communicate via HTTP requests. 
-Fortunately, using Cloud Functions, you can turn actions into web actions invoked using 
-HTTP so that services can easily invoke these web actions within a microservices architecture. 
-When using Cloud Functions, when you can annotate new actions using the web true flag to convert 
-those actions into web actions. 
-The result is the creation of a public URL that can trigger the action from any web app. 
-Web actions can then be invoked via HTTP requests without user authentication. 
-The HTTP request parameters are automatically converted into event parameters. 
-Web actions can control the HTTP response headers and body to support content types 
-directly, manage cookies, and perform HTTP redirects. 
-Web actions provide many benefits. 
-First, web actions can be invoked from anywhere without defining a trigger or a rule. 
-Some serverless functions are only invoked due to an event, and thus a trigger is important. 
-However, web apps might want to directly invoke actions. 
-Secondly, You can access web actions through a REST interface without credentials. 
-Next, web actions support all content types on an HTTP response so that functions can 
-return HTML, XML, SVG, PNG, and others, with intelligent defaults for JSON. 
-Finally, web actions support any HTTP method, including GET, POST (which is the default), 
-PUT, PATCH, and DELETE, as well as HEAD and OPTIONS. 
-You can easily create a web action by passing the web flag with the value of true. 
-If you already created an action, you can update the existing action and pass this same 
-web flag. 
-To use a web action, you need its public URL. 
-You can retrieve the public URL by using the action get command and passing the hello URL 
-flag. 
-In addition to creating web actions, Cloud Functions also provides an integrated API 
-Gateway service. 
-You can use the Integrated API service to create new HTTP APIs that map incoming requests 
-to actions based on the path or the HTTP method. 
-This capability lets you have a single API path that responds to both GET and POST requests. 
-The API Gateway service then routes the HTTP requests to the appropriate web actions depending 
-on the path or method. 
-The API Gateway service also can perform user authentication, rate limiting, and more. 
-You do not need to implement these capabilities within your web actions. 
-To use the API Gateway, you’ll need to apply API subcommands. 
-The subcommand to create an API is ibmcloud fn api create base path API name HTTP method 
-action name. 
-The pathname for an API extends the base path, if the base path is provided. 
-Although the base path is not required, specifying a base path can help you logically group APIs. 
-All actions used in an API must be web actions. 
-In the labs, you’ll have more chances to use web actions and APIs. 
-In this video, you learned that: 
-Web actions create a public URL that you can use to invoke an action rather than using 
-triggers and rules. 
-After creating a web action, you can use the Cloud Functions integrated API Gateway to 
-expose web actions via an API. 
-The API Gateway performs robust API management on your behalf, such as routing and rate limiting. 
+Welcome to “Expose Actions as APIs.” After watching this video, you will be able to: Describe why you need to expose actions as APIs, Create a web action, Identify the benefits of web actions, Identify the benefits of using the API Gateway service, and describe how IBM Cloud Functions work with an integrated API Gateway. Initially, an action is only usable from the command line interface using the invoke command or the web console. Web apps can’t easily invoke actions using these two methods. For a web app to call the action directly, you must expose the action as a web action via a RESTful API so that other services can call those actions. In a production microservices application that uses Cloud Functions, functions need to be directly accessible without using the command line interface. And Microservices often communicate via HTTP requests. Fortunately, using Cloud Functions, you can turn actions into web actions invoked using HTTP so that services can easily invoke these web actions within a microservices architecture. When using Cloud Functions, when you can annotate new actions using the web true flag to convert those actions into web actions. The result is the creation of a public URL that can trigger the action from any web app. Web actions can then be invoked via HTTP requests without user authentication. The HTTP request parameters are automatically converted into event parameters. Web actions can control the HTTP response headers and body to support content types directly, manage cookies, and perform HTTP redirects. Web actions provide many benefits. First, web actions can be invoked from anywhere without defining a trigger or a rule. Some serverless functions are only invoked due to an event, and thus a trigger is important. However, web apps might want to directly invoke actions. Secondly, You can access web actions through a REST interface without credentials. Next, web actions support all content types on an HTTP response so that functions can return HTML, XML, SVG, PNG, and others, with intelligent defaults for JSON. Finally, web actions support any HTTP method, including GET, POST (which is the default), PUT, PATCH, and DELETE, as well as HEAD and OPTIONS. You can easily create a web action by passing the web flag with the value of true. If you already created an action, you can update the existing action and pass this same web flag. To use a web action, you need its public URL. You can retrieve the public URL by using the action get command and passing the hello URL flag. In addition to creating web actions, Cloud Functions also provides an integrated API Gateway service. You can use the Integrated API service to create new HTTP APIs that map incoming requests to actions based on the path or the HTTP method. This capability lets you have a single API path that responds to both GET and POST requests. The API Gateway service then routes the HTTP requests to the appropriate web actions depending on the path or method. The API Gateway service also can perform user authentication, rate limiting, and more. You do not need to implement these capabilities within your web actions. To use the API Gateway, you’ll need to apply API subcommands. The subcommand to create an API is ibmcloud fn api create base path API name HTTP method action name. The pathname for an API extends the base path, if the base path is provided. Although the base path is not required, specifying a base path can help you logically group APIs. All actions used in an API must be web actions. In the labs, you’ll have more chances to use web actions and APIs. In this video, you learned that: Web actions create a public URL that you can use to invoke an action rather than using triggers and rules. After creating a web action, you can use the Cloud Functions integrated API Gateway to expose web actions via an API. The API Gateway performs robust API management on your behalf, such as routing and rate limiting.
+
+## Lab
+
+- [Click here](./instructional-labs-v2.pdf) to view and download lab instructions.
 
 ## Module 3 Summary
 
-Congratulations! You have completed this module. At this point in the course, you know that:
-
-You can create Cloud Functions actions using source code
-
-Actions can pass parameters and apply default values​. Actions can call other actions by using a pre-installed OpenWhisk library​. Sequences are a type of action and are created by chaining together existing actions. You can invoke actions using either blocking or non-blocking invocations. Activation records are stored for each invocation and you can use the activation record to obtain the invocation’s response
-
-IBM Cloud Functions provides packages that you can use and bind to specify default parameters. You can create packages to group your actions, manage default parameters, and share entities with other users.
-
-A rule associates one trigger with one action. When the associated trigger is fired, rules invoke actions. Using multiple rules can cause a trigger to invoke multiple actions or an action to be invoked by multiple triggers 
-
-Web actions create a public URL that you can use to invoke an action rather than using triggers and rules. After creating a web action, you can use the Cloud Functions integrated API Gateway to expose web actions via an API.
-
-You can use the API Gateway to perform robust API management on your behalf, such as routing and rate limiting.
+- You can create Cloud Functions actions using source code
+- Actions can pass parameters and apply default values​. Actions can call other actions by using a pre-installed OpenWhisk library​. Sequences are a type of action and are created by chaining together existing actions. You can invoke actions using either blocking or non-blocking invocations. Activation records are stored for each invocation and you can use the activation record to obtain the invocation’s response
+- IBM Cloud Functions provides packages that you can use and bind to specify default parameters. You can create packages to group your actions, manage default parameters, and share entities with other users.
+- A rule associates one trigger with one action. When the associated trigger is fired, rules invoke actions. Using multiple rules can cause a trigger to invoke multiple actions or an action to be invoked by multiple triggers 
+- Web actions create a public URL that you can use to invoke an action rather than using triggers and rules. After creating a web action, you can use the Cloud Functions integrated API Gateway to expose web actions via an API.
+- You can use the API Gateway to perform robust API management on your behalf, such as routing and rate limiting.
 
 ## Glossary - ORM: MicroServices w/ Serverless
 
-[Click here](https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0250EN-SkillsNetwork/cheatsheets/C9M3%20Glossary%20v1.3.pdf) to view and download "ORM: MicroServices w/ Serverless" module glossary 
+[Click here](./c9m3-glossary-v1.3.pdf) to view and download "ORM: MicroServices w/ Serverless" module glossary 
 
 # OpenShift Essentials/Working with OpenShift and Istio
 
 ## OpenShift Recap
 
-Welcome to the “Red Hat OpenShift Recap.” 
-After watching this video, you will be able to: 
-Explain what Red Hat OpenShift is, 
-Describe the relationship between OpenShift and Kubernetes, and 
-identify the services provided by OpenShift to facilitate operations and development tasks. 
-The concise definition of OpenShift, as provided on the Red Hat website, says that OpenShift 
-is a hybrid cloud, enterprise Kubernetes application platform. 
-Hybrid cloud is an IT architecture that incorporates workload portability, orchestration, and management 
-across premises and cloud environments. 
-You can run OpenShift in both on-premises and cloud environments. 
-OpenShift builds on open-source Kubernetes to create an application platform. 
-As an application platform, OpenShift does more than orchestrate containers. 
-OpenShift also provides additional tooling around the complete lifecycle of applications—from 
-build and CI/CD—to monitoring and logging. 
-Of course, we should note that OpenShift is developed and supported by Red Hat. 
-OpenShift is a platform for running microservices. 
-OpenShift is tailormade for deploying cloud-native services in an automated fashion. 
-Serverless architectures often work in tandem with other forms of compute such as virtual 
-machines and containers. 
-OpenShift orchestrates containerized workloads and thus provides an excellent pattern for 
-a cloud-native application. 
-You can integrate OpenShift with serverless technologies when serverless can better meet 
-your organization’s needs. 
-Kubernetes and OpenShift are closely connected. 
-An analogy to the Linux kernel is often used to convey the relationship between Kubernetes 
-and OpenShift. 
-A kernel is a powerful program at the center of an operating system. 
-While the Linus kernel is foundational and capable, many Linux distributions, such as 
-Ubuntu, Fedora, and Debian, build upon the kernel. 
-These distributions are operating systems with additional features and functions that 
-use the Linux kernel as their own. 
-Just like a Fedora distribution of Linux, OpenShift is a distribution of Kubernetes, 
-building on its foundational capabilities. 
-Let’s look at what’s included with OpenShift using a diagram reproduced from the OpenShift 
-website. 
-First, in an OpenShift environment, the Kubernetes master runs on Red Hat Enterprise Linux CoreOS, 
-while the worker nodes support Red Hat Enterprise Linux. 
-Next is Kubernetes. 
-As we’ve already mentioned, Kubernetes is an integral part of OpenShift, part of the 
-offering. 
-So far, the OpenShift architecture is like Kubernetes. 
-OpenShift infrastructure includes Kubernetes deployed on top. 
-Next are cluster services. 
-Cluster services include integrated monitoring, a private registry deployed within the cluster, 
-networking solutions, and many other features designed to create a helpful and intuitive 
-user experience. 
-On top of the cluster services, platform services help users manage their workloads. 
-Application services help users build cloud-native apps, while developer services help increase 
-developer productivity. 
-In this video, you learned that: 
-Red Hat OpenShift is a platform for running containerized workloads like microservices. 
-OpenShift is like a Kubernetes distribution in that OpenShift builds additional capabilities 
-on top of Kubernetes. 
-OpenShift provides a variety of services to manage workloads, build cloud-native apps, 
-and increase developer productivity. 
+Welcome to the “Red Hat OpenShift Recap.” After watching this video, you will be able to: Explain what Red Hat OpenShift is, Describe the relationship between OpenShift and Kubernetes, and identify the services provided by OpenShift to facilitate operations and development tasks. The concise definition of OpenShift, as provided on the Red Hat website, says that OpenShift is a hybrid cloud, enterprise Kubernetes application platform. Hybrid cloud is an IT architecture that incorporates workload portability, orchestration, and management across premises and cloud environments. You can run OpenShift in both on-premises and cloud environments. OpenShift builds on open-source Kubernetes to create an application platform. As an application platform, OpenShift does more than orchestrate containers. OpenShift also provides additional tooling around the complete lifecycle of applications—from build and CI/CD—to monitoring and logging. Of course, we should note that OpenShift is developed and supported by Red Hat. OpenShift is a platform for running microservices. OpenShift is tailormade for deploying cloud-native services in an automated fashion. Serverless architectures often work in tandem with other forms of compute such as virtual machines and containers. OpenShift orchestrates containerized workloads and thus provides an excellent pattern for a cloud-native application. You can integrate OpenShift with serverless technologies when serverless can better meet your organization’s needs. Kubernetes and OpenShift are closely connected. An analogy to the Linux kernel is often used to convey the relationship between Kubernetes and OpenShift. A kernel is a powerful program at the center of an operating system. While the Linus kernel is foundational and capable, many Linux distributions, such as Ubuntu, Fedora, and Debian, build upon the kernel. These distributions are operating systems with additional features and functions that use the Linux kernel as their own. Just like a Fedora distribution of Linux, OpenShift is a distribution of Kubernetes, building on its foundational capabilities. Let’s look at what’s included with OpenShift using a diagram reproduced from the OpenShift website. First, in an OpenShift environment, the Kubernetes master runs on Red Hat Enterprise Linux CoreOS, while the worker nodes support Red Hat Enterprise Linux. Next is Kubernetes. As we’ve already mentioned, Kubernetes is an integral part of OpenShift, part of the offering. So far, the OpenShift architecture is like Kubernetes. OpenShift infrastructure includes Kubernetes deployed on top. Next are cluster services. Cluster services include integrated monitoring, a private registry deployed within the cluster, networking solutions, and many other features designed to create a helpful and intuitive user experience. On top of the cluster services, platform services help users manage their workloads. Application services help users build cloud-native apps, while developer services help increase developer productivity. In this video, you learned that: Red Hat OpenShift is a platform for running containerized workloads like microservices. OpenShift is like a Kubernetes distribution in that OpenShift builds additional capabilities on top of Kubernetes. OpenShift provides a variety of services to manage workloads, build cloud-native apps, and increase developer productivity.
 
 ## Service Mesh and Istio
 
-Welcome to “Service Mesh and Istio.” 
-After watching this video, you will be able to: 
-List the benefits of microservices, 
-Describe the challenges that come with microservices, 
-Explain what a service mesh is, 
-Describe why a service mesh is useful, 
-Describe how a service mesh can alleviate common microservices challenges. 
-Using a microservices architecture to build cloud-native applications provides numerous 
-benefits. 
-Updating code is more manageable with microservices—you 
-only need to update the relevant services. 
-With microservices, teams who develop different application components are free to use other 
-technology stacks that meet their unique needs. 
-In addition, when an application is running, components 
-that experience more load can be scaled independently, 
-preventing the entire application from needing to be scaled when only one component requires 
-more resources. 
-Using microservices also brings some challenges. 
-Microservices require configuration to secure communications and set up encryption. 
-Development teams might want to roll out new features to a subset of users or compare two 
-versions of a new feature to see which version most engages users. 
-In these situations, teams need canary deployments and A/B testing. 
-Communication between microservices also leads to the possibility of cascading failures if 
-one service is unreachable or particularly slow. 
-To prevent communication failures from cascading to multiple microservices, developers must 
-implement retries and circuit breaking. 
-Now let’s talk about service meshes. 
-A service mesh is a dedicated layer for making service-to-service communication secure and 
-reliable. 
-Among other capabilities, service meshes provide traffic management to control the flow of 
-traffic between services, security to encrypt traffic between services, and observability 
-of service behavior to troubleshoot and optimize applications. 
-To learn more about service mesh capabilities, and specifically the Istio service mesh, here 
-is Ram Vennam from the IBM Cloud team. 
-Let's use this example application. 
-I have a UI microservice talking to two versions of catalog, which talk to inventory. 
-All of these are services deployed inside of a Kubernetes cluster. 
-The number one reason why someone uses a service mesh 
-is because they want to secure their workload. 
-So they want mutual TLS when one service is talking to another. 
-Next, they want to dynamically configure how the services are connected to one another. 
-So, in this example, there's version one and version two. 
-So, I might want to send 90 percent of the traffic to version 1 and then 10 percent 
-of the traffic to version 2 while I do testing and incremental rollouts. 
-I might also want to try adding retry policies and circuit breaking to harden my system. 
-Three. I want to observe how my application is doing end to end, not just if a service is up 
-or down but see where the bottlenecks are in the system and how traffic is flowing. 
-And four, I want to control who has access to talk to what. 
-In this example, UI is allowed to talk to catalog, and catalog is allowed to talk to inventory, 
-but UI is not allowed to talk to inventory directly, 
-and rogue containers cannot talk to inventory service. 
-You can get more granular than that and say that UI is allowed to make an HTTP get request 
-and catalog is allowed to make a post request to inventory. 
-In the past, we used to have our developers program all of these 
-features directly into their application code. 
-That slowed down the dev cycle, it made these microservices bigger, and just generally made 
-everything less flexible, but now there's a better way and that's the service mesh. 
-You keep your application small and business-focused and, instead, 
-you dynamically program the intelligence into the network and that's exactly what Istio does. 
-So, when you have Istio installed, the first thing you'll do is... it'll automatically inject proxies 
-next to each one of your containers, and these proxies are envoy proxies, 
-and the proxy itself runs in a container next to your application container, 
-but it runs inside the same Kubernetes pod. 
-Now, when UI wants to talk to catalog, the proxy will actually intercept that request, 
-apply any policies, and then route traffic to the proxy on the other side, 
-and then the catalog proxy will receive that request and then forward it down to the catalog. 
-Istio will configure each one of these proxies with your desired configuration. 
-Istio extends Kubernetes using CRDs. 
-So, to apply Istio configuration, you just write your YAML and then apply it to Kubernetes. 
-The Istio galley component will receive that YAML, validate it, and then hand it over to Istio pilot. 
-Pilot will convert that configuration to envoy configuration 
-and distribute it to each one of the proxies. 
-If you want the proxies to add additional policies and rules there's a policy component. 
-And then these proxies constantly report telemetry information about 
-what's going on into your system to the Istio telemetry component. 
-And last but not least, there's citadel. 
-Citadel is responsible for providing a strong identity 
-to each one of the services in your system. 
-It also generates certificates and rolls it out to each one of the proxies 
-so that the proxies can do mutual TLS when they're talking to one another. 
-To get started with Istio and to configure Istio, 
-there's three main resources that you need to learn about. 
-First, there's a gateway. 
-Gateway is like a load balancer that sits at the 
-edge of your mesh and accepts incoming and outgoing HTTP and TCP connections. 
-Next, to direct traffic from gateway to your services you create a virtual service. 
-And a virtual service can be bound to a gateway and direct traffic to UI 
-or it could be bound to a service and then direct traffic to your other services, 
-where you can apply policies like ninety percent and ten percent traffic split rules. 
-Once traffic is routed, you can apply rules on top of that traffic 
-such as TLS settings or circuit breaking, and those are done using destination rules. 
-And those are the three main resources you need to know about Istio. 
-I'm actually going to put policy and telemetry in asterisks because 
-there's some refactoring that's going on with these components. 
-The logic is being moved outside of this control plane 
-and into the proxies themselves to avoid the additional network hop. 
-This translates to improved performance. 
-In this video, you learned that: 
-Microservices architectures need security between 
-services as well as ways to manage and test services, 
-A service mesh is a dedicated layer that provides 
-security and more by coordinating communication in the environment, 
-Istio provides traffic shifting, mutual transport layer security, 
-and telemetry when deployed with microservices.
+Welcome to “Service Mesh and Istio.” After watching this video, you will be able to: List the benefits of microservices, Describe the challenges that come with microservices, Explain what a service mesh is, Describe why a service mesh is useful, Describe how a service mesh can alleviate common microservices challenges. Using a microservices architecture to build cloud-native applications provides numerous benefits. Updating code is more manageable with microservices—you only need to update the relevant services. With microservices, teams who develop different application components are free to use other technology stacks that meet their unique needs. In addition, when an application is running, components that experience more load can be scaled independently, preventing the entire application from needing to be scaled when only one component requires more resources. Using microservices also brings some challenges. Microservices require configuration to secure communications and set up encryption. Development teams might want to roll out new features to a subset of users or compare two versions of a new feature to see which version most engages users. In these situations, teams need canary deployments and A/B testing. Communication between microservices also leads to the possibility of cascading failures if one service is unreachable or particularly slow. To prevent communication failures from cascading to multiple microservices, developers must implement retries and circuit breaking. Now let’s talk about service meshes. A service mesh is a dedicated layer for making service-to-service communication secure and reliable. Among other capabilities, service meshes provide traffic management to control the flow of traffic between services, security to encrypt traffic between services, and observability of service behavior to troubleshoot and optimize applications. To learn more about service mesh capabilities, and specifically the Istio service mesh, here is Ram Vennam from the IBM Cloud team. Let's use this example application. I have a UI microservice talking to two versions of catalog, which talk to inventory. All of these are services deployed inside of a Kubernetes cluster. The number one reason why someone uses a service mesh is because they want to secure their workload. So they want mutual TLS when one service is talking to another. Next, they want to dynamically configure how the services are connected to one another. So, in this example, there's version one and version two. So, I might want to send 90 percent of the traffic to version 1 and then 10 percent of the traffic to version 2 while I do testing and incremental rollouts. I might also want to try adding retry policies and circuit breaking to harden my system. Three. I want to observe how my application is doing end to end, not just if a service is up or down but see where the bottlenecks are in the system and how traffic is flowing. And four, I want to control who has access to talk to what. In this example, UI is allowed to talk to catalog, and catalog is allowed to talk to inventory, but UI is not allowed to talk to inventory directly, and rogue containers cannot talk to inventory service. You can get more granular than that and say that UI is allowed to make an HTTP get request and catalog is allowed to make a post request to inventory. In the past, we used to have our developers program all of these features directly into their application code. That slowed down the dev cycle, it made these microservices bigger, and just generally made everything less flexible, but now there's a better way and that's the service mesh. You keep your application small and business-focused and, instead, you dynamically program the intelligence into the network and that's exactly what Istio does. So, when you have Istio installed, the first thing you'll do is... it'll automatically inject proxies next to each one of your containers, and these proxies are envoy proxies, and the proxy itself runs in a container next to your application container, but it runs inside the same Kubernetes pod. Now, when UI wants to talk to catalog, the proxy will actually intercept that request, apply any policies, and then route traffic to the proxy on the other side, and then the catalog proxy will receive that request and then forward it down to the catalog. Istio will configure each one of these proxies with your desired configuration. Istio extends Kubernetes using CRDs. So, to apply Istio configuration, you just write your YAML and then apply it to Kubernetes. The Istio galley component will receive that YAML, validate it, and then hand it over to Istio pilot. Pilot will convert that configuration to envoy configuration and distribute it to each one of the proxies. If you want the proxies to add additional policies and rules there's a policy component. And then these proxies constantly report telemetry information about what's going on into your system to the Istio telemetry component. And last but not least, there's citadel. Citadel is responsible for providing a strong identity to each one of the services in your system. It also generates certificates and rolls it out to each one of the proxies so that the proxies can do mutual TLS when they're talking to one another. To get started with Istio and to configure Istio, there's three main resources that you need to learn about. First, there's a gateway. Gateway is like a load balancer that sits at the edge of your mesh and accepts incoming and outgoing HTTP and TCP connections. Next, to direct traffic from gateway to your services you create a virtual service. And a virtual service can be bound to a gateway and direct traffic to UI or it could be bound to a service and then direct traffic to your other services, where you can apply policies like ninety percent and ten percent traffic split rules. Once traffic is routed, you can apply rules on top of that traffic such as TLS settings or circuit breaking, and those are done using destination rules. And those are the three main resources you need to know about Istio. I'm actually going to put policy and telemetry in asterisks because there's some refactoring that's going on with these components. The logic is being moved outside of this control plane and into the proxies themselves to avoid the additional network hop. This translates to improved performance. In this video, you learned that: Microservices architectures need security between services as well as ways to manage and test services, A service mesh is a dedicated layer that provides security and more by coordinating communication in the environment, Istio provides traffic shifting, mutual transport layer security, and telemetry when deployed with microservices.
 
 ## Microservices with OpenShift
 
-Welcome to Microservices with OpenShift. 
-After watching this video, you'll be able to 
-Describe how OpenShift makes developers lives easier, 
-Explain the process by which microservices are deployed on OpenShift. 
-Watch Si Vennam from the IBM Cloud team describe how to deploy microservices with OpenShift. 
-We'll start with developers. 
-So we'll sketch out a developer up here. 
-Now what does a developer have to do? 
-Well, they generally have to write applications, create changes, test them out, 
-deploy them into a cluster, and they're really just focused on that 
-and any other kind of distractions will slow them down from that task. 
-So, with dev, the first thing that they're going to want to 
-do when starting with OpenShift is to create a project and an application. 
-To do so, OpenShift has two different ways of enabling developers to work with their platform. 
-So, one you can take advantage of the CLI, 
-and there's also a really powerful web console that they could work with as well. 
-So, the first thing that the dev wants to do 
-is take advantage of one of those two form factors to create a project and an application. 
-And there's templates for all different kinds of source code 
-and programming languages that the dev wants to work with. 
-So, they'll go ahead and do that and then, 
-you know, once they get into their flow of creating updates to an application, 
-the very first step they're going to want to do is push changes to a repository. 
-And in this case, let's use GitHub as an example. 
-Let's say that this developer is making changes into GitHub. 
-That's really all they need to do. 
-Behind the scenes, OpenShift is going to take care of the rest. 
-So, when that application and project was created, OpenShift in the back end will create a jenkins 
-job and pipeline that helps power deploying this application. 
-So, once code gets pushed into that GitHub, it'll trigger a web hook, which kicks off a Jenkins job. 
-Which is just going to do two things: 
-First, what it's going to do is do something called source to image, 
-which is going to create a docker image out of that source code. 
-Next, it's going to go ahead and take that and put it into a registry. 
-A private registry, which comes built-in in OpenShift and, in fact, you can actually 
-use public registries or your own registry if you have it outside of this context as well. 
-Once that image gets built and pushed into that registry 
-next, what OpenShift will do is go ahead and push that into the actual cluster. 
-And that's what we've got here is two hosts that are in our cluster in OpenShift. 
-We're gonna take that image and let's say that we've set it up to deploy two times. 
-And we'll call this v1 of the application. 
-So, let's kind of overview that process one more time. 
-So, the developer makes some change to a code then Jenkins will kind of kick off that build, 
-create an image, push that image to a registry, 
-and then a little bit of a different thing here, 
-So, in this step right here, OpenShift takes advantage of something called image streams, 
-which is a little bit different to how Kubernetes will do things and essentially 
-what it enables you to do is whenever a change is kind of detected with that image, 
-an image stream will allow you to push those with no downtime to your applications. 
-So, what it'll do is, you know, with that new version of that code, it'll bring down the old 
-version, start the new version until we've rolled out the whole new version of that application. 
-This is just a few ways that OpenShift makes developers' lives easier. 
-In this video, you learned that OpenShift creates a Jenkins 
-job to automatically build microservices into containers, 
-OpenShift pushes the built containers to a registry 
-and deploys those containers to the cluster 
+Welcome to Microservices with OpenShift. After watching this video, you'll be able to Describe how OpenShift makes developers lives easier, Explain the process by which microservices are deployed on OpenShift. Watch Si Vennam from the IBM Cloud team describe how to deploy microservices with OpenShift. We'll start with developers. So we'll sketch out a developer up here. Now what does a developer have to do? Well, they generally have to write applications, create changes, test them out, deploy them into a cluster, and they're really just focused on that and any other kind of distractions will slow them down from that task. So, with dev, the first thing that they're going to want to do when starting with OpenShift is to create a project and an application. To do so, OpenShift has two different ways of enabling developers to work with their platform. So, one you can take advantage of the CLI, and there's also a really powerful web console that they could work with as well. So, the first thing that the dev wants to do is take advantage of one of those two form factors to create a project and an application. And there's templates for all different kinds of source code and programming languages that the dev wants to work with. So, they'll go ahead and do that and then, you know, once they get into their flow of creating updates to an application, the very first step they're going to want to do is push changes to a repository. And in this case, let's use GitHub as an example. Let's say that this developer is making changes into GitHub. That's really all they need to do. Behind the scenes, OpenShift is going to take care of the rest. So, when that application and project was created, OpenShift in the back end will create a jenkins job and pipeline that helps power deploying this application. So, once code gets pushed into that GitHub, it'll trigger a web hook, which kicks off a Jenkins job. Which is just going to do two things: First, what it's going to do is do something called source to image, which is going to create a docker image out of that source code. Next, it's going to go ahead and take that and put it into a registry. A private registry, which comes built-in in OpenShift and, in fact, you can actually use public registries or your own registry if you have it outside of this context as well. Once that image gets built and pushed into that registry next, what OpenShift will do is go ahead and push that into the actual cluster. And that's what we've got here is two hosts that are in our cluster in OpenShift. We're gonna take that image and let's say that we've set it up to deploy two times. And we'll call this v1 of the application. So, let's kind of overview that process one more time. So, the developer makes some change to a code then Jenkins will kind of kick off that build, create an image, push that image to a registry, and then a little bit of a different thing here, So, in this step right here, OpenShift takes advantage of something called image streams, which is a little bit different to how Kubernetes will do things and essentially what it enables you to do is whenever a change is kind of detected with that image, an image stream will allow you to push those with no downtime to your applications. So, what it'll do is, you know, with that new version of that code, it'll bring down the old version, start the new version until we've rolled out the whole new version of that application. This is just a few ways that OpenShift makes developers' lives easier. In this video, you learned that OpenShift creates a Jenkins job to automatically build microservices into containers, OpenShift pushes the built containers to a registry and deploys those containers to the cluster 
 
 ## Red Hat Marketplace
 
-Welcome to "Red Hat Marketplace." 
-After watching this video, you will be able to: 
-Explain why using third-party software with microservices is beneficial and 
-Describe how Red Hat Marketplace solves the challenges of discovering, procuring, and 
-managing software 
-Developing and deploying microservices using OpenShift is a simple and streamlined process. 
-In addition to developing your own microservices, OpenShift enables you to supplement your solutions 
-using other third-party software. 
-You'll likely use third-party software, including databases, logging and monitoring solutions, 
-or any number of other options that can help make your application more robust. 
-Third-party software can be a great way to fill gaps without having to develop entire 
-solutions yourself. 
-But when it comes to choosing third-party software, a lot of questions arise. 
-How can you discover software certified to work in your environment? 
-How can you purchase that software? 
-How can you deploy that software? 
-And, after deployment, how can you manage ongoing tasks such as updates? 
-Red Mat Marketplace solves each of these concerns. 
-According to its website, Red Hat Marketplace is "a simpler way to try, buy, and manage 
-certified software for Red Hat OpenShift." 
-How does it work? 
-Red Hat Marketplace provides a one-stop-shop for software certified to run on Red Hat OpenShift. 
-You can search for available products and filter the results based on multiple categories. 
-Each product includes information about the software's automation capabilities, such as 
-whether the software performs installations, seamless upgrades, and other software lifecycle 
-tasks. 
-Red Hat Marketplace enables you to size software to your needs, sign up for free trials, and 
-purchase your software. 
-The Marketplace provides real-time pricing, billing, and subscription choices, and multiple 
-payment options. 
-You can quickly deploy your purchased software automatically via Red Hat Marketplace to selected 
-OpenShift clusters on any cloud or on-premises environment. 
-Finally, you can use Red Hat Marketplace to perform many lifecycle actions, such as seamless 
-upgrades and deep insights like metrics, alerts, log processing, and workload analysis. 
-Red Hat provides continuous support for all products purchased through the Marketplace. 
-Next, watch Rojan Jose from the IBM Cloud team demonstrate how to find a database solution 
-on the Red Hat Marketplace. 
-Let's say as a developer, I'm looking for database progress. 
-Click on the database category to see the complete list of database products. 
-Use the filter on the left to narrow down the results. 
-Click on the product title to view product details. 
-I'm going to open MemSQL. 
-As you can see, MemSQL meets certification standards on 5 different parameters. 
-It also supports Phase 1 and Phase 2 on the Operator maturity model. 
-The overview tab provides general information about the product and reviews from G2. 
-Reviews from a third-party source allows the marketplace to be rendered neutral. 
-The documentation tab provides links to getting started and installation guides. 
-The pricing tab offers a summary of product pricing by tiers 
-Product entitlement can be based on the number of containers, user account, application and 
-instances, etc, along with a subscription which can be monthly or yearly renewals. 
-Metering best usage and managing overages will be made available in future releases. 
-And the Help tab gives you more information about the support plan. 
-In this video, you learned that: 
-Certified software fills gaps in your application, eliminating the need for your organization 
-to develop new microservices, and 
-Red Hat Marketplace provides a central location to try, buy, deploy and manage software certified 
-for OpenShift environments 
+Welcome to "Red Hat Marketplace." After watching this video, you will be able to: Explain why using third-party software with microservices is beneficial and Describe how Red Hat Marketplace solves the challenges of discovering, procuring, and managing software Developing and deploying microservices using OpenShift is a simple and streamlined process. In addition to developing your own microservices, OpenShift enables you to supplement your solutions using other third-party software. You'll likely use third-party software, including databases, logging and monitoring solutions, or any number of other options that can help make your application more robust. Third-party software can be a great way to fill gaps without having to develop entire solutions yourself. But when it comes to choosing third-party software, a lot of questions arise. How can you discover software certified to work in your environment? How can you purchase that software? How can you deploy that software? And, after deployment, how can you manage ongoing tasks such as updates? Red Mat Marketplace solves each of these concerns. According to its website, Red Hat Marketplace is "a simpler way to try, buy, and manage certified software for Red Hat OpenShift." How does it work? Red Hat Marketplace provides a one-stop-shop for software certified to run on Red Hat OpenShift. You can search for available products and filter the results based on multiple categories. Each product includes information about the software's automation capabilities, such as whether the software performs installations, seamless upgrades, and other software lifecycle tasks. Red Hat Marketplace enables you to size software to your needs, sign up for free trials, and purchase your software. The Marketplace provides real-time pricing, billing, and subscription choices, and multiple payment options. You can quickly deploy your purchased software automatically via Red Hat Marketplace to selected OpenShift clusters on any cloud or on-premises environment. Finally, you can use Red Hat Marketplace to perform many lifecycle actions, such as seamless upgrades and deep insights like metrics, alerts, log processing, and workload analysis. Red Hat provides continuous support for all products purchased through the Marketplace. Next, watch Rojan Jose from the IBM Cloud team demonstrate how to find a database solution on the Red Hat Marketplace. Let's say as a developer, I'm looking for database progress. Click on the database category to see the complete list of database products. Use the filter on the left to narrow down the results. Click on the product title to view product details. I'm going to open MemSQL. As you can see, MemSQL meets certification standards on 5 different parameters. It also supports Phase 1 and Phase 2 on the Operator maturity model. The overview tab provides general information about the product and reviews from G2. Reviews from a third-party source allows the marketplace to be rendered neutral. The documentation tab provides links to getting started and installation guides. The pricing tab offers a summary of product pricing by tiers Product entitlement can be based on the number of containers, user account, application and instances, etc, along with a subscription which can be monthly or yearly renewals. Metering best usage and managing overages will be made available in future releases. And the Help tab gives you more information about the support plan. In this video, you learned that: Certified software fills gaps in your application, eliminating the need for your organization to develop new microservices, and Red Hat Marketplace provides a central location to try, buy, deploy and manage software certified for OpenShift environments
+
+## Lab
+
+[Click here](./coding-labs.pdf) to view and download lab instructions.
 
 ## Module 4 Summary
 
-Congratulations! You have completed this module. At this point in the course, you know that: 
-
-Red Hat OpenShift is a platform for running containerized workloads like microservices. 
-
-OpenShift is like a Kubernetes distribution in that OpenShift with additional capabilities. OpenShift services help manage workloads, build cloud-native apps, and increase developer productivity. For example, OpenShift creates a Jenkins job to automatically build microservices into containers. In addition, OpenShift pushes the built containers to a registry and deploys those containers to the cluster 
-
-Microservices architectures need security among services as well as ways to manage and test services. 
-
-A service mesh is a dedicated layer that provides security and more by coordinating communication. Istio is a service mesh that provides traffic shifting, mutual transport layer security, and telemetry when deployed with microservices.  
-
-Certified software fills development gaps in your application, eliminating the need for your organization to spend the time and money  to develop new microservices. Red Hat Marketplace provides a central location to try, buy, deploy and manage software certified for OpenShift environments. 
-
+- Red Hat OpenShift is a platform for running containerized workloads like microservices. 
+- OpenShift is like a Kubernetes distribution in that OpenShift with additional capabilities. OpenShift services help manage workloads, build cloud-native apps, and increase developer productivity. For example, OpenShift creates a Jenkins job to automatically build microservices into containers. In addition, OpenShift pushes the built containers to a registry and deploys those containers to the cluster 
+- Microservices architectures need security among services as well as ways to manage and test services. 
+- A service mesh is a dedicated layer that provides security and more by coordinating communication. Istio is a service mesh that provides traffic shifting, mutual transport layer security, and telemetry when deployed with microservices.  
+- Certified software fills development gaps in your application, eliminating the need for your organization to spend the time and money  to develop new microservices. Red Hat Marketplace provides a central location to try, buy, deploy and manage software certified for OpenShift environments.
 
 ## Glossary - OpenShift Essentials/Working with OpenShift and Istio
 
-[Click here](https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0250EN-SkillsNetwork/cheatsheets/C9M4%20Glossary%20v1.1.pdf) to view and download " OpenShift Essentials/Working with OpenShift and Istio" module glossary 
+[Click here](./c9m4-glossary-v1.1.pdf) to view and download " OpenShift Essentials/Working with OpenShift and Istio" module glossary 
 
 # Final Project
