@@ -159,3 +159,5 @@ Welcome to "Red Hat Marketplace." After watching this video, you will be able to
 [Click here](./c9m4-glossary-v1.1.pdf) to view and download " OpenShift Essentials/Working with OpenShift and Istio" module glossary 
 
 # Final Project
+
+[Click here](./final-project-serverless-lab.pdf) to view and download lab instructions.
