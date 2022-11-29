@@ -5,8 +5,30 @@
 
 ## Unit Testing
 
-## Packaging
+- [Click here](./unit-testing.pdf) to download and see lab content.
 
-## Creating Web Applications Using Flask
+## Creating a Python Package
+
+- [Click here](./creating-a-python-package.pdf) to download and see lab content.
+
+## Python Style Guide
+
+- [Click here](./python-style-guide.pdf) to download and see lab content.
 
 ## Overview of Static Code Analysis Hands-on lab
+
+- [Click here](./overview-of-static-code-analysis-hands-on-lab.pdf) to download and see lab content.
+
+## Static Code Analysis
+
+- [Click here](./static-code-analysis.pdf) to download and see lab content.
+
+## Decorators in Flask
+
+- [Click here](./decorators-in-flask.pdf) to download and see lab content.
+
+## Web Applications using Flask
+
+- [Click here](./web-applications-using-flask.pdf) to download and see lab content.
+
+
