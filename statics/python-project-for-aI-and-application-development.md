@@ -1,4 +1,15 @@
-[<=](../index.md)
+[<=](../index.md)|
+[Course content online]()
+___
+
+- [Python - Unit testing, module packaging and web application development](#python---unit-testing-module-packaging-and-web-application-development)
+  - [Unit Testing](#unit-testing)
+  - [Creating a Python Package](#creating-a-python-package)
+  - [Python Style Guide (here)](#python-style-guide-here)
+  - [Overview of Static Code Analysis Hands-on lab](#overview-of-static-code-analysis-hands-on-lab)
+  - [Static Code Analysis](#static-code-analysis)
+  - [Decorators in Flask](#decorators-in-flask)
+  - [Web Applications using Flask](#web-applications-using-flask)
 
 
 # Python - Unit testing, module packaging and web application development
@@ -11,7 +22,7 @@
 
 - [Click here](./creating-a-python-package.pdf) to download and see lab content.
 
-## Python Style Guide
+## Python Style Guide (here)
 
 - [Click here](./python-style-guide.pdf) to download and see lab content.
 
