@@ -102,7 +102,7 @@ Follow the instructional lab to complete above tasks step by step.
 
 ## User Management Overview
 
-Now, you have the initial Django application built and deployed. In the next step, the admins of the dealership will review the app to identify users and manage their accesses based on roles (such as anonymous users or registered users). Thus, you are planning to add authentication andauthorization, i.e., user management, to the app.
+Now, you have the initial Django application built and deployed. In the next step, the admins of the dealership will review the app to identify users and manage their accesses based on roles (such as anonymous users or registered users). Thus, you are planning to add authentication and uthorization, i.e., user management, to the app.
 
 In this lesson, you need to perform the following tasks to add the user management feature:
 
@@ -121,7 +121,7 @@ Follow the instructional lab to complete the above tasks step by step.
 
 ## CI/CD Overview
 
-Congratulations on running and testing the application. The next step is setting up ContinuousIntegration and Continuous Delivery for your source code. This is particularly important if you havemultiple people working on the project. Continuous Integration provides a way for developers tocollaborate and Continuous Delivery provides a way to deliver your changes to the clients withoutinterruptions.
+Congratulations on running and testing the application. The next step is setting up Continuous Integration and Continuous Delivery for your source code. This is particularly important if you have multiple people working on the project. Continuous Integration provides a way for developers to collaborate and Continuous Delivery provides a way to deliver your changes to the clients without interruptions.
 
 In this module you will:
 
