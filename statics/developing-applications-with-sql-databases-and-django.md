@@ -48,7 +48,6 @@ ___
   - [Manage Static Files](#manage-static-files)
   - [Deploy Your Django App on IBM Cloud](#deploy-your-django-app-on-ibm-cloud)
   - [Module Summary](#module-summary-2)
-- [Final Project: Enhance Online Course App with New Features](#final-project-enhance-online-course-app-with-new-features)
 
 
 # Getting Started with SQL & Relational Databases
@@ -319,5 +318,3 @@ Welcome to Deploy Django Apps on Cloud. After watching this video, you will be a
 - The Web Server Gateway Interface, or WSGI, is the main Python standard for communicating between Web servers and applications. 
 - The Asynchronous Server Gateway Interface is another web server interface the Django app supports. 
 - Infrastructure as a Service and Platform as a Service offerings, such as Cloud Foundry, allow you to focus on your app development and deploy apps without worrying about the underlying infrastructure and platform.​
-
-# Final Project: Enhance Online Course App with New Features

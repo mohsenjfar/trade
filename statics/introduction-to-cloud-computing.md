@@ -63,7 +63,6 @@ ___
   - [Case Studies in Different Industry Verticals](#case-studies-in-different-industry-verticals)
   - [Career Opportunities and Job Roles in Cloud Computing](#career-opportunities-and-job-roles-in-cloud-computing)
   - [Lesson Summary](#lesson-summary-10)
-- [Certificate](#certificate)
 
 # Overview of Cloud Computing
 
@@ -384,7 +383,3 @@ Cloud computing is a key part of an enterprise’s digital transformation strate
 - LiquidPower using cloud-based SAP applications to fuel business growth  
 
 The market size of the cloud services industry is at nearly three times the growth of overall IT services, escalating the need for qualified cloud computing professionals. Some of the common job roles that are available in this domain include Cloud Software Engineers, Cloud Integration Specialists, Cloud Data Engineers, Cloud Security Engineers, Cloud DevOps Engineers, and Cloud Solution Architects
-
-# Certificate
-
-- [Click here](./coursera-wxgbrmlxtg8r.pdf) to view and download the course certificate

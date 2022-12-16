@@ -35,8 +35,6 @@ ___
   - [JavaScript APIs](#javascript-apis)
   - [Module Summary](#module-summary-1)
   - [Cheatsheet- JavaScript Programming for Web Applications](#cheatsheet--javascript-programming-for-web-applications)
-- [Certificate](#certificate)
-- [Badge](#badge)
 
 # Introduction to Programming for the Cloud
 
@@ -197,10 +195,3 @@ Hello. Welcome to JavaScript APIs. After watching this video, you will be able t
 
 - [Click here](./c2m4-cheatsheet-v1.2.pdf) to view and download the "JavaScript Programming for Web Applications" module cheatsheet 1
 - [Click here](./jscheatsheets.pdf) to view and download the "JavaScript Programming for Web Applications" module cheatsheet 2
-
-# Certificate
-
-- [Click here](./coursera-jspg4ushm78r.pdf) to view and download the course certificate
-
-# Badge
-![credly](./web-development-with-html-css-javascript-essentials.png)

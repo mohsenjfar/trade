@@ -31,7 +31,6 @@ ___
 - [Final Project: Part 2 - Git CLI](#final-project-part-2---git-cli)
   - [Repository link](#repository-link-1)
     - [pull request](#pull-request)
-- [Certificate](#certificate)
 
 # Git and GitHub Fundamentals
 
@@ -186,7 +185,3 @@ https://github.com/jfar/jbbmo-Introduction-to-Git-and-GitHub
 https://github.com/ibm-developer-skills-network/jbbmo-Introduction-to-Git-and-GitHub/pull/4411
 
 https://github.com/ibm-developer-skills-network/jbbmo-Introduction-to-Git-and-GitHub/pull/4412
-
-# Certificate
-
-- [Click here](./coursera-ladh4kmtazck.pdf) to view and download the course certificate

@@ -173,11 +173,3 @@ IBM Data Engineering Professional Certificate
 ## Python Cheat Sheet: The Basics
 
 - [Click here](./python-cheat-sheet-the-basics-coursera.pdf) to download a cheat sheet summarizing everything you have learned over this course.
-
-# Certificate
-
-- [Click here]() to view and download the course certificate
-
-# Badge
-
-![credly](./python-for-data-science-and-ai.png)

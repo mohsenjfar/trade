@@ -2,14 +2,20 @@
 [Course content online]()
 ___
 
-- [Introduction to Capstone Project](#introduction-to-capstone-project)
-- [Capstone Overview](#capstone-overview)
-- [Capstone Prework](#capstone-prework)
-- [Static Pages](#static-pages)
-- [Add static pages](#add-static-pages)
+- [Static page](#static-page)
+  - [Introduction to Capstone Project](#introduction-to-capstone-project)
+  - [Capstone Overview](#capstone-overview)
+  - [Capstone Prework](#capstone-prework)
+  - [Static Pages](#static-pages)
+  - [Add static pages](#add-static-pages)
+- [User management and CI/CD](#user-management-and-cicd)
+  - [User Management Overview](#user-management-overview)
+  - [User Management](#user-management)
+  - [CI/CD Overview](#cicd-overview)
+  - [Add Continuous Integration with Linting](#add-continuous-integration-with-linting)
 
-
-# Introduction to Capstone Project
+# Static page
+## Introduction to Capstone Project
 
 **Estimated time needed: 9-11 hours**
 
@@ -65,15 +71,15 @@ Next Steps
 
 Be sure to read the capstone overview before starting with the step-by-step instructions.
 
-# Capstone Overview
+## Capstone Overview
 
 - [Click here](./capstone-overview.pdf) to see and download instructions.
 
-# Capstone Prework
+## Capstone Prework
 
 - [Click here](./capstone-prework.pdf) to see and download instructions.
 
-# Static Pages
+## Static Pages
 
 Congratulations on your new role as the lead software developer at the `Best Cars` dealership. As a warm-up task, you need to build and deploy an initial Django app on IBM Cloud.The Django app will be mainly used for user management and authentication, managing car models and makes, and routing other IBM cloud services for dealership and reviews. You will build this Django app and related cloud services incrementally along the capstone course.
 
@@ -88,6 +94,44 @@ In this learning module, you are asked to perform the following tasks:
 
 Follow the instructional lab to complete above tasks step by step.
 
-# Add static pages
+## Add static pages
 
 - [Click here](./static-pages.pdf) to see and download instructions.
+
+# User management and CI/CD
+
+## User Management Overview
+
+Now, you have the initial Django application built and deployed. In the next step, the admins of the dealership will review the app to identify users and manage their accesses based on roles (such as anonymous users or registered users). Thus, you are planning to add authentication andauthorization, i.e., user management, to the app.
+
+In this lesson, you need to perform the following tasks to add the user management feature:
+
+- Create a super user for the Django admin site
+- Add a user login/logout and signup menu items to the navigation bar in the Django template
+- Add a Django login view to handle login request
+- Add a Django logout view to handle logout request
+- Add a Django signup template
+- Add a Django signup view to handle signup request
+
+Follow the instructional lab to complete the above tasks step by step.
+
+## User Management
+
+- [Click here](./user-management.pdf) to see and download instructions.
+
+## CI/CD Overview
+
+Congratulations on running and testing the application. The next step is setting up ContinuousIntegration and Continuous Delivery for your source code. This is particularly important if you havemultiple people working on the project. Continuous Integration provides a way for developers tocollaborate and Continuous Delivery provides a way to deliver your changes to the clients withoutinterruptions.
+
+In this module you will:
+
+- Create a toolchain service on IBM Cloud
+- Create a CI/CD pipeline from your Github repository
+- Enable code, build, and linting stages
+
+Follow the instructional lab to complete the above tasks step by step.
+
+## Add Continuous Integration with Linting
+
+- [Click here](./add-continuous-integration-with-linting.pdf) to see and download instructions.
+

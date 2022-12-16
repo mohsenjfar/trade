@@ -34,22 +34,20 @@ ___
   - [Module 3 Summary](#module-3-summary)
   - [Glossary - Express Web Application Framework](#glossary---express-web-application-framework)
   - [Cheatsheet - Express Web Application Framework](#cheatsheet---express-web-application-framework)
-- [Building a Rich Front-End Application using REACT & ES6](#building-a-rich-front-end-application-using-react--es6)
+- [Building a Rich Front-End Application using REACT \& ES6](#building-a-rich-front-end-application-using-react--es6)
   - [Introduction to ES6](#introduction-to-es6)
   - [Introduction to Front End Frameworks and React.JS](#introduction-to-front-end-frameworks-and-reactjs)
   - [Working with React Components](#working-with-react-components)
   - [Passing Data and States between Components](#passing-data-and-states-between-components)
   - [Connecting React to External Services](#connecting-react-to-external-services)
   - [Module 4 Summary](#module-4-summary)
-  - [Glossary - Building a Rich Front-End Application using REACT & ES6](#glossary---building-a-rich-front-end-application-using-react--es6)
-  - [Cheatsheet - Building a Rich Front-End Application using REACT & ES6](#cheatsheet---building-a-rich-front-end-application-using-react--es6)
+  - [Glossary - Building a Rich Front-End Application using REACT \& ES6](#glossary---building-a-rich-front-end-application-using-react--es6)
+  - [Cheatsheet - Building a Rich Front-End Application using REACT \& ES6](#cheatsheet---building-a-rich-front-end-application-using-react--es6)
   - [Bonus Lesson Introduction and Learning Objectives](#bonus-lesson-introduction-and-learning-objectives)
   - [Testing Cloud Applications](#testing-cloud-applications)
   - [Introduction to Logging](#introduction-to-logging)
   - [IBM Cloud Monitoring with LogDNA and Sysdig](#ibm-cloud-monitoring-with-logdna-and-sysdig)
   - [Lesson Summary](#lesson-summary)
-- [Final project](#final-project)
-  - [Fork repository](#fork-repository)
 
 # Introduction to serverside JavaScript
 
@@ -378,11 +376,3 @@ Welcome to IBM Cloud Monitoring with LogDNA and Sysdig. After watching this vide
 - Logging and monitoring for cloud applications at scale are different than logging for a single application. 
 - LogDNA provides a central place for logging system- and application-level events. 
 - Sysdig provides real-time operational visibility into your application stack.
-
-# Final project
-
-## Fork repository
-- [link](https://github.com/jfar/cazgi-IBM-Watson-NLU-Project)
-
-
-

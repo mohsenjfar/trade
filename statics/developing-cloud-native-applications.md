@@ -56,8 +56,6 @@ ___
 - [Final project](#final-project)
   - [Natural language syntaxes](#natural-language-syntaxes)
     - [Analyze target phrases and keywords](#analyze-target-phrases-and-keywords)
-- [Certificate](#certificate)
-- [Badge](#badge)
 
 
 # Introduction to Cloud Native
@@ -305,10 +303,3 @@ curl -X POST -u "apikey:o1lLAj9CxN-_6PKfJWaeDS92ybEMGRHFUudn_Ct3A8q5" \
 }' \
 "https://api.us-south.natural-language-understanding.watson.cloud.ibm.com/instances/eb128231-0d43-485f-97d8-bd21ea6f3e08/v1/analyze?version=2019-07-12"
 ```
-
-# Certificate
-
-- [Click here](./coursera-j2mzbbhrxbsx.pdf) to view and download the course certificate
-
-# Badge
-![credly](./developing-cloud-native-applications.1.png)
