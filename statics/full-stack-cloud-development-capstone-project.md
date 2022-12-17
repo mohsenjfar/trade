@@ -13,6 +13,12 @@ ___
   - [User Management](#user-management)
   - [CI/CD Overview](#cicd-overview)
   - [Add Continuous Integration with Linting](#add-continuous-integration-with-linting)
+- [Backend services](#backend-services)
+  - [Back End Services Overview](#back-end-services-overview)
+  - [Implement IBM Cloud Function Endpoints](#implement-ibm-cloud-function-endpoints)
+  - [Django Models Views](#django-models-views)
+  - [Build CarModel and CarMake Django Models](#build-carmodel-and-carmake-django-models)
+  - [Create Django Proxy Services Of Cloud Functions](#create-django-proxy-services-of-cloud-functions)
 
 # Static page
 ## Introduction to Capstone Project
@@ -135,3 +141,55 @@ Follow the instructional lab to complete the above tasks step by step.
 
 - [Click here](./add-continuous-integration-with-linting.pdf) to see and download instructions.
 
+# Backend services
+
+## Back End Services Overview
+
+The Django application you created in the last module needs to communicate with the database. In 
+this module, you will create actions on IBM Cloud Functions and serve them behind an API 
+endpoint.
+
+You will build several actions in Python and JavaScript to perform database operations including:
+
+- Get all dealerships
+- Get all dealerships for a given state
+- Get all reviews for a dealership
+- Post a review for a dealership
+
+Follow the instructional lab to complete above tasks step by step
+
+## Implement IBM Cloud Function Endpoints
+
+- [Click here](./implement-ibm-cloud-function-endpoints.pdf) to see and download instructions.
+
+## Django Models Views
+
+Now that you have created dealership and views related CRUD cloud functions.  Next, we need to 
+create data models and services for the dealers' inventory. Each dealer manages a car inventory 
+with different car models and makes, which are, in fact, relatively static data, thus suitable to be 
+stored in Django locally. 
+
+To integrate external dealer and review data, you will need to call the cloud function APIs from the 
+Django app and process the API results in Django views. Such Django views can be seen as proxy 
+services to the end user because they fetch data from external resources per users' requests.
+
+In this lesson, you need to perform the following tasks to add car model and make related models 
+and views, and proxy services:
+
+- Create CarModel and CarMake Django models
+- Register CarModel and CarMake models with the admin site
+- Create new car models objects with associated car makes and dealerships
+- Create a `get_dealerships` Django view to get dealer list
+- Create a Django `get_dealer_details` view to get reviews of a dealer
+- Update the `get_dealer_details` view to call Watson NLU for analyzing review sentiment
+- Create an `add_review` Django view to post dealer review
+
+Follow the instructional lab to complete the above tasks step by step.
+
+## Build CarModel and CarMake Django Models
+
+- [Click here](./build-carmodel-and-carmake-django-models.pdf) to see and download instructions.
+
+## Create Django Proxy Services Of Cloud Functions
+
+- [Click here](./create-django-proxy-services-of-cloud-functions.pdf) to see and download instructions.
