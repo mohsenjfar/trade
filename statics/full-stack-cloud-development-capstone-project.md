@@ -161,6 +161,7 @@ Follow the instructional lab to complete above tasks step by step
 ## Implement IBM Cloud Function Endpoints
 
 - [Click here](./implement-ibm-cloud-function-endpoints.pdf) to see and download instructions.
+- [Click here](./functions-endpoint.pdf) to see and download instructions.
 
 ## Django Models Views
 
