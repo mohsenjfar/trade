@@ -156,8 +156,9 @@ Welcome to "Red Hat Marketplace." After watching this video, you will be able to
 
 ## Glossary - OpenShift Essentials/Working with OpenShift and Istio
 
-[Click here](./c9m4-glossary-v1.1.pdf) to view and download " OpenShift Essentials/Working with OpenShift and Istio" module glossary 
+- [glossary](./c9m4-glossary-v1.1.pdf)
 
 # Final Project
 
-[Click here](./final-project-serverless-lab.pdf) to view and download lab instructions.
+- [lab instructions](./final-project-serverless-lab.pdf)
+- [Cloudant API](https://cloud.ibm.com/apidocs/cloudant?code=python#postdocument)

@@ -4,21 +4,13 @@ ___
 
 - [Static page](#static-page)
   - [Introduction to Capstone Project](#introduction-to-capstone-project)
-  - [Capstone Overview](#capstone-overview)
-  - [Capstone Prework](#capstone-prework)
   - [Static Pages](#static-pages)
-  - [Add static pages](#add-static-pages)
 - [User management and CI/CD](#user-management-and-cicd)
   - [User Management Overview](#user-management-overview)
-  - [User Management](#user-management)
   - [CI/CD Overview](#cicd-overview)
-  - [Add Continuous Integration with Linting](#add-continuous-integration-with-linting)
 - [Backend services](#backend-services)
   - [Back End Services Overview](#back-end-services-overview)
-  - [Implement IBM Cloud Function Endpoints](#implement-ibm-cloud-function-endpoints)
   - [Django Models Views](#django-models-views)
-  - [Build CarModel and CarMake Django Models](#build-carmodel-and-carmake-django-models)
-  - [Create Django Proxy Services Of Cloud Functions](#create-django-proxy-services-of-cloud-functions)
 
 # Static page
 ## Introduction to Capstone Project
@@ -77,13 +69,8 @@ Next Steps
 
 Be sure to read the capstone overview before starting with the step-by-step instructions.
 
-## Capstone Overview
-
-- [Click here](./capstone-overview.pdf) to see and download instructions.
-
-## Capstone Prework
-
-- [Click here](./capstone-prework.pdf) to see and download instructions.
+- [Capstone Overview](./capstone-overview.pdf)
+- [Capstone Prework](./capstone-prework.pdf)
 
 ## Static Pages
 
@@ -100,9 +87,7 @@ In this learning module, you are asked to perform the following tasks:
 
 Follow the instructional lab to complete above tasks step by step.
 
-## Add static pages
-
-- [Click here](./static-pages.pdf) to see and download instructions.
+- [Add static pages](./static-pages.pdf)
 
 # User management and CI/CD
 
@@ -121,9 +106,7 @@ In this lesson, you need to perform the following tasks to add the user manageme
 
 Follow the instructional lab to complete the above tasks step by step.
 
-## User Management
-
-- [Click here](./user-management.pdf) to see and download instructions.
+- [User Management](./user-management.pdf)
 
 ## CI/CD Overview
 
@@ -137,9 +120,7 @@ In this module you will:
 
 Follow the instructional lab to complete the above tasks step by step.
 
-## Add Continuous Integration with Linting
-
-- [Click here](./add-continuous-integration-with-linting.pdf) to see and download instructions.
+- [Add Continuous Integration with Linting](./add-continuous-integration-with-linting.pdf)
 
 # Backend services
 
@@ -158,10 +139,8 @@ You will build several actions in Python and JavaScript to perform database oper
 
 Follow the instructional lab to complete above tasks step by step
 
-## Implement IBM Cloud Function Endpoints
-
-- [Click here](./implement-ibm-cloud-function-endpoints.pdf) to see and download instructions.
-- [Click here](./functions-endpoint.pdf) to see and download instructions.
+- [Implement IBM Cloud Function Endpoints](./implement-ibm-cloud-function-endpoints.pdf) (**here**)
+- [Creating the API Endpoint URL’s using Actions on IBMCloud](./functions-endpoint.pdf)
 
 ## Django Models Views
 
@@ -187,10 +166,5 @@ and views, and proxy services:
 
 Follow the instructional lab to complete the above tasks step by step.
 
-## Build CarModel and CarMake Django Models
-
-- [Click here](./build-carmodel-and-carmake-django-models.pdf) to see and download instructions.
-
-## Create Django Proxy Services Of Cloud Functions
-
-- [Click here](./create-django-proxy-services-of-cloud-functions.pdf) to see and download instructions.
+- [Build CarModel and CarMake Django Models](./build-carmodel-and-carmake-django-models.pdf)
+- [Create Django Proxy Services Of Cloud Functions](./create-django-proxy-services-of-cloud-functions.pdf)
