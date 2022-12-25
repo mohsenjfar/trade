@@ -139,7 +139,7 @@ You will build several actions in Python and JavaScript to perform database oper
 
 Follow the instructional lab to complete above tasks step by step
 
-- [Implement IBM Cloud Function Endpoints](./implement-ibm-cloud-function-endpoints.pdf) (**here**)
+- [Implement IBM Cloud Function Endpoints](./implement-ibm-cloud-function-endpoints.pdf)
 - [Creating the API Endpoint URL’s using Actions on IBMCloud](./functions-endpoint.pdf)
 
 ## Django Models Views
