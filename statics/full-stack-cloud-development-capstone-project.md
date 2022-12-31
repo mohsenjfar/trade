@@ -11,6 +11,8 @@ ___
 - [Backend services](#backend-services)
   - [Back End Services Overview](#back-end-services-overview)
   - [Django Models Views](#django-models-views)
+- [Dynamic pages](#dynamic-pages)
+  - [Dynamic Pages Overview](#dynamic-pages-overview)
 
 # Static page
 ## Introduction to Capstone Project
@@ -168,3 +170,19 @@ Follow the instructional lab to complete the above tasks step by step.
 
 - [Build CarModel and CarMake Django Models](./build-carmodel-and-carmake-django-models.pdf)
 - [Create Django Proxy Services Of Cloud Functions](./create-django-proxy-services-of-cloud-functions.pdf)
+
+# Dynamic pages
+
+## Dynamic Pages Overview
+
+You created all necessary backend services (Django views and cloud functions) for managing dealerships, reviews, and cars in the last module. Next, it is time to create some stylized front-end Django templates to present those service results to the end users.
+
+In this learning module, you need to perform the following tasks to add the front-end to the app:
+
+- Create a dealership list template and update the dealership list view
+- Create a dealer details/reviews template and update the dealership detail view
+- Create a review submission page and add a submission view
+
+Follow the instructional lab to complete above tasks step by step.
+
+- [Add dynamic pages](./add-dynamic-pages.pdf)
