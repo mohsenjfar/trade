@@ -13,6 +13,12 @@ ___
   - [Django Models Views](#django-models-views)
 - [Dynamic pages](#dynamic-pages)
   - [Dynamic Pages Overview](#dynamic-pages-overview)
+- [Containerize \& Deploy to Kubernetes](#containerize--deploy-to-kubernetes)
+  - [Overview](#overview)
+  - [Add Dockerfile](#add-dockerfile)
+  - [Push built image to container registry](#push-built-image-to-container-registry)
+  - [Add deployment artifacts](#add-deployment-artifacts)
+  - [Deploy the application](#deploy-the-application)
 
 # Static page
 ## Introduction to Capstone Project
@@ -186,3 +192,203 @@ In this learning module, you need to perform the following tasks to add the fron
 Follow the instructional lab to complete above tasks step by step.
 
 - [Add dynamic pages](./add-dynamic-pages.pdf)
+
+# Containerize & Deploy to Kubernetes
+
+## Overview
+
+In line with the latest trends in technology and to avoid vendor lock-in, your management team is looking to deploy the dealership application to multiple clouds. The application is currently running on Code Engine, but you have been told not all cloud providers have a hosted Code Engine service. You are put in charge to look at containers as a possible way to mitigate this problem as all the big cloud providers have a way to host and manage containers. When containerizing an application, the process includes packaging an application with its relevant environment variables, configuration files, libraries, and software dependencies. The result is a container image that can then be run on a container platform. You are also asked to use Kubernetes to manage the containerized deployment. Kubernetes is an open-source container orchestration platform that automates the deployment, management, and scaling of applications.
+
+In this module you will:
+- add the ability to your application to run in a container
+- add deployment artifacts for your application so it can be managed by Kubernetes
+
+Follow the instructional lab to complete the above tasks step by step.
+
+You have made good progress in your assignment thus far! Your Django application is running on IBM Cloud, and your team is happy. However, your boss has a new ask. The company is looking at using containers to manage and deploy the application. Furthermore, the management is interested in using the hybrid cloud strategy where some applications and services reside on a private cloud and others on a public cloud. To provide a more robust development experience, you are asked to look at Kubernetes. So, let’s containerize your application now.
+
+**NOTE**: Before starting the lab, please follow the steps to check and delete previously persisting sessions to avoid any issues while running the lab.
+
+- Please run the below command:
+
+```sh
+kubectl get deployments
+```
+
+- If you see that the `dealership` deployment already exists, please delete it using:
+
+```sh
+kubectl delete deployment dealership
+```
+
+- Please run the below command:
+
+```sh
+ibmcloud cr images
+```
+
+- If there is any `dealership` image, please delete it using:
+
+```sh
+ibmcloud cr image-rm us.icr.io/<your sn labs namespace>/dealership:latest && docker rmi us.icr.io/<your sn labs namespace>/dealership:latest
+```
+
+**Please enter your SN labs namespace in place of** `<your sn labs namespace>`
+
+- If you do not remember your namesapce, you can get it by using either of the below commands:
+  - oc project
+  - ibmcloud cr namespaces (Please use the one which is of the format `sn-labs-$USERNAME)`
+- Please sign out of SN labs & clear your browser cache and cookies.
+- Please start the lab again & proceed as below.
+
+## Add Dockerfile
+
+Create a `Dockerfile` in the root directory. The file will have the following steps listed:
+
+1. Add base image.
+2. Add requirements.txt file.
+3. Install and update Python.
+4. Change working directory.
+5. Expose port.
+6. Run command to start application.
+
+Here is an example file to get you started:
+
+```docker
+    FROM python:3.8.2
+
+    ENV PYTHONBUFFERED 1
+    ENV PYTHONWRITEBYTECODE 1
+
+    RUN apt-get update \
+        && apt-get install -y netcat
+
+    ENV APP=/app
+
+    # Change the workdir.
+    WORKDIR $APP
+
+    # Install the requirements
+    COPY requirements.txt $APP
+    RUN pip install --upgrade pip
+    RUN pip install -r requirements.txt
+
+    # Copy the rest of the files
+    COPY . $APP
+
+    EXPOSE 8000
+
+    RUN chmod +x /app/entrypoint.sh
+    ENTRYPOINT ["/app/entrypoint.sh"]
+
+    CMD ["gunicorn", "--bind", ":8000", "--workers", "3", "djangobackend.wsgi"]
+```
+
+**Note**: Please ensure that the contents of the Dockerfile are indented as above
+
+Notice that the the second to last command in Dockerfile refers to `entrypoint.sh`. This file should have the following content:
+
+```bash
+    #!/bin/sh
+
+    if [ "$DATABASE" = "postgres" ]; then
+        echo "Waiting for postgres..."
+
+        while ! nc -z $DATABASE_HOST $DATABASE_PORT; do
+        sleep 0.1
+        done
+
+        echo "PostgreSQL started"
+    fi
+
+    # Make migrations and migrate the database.
+    echo "Making migrations and migrating the database. "
+    python manage.py makemigrations main --noinput 
+    python manage.py migrate --noinput 
+    exec "$@"
+```
+
+Please use the below command to make `entrypoint.sh` executable.
+
+```bash
+chmod +x ./entrypoint.sh
+```
+
+## Push built image to container registry
+
+If you remember from the previous course in this certification, you were asked to build your image and push to IBM Cloud Image Registry (ICR). You need to do the same here and then refer to this image in your Kubernetes deployment file.
+
+Please export your SN labs namespace as below:
+
+```sh
+export MY_NAMESPACE = <your SN labs namespace>
+```
+
+Note: Please enter your SN labs namespace in place of `<your SN labs namespace>`
+
+```sh
+docker build -t us.icr.io/$MY_NAMESPACE/dealership .
+```
+
+Next, push the image to the container registry:
+
+```sh
+docker push us.icr.io/$MY_NAMESPACE/dealership
+```
+
+## Add deployment artifacts
+
+Create `deployment.yaml` file to create the deployment and the service. It should look something like:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: dealership
+  name: dealership
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: dealership
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        run: dealership
+    spec:
+      containers:
+      - image: us.icr.io/$MY_NAMESPACE/dealership:latest
+        imagePullPolicy: Always
+        name: dealership
+        ports:
+        - containerPort: 8000
+          protocol: TCP
+      restartPolicy: Always
+  replicas: 1
+```
+
+Please enter your SN labs namespace in place of `$MY_NAMESPACE` in the above file.
+
+## Deploy the application
+
+Create the deployment using the following command and your deployment file:
+
+```sh
+kubectl apply -f deployment.yaml
+```
+
+Normally, we would add a service to our deployment, however, we are going to use port-forwarding in this environment to see the running application.
+
+```sh
+kubectl port-forward deployment.apps/dealership 8000:8000
+```
+
+**Note**: If you see any errors, please wait for some time & run the command again.
+
+Click on the Skills Network button on the right, it will open the “Skills Network Toolbox”. Then click OTHER then Launch Application. From there you should be able to enter the port as 8000 and launch, to see the running application. You will get an error from the home page. Add /djangoapp at the end of the URL to see your application.
