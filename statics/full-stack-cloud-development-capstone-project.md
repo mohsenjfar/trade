@@ -19,6 +19,9 @@ ___
   - [Push built image to container registry](#push-built-image-to-container-registry)
   - [Add deployment artifacts](#add-deployment-artifacts)
   - [Deploy the application](#deploy-the-application)
+- [Assignments](#assignments)
+  - [URLs](#urls)
+  - [Screenshots](#screenshots)
 
 # Static page
 ## Introduction to Capstone Project
@@ -230,10 +233,10 @@ ibmcloud cr images
 - If there is any `dealership` image, please delete it using:
 
 ```sh
-ibmcloud cr image-rm us.icr.io/<your sn labs namespace>/dealership:latest && docker rmi us.icr.io/<your sn labs namespace>/dealership:latest
+ibmcloud cr image-rm us.icr.io/sn-labs-moj/dealership:latest && docker rmi us.icr.io/sn-labs-moj/dealership:latest
 ```
 
-**Please enter your SN labs namespace in place of** `<your sn labs namespace>`
+**Please enter your SN labs namespace in place of** `sn-labs-moj`
 
 - If you do not remember your namesapce, you can get it by using either of the below commands:
   - oc project
@@ -321,10 +324,10 @@ If you remember from the previous course in this certification, you were asked t
 Please export your SN labs namespace as below:
 
 ```sh
-export MY_NAMESPACE = <your SN labs namespace>
+export MY_NAMESPACE=sn-labs-moj
 ```
 
-Note: Please enter your SN labs namespace in place of `<your SN labs namespace>`
+Note: Please enter your SN labs namespace in place of `sn-labs-moj`
 
 ```sh
 docker build -t us.icr.io/$MY_NAMESPACE/dealership .
@@ -363,7 +366,7 @@ spec:
         run: dealership
     spec:
       containers:
-      - image: us.icr.io/$MY_NAMESPACE/dealership:latest
+      - image: us.icr.io/sn-labs-moj/dealership:latest
         imagePullPolicy: Always
         name: dealership
         ports:
@@ -372,8 +375,6 @@ spec:
       restartPolicy: Always
   replicas: 1
 ```
-
-Please enter your SN labs namespace in place of `$MY_NAMESPACE` in the above file.
 
 ## Deploy the application
 
@@ -392,3 +393,31 @@ kubectl port-forward deployment.apps/dealership 8000:8000
 **Note**: If you see any errors, please wait for some time & run the command again.
 
 Click on the Skills Network button on the right, it will open the “Skills Network Toolbox”. Then click OTHER then Launch Application. From there you should be able to enter the port as 8000 and launch, to see the running application. You will get an error from the home page. Add /djangoapp at the end of the URL to see your application.
+
+# Assignments
+
+## URLs
+
+1. Submit the URL of "GET dealerships" endpoint from IBM Cloud Functions (4 pts)
+- https://us-south.functions.appdomain.cloud/api/v1/web/e7d8f3db-0cc6-4f5c-80ef-d9860b3f8248/dealership-package/get-dealership-sequence.json
+2. Submit the URL of "GET dealerships" endpoint from IBM Cloud Functions with the state filter added at the end (4 pts)
+- 
+3. Submit the URL of "GET reviews" endpoint from IBM Cloud Functions with the "dealerId=13" added to the end (4 pts)
+- https://us-south.functions.appdomain.cloud/api/v1/web/e7d8f3db-0cc6-4f5c-80ef-d9860b3f8248/dealership-package/get-review.json?dealerId=13
+
+## Screenshots
+
+1. Submit the screenshot with the filename `django_server.jpg` (or a .png file) demonstrating the Django runserver command was running successfully. (4 pts)
+2. Submit the screenshot with the filename `contact_us.jpg` (or a .png file) demonstrating the completed “Contact Us” page (4 pts).
+3. Submit the screenshot with the filename `about_us.jpg` (or a .png file) demonstrating the completed “About Us” page. (4 pts)
+4. Submit the screenshot with the filename `dealerships.jpg` (or a .png file) demonstrating the completed dealership list page (4 pts).
+5. Submit the screenshot with the filename `dealerships_filter.jpg` (or a .png file) demonstrating an opened dealership dropdown filter (4 pts).
+6. Submit the screenshot with the filename `dealership_details.jpg` (or a .png file) demonstrating the dealership details page with all its reviews (4 pts).
+7. Submit the screenshot with the filename `sign_up.jpg` (or a .png file) demonstrating the sign-up page. (4 pts)
+8. Submit the screenshot with the filename `login.jpg` (or a .png file) demonstrating the log-in page. (2 pts)
+9. Submit the screenshot with the filename `logout.jpg` (or a .png file) demonstrating the log-out button. (2 pts)
+10. Submit the screenshot with the filename `dealership_review_submission.jpg` (or a .png file) demonstrating the review submission page. (4 pts)
+11. Submit the screenshot with the filename `admin_login.jpg` (or a .png file) demonstrating a logged-in Django admin user. (2 pts)
+12. Submit the screenshot with the filename `admin_logout.jpg` (or a .png file) demonstrating the user has been redirected to the Django admin login page. (2 pts)
+13. Submit the screenshot with the filename `create_carmake.jpg` (or a .png file) demonstrating the Django admin page to create a new car make and car model. (2 pts)
+14. Submit the screenshot with the filename ` updated_carmake_list.jpg` (or a .png file) demonstrating the newly created car make is shown on the car make list. (2 pts)
