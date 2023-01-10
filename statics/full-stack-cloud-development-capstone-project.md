@@ -401,7 +401,7 @@ Click on the Skills Network button on the right, it will open the “Skills Netw
 1. Submit the URL of "GET dealerships" endpoint from IBM Cloud Functions (4 pts)
 - https://us-south.functions.appdomain.cloud/api/v1/web/e7d8f3db-0cc6-4f5c-80ef-d9860b3f8248/dealership-package/get-dealership-sequence.json
 2. Submit the URL of "GET dealerships" endpoint from IBM Cloud Functions with the state filter added at the end (4 pts)
-- 
+- https://us-south.functions.appdomain.cloud/api/v1/web/e7d8f3db-0cc6-4f5c-80ef-d9860b3f8248/dealership-package/get_state.json?state=Texas
 3. Submit the URL of "GET reviews" endpoint from IBM Cloud Functions with the "dealerId=13" added to the end (4 pts)
 - https://us-south.functions.appdomain.cloud/api/v1/web/e7d8f3db-0cc6-4f5c-80ef-d9860b3f8248/dealership-package/get-review.json?dealerId=13
 
