@@ -284,3 +284,6 @@ fabric.properties
 .DS_Store
 .DS_Store
 final_template.zip
+
+# video and audio
+*.mp3

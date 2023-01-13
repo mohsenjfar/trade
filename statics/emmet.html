@@ -1,0 +1,332 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Emmet</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-dark bg-secondary justify-content-between">
+        <a class="navbar-brand" href="../index.html">WIKIMO</a>
+        <form class="form-inline m-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search wikimo" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">login</button>
+        </form>
+    </nav>
+    <div class="card m-2">
+        <div class="card-header">
+            Abbreviations Syntax
+        </div>
+        <div class="card-body">
+            <p class="card-text">
+
+            <div class="bsa-cpc"></div>
+            <h1><a name="abbreviations-syntax" href="/abbreviations/syntax/#abbreviations-syntax"
+                    class="anchor"></a>Abbreviations Syntax</h1>
+            <p>Emmet uses syntax similar to CSS selectors for describing elements’ positions inside generated tree and
+                elements’ attributes.</p>
+            <h2 id="elements"><a name="elements" href="/abbreviations/syntax/#elements" class="anchor"></a>Elements</h2>
+            <p>You can use elements’ names like <code>div</code> or <code>p</code> to <em>generate</em> HTML tags. Emmet
+                doesn’t have a predefined set of available tag names, you can write any word and transform it into a
+                tag: <code>div</code> → <code>&lt;div&gt;&lt;/div&gt;</code>, <code>foo</code> →
+                <code>&lt;foo&gt;&lt;/foo&gt;</code> and so on.
+            </p>
+            <h2 id="nesting-operators"><a name="nesting-operators" href="/abbreviations/syntax/#nesting-operators"
+                    class="anchor"></a>Nesting operators</h2>
+            <p>Nesting operators are used to position abbreviation elements inside generated tree: whether it should be
+                placed inside or near the context element.</p>
+            <h3 id="child-"><a name="child-gt" href="/abbreviations/syntax/#child-gt" class="anchor"></a>Child:
+                <code>&gt;</code>
+            </h3>
+            <p>You can use <code>&gt;</code> operator to nest elements inside each other:</p>
+            <pre><code><span class="erlang"><span class="keyword">div</span>&gt;ul&gt;li</span>
+</code></pre>
+            <p>...will produce</p>
+            <pre><code><span class="xml"><span class="tag">&lt;<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">ul</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span></span>
+</code></pre>
+            <h3 id="sibling-"><a name="sibling" href="/abbreviations/syntax/#sibling" class="anchor"></a>Sibling:
+                <code>+</code>
+            </h3>
+            <p>Use <code>+</code> operator to place elements near each other, on the same level:</p>
+            <pre><code><span class="erlang"><span class="keyword">div</span>+p+bq</span>
+</code></pre>
+            <p>...will output</p>
+            <pre><code><span class="xml"><span class="tag">&lt;<span class="title">div</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;<span class="title">p</span>&gt;</span><span class="tag">&lt;/<span class="title">p</span>&gt;</span>
+<span class="tag">&lt;<span class="title">blockquote</span>&gt;</span><span class="tag">&lt;/<span class="title">blockquote</span>&gt;</span></span>
+</code></pre>
+            <h3 id="climb-up-"><a name="climb-up" href="/abbreviations/syntax/#climb-up" class="anchor"></a>Climb-up:
+                <code>^</code>
+            </h3>
+            <p>With <code>&gt;</code> operator you’re descending down the generated tree and positions of all sibling
+                elements will be resolved against the most deepest element:</p>
+            <pre><code><span class="erlang"><span class="keyword">div</span>+<span class="keyword">div</span>&gt;p&gt;span+em </span>
+</code></pre>
+            <p>...will be expanded to </p>
+            <pre><code><span class="xml"><span class="tag">&lt;<span class="title">div</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">p</span>&gt;</span><span class="tag">&lt;<span class="title">span</span>&gt;</span><span class="tag">&lt;/<span class="title">span</span>&gt;</span><span class="tag">&lt;<span class="title">em</span>&gt;</span><span class="tag">&lt;/<span class="title">em</span>&gt;</span><span class="tag">&lt;/<span class="title">p</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span></span>
+</code></pre>
+            <p>With <code>^</code> operator, you can climb one level up the tree and change context where following
+                elements should appear:</p>
+            <pre><code><span class="erlang"><span class="keyword">div</span>+<span class="keyword">div</span>&gt;p&gt;span+em^bq</span>
+</code></pre>
+            <p>...outputs to</p>
+            <pre><code><span class="xml"><span class="tag">&lt;<span class="title">div</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">p</span>&gt;</span><span class="tag">&lt;<span class="title">span</span>&gt;</span><span class="tag">&lt;/<span class="title">span</span>&gt;</span><span class="tag">&lt;<span class="title">em</span>&gt;</span><span class="tag">&lt;/<span class="title">em</span>&gt;</span><span class="tag">&lt;/<span class="title">p</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">blockquote</span>&gt;</span><span class="tag">&lt;/<span class="title">blockquote</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span></span>
+</code></pre>
+            <p>You can use as many <code>^</code> operators as you like, each operator will move one level up:</p>
+            <pre><code><span class="erlang"><span class="keyword">div</span>+<span class="keyword">div</span>&gt;p&gt;span+em^^^bq</span>
+</code></pre>
+            <p>...will output to</p>
+            <pre><code><span class="xml"><span class="tag">&lt;<span class="title">div</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">p</span>&gt;</span><span class="tag">&lt;<span class="title">span</span>&gt;</span><span class="tag">&lt;/<span class="title">span</span>&gt;</span><span class="tag">&lt;<span class="title">em</span>&gt;</span><span class="tag">&lt;/<span class="title">em</span>&gt;</span><span class="tag">&lt;/<span class="title">p</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;<span class="title">blockquote</span>&gt;</span><span class="tag">&lt;/<span class="title">blockquote</span>&gt;</span></span>
+</code></pre>
+            <h3 id="multiplication-"><a name="multiplication" href="/abbreviations/syntax/#multiplication"
+                    class="anchor"></a>Multiplication: <code>*</code></h3>
+            <p>With <code>*</code> operator you can define how many times element should be outputted:</p>
+            <pre><code><span class="http"><span class="attribute">ul&gt;li*5</span>
+</span></code></pre>
+            <p>...outputs to</p>
+            <pre><code><span class="xml"><span class="tag">&lt;<span class="title">ul</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">ul</span>&gt;</span></span>
+</code></pre>
+            <h3 id="grouping-"><a name="grouping" href="/abbreviations/syntax/#grouping" class="anchor"></a>Grouping:
+                <code>()</code>
+            </h3>
+            <p>Parenthesises are used by Emmets’ power users for grouping subtrees in complex abbreviations:</p>
+            <pre><code><span class="erlang"><span class="keyword">div</span>&gt;(header&gt;ul&gt;li*<span class="number">2</span>&gt;a)+footer&gt;p</span>
+</code></pre>
+            <p>...expands to</p>
+            <pre><code><span class="xml"><span class="tag">&lt;<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">header</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">ul</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">""</span>&gt;</span><span class="tag">&lt;/<span class="title">a</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">""</span>&gt;</span><span class="tag">&lt;/<span class="title">a</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">header</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">footer</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">p</span>&gt;</span><span class="tag">&lt;/<span class="title">p</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">footer</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span></span>
+</code></pre>
+            <p>If you’re working with browser’s DOM, you may think of groups as Document Fragments: each group contains
+                abbreviation subtree and all the following elements are inserted at the same level as the first element
+                of group. </p>
+            <p>You can nest groups inside each other and combine them with multiplication <code>*</code> operator:</p>
+            <pre><code><span class="lisp"><span class="list">(<span class="title">div&gt;dl&gt;</span><span class="body"><span class="list">(<span class="title">dt+dd</span><span class="body"></span>)</span><span class="variable">*3)+footer&gt;p</span>
+</span></span></span></code></pre>
+            <p>...produces</p>
+            <pre><code><span class="xml"><span class="tag">&lt;<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">dl</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">dt</span>&gt;</span><span class="tag">&lt;/<span class="title">dt</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">dd</span>&gt;</span><span class="tag">&lt;/<span class="title">dd</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">dt</span>&gt;</span><span class="tag">&lt;/<span class="title">dt</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">dd</span>&gt;</span><span class="tag">&lt;/<span class="title">dd</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">dt</span>&gt;</span><span class="tag">&lt;/<span class="title">dt</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">dd</span>&gt;</span><span class="tag">&lt;/<span class="title">dd</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">dl</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;<span class="title">footer</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">p</span>&gt;</span><span class="tag">&lt;/<span class="title">p</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">footer</span>&gt;</span></span>
+</code></pre>
+            <p>With groups, you can literally write full page mark-up with a single abbreviation, but please don’t do
+                that.</p>
+            <h2 id="attribute-operators"><a name="attribute-operators" href="/abbreviations/syntax/#attribute-operators"
+                    class="anchor"></a>Attribute operators</h2>
+            <p>Attribute operators are used to modify attributes of outputted elements. For example, in HTML and XML you
+                can quickly add <code>class</code> attribute to generated element.</p>
+            <h3 id="id-and-class"><a name="id-and-class" href="/abbreviations/syntax/#id-and-class"
+                    class="anchor"></a>ID and CLASS</h3>
+            <p>In CSS, you use <code>elem#id</code> and <code>elem.class</code> notation to reach the elements with
+                specified <code>id</code> or <code>class</code> attributes. In Emmet, you can use the very same syntax
+                to <em>add</em> these attributes to specified element:</p>
+            <pre><code><span class="delphi"><span class="keyword">div</span>#header+<span class="keyword">div</span>.page+<span class="keyword">div</span>#footer.class1.class2.class3</span>
+</code></pre>
+            <p>...will output</p>
+            <pre><code><span class="xml"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"header"</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"page"</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"footer"</span> <span class="attribute">class</span>=<span class="value">"class1 class2 class3"</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span></span>
+</code></pre>
+            <h3 id="custom-attributes"><a name="custom-attributes" href="/abbreviations/syntax/#custom-attributes"
+                    class="anchor"></a>Custom attributes</h3>
+            <p>You can use <code>[attr]</code> notation (as in CSS) to add custom attributes to your element:</p>
+            <pre><code><span class="ini"><span class="setting">td[title=<span class="value"><span class="string">"Hello world!"</span> colspan=<span class="number">3</span>]</span></span></span>
+</code></pre>
+            <p>...outputs</p>
+            <pre><code><span class="xml"><span class="tag">&lt;<span class="title">td</span> <span class="attribute">title</span>=<span class="value">"Hello world!"</span> <span class="attribute">colspan</span>=<span class="value">"3"</span>&gt;</span><span class="tag">&lt;/<span class="title">td</span>&gt;</span></span>
+</code></pre>
+            <ul>
+                <li>You can place as many attributes as you like inside square brackets.</li>
+                <li>You don’t have to specify attribute values: <code>td[colspan title]</code> will produce
+                    <code>&lt;td colspan="" title=""&gt;</code> with tabstops inside each empty attribute (if your
+                    editor supports them).
+                </li>
+                <li>You can use single or double quotes for quoting attribute values.</li>
+                <li>You don’t need to quote values if they don’t contain spaces: <code>td[title=hello colspan=3]</code>
+                    will work.</li>
+            </ul>
+            <h3 id="item-numbering-"><a name="item-numbering" href="/abbreviations/syntax/#item-numbering"
+                    class="anchor"></a>Item numbering: <code>$</code></h3>
+            <p>With multiplication <code>*</code> operator you can repeat elements, but with <code>$</code> you can
+                <em>number</em> them. Place <code>$</code> operator inside element’s name, attribute’s name or
+                attribute’s value to output current number of repeated element:
+            </p>
+            <pre><code><span class="ruby">ul&gt;li.item<span class="variable">$*</span><span class="number">5</span></span>
+</code></pre>
+            <p>...outputs to</p>
+            <pre><code><span class="xml"><span class="tag">&lt;<span class="title">ul</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"item1"</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"item2"</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"item3"</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"item4"</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"item5"</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">ul</span>&gt;</span></span>
+</code></pre>
+            <p>You can use multiple <code>$</code> in a row to pad number with zeroes:</p>
+            <pre><code><span class="ruby">ul&gt;li.item<span class="variable">$$</span><span class="variable">$*</span><span class="number">5</span></span>
+</code></pre>
+            <p>...outputs to</p>
+            <pre><code><span class="xml"><span class="tag">&lt;<span class="title">ul</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"item001"</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"item002"</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"item003"</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"item004"</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"item005"</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">ul</span>&gt;</span></span>
+</code></pre>
+            <h4 id="changing-numbering-base-and-direction"><a name="changing-numbering-base-and-direction"
+                    href="/abbreviations/syntax/#changing-numbering-base-and-direction" class="anchor"></a>Changing
+                numbering base and direction</h4>
+            <p>With <code>@</code> modifier, you can change numbering direction (ascending or descending) and base (e.g.
+                start value).</p>
+            <p>For example, to change direction, add <code>@-</code> after <code>$</code>:</p>
+            <pre><code><span class="perl">ul&gt;li.item<span class="variable">$@</span>-<span class="variable">*5</span></span>
+</code></pre>
+            <p>…outputs to</p>
+            <pre><code><span class="xml"><span class="tag">&lt;<span class="title">ul</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"item5"</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"item4"</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"item3"</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"item2"</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"item1"</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">ul</span>&gt;</span></span>
+</code></pre>
+            <p>To change counter base value, add <code>@N</code> modifier to <code>$</code>:</p>
+            <pre><code><span class="perl">ul&gt;li.item<span class="variable">$@</span><span class="number">3</span><span class="variable">*5</span></span>
+</code></pre>
+            <p>…transforms to</p>
+            <pre><code><span class="xml"><span class="tag">&lt;<span class="title">ul</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"item3"</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"item4"</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"item5"</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"item6"</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"item7"</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">ul</span>&gt;</span></span>
+</code></pre>
+            <p>You can use these modifiers together:</p>
+            <pre><code><span class="perl">ul&gt;li.item<span class="variable">$@</span>-<span class="number">3</span><span class="variable">*5</span></span>
+</code></pre>
+            <p>…is transformed to</p>
+            <pre><code><span class="xml"><span class="tag">&lt;<span class="title">ul</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"item7"</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"item6"</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"item5"</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"item4"</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"item3"</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">ul</span>&gt;</span></span>
+</code></pre>
+            <h2 id="text-"><a name="text" href="/abbreviations/syntax/#text" class="anchor"></a>Text: <code>{}</code>
+            </h2>
+            <p>You can use curly braces to add text to element:</p>
+            <pre><code><span class="http"><span class="attribute">a{Click me}</span>
+</span></code></pre>
+            <p>...will produce</p>
+            <pre><code><span class="xml"><span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">""</span>&gt;</span>Click me<span class="tag">&lt;/<span class="title">a</span>&gt;</span></span>
+</code></pre>
+            <p>Note that <code>{text}</code> is used and parsed as a separate element (like, <code>div</code>,
+                <code>p</code> etc.) but has a special meaning when written right after element. For example,
+                <code>a{click}</code> and <code>a&gt;{click}</code> will produce the same output, but
+                <code>a{click}+b{here}</code> and <code>a&gt;{click}+b{here}</code> won’t:
+            </p>
+            <pre><code><span class="xml"><span class="comment">&lt;!-- a{click}+b{here} --&gt;</span>
+<span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">""</span>&gt;</span>click<span class="tag">&lt;/<span class="title">a</span>&gt;</span><span class="tag">&lt;<span class="title">b</span>&gt;</span>here<span class="tag">&lt;/<span class="title">b</span>&gt;</span>
+
+<span class="comment">&lt;!-- a&gt;{click}+b{here} --&gt;</span>
+<span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">""</span>&gt;</span>click<span class="tag">&lt;<span class="title">b</span>&gt;</span>here<span class="tag">&lt;/<span class="title">b</span>&gt;</span><span class="tag">&lt;/<span class="title">a</span>&gt;</span></span>
+</code></pre>
+            <p>In second example the <code>&lt;b&gt;</code> element is placed <em>inside</em> <code>&lt;a&gt;</code>
+                element. And that’s the difference: when <code>{text}</code> is written right after element, it doesn’t
+                change parent context. Here’s more complex example showing why it is important:</p>
+            <pre><code><span class="bash">p&gt;{Click }+a{here}+{ to <span class="keyword">continue</span>}</span>
+</code></pre>
+            <p>...produces</p>
+            <pre><code><span class="xml"><span class="tag">&lt;<span class="title">p</span>&gt;</span>Click <span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">""</span>&gt;</span>here<span class="tag">&lt;/<span class="title">a</span>&gt;</span> to continue<span class="tag">&lt;/<span class="title">p</span>&gt;</span></span>
+</code></pre>
+            <p>In this example, to write <code>Click here to continue</code> inside <code>&lt;p&gt;</code> element we
+                have explicitly move down the tree with <code>&gt;</code> operator after <code>p</code>, but in case of
+                <code>a</code> element we don’t have to, since we need <code>&lt;a&gt;</code> element with
+                <code>here</code> word only, without changing parent context.
+            </p>
+            <p>For comparison, here’s the same abbreviation written without child <code>&gt;</code> operator:</p>
+            <pre><code><span class="bash">p{Click }+a{here}+{ to <span class="keyword">continue</span>}</span>
+</code></pre>
+            <p>...produces</p>
+            <pre><code><span class="xml"><span class="tag">&lt;<span class="title">p</span>&gt;</span>Click <span class="tag">&lt;/<span class="title">p</span>&gt;</span>
+<span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">""</span>&gt;</span>here<span class="tag">&lt;/<span class="title">a</span>&gt;</span> to continue</span>
+</code></pre>
+            <h2 id="notes-on-abbreviation-formatting"><a name="notes-on-abbreviation-formatting"
+                    href="/abbreviations/syntax/#notes-on-abbreviation-formatting" class="anchor"></a>Notes on
+                abbreviation formatting</h2>
+            <p>When you get familiar with Emmet’s abbreviations syntax, you may want to use some formatting to make your
+                abbreviations more readable. For example, use spaces between elements and operators, like this:</p>
+            <pre><code><span class="lisp"><span class="list">(<span class="title">header</span><span class="body"> &gt; ul.nav &gt; li<span class="variable">*5) + footer</span>
+</span></span></span></code></pre>
+            <p>But it won’t work, because space is a <em>stop symbol</em> where Emmet stops abbreviation parsing.</p>
+            <p>Many users mistakenly think that each abbreviation should be written in a new line, but they are wrong:
+                you can type and expand abbreviation <em>anywhere in the text</em>:</p>
+            </p>
+        </div>
+    </div>
+    <footer class="p-3 bg-secondary text-white" style="bottom:0; width: 100%">
+        <div>
+            <div class="row">
+                <div class="col-4">
+                    <h5 class="text-light">External links:</h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <ul>
+                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML" class="text-light">Mozilla</a>
+                        </li>
+                        <li><a href="https://www.w3schools.com/html/default.asp" class="text-light">W3schools</a></li>
+                        <li><a href="https://docs.emmet.io" class="text-light">Emmet</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
