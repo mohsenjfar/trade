@@ -1,0 +1,48 @@
+{
+    "root": {
+        "data": {
+            "id": "cpx3c1jj6880",
+            "created": 1674225292736,
+            "text": "UI/UX",
+            "hyperlink": "https://ui-ux.org",
+            "hyperlinkTitle": ""
+        },
+        "children": [
+            {
+                "data": {
+                    "id": "cpx3c7oaeco0",
+                    "created": 1674225306084,
+                    "text": "Information architecture"
+                },
+                "children": []
+            },
+            {
+                "data": {
+                    "id": "cpx3cgw15g80",
+                    "created": 1674225326143,
+                    "text": "card sorting"
+                },
+                "children": []
+            },
+            {
+                "data": {
+                    "id": "cpx3cnsqc0g0",
+                    "created": 1674225341181,
+                    "text": "adobe xd"
+                },
+                "children": []
+            },
+            {
+                "data": {
+                    "id": "cpx3cq4enu00",
+                    "created": 1674225346241,
+                    "text": "wireframes"
+                },
+                "children": []
+            }
+        ]
+    },
+    "template": "default",
+    "theme": "fresh-blue",
+    "version": "1.4.43"
+}
