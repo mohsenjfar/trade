@@ -1,0 +1,36 @@
+{
+    "root": {
+        "data": {
+            "id": "cpx4s5893lc0",
+            "created": 1674229375697,
+            "text": "servers"
+        },
+        "children": [
+            {
+                "data": {
+                    "id": "cpx4s71tb5s0",
+                    "created": 1674229379662,
+                    "text": "irserver",
+                    "note": "IP address: 94.74.182.200\n\nusername: root\npassword: \n\nnano /etc/apt/sources.list\n\ndeb https://mirror.iranserver.com/debian bullseye main contrib non-free\n\napt update\n\napt install task-xfce-desktop\n\napt install xrdp\n\napt install network-manager-openvpn\n\nadduser ",
+                    "hyperlink": "https://epanel.info/index.php?rp=/login",
+                    "hyperlinkTitle": ""
+                },
+                "children": []
+            },
+            {
+                "data": {
+                    "id": "cpx4sagsuns0",
+                    "created": 1674229387098,
+                    "text": "frserver",
+                    "hyperlink": "https://manager.pulseheberg.com/login?language=english",
+                    "hyperlinkTitle": "",
+                    "note": "IP address:  185.216.26.133\n\nusername: root\npassword: \n"
+                },
+                "children": []
+            }
+        ]
+    },
+    "template": "default",
+    "theme": "fresh-blue",
+    "version": "1.4.43"
+}
