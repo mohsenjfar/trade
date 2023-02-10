@@ -63,7 +63,7 @@
                     "id": "cpx4s71tb5s0",
                     "created": 1674229379662,
                     "text": "irserver",
-                    "note": "IP address: 94.74.182.200\n\nusername: root\npassword: \n\n#!/bin/bash\n\nsed -i 's/deb/#deb/' /etc/apt/sources.list\necho \"deb https://mirror.iranserver.com/debian bullseye main contrib non-free\" >> /etc/apt/sources.list\napt update -y\napt install task-xfce-desktop -y\napt install xrdp -y\napt install network-manager-openvpn -y\nuseradd -m -s /bin/bash \"$\"\necho \"$\" | passwd --stdin \"$\"",
+                    "note": "IP address: 94.74.182.200\n\nusername: root\npassword: \n\n#!/bin/bash\n\nsed -i 's/deb/#deb/' /etc/apt/sources.list\necho \"deb https://mirror.iranserver.com/debian bullseye main contrib non-free\" >> /etc/apt/sources.list\napt update -y\napt full-upgrade -y\napt install docker docker-compose git python3-venv\ngit clone https://github.com/jfar/cryptobot.git\npython3 -m venv venv\nsource venv/bin/activate\npip3 install -r requirements.txt\njupyter lab password\njupyter lab --no-browser --ip=94.74.182.200 --allow-root\n# Ctrl + Z > bg\nhttp://94.74.182.200:8888",
                     "hyperlink": "https://epanel.info/index.php?rp=/login",
                     "hyperlinkTitle": ""
                 },
