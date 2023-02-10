@@ -1,0 +1,237 @@
+{
+    "root": {
+        "data": {
+            "id": "cqanr3hz5cw0",
+            "created": 1675603174093,
+            "text": "metaverse"
+        },
+        "children": [
+            {
+                "data": {
+                    "id": "cqaperrxy000",
+                    "created": 1675607850424,
+                    "text": "lands",
+                    "expandState": "expand"
+                },
+                "children": [
+                    {
+                        "data": {
+                            "id": "cqanrj0gyqo0",
+                            "created": 1675603207863,
+                            "text": "Treeverse"
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "id": "cqanrlaq31k0",
+                            "created": 1675603212836,
+                            "text": "Sandbox"
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "cqanru93hb40",
+                                    "created": 1675603232329,
+                                    "text": "SAND"
+                                },
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "data": {
+                            "id": "cqanravj6ow0",
+                            "created": 1675603190150,
+                            "text": "Deceltraland"
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "cqanrpg8t9s0",
+                                    "created": 1675603221877,
+                                    "text": "MANA"
+                                },
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "data": {
+                            "id": "cqanrd6bs1k0",
+                            "created": 1675603195156,
+                            "text": "CryptoVoxels"
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "id": "cqanrgcqng80",
+                            "created": 1675603202074,
+                            "text": "Worldwide Webb"
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "id": "cqastr1cqw00",
+                            "created": 1675617487608,
+                            "text": "pavia",
+                            "hyperlink": "https://cnft.io/project/pavia",
+                            "hyperlinkTitle": "",
+                            "priority": 1
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "cqaugqoslpc0",
+                                    "created": 1675622110334,
+                                    "text": "discord",
+                                    "hyperlink": "https://discord.com/",
+                                    "hyperlinkTitle": ""
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "cqauh3cktu80",
+                                    "created": 1675622137894,
+                                    "text": "cnft",
+                                    "hyperlink": "https://cnft.io/project/pavia",
+                                    "hyperlinkTitle": ""
+                                },
+                                "children": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "data": {
+                    "id": "cqapf3dwbc00",
+                    "created": 1675607875696,
+                    "text": "web3",
+                    "hyperlink": "https://web3.foundation/",
+                    "hyperlinkTitle": ""
+                },
+                "children": []
+            },
+            {
+                "data": {
+                    "id": "cqapgdnu0c00",
+                    "created": 1675607976429,
+                    "text": "blockchain",
+                    "hyperlink": "https://en.wikipedia.org/wiki/Blockchain",
+                    "hyperlinkTitle": ""
+                },
+                "children": []
+            },
+            {
+                "data": {
+                    "id": "cqaqasj9kmw0",
+                    "created": 1675610359729,
+                    "text": "NVIDIA Omniverse Cloud",
+                    "note": "used to create apps in metavers"
+                },
+                "children": []
+            },
+            {
+                "data": {
+                    "id": "cqar8xrcjtc0",
+                    "created": 1675613035483,
+                    "text": "openai",
+                    "hyperlink": "https://openai.com/",
+                    "hyperlinkTitle": "",
+                    "expandState": "expand",
+                    "note": "apikey: "
+                },
+                "children": [
+                    {
+                        "data": {
+                            "id": "cqcfrdlnc5k0",
+                            "created": 1675783747117,
+                            "text": "examples",
+                            "hyperlink": "https://platform.openai.com/examples",
+                            "hyperlinkTitle": ""
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "id": "cqcfrv5fz740",
+                            "created": 1675783785319,
+                            "text": "Docs",
+                            "hyperlink": "https://platform.openai.com/docs/introduction",
+                            "hyperlinkTitle": ""
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "id": "cqdtaxxj9m80",
+                            "created": 1675923514676,
+                            "text": "chatGPT",
+                            "hyperlink": "https://chat.openai.com/auth/login",
+                            "hyperlinkTitle": ""
+                        },
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "data": {
+                    "id": "cqcgvru8ie00",
+                    "created": 1675786912677,
+                    "text": "abantether",
+                    "hyperlink": "https://abantether.com",
+                    "hyperlinkTitle": ""
+                },
+                "children": []
+            },
+            {
+                "data": {
+                    "id": "cqcgvvypt680",
+                    "created": 1675786921655,
+                    "text": "Tabdeal",
+                    "hyperlink": "https://tabdeal.org/",
+                    "hyperlinkTitle": ""
+                },
+                "children": []
+            },
+            {
+                "data": {
+                    "id": "cqeosp4zeqo0",
+                    "created": 1676012360497,
+                    "text": "datascience",
+                    "hyperlink": "https://www.learndatasci.com",
+                    "hyperlinkTitle": ""
+                },
+                "children": [
+                    {
+                        "data": {
+                            "id": "cqeotah3iw80",
+                            "created": 1676012406942,
+                            "text": "How to Make an Algo Trading Crypto Bot with Python (Part 1)",
+                            "hyperlink": "https://www.learndatasci.com/tutorials/algo-trading-crypto-bot-python-strategy-backtesting/",
+                            "hyperlinkTitle": ""
+                        },
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "data": {
+                    "id": "cqeotqn9q5k0",
+                    "created": 1676012442144,
+                    "text": "freqtrade",
+                    "hyperlink": "https://www.freqtrade.io/en/stable/",
+                    "hyperlinkTitle": ""
+                },
+                "children": []
+            }
+        ]
+    },
+    "template": "default",
+    "theme": "fresh-blue",
+    "version": "1.4.43"
+}
