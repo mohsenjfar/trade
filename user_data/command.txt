@@ -1,0 +1,1 @@
+sudo docker-compose run --rm freqtrade backtesting --strategy SimpleMA_strategy -i 1d -p ETH/BTC --timerange 20200101-20201231 --starting-balance 1 -c ./user_data/learndatasci-config.json
