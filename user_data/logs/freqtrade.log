@@ -1,0 +1,1531 @@
+2023-02-17 11:40:54,794 - freqtrade.loggers - INFO - Verbosity set to 0
+2023-02-17 11:40:54,794 - freqtrade.configuration.configuration - INFO - Runmode set to dry_run.
+2023-02-17 11:40:54,795 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2023-02-17 11:40:54,795 - freqtrade.configuration.configuration - INFO - Dry run is enabled
+2023-02-17 11:40:54,795 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/tradesv3.sqlite"
+2023-02-17 11:40:54,795 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 10 ...
+2023-02-17 11:40:54,821 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2023-02-17 11:40:54,822 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/binance ...
+2023-02-17 11:40:54,823 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2023-02-17 11:40:54,846 - freqtrade.exchange.check_exchange - INFO - Exchange "binance" is officially supported by the Freqtrade development team.
+2023-02-17 11:40:54,847 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2023-02-17 11:40:55,185 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy SimpleMA_strategy from '/freqtrade/user_data/strategies/SimpleMA_strategy.py'...
+2023-02-17 11:40:55,186 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2023-02-17 11:40:55,187 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'timeframe' with value in config file: 1d.
+2023-02-17 11:40:55,187 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: BTC.
+2023-02-17 11:40:55,188 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: 0.01.
+2023-02-17 11:40:55,188 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2023-02-17 11:40:55,188 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 10.
+2023-02-17 11:40:55,188 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {'0': 100}
+2023-02-17 11:40:55,189 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 1d
+2023-02-17 11:40:55,189 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -1.0
+2023-02-17 11:40:55,189 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2023-02-17 11:40:55,189 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2023-02-17 11:40:55,189 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2023-02-17 11:40:55,190 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: False
+2023-02-17 11:40:55,190 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2023-02-17 11:40:55,190 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'limit', 'exit': 'limit', 'stoploss': 'limit', 'stoploss_on_exchange': False, 'stoploss_on_exchange_interval': 60}
+2023-02-17 11:40:55,190 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2023-02-17 11:40:55,190 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: BTC
+2023-02-17 11:40:55,191 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: 0.01
+2023-02-17 11:40:55,191 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using protections: []
+2023-02-17 11:40:55,191 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 0
+2023-02-17 11:40:55,191 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2023-02-17 11:40:55,191 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2023-02-17 11:40:55,192 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2023-02-17 11:40:55,192 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2023-02-17 11:40:55,192 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2023-02-17 11:40:55,192 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2023-02-17 11:40:55,192 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2023-02-17 11:40:55,193 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2023-02-17 11:40:55,193 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2023-02-17 11:40:55,193 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 10
+2023-02-17 11:40:55,193 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2023-02-17 11:40:55,202 - freqtrade.exchange.exchange - INFO - Instance is running with dry_run enabled
+2023-02-17 11:40:55,203 - freqtrade.exchange.exchange - INFO - Using CCXT 2.7.12
+2023-02-17 11:40:55,249 - freqtrade.exchange.exchange - INFO - Using Exchange "Binance"
+2023-02-17 11:41:05,284 - freqtrade.exchange.exchange - ERROR - Unable to initialize markets.
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 174, in _new_conn
+    conn = connection.create_connection(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/connection.py", line 95, in create_connection
+    raise err
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/connection.py", line 85, in create_connection
+    sock.connect(sa)
+TimeoutError: timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 386, in _make_request
+    self._validate_conn(conn)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 1042, in _validate_conn
+    conn.connect()
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 358, in connect
+    self.sock = conn = self._new_conn()
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 179, in _new_conn
+    raise ConnectTimeoutError(
+urllib3.exceptions.ConnectTimeoutError: (<urllib3.connection.HTTPSConnection object at 0x7f9781754b80>, 'Connection to api.binance.com timed out. (connect timeout=10)')
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/adapters.py", line 489, in send
+    resp = conn.urlopen(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f9781754b80>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 599, in fetch
+    response = self.session.request(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/sessions.py", line 587, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/sessions.py", line 701, in send
+    r = adapter.send(request, **kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/adapters.py", line 553, in send
+    raise ConnectTimeout(e, request=request)
+requests.exceptions.ConnectTimeout: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f9781754b80>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 479, in _load_markets
+    self._markets = self._api.load_markets(params={})
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 1460, in load_markets
+    markets = self.fetch_markets(params)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/binance.py", line 1683, in fetch_markets
+    promises.append(self.publicGetExchangeInfo(params))
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 505, in inner
+    return entry(_self, **inner_kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/binance.py", line 6201, in request
+    response = self.fetch2(path, api, method, params, headers, body, config, context)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 2830, in fetch2
+    return self.fetch(request['url'], request['method'], request['headers'], request['body'])
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 629, in fetch
+    raise RequestTimeout(details) from e
+ccxt.base.errors.RequestTimeout: binance GET https://api.binance.com/api/v3/exchangeInfo
+2023-02-17 11:41:05,291 - freqtrade.commands.trade_commands - ERROR - Could not load markets, therefore cannot start. Please investigate the above error for more details.
+2023-02-17 11:41:05,291 - freqtrade.commands.trade_commands - ERROR - Fatal exception!
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/commands/trade_commands.py", line 18, in start_trading
+    worker = Worker(args)
+  File "/freqtrade/freqtrade/worker.py", line 37, in __init__
+    self._init(False)
+  File "/freqtrade/freqtrade/worker.py", line 53, in _init
+    self.freqtrade = FreqtradeBot(self._config)
+  File "/freqtrade/freqtrade/freqtradebot.py", line 68, in __init__
+    self.exchange = ExchangeResolver.load_exchange(
+  File "/freqtrade/freqtrade/resolvers/exchange_resolver.py", line 34, in load_exchange
+    exchange = ExchangeResolver._load_exchange(
+  File "/freqtrade/freqtrade/resolvers/exchange_resolver.py", line 60, in _load_exchange
+    exchange = ex_class(**kwargs)
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 181, in __init__
+    self.validate_config(config)
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 212, in validate_config
+    self.validate_stakecurrency(config['stake_currency'])
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 514, in validate_stakecurrency
+    raise OperationalException(
+freqtrade.exceptions.OperationalException: Could not load markets, therefore cannot start. Please investigate the above error for more details.
+2023-02-17 11:41:15,539 - freqtrade.loggers - INFO - Verbosity set to 0
+2023-02-17 11:41:15,540 - freqtrade.configuration.configuration - INFO - Runmode set to dry_run.
+2023-02-17 11:41:15,540 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2023-02-17 11:41:15,540 - freqtrade.configuration.configuration - INFO - Dry run is enabled
+2023-02-17 11:41:15,540 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/tradesv3.sqlite"
+2023-02-17 11:41:15,541 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 10 ...
+2023-02-17 11:41:15,582 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2023-02-17 11:41:15,583 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/binance ...
+2023-02-17 11:41:15,584 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2023-02-17 11:41:15,607 - freqtrade.exchange.check_exchange - INFO - Exchange "binance" is officially supported by the Freqtrade development team.
+2023-02-17 11:41:15,608 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2023-02-17 11:41:15,692 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy SimpleMA_strategy from '/freqtrade/user_data/strategies/SimpleMA_strategy.py'...
+2023-02-17 11:41:15,692 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2023-02-17 11:41:15,693 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'timeframe' with value in config file: 1d.
+2023-02-17 11:41:15,693 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: BTC.
+2023-02-17 11:41:15,694 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: 0.01.
+2023-02-17 11:41:15,694 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2023-02-17 11:41:15,694 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 10.
+2023-02-17 11:41:15,694 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {'0': 100}
+2023-02-17 11:41:15,695 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 1d
+2023-02-17 11:41:15,695 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -1.0
+2023-02-17 11:41:15,695 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2023-02-17 11:41:15,695 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2023-02-17 11:41:15,695 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2023-02-17 11:41:15,696 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: False
+2023-02-17 11:41:15,696 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2023-02-17 11:41:15,696 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'limit', 'exit': 'limit', 'stoploss': 'limit', 'stoploss_on_exchange': False, 'stoploss_on_exchange_interval': 60}
+2023-02-17 11:41:15,696 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2023-02-17 11:41:15,696 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: BTC
+2023-02-17 11:41:15,697 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: 0.01
+2023-02-17 11:41:15,697 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using protections: []
+2023-02-17 11:41:15,697 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 0
+2023-02-17 11:41:15,697 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2023-02-17 11:41:15,697 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2023-02-17 11:41:15,697 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2023-02-17 11:41:15,698 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2023-02-17 11:41:15,698 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2023-02-17 11:41:15,698 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2023-02-17 11:41:15,698 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2023-02-17 11:41:15,698 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2023-02-17 11:41:15,699 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2023-02-17 11:41:15,699 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 10
+2023-02-17 11:41:15,699 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2023-02-17 11:41:15,708 - freqtrade.exchange.exchange - INFO - Instance is running with dry_run enabled
+2023-02-17 11:41:15,708 - freqtrade.exchange.exchange - INFO - Using CCXT 2.7.12
+2023-02-17 11:41:15,764 - freqtrade.exchange.exchange - INFO - Using Exchange "Binance"
+2023-02-17 11:41:25,864 - freqtrade.exchange.exchange - ERROR - Unable to initialize markets.
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 174, in _new_conn
+    conn = connection.create_connection(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/connection.py", line 95, in create_connection
+    raise err
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/connection.py", line 85, in create_connection
+    sock.connect(sa)
+TimeoutError: timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 386, in _make_request
+    self._validate_conn(conn)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 1042, in _validate_conn
+    conn.connect()
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 358, in connect
+    self.sock = conn = self._new_conn()
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 179, in _new_conn
+    raise ConnectTimeoutError(
+urllib3.exceptions.ConnectTimeoutError: (<urllib3.connection.HTTPSConnection object at 0x7f27a4350d60>, 'Connection to api.binance.com timed out. (connect timeout=10)')
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/adapters.py", line 489, in send
+    resp = conn.urlopen(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f27a4350d60>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 599, in fetch
+    response = self.session.request(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/sessions.py", line 587, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/sessions.py", line 701, in send
+    r = adapter.send(request, **kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/adapters.py", line 553, in send
+    raise ConnectTimeout(e, request=request)
+requests.exceptions.ConnectTimeout: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f27a4350d60>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 479, in _load_markets
+    self._markets = self._api.load_markets(params={})
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 1460, in load_markets
+    markets = self.fetch_markets(params)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/binance.py", line 1683, in fetch_markets
+    promises.append(self.publicGetExchangeInfo(params))
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 505, in inner
+    return entry(_self, **inner_kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/binance.py", line 6201, in request
+    response = self.fetch2(path, api, method, params, headers, body, config, context)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 2830, in fetch2
+    return self.fetch(request['url'], request['method'], request['headers'], request['body'])
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 629, in fetch
+    raise RequestTimeout(details) from e
+ccxt.base.errors.RequestTimeout: binance GET https://api.binance.com/api/v3/exchangeInfo
+2023-02-17 11:41:25,889 - freqtrade.commands.trade_commands - ERROR - Could not load markets, therefore cannot start. Please investigate the above error for more details.
+2023-02-17 11:41:25,889 - freqtrade.commands.trade_commands - ERROR - Fatal exception!
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/commands/trade_commands.py", line 18, in start_trading
+    worker = Worker(args)
+  File "/freqtrade/freqtrade/worker.py", line 37, in __init__
+    self._init(False)
+  File "/freqtrade/freqtrade/worker.py", line 53, in _init
+    self.freqtrade = FreqtradeBot(self._config)
+  File "/freqtrade/freqtrade/freqtradebot.py", line 68, in __init__
+    self.exchange = ExchangeResolver.load_exchange(
+  File "/freqtrade/freqtrade/resolvers/exchange_resolver.py", line 34, in load_exchange
+    exchange = ExchangeResolver._load_exchange(
+  File "/freqtrade/freqtrade/resolvers/exchange_resolver.py", line 60, in _load_exchange
+    exchange = ex_class(**kwargs)
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 181, in __init__
+    self.validate_config(config)
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 212, in validate_config
+    self.validate_stakecurrency(config['stake_currency'])
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 514, in validate_stakecurrency
+    raise OperationalException(
+freqtrade.exceptions.OperationalException: Could not load markets, therefore cannot start. Please investigate the above error for more details.
+2023-02-17 11:41:38,301 - freqtrade.loggers - INFO - Verbosity set to 0
+2023-02-17 11:41:38,302 - freqtrade.configuration.configuration - INFO - Runmode set to dry_run.
+2023-02-17 11:41:38,302 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2023-02-17 11:41:38,302 - freqtrade.configuration.configuration - INFO - Dry run is enabled
+2023-02-17 11:41:38,303 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/tradesv3.sqlite"
+2023-02-17 11:41:38,303 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 10 ...
+2023-02-17 11:41:38,962 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2023-02-17 11:41:38,989 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/binance ...
+2023-02-17 11:41:38,991 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2023-02-17 11:41:39,015 - freqtrade.exchange.check_exchange - INFO - Exchange "binance" is officially supported by the Freqtrade development team.
+2023-02-17 11:41:39,016 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2023-02-17 11:41:39,276 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy SimpleMA_strategy from '/freqtrade/user_data/strategies/SimpleMA_strategy.py'...
+2023-02-17 11:41:39,276 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2023-02-17 11:41:39,278 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'timeframe' with value in config file: 1d.
+2023-02-17 11:41:39,278 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: BTC.
+2023-02-17 11:41:39,278 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: 0.01.
+2023-02-17 11:41:39,279 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2023-02-17 11:41:39,279 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 10.
+2023-02-17 11:41:39,280 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {'0': 100}
+2023-02-17 11:41:39,281 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 1d
+2023-02-17 11:41:39,281 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -1.0
+2023-02-17 11:41:39,281 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2023-02-17 11:41:39,282 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2023-02-17 11:41:39,282 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2023-02-17 11:41:39,282 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: False
+2023-02-17 11:41:39,283 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2023-02-17 11:41:39,283 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'limit', 'exit': 'limit', 'stoploss': 'limit', 'stoploss_on_exchange': False, 'stoploss_on_exchange_interval': 60}
+2023-02-17 11:41:39,283 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2023-02-17 11:41:39,284 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: BTC
+2023-02-17 11:41:39,284 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: 0.01
+2023-02-17 11:41:39,285 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using protections: []
+2023-02-17 11:41:39,285 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 0
+2023-02-17 11:41:39,285 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2023-02-17 11:41:39,286 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2023-02-17 11:41:39,286 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2023-02-17 11:41:39,286 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2023-02-17 11:41:39,287 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2023-02-17 11:41:39,287 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2023-02-17 11:41:39,288 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2023-02-17 11:41:39,288 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2023-02-17 11:41:39,288 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2023-02-17 11:41:39,289 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 10
+2023-02-17 11:41:39,289 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2023-02-17 11:41:39,299 - freqtrade.exchange.exchange - INFO - Instance is running with dry_run enabled
+2023-02-17 11:41:39,299 - freqtrade.exchange.exchange - INFO - Using CCXT 2.7.12
+2023-02-17 11:41:39,349 - freqtrade.exchange.exchange - INFO - Using Exchange "Binance"
+2023-02-17 11:41:49,500 - freqtrade.exchange.exchange - ERROR - Unable to initialize markets.
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 174, in _new_conn
+    conn = connection.create_connection(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/connection.py", line 95, in create_connection
+    raise err
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/connection.py", line 85, in create_connection
+    sock.connect(sa)
+TimeoutError: timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 386, in _make_request
+    self._validate_conn(conn)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 1042, in _validate_conn
+    conn.connect()
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 358, in connect
+    self.sock = conn = self._new_conn()
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 179, in _new_conn
+    raise ConnectTimeoutError(
+urllib3.exceptions.ConnectTimeoutError: (<urllib3.connection.HTTPSConnection object at 0x7f2225cf0f10>, 'Connection to api.binance.com timed out. (connect timeout=10)')
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/adapters.py", line 489, in send
+    resp = conn.urlopen(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f2225cf0f10>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 599, in fetch
+    response = self.session.request(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/sessions.py", line 587, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/sessions.py", line 701, in send
+    r = adapter.send(request, **kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/adapters.py", line 553, in send
+    raise ConnectTimeout(e, request=request)
+requests.exceptions.ConnectTimeout: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f2225cf0f10>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 479, in _load_markets
+    self._markets = self._api.load_markets(params={})
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 1460, in load_markets
+    markets = self.fetch_markets(params)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/binance.py", line 1683, in fetch_markets
+    promises.append(self.publicGetExchangeInfo(params))
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 505, in inner
+    return entry(_self, **inner_kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/binance.py", line 6201, in request
+    response = self.fetch2(path, api, method, params, headers, body, config, context)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 2830, in fetch2
+    return self.fetch(request['url'], request['method'], request['headers'], request['body'])
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 629, in fetch
+    raise RequestTimeout(details) from e
+ccxt.base.errors.RequestTimeout: binance GET https://api.binance.com/api/v3/exchangeInfo
+2023-02-17 11:41:49,524 - freqtrade.commands.trade_commands - ERROR - Could not load markets, therefore cannot start. Please investigate the above error for more details.
+2023-02-17 11:41:49,524 - freqtrade.commands.trade_commands - ERROR - Fatal exception!
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/commands/trade_commands.py", line 18, in start_trading
+    worker = Worker(args)
+  File "/freqtrade/freqtrade/worker.py", line 37, in __init__
+    self._init(False)
+  File "/freqtrade/freqtrade/worker.py", line 53, in _init
+    self.freqtrade = FreqtradeBot(self._config)
+  File "/freqtrade/freqtrade/freqtradebot.py", line 68, in __init__
+    self.exchange = ExchangeResolver.load_exchange(
+  File "/freqtrade/freqtrade/resolvers/exchange_resolver.py", line 34, in load_exchange
+    exchange = ExchangeResolver._load_exchange(
+  File "/freqtrade/freqtrade/resolvers/exchange_resolver.py", line 60, in _load_exchange
+    exchange = ex_class(**kwargs)
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 181, in __init__
+    self.validate_config(config)
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 212, in validate_config
+    self.validate_stakecurrency(config['stake_currency'])
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 514, in validate_stakecurrency
+    raise OperationalException(
+freqtrade.exceptions.OperationalException: Could not load markets, therefore cannot start. Please investigate the above error for more details.
+2023-02-17 11:41:59,930 - freqtrade.loggers - INFO - Verbosity set to 0
+2023-02-17 11:41:59,932 - freqtrade.configuration.configuration - INFO - Runmode set to dry_run.
+2023-02-17 11:41:59,932 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2023-02-17 11:41:59,933 - freqtrade.configuration.configuration - INFO - Dry run is enabled
+2023-02-17 11:41:59,934 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/tradesv3.sqlite"
+2023-02-17 11:41:59,934 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 10 ...
+2023-02-17 11:42:00,006 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2023-02-17 11:42:00,007 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/binance ...
+2023-02-17 11:42:00,009 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2023-02-17 11:42:00,037 - freqtrade.exchange.check_exchange - INFO - Exchange "binance" is officially supported by the Freqtrade development team.
+2023-02-17 11:42:00,038 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2023-02-17 11:42:00,130 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy SimpleMA_strategy from '/freqtrade/user_data/strategies/SimpleMA_strategy.py'...
+2023-02-17 11:42:00,131 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2023-02-17 11:42:00,132 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'timeframe' with value in config file: 1d.
+2023-02-17 11:42:00,133 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: BTC.
+2023-02-17 11:42:00,133 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: 0.01.
+2023-02-17 11:42:00,133 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2023-02-17 11:42:00,134 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 10.
+2023-02-17 11:42:00,134 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {'0': 100}
+2023-02-17 11:42:00,134 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 1d
+2023-02-17 11:42:00,135 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -1.0
+2023-02-17 11:42:00,135 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2023-02-17 11:42:00,135 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2023-02-17 11:42:00,136 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2023-02-17 11:42:00,136 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: False
+2023-02-17 11:42:00,136 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2023-02-17 11:42:00,136 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'limit', 'exit': 'limit', 'stoploss': 'limit', 'stoploss_on_exchange': False, 'stoploss_on_exchange_interval': 60}
+2023-02-17 11:42:00,137 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2023-02-17 11:42:00,137 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: BTC
+2023-02-17 11:42:00,137 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: 0.01
+2023-02-17 11:42:00,138 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using protections: []
+2023-02-17 11:42:00,138 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 0
+2023-02-17 11:42:00,138 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2023-02-17 11:42:00,139 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2023-02-17 11:42:00,139 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2023-02-17 11:42:00,139 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2023-02-17 11:42:00,140 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2023-02-17 11:42:00,140 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2023-02-17 11:42:00,140 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2023-02-17 11:42:00,141 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2023-02-17 11:42:00,141 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2023-02-17 11:42:00,141 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 10
+2023-02-17 11:42:00,142 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2023-02-17 11:42:00,170 - freqtrade.exchange.exchange - INFO - Instance is running with dry_run enabled
+2023-02-17 11:42:00,170 - freqtrade.exchange.exchange - INFO - Using CCXT 2.7.12
+2023-02-17 11:42:00,221 - freqtrade.exchange.exchange - INFO - Using Exchange "Binance"
+2023-02-17 11:42:10,253 - freqtrade.exchange.exchange - ERROR - Unable to initialize markets.
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 174, in _new_conn
+    conn = connection.create_connection(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/connection.py", line 95, in create_connection
+    raise err
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/connection.py", line 85, in create_connection
+    sock.connect(sa)
+TimeoutError: timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 386, in _make_request
+    self._validate_conn(conn)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 1042, in _validate_conn
+    conn.connect()
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 358, in connect
+    self.sock = conn = self._new_conn()
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 179, in _new_conn
+    raise ConnectTimeoutError(
+urllib3.exceptions.ConnectTimeoutError: (<urllib3.connection.HTTPSConnection object at 0x7f4e4ee3cfa0>, 'Connection to api.binance.com timed out. (connect timeout=10)')
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/adapters.py", line 489, in send
+    resp = conn.urlopen(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f4e4ee3cfa0>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 599, in fetch
+    response = self.session.request(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/sessions.py", line 587, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/sessions.py", line 701, in send
+    r = adapter.send(request, **kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/adapters.py", line 553, in send
+    raise ConnectTimeout(e, request=request)
+requests.exceptions.ConnectTimeout: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f4e4ee3cfa0>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 479, in _load_markets
+    self._markets = self._api.load_markets(params={})
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 1460, in load_markets
+    markets = self.fetch_markets(params)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/binance.py", line 1683, in fetch_markets
+    promises.append(self.publicGetExchangeInfo(params))
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 505, in inner
+    return entry(_self, **inner_kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/binance.py", line 6201, in request
+    response = self.fetch2(path, api, method, params, headers, body, config, context)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 2830, in fetch2
+    return self.fetch(request['url'], request['method'], request['headers'], request['body'])
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 629, in fetch
+    raise RequestTimeout(details) from e
+ccxt.base.errors.RequestTimeout: binance GET https://api.binance.com/api/v3/exchangeInfo
+2023-02-17 11:42:10,260 - freqtrade.commands.trade_commands - ERROR - Could not load markets, therefore cannot start. Please investigate the above error for more details.
+2023-02-17 11:42:10,260 - freqtrade.commands.trade_commands - ERROR - Fatal exception!
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/commands/trade_commands.py", line 18, in start_trading
+    worker = Worker(args)
+  File "/freqtrade/freqtrade/worker.py", line 37, in __init__
+    self._init(False)
+  File "/freqtrade/freqtrade/worker.py", line 53, in _init
+    self.freqtrade = FreqtradeBot(self._config)
+  File "/freqtrade/freqtrade/freqtradebot.py", line 68, in __init__
+    self.exchange = ExchangeResolver.load_exchange(
+  File "/freqtrade/freqtrade/resolvers/exchange_resolver.py", line 34, in load_exchange
+    exchange = ExchangeResolver._load_exchange(
+  File "/freqtrade/freqtrade/resolvers/exchange_resolver.py", line 60, in _load_exchange
+    exchange = ex_class(**kwargs)
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 181, in __init__
+    self.validate_config(config)
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 212, in validate_config
+    self.validate_stakecurrency(config['stake_currency'])
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 514, in validate_stakecurrency
+    raise OperationalException(
+freqtrade.exceptions.OperationalException: Could not load markets, therefore cannot start. Please investigate the above error for more details.
+2023-02-17 11:42:21,007 - freqtrade.loggers - INFO - Verbosity set to 0
+2023-02-17 11:42:21,008 - freqtrade.configuration.configuration - INFO - Runmode set to dry_run.
+2023-02-17 11:42:21,008 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2023-02-17 11:42:21,008 - freqtrade.configuration.configuration - INFO - Dry run is enabled
+2023-02-17 11:42:21,008 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/tradesv3.sqlite"
+2023-02-17 11:42:21,008 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 10 ...
+2023-02-17 11:42:21,022 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2023-02-17 11:42:21,023 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/binance ...
+2023-02-17 11:42:21,025 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2023-02-17 11:42:21,048 - freqtrade.exchange.check_exchange - INFO - Exchange "binance" is officially supported by the Freqtrade development team.
+2023-02-17 11:42:21,048 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2023-02-17 11:42:21,131 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy SimpleMA_strategy from '/freqtrade/user_data/strategies/SimpleMA_strategy.py'...
+2023-02-17 11:42:21,131 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2023-02-17 11:42:21,132 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'timeframe' with value in config file: 1d.
+2023-02-17 11:42:21,132 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: BTC.
+2023-02-17 11:42:21,133 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: 0.01.
+2023-02-17 11:42:21,133 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2023-02-17 11:42:21,133 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 10.
+2023-02-17 11:42:21,133 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {'0': 100}
+2023-02-17 11:42:21,133 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 1d
+2023-02-17 11:42:21,133 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -1.0
+2023-02-17 11:42:21,134 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2023-02-17 11:42:21,134 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2023-02-17 11:42:21,134 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2023-02-17 11:42:21,134 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: False
+2023-02-17 11:42:21,134 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2023-02-17 11:42:21,134 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'limit', 'exit': 'limit', 'stoploss': 'limit', 'stoploss_on_exchange': False, 'stoploss_on_exchange_interval': 60}
+2023-02-17 11:42:21,135 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2023-02-17 11:42:21,135 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: BTC
+2023-02-17 11:42:21,135 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: 0.01
+2023-02-17 11:42:21,135 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using protections: []
+2023-02-17 11:42:21,135 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 0
+2023-02-17 11:42:21,135 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2023-02-17 11:42:21,135 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2023-02-17 11:42:21,136 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2023-02-17 11:42:21,136 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2023-02-17 11:42:21,136 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2023-02-17 11:42:21,136 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2023-02-17 11:42:21,136 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2023-02-17 11:42:21,136 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2023-02-17 11:42:21,136 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2023-02-17 11:42:21,137 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 10
+2023-02-17 11:42:21,137 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2023-02-17 11:42:21,146 - freqtrade.exchange.exchange - INFO - Instance is running with dry_run enabled
+2023-02-17 11:42:21,146 - freqtrade.exchange.exchange - INFO - Using CCXT 2.7.12
+2023-02-17 11:42:21,190 - freqtrade.exchange.exchange - INFO - Using Exchange "Binance"
+2023-02-17 11:42:31,232 - freqtrade.exchange.exchange - ERROR - Unable to initialize markets.
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 174, in _new_conn
+    conn = connection.create_connection(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/connection.py", line 95, in create_connection
+    raise err
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/connection.py", line 85, in create_connection
+    sock.connect(sa)
+TimeoutError: timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 386, in _make_request
+    self._validate_conn(conn)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 1042, in _validate_conn
+    conn.connect()
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 358, in connect
+    self.sock = conn = self._new_conn()
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 179, in _new_conn
+    raise ConnectTimeoutError(
+urllib3.exceptions.ConnectTimeoutError: (<urllib3.connection.HTTPSConnection object at 0x7f5f4d370d60>, 'Connection to api.binance.com timed out. (connect timeout=10)')
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/adapters.py", line 489, in send
+    resp = conn.urlopen(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f5f4d370d60>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 599, in fetch
+    response = self.session.request(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/sessions.py", line 587, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/sessions.py", line 701, in send
+    r = adapter.send(request, **kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/adapters.py", line 553, in send
+    raise ConnectTimeout(e, request=request)
+requests.exceptions.ConnectTimeout: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f5f4d370d60>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 479, in _load_markets
+    self._markets = self._api.load_markets(params={})
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 1460, in load_markets
+    markets = self.fetch_markets(params)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/binance.py", line 1683, in fetch_markets
+    promises.append(self.publicGetExchangeInfo(params))
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 505, in inner
+    return entry(_self, **inner_kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/binance.py", line 6201, in request
+    response = self.fetch2(path, api, method, params, headers, body, config, context)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 2830, in fetch2
+    return self.fetch(request['url'], request['method'], request['headers'], request['body'])
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 629, in fetch
+    raise RequestTimeout(details) from e
+ccxt.base.errors.RequestTimeout: binance GET https://api.binance.com/api/v3/exchangeInfo
+2023-02-17 11:42:31,238 - freqtrade.commands.trade_commands - ERROR - Could not load markets, therefore cannot start. Please investigate the above error for more details.
+2023-02-17 11:42:31,239 - freqtrade.commands.trade_commands - ERROR - Fatal exception!
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/commands/trade_commands.py", line 18, in start_trading
+    worker = Worker(args)
+  File "/freqtrade/freqtrade/worker.py", line 37, in __init__
+    self._init(False)
+  File "/freqtrade/freqtrade/worker.py", line 53, in _init
+    self.freqtrade = FreqtradeBot(self._config)
+  File "/freqtrade/freqtrade/freqtradebot.py", line 68, in __init__
+    self.exchange = ExchangeResolver.load_exchange(
+  File "/freqtrade/freqtrade/resolvers/exchange_resolver.py", line 34, in load_exchange
+    exchange = ExchangeResolver._load_exchange(
+  File "/freqtrade/freqtrade/resolvers/exchange_resolver.py", line 60, in _load_exchange
+    exchange = ex_class(**kwargs)
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 181, in __init__
+    self.validate_config(config)
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 212, in validate_config
+    self.validate_stakecurrency(config['stake_currency'])
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 514, in validate_stakecurrency
+    raise OperationalException(
+freqtrade.exceptions.OperationalException: Could not load markets, therefore cannot start. Please investigate the above error for more details.
+2023-02-17 11:42:40,728 - freqtrade.loggers - INFO - Verbosity set to 0
+2023-02-17 11:42:40,728 - freqtrade.configuration.configuration - INFO - Runmode set to dry_run.
+2023-02-17 11:42:40,728 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2023-02-17 11:42:40,729 - freqtrade.configuration.configuration - INFO - Dry run is enabled
+2023-02-17 11:42:40,729 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/tradesv3.sqlite"
+2023-02-17 11:42:40,729 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 10 ...
+2023-02-17 11:42:40,743 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2023-02-17 11:42:40,744 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/binance ...
+2023-02-17 11:42:40,745 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2023-02-17 11:42:40,769 - freqtrade.exchange.check_exchange - INFO - Exchange "binance" is officially supported by the Freqtrade development team.
+2023-02-17 11:42:40,769 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2023-02-17 11:42:40,853 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy SimpleMA_strategy from '/freqtrade/user_data/strategies/SimpleMA_strategy.py'...
+2023-02-17 11:42:40,854 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2023-02-17 11:42:40,854 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'timeframe' with value in config file: 1d.
+2023-02-17 11:42:40,855 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: BTC.
+2023-02-17 11:42:40,855 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: 0.01.
+2023-02-17 11:42:40,855 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2023-02-17 11:42:40,855 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 10.
+2023-02-17 11:42:40,856 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {'0': 100}
+2023-02-17 11:42:40,856 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 1d
+2023-02-17 11:42:40,856 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -1.0
+2023-02-17 11:42:40,856 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2023-02-17 11:42:40,856 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2023-02-17 11:42:40,856 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2023-02-17 11:42:40,857 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: False
+2023-02-17 11:42:40,857 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2023-02-17 11:42:40,857 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'limit', 'exit': 'limit', 'stoploss': 'limit', 'stoploss_on_exchange': False, 'stoploss_on_exchange_interval': 60}
+2023-02-17 11:42:40,857 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2023-02-17 11:42:40,857 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: BTC
+2023-02-17 11:42:40,857 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: 0.01
+2023-02-17 11:42:40,858 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using protections: []
+2023-02-17 11:42:40,858 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 0
+2023-02-17 11:42:40,858 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2023-02-17 11:42:40,858 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2023-02-17 11:42:40,858 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2023-02-17 11:42:40,858 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2023-02-17 11:42:40,858 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2023-02-17 11:42:40,859 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2023-02-17 11:42:40,859 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2023-02-17 11:42:40,859 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2023-02-17 11:42:40,859 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2023-02-17 11:42:40,859 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 10
+2023-02-17 11:42:40,860 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2023-02-17 11:42:40,868 - freqtrade.exchange.exchange - INFO - Instance is running with dry_run enabled
+2023-02-17 11:42:40,869 - freqtrade.exchange.exchange - INFO - Using CCXT 2.7.12
+2023-02-17 11:42:40,914 - freqtrade.exchange.exchange - INFO - Using Exchange "Binance"
+2023-02-17 11:42:50,990 - freqtrade.exchange.exchange - ERROR - Unable to initialize markets.
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 174, in _new_conn
+    conn = connection.create_connection(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/connection.py", line 95, in create_connection
+    raise err
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/connection.py", line 85, in create_connection
+    sock.connect(sa)
+TimeoutError: timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 386, in _make_request
+    self._validate_conn(conn)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 1042, in _validate_conn
+    conn.connect()
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 358, in connect
+    self.sock = conn = self._new_conn()
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 179, in _new_conn
+    raise ConnectTimeoutError(
+urllib3.exceptions.ConnectTimeoutError: (<urllib3.connection.HTTPSConnection object at 0x7fcd448ece50>, 'Connection to api.binance.com timed out. (connect timeout=10)')
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/adapters.py", line 489, in send
+    resp = conn.urlopen(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7fcd448ece50>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 599, in fetch
+    response = self.session.request(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/sessions.py", line 587, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/sessions.py", line 701, in send
+    r = adapter.send(request, **kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/adapters.py", line 553, in send
+    raise ConnectTimeout(e, request=request)
+requests.exceptions.ConnectTimeout: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7fcd448ece50>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 479, in _load_markets
+    self._markets = self._api.load_markets(params={})
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 1460, in load_markets
+    markets = self.fetch_markets(params)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/binance.py", line 1683, in fetch_markets
+    promises.append(self.publicGetExchangeInfo(params))
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 505, in inner
+    return entry(_self, **inner_kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/binance.py", line 6201, in request
+    response = self.fetch2(path, api, method, params, headers, body, config, context)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 2830, in fetch2
+    return self.fetch(request['url'], request['method'], request['headers'], request['body'])
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 629, in fetch
+    raise RequestTimeout(details) from e
+ccxt.base.errors.RequestTimeout: binance GET https://api.binance.com/api/v3/exchangeInfo
+2023-02-17 11:42:50,997 - freqtrade.commands.trade_commands - ERROR - Could not load markets, therefore cannot start. Please investigate the above error for more details.
+2023-02-17 11:42:50,997 - freqtrade.commands.trade_commands - ERROR - Fatal exception!
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/commands/trade_commands.py", line 18, in start_trading
+    worker = Worker(args)
+  File "/freqtrade/freqtrade/worker.py", line 37, in __init__
+    self._init(False)
+  File "/freqtrade/freqtrade/worker.py", line 53, in _init
+    self.freqtrade = FreqtradeBot(self._config)
+  File "/freqtrade/freqtrade/freqtradebot.py", line 68, in __init__
+    self.exchange = ExchangeResolver.load_exchange(
+  File "/freqtrade/freqtrade/resolvers/exchange_resolver.py", line 34, in load_exchange
+    exchange = ExchangeResolver._load_exchange(
+  File "/freqtrade/freqtrade/resolvers/exchange_resolver.py", line 60, in _load_exchange
+    exchange = ex_class(**kwargs)
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 181, in __init__
+    self.validate_config(config)
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 212, in validate_config
+    self.validate_stakecurrency(config['stake_currency'])
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 514, in validate_stakecurrency
+    raise OperationalException(
+freqtrade.exceptions.OperationalException: Could not load markets, therefore cannot start. Please investigate the above error for more details.
+2023-02-17 11:43:00,714 - freqtrade.loggers - INFO - Verbosity set to 0
+2023-02-17 11:43:00,714 - freqtrade.configuration.configuration - INFO - Runmode set to dry_run.
+2023-02-17 11:43:00,714 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2023-02-17 11:43:00,715 - freqtrade.configuration.configuration - INFO - Dry run is enabled
+2023-02-17 11:43:00,715 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/tradesv3.sqlite"
+2023-02-17 11:43:00,715 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 10 ...
+2023-02-17 11:43:00,729 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2023-02-17 11:43:00,730 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/binance ...
+2023-02-17 11:43:00,731 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2023-02-17 11:43:00,755 - freqtrade.exchange.check_exchange - INFO - Exchange "binance" is officially supported by the Freqtrade development team.
+2023-02-17 11:43:00,755 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2023-02-17 11:43:00,839 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy SimpleMA_strategy from '/freqtrade/user_data/strategies/SimpleMA_strategy.py'...
+2023-02-17 11:43:00,840 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2023-02-17 11:43:00,841 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'timeframe' with value in config file: 1d.
+2023-02-17 11:43:00,841 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: BTC.
+2023-02-17 11:43:00,841 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: 0.01.
+2023-02-17 11:43:00,841 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2023-02-17 11:43:00,842 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 10.
+2023-02-17 11:43:00,842 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {'0': 100}
+2023-02-17 11:43:00,842 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 1d
+2023-02-17 11:43:00,842 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -1.0
+2023-02-17 11:43:00,842 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2023-02-17 11:43:00,842 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2023-02-17 11:43:00,843 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2023-02-17 11:43:00,843 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: False
+2023-02-17 11:43:00,843 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2023-02-17 11:43:00,843 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'limit', 'exit': 'limit', 'stoploss': 'limit', 'stoploss_on_exchange': False, 'stoploss_on_exchange_interval': 60}
+2023-02-17 11:43:00,843 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2023-02-17 11:43:00,843 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: BTC
+2023-02-17 11:43:00,844 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: 0.01
+2023-02-17 11:43:00,844 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using protections: []
+2023-02-17 11:43:00,844 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 0
+2023-02-17 11:43:00,844 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2023-02-17 11:43:00,844 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2023-02-17 11:43:00,844 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2023-02-17 11:43:00,845 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2023-02-17 11:43:00,845 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2023-02-17 11:43:00,845 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2023-02-17 11:43:00,845 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2023-02-17 11:43:00,845 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2023-02-17 11:43:00,845 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2023-02-17 11:43:00,845 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 10
+2023-02-17 11:43:00,846 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2023-02-17 11:43:00,855 - freqtrade.exchange.exchange - INFO - Instance is running with dry_run enabled
+2023-02-17 11:43:00,855 - freqtrade.exchange.exchange - INFO - Using CCXT 2.7.12
+2023-02-17 11:43:00,899 - freqtrade.exchange.exchange - INFO - Using Exchange "Binance"
+2023-02-17 11:43:10,926 - freqtrade.exchange.exchange - ERROR - Unable to initialize markets.
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 174, in _new_conn
+    conn = connection.create_connection(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/connection.py", line 95, in create_connection
+    raise err
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/connection.py", line 85, in create_connection
+    sock.connect(sa)
+TimeoutError: timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 386, in _make_request
+    self._validate_conn(conn)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 1042, in _validate_conn
+    conn.connect()
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 358, in connect
+    self.sock = conn = self._new_conn()
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 179, in _new_conn
+    raise ConnectTimeoutError(
+urllib3.exceptions.ConnectTimeoutError: (<urllib3.connection.HTTPSConnection object at 0x7f3fa88c8fd0>, 'Connection to api.binance.com timed out. (connect timeout=10)')
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/adapters.py", line 489, in send
+    resp = conn.urlopen(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f3fa88c8fd0>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 599, in fetch
+    response = self.session.request(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/sessions.py", line 587, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/sessions.py", line 701, in send
+    r = adapter.send(request, **kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/adapters.py", line 553, in send
+    raise ConnectTimeout(e, request=request)
+requests.exceptions.ConnectTimeout: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f3fa88c8fd0>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 479, in _load_markets
+    self._markets = self._api.load_markets(params={})
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 1460, in load_markets
+    markets = self.fetch_markets(params)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/binance.py", line 1683, in fetch_markets
+    promises.append(self.publicGetExchangeInfo(params))
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 505, in inner
+    return entry(_self, **inner_kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/binance.py", line 6201, in request
+    response = self.fetch2(path, api, method, params, headers, body, config, context)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 2830, in fetch2
+    return self.fetch(request['url'], request['method'], request['headers'], request['body'])
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 629, in fetch
+    raise RequestTimeout(details) from e
+ccxt.base.errors.RequestTimeout: binance GET https://api.binance.com/api/v3/exchangeInfo
+2023-02-17 11:43:10,933 - freqtrade.commands.trade_commands - ERROR - Could not load markets, therefore cannot start. Please investigate the above error for more details.
+2023-02-17 11:43:10,933 - freqtrade.commands.trade_commands - ERROR - Fatal exception!
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/commands/trade_commands.py", line 18, in start_trading
+    worker = Worker(args)
+  File "/freqtrade/freqtrade/worker.py", line 37, in __init__
+    self._init(False)
+  File "/freqtrade/freqtrade/worker.py", line 53, in _init
+    self.freqtrade = FreqtradeBot(self._config)
+  File "/freqtrade/freqtrade/freqtradebot.py", line 68, in __init__
+    self.exchange = ExchangeResolver.load_exchange(
+  File "/freqtrade/freqtrade/resolvers/exchange_resolver.py", line 34, in load_exchange
+    exchange = ExchangeResolver._load_exchange(
+  File "/freqtrade/freqtrade/resolvers/exchange_resolver.py", line 60, in _load_exchange
+    exchange = ex_class(**kwargs)
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 181, in __init__
+    self.validate_config(config)
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 212, in validate_config
+    self.validate_stakecurrency(config['stake_currency'])
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 514, in validate_stakecurrency
+    raise OperationalException(
+freqtrade.exceptions.OperationalException: Could not load markets, therefore cannot start. Please investigate the above error for more details.
+2023-02-17 11:43:20,677 - freqtrade.loggers - INFO - Verbosity set to 0
+2023-02-17 11:43:20,677 - freqtrade.configuration.configuration - INFO - Runmode set to dry_run.
+2023-02-17 11:43:20,678 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2023-02-17 11:43:20,678 - freqtrade.configuration.configuration - INFO - Dry run is enabled
+2023-02-17 11:43:20,678 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/tradesv3.sqlite"
+2023-02-17 11:43:20,678 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 10 ...
+2023-02-17 11:43:20,692 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2023-02-17 11:43:20,693 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/binance ...
+2023-02-17 11:43:20,695 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2023-02-17 11:43:20,718 - freqtrade.exchange.check_exchange - INFO - Exchange "binance" is officially supported by the Freqtrade development team.
+2023-02-17 11:43:20,718 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2023-02-17 11:43:20,801 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy SimpleMA_strategy from '/freqtrade/user_data/strategies/SimpleMA_strategy.py'...
+2023-02-17 11:43:20,802 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2023-02-17 11:43:20,803 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'timeframe' with value in config file: 1d.
+2023-02-17 11:43:20,803 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: BTC.
+2023-02-17 11:43:20,804 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: 0.01.
+2023-02-17 11:43:20,804 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2023-02-17 11:43:20,804 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 10.
+2023-02-17 11:43:20,804 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {'0': 100}
+2023-02-17 11:43:20,805 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 1d
+2023-02-17 11:43:20,805 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -1.0
+2023-02-17 11:43:20,805 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2023-02-17 11:43:20,805 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2023-02-17 11:43:20,805 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2023-02-17 11:43:20,806 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: False
+2023-02-17 11:43:20,806 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2023-02-17 11:43:20,806 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'limit', 'exit': 'limit', 'stoploss': 'limit', 'stoploss_on_exchange': False, 'stoploss_on_exchange_interval': 60}
+2023-02-17 11:43:20,806 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2023-02-17 11:43:20,806 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: BTC
+2023-02-17 11:43:20,806 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: 0.01
+2023-02-17 11:43:20,807 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using protections: []
+2023-02-17 11:43:20,807 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 0
+2023-02-17 11:43:20,807 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2023-02-17 11:43:20,807 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2023-02-17 11:43:20,807 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2023-02-17 11:43:20,807 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2023-02-17 11:43:20,808 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2023-02-17 11:43:20,808 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2023-02-17 11:43:20,808 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2023-02-17 11:43:20,808 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2023-02-17 11:43:20,808 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2023-02-17 11:43:20,808 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 10
+2023-02-17 11:43:20,809 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2023-02-17 11:43:20,817 - freqtrade.exchange.exchange - INFO - Instance is running with dry_run enabled
+2023-02-17 11:43:20,818 - freqtrade.exchange.exchange - INFO - Using CCXT 2.7.12
+2023-02-17 11:43:20,862 - freqtrade.exchange.exchange - INFO - Using Exchange "Binance"
+2023-02-17 11:43:30,894 - freqtrade.exchange.exchange - ERROR - Unable to initialize markets.
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 174, in _new_conn
+    conn = connection.create_connection(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/connection.py", line 95, in create_connection
+    raise err
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/connection.py", line 85, in create_connection
+    sock.connect(sa)
+TimeoutError: timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 386, in _make_request
+    self._validate_conn(conn)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 1042, in _validate_conn
+    conn.connect()
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 358, in connect
+    self.sock = conn = self._new_conn()
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 179, in _new_conn
+    raise ConnectTimeoutError(
+urllib3.exceptions.ConnectTimeoutError: (<urllib3.connection.HTTPSConnection object at 0x7ff3a0a48ca0>, 'Connection to api.binance.com timed out. (connect timeout=10)')
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/adapters.py", line 489, in send
+    resp = conn.urlopen(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7ff3a0a48ca0>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 599, in fetch
+    response = self.session.request(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/sessions.py", line 587, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/sessions.py", line 701, in send
+    r = adapter.send(request, **kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/adapters.py", line 553, in send
+    raise ConnectTimeout(e, request=request)
+requests.exceptions.ConnectTimeout: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7ff3a0a48ca0>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 479, in _load_markets
+    self._markets = self._api.load_markets(params={})
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 1460, in load_markets
+    markets = self.fetch_markets(params)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/binance.py", line 1683, in fetch_markets
+    promises.append(self.publicGetExchangeInfo(params))
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 505, in inner
+    return entry(_self, **inner_kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/binance.py", line 6201, in request
+    response = self.fetch2(path, api, method, params, headers, body, config, context)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 2830, in fetch2
+    return self.fetch(request['url'], request['method'], request['headers'], request['body'])
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 629, in fetch
+    raise RequestTimeout(details) from e
+ccxt.base.errors.RequestTimeout: binance GET https://api.binance.com/api/v3/exchangeInfo
+2023-02-17 11:43:30,901 - freqtrade.commands.trade_commands - ERROR - Could not load markets, therefore cannot start. Please investigate the above error for more details.
+2023-02-17 11:43:30,902 - freqtrade.commands.trade_commands - ERROR - Fatal exception!
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/commands/trade_commands.py", line 18, in start_trading
+    worker = Worker(args)
+  File "/freqtrade/freqtrade/worker.py", line 37, in __init__
+    self._init(False)
+  File "/freqtrade/freqtrade/worker.py", line 53, in _init
+    self.freqtrade = FreqtradeBot(self._config)
+  File "/freqtrade/freqtrade/freqtradebot.py", line 68, in __init__
+    self.exchange = ExchangeResolver.load_exchange(
+  File "/freqtrade/freqtrade/resolvers/exchange_resolver.py", line 34, in load_exchange
+    exchange = ExchangeResolver._load_exchange(
+  File "/freqtrade/freqtrade/resolvers/exchange_resolver.py", line 60, in _load_exchange
+    exchange = ex_class(**kwargs)
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 181, in __init__
+    self.validate_config(config)
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 212, in validate_config
+    self.validate_stakecurrency(config['stake_currency'])
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 514, in validate_stakecurrency
+    raise OperationalException(
+freqtrade.exceptions.OperationalException: Could not load markets, therefore cannot start. Please investigate the above error for more details.
+2023-02-17 11:43:40,384 - freqtrade.loggers - INFO - Verbosity set to 0
+2023-02-17 11:43:40,385 - freqtrade.configuration.configuration - INFO - Runmode set to dry_run.
+2023-02-17 11:43:40,385 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2023-02-17 11:43:40,385 - freqtrade.configuration.configuration - INFO - Dry run is enabled
+2023-02-17 11:43:40,385 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/tradesv3.sqlite"
+2023-02-17 11:43:40,385 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 10 ...
+2023-02-17 11:43:40,400 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2023-02-17 11:43:40,400 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/binance ...
+2023-02-17 11:43:40,402 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2023-02-17 11:43:40,425 - freqtrade.exchange.check_exchange - INFO - Exchange "binance" is officially supported by the Freqtrade development team.
+2023-02-17 11:43:40,426 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2023-02-17 11:43:40,509 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy SimpleMA_strategy from '/freqtrade/user_data/strategies/SimpleMA_strategy.py'...
+2023-02-17 11:43:40,509 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2023-02-17 11:43:40,510 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'timeframe' with value in config file: 1d.
+2023-02-17 11:43:40,510 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: BTC.
+2023-02-17 11:43:40,511 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: 0.01.
+2023-02-17 11:43:40,511 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2023-02-17 11:43:40,511 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 10.
+2023-02-17 11:43:40,511 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {'0': 100}
+2023-02-17 11:43:40,512 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 1d
+2023-02-17 11:43:40,512 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -1.0
+2023-02-17 11:43:40,512 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2023-02-17 11:43:40,512 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2023-02-17 11:43:40,512 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2023-02-17 11:43:40,512 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: False
+2023-02-17 11:43:40,513 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2023-02-17 11:43:40,513 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'limit', 'exit': 'limit', 'stoploss': 'limit', 'stoploss_on_exchange': False, 'stoploss_on_exchange_interval': 60}
+2023-02-17 11:43:40,513 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2023-02-17 11:43:40,513 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: BTC
+2023-02-17 11:43:40,513 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: 0.01
+2023-02-17 11:43:40,513 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using protections: []
+2023-02-17 11:43:40,514 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 0
+2023-02-17 11:43:40,514 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2023-02-17 11:43:40,514 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2023-02-17 11:43:40,514 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2023-02-17 11:43:40,514 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2023-02-17 11:43:40,514 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2023-02-17 11:43:40,514 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2023-02-17 11:43:40,515 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2023-02-17 11:43:40,515 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2023-02-17 11:43:40,515 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2023-02-17 11:43:40,515 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 10
+2023-02-17 11:43:40,515 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2023-02-17 11:43:40,524 - freqtrade.exchange.exchange - INFO - Instance is running with dry_run enabled
+2023-02-17 11:43:40,524 - freqtrade.exchange.exchange - INFO - Using CCXT 2.7.12
+2023-02-17 11:43:40,569 - freqtrade.exchange.exchange - INFO - Using Exchange "Binance"
+2023-02-17 11:43:50,598 - freqtrade.exchange.exchange - ERROR - Unable to initialize markets.
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 174, in _new_conn
+    conn = connection.create_connection(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/connection.py", line 95, in create_connection
+    raise err
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/connection.py", line 85, in create_connection
+    sock.connect(sa)
+TimeoutError: timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 386, in _make_request
+    self._validate_conn(conn)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 1042, in _validate_conn
+    conn.connect()
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 358, in connect
+    self.sock = conn = self._new_conn()
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 179, in _new_conn
+    raise ConnectTimeoutError(
+urllib3.exceptions.ConnectTimeoutError: (<urllib3.connection.HTTPSConnection object at 0x7f2d40e10c40>, 'Connection to api.binance.com timed out. (connect timeout=10)')
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/adapters.py", line 489, in send
+    resp = conn.urlopen(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f2d40e10c40>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 599, in fetch
+    response = self.session.request(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/sessions.py", line 587, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/sessions.py", line 701, in send
+    r = adapter.send(request, **kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/adapters.py", line 553, in send
+    raise ConnectTimeout(e, request=request)
+requests.exceptions.ConnectTimeout: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f2d40e10c40>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 479, in _load_markets
+    self._markets = self._api.load_markets(params={})
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 1460, in load_markets
+    markets = self.fetch_markets(params)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/binance.py", line 1683, in fetch_markets
+    promises.append(self.publicGetExchangeInfo(params))
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 505, in inner
+    return entry(_self, **inner_kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/binance.py", line 6201, in request
+    response = self.fetch2(path, api, method, params, headers, body, config, context)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 2830, in fetch2
+    return self.fetch(request['url'], request['method'], request['headers'], request['body'])
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 629, in fetch
+    raise RequestTimeout(details) from e
+ccxt.base.errors.RequestTimeout: binance GET https://api.binance.com/api/v3/exchangeInfo
+2023-02-17 11:43:50,605 - freqtrade.commands.trade_commands - ERROR - Could not load markets, therefore cannot start. Please investigate the above error for more details.
+2023-02-17 11:43:50,606 - freqtrade.commands.trade_commands - ERROR - Fatal exception!
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/commands/trade_commands.py", line 18, in start_trading
+    worker = Worker(args)
+  File "/freqtrade/freqtrade/worker.py", line 37, in __init__
+    self._init(False)
+  File "/freqtrade/freqtrade/worker.py", line 53, in _init
+    self.freqtrade = FreqtradeBot(self._config)
+  File "/freqtrade/freqtrade/freqtradebot.py", line 68, in __init__
+    self.exchange = ExchangeResolver.load_exchange(
+  File "/freqtrade/freqtrade/resolvers/exchange_resolver.py", line 34, in load_exchange
+    exchange = ExchangeResolver._load_exchange(
+  File "/freqtrade/freqtrade/resolvers/exchange_resolver.py", line 60, in _load_exchange
+    exchange = ex_class(**kwargs)
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 181, in __init__
+    self.validate_config(config)
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 212, in validate_config
+    self.validate_stakecurrency(config['stake_currency'])
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 514, in validate_stakecurrency
+    raise OperationalException(
+freqtrade.exceptions.OperationalException: Could not load markets, therefore cannot start. Please investigate the above error for more details.
+2023-02-17 11:44:00,229 - freqtrade.loggers - INFO - Verbosity set to 0
+2023-02-17 11:44:00,230 - freqtrade.configuration.configuration - INFO - Runmode set to dry_run.
+2023-02-17 11:44:00,231 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2023-02-17 11:44:00,231 - freqtrade.configuration.configuration - INFO - Dry run is enabled
+2023-02-17 11:44:00,231 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/tradesv3.sqlite"
+2023-02-17 11:44:00,231 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 10 ...
+2023-02-17 11:44:00,246 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2023-02-17 11:44:00,247 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/binance ...
+2023-02-17 11:44:00,248 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2023-02-17 11:44:00,272 - freqtrade.exchange.check_exchange - INFO - Exchange "binance" is officially supported by the Freqtrade development team.
+2023-02-17 11:44:00,273 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2023-02-17 11:44:00,354 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy SimpleMA_strategy from '/freqtrade/user_data/strategies/SimpleMA_strategy.py'...
+2023-02-17 11:44:00,354 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2023-02-17 11:44:00,355 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'timeframe' with value in config file: 1d.
+2023-02-17 11:44:00,355 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: BTC.
+2023-02-17 11:44:00,356 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: 0.01.
+2023-02-17 11:44:00,356 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2023-02-17 11:44:00,356 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 10.
+2023-02-17 11:44:00,356 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {'0': 100}
+2023-02-17 11:44:00,357 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 1d
+2023-02-17 11:44:00,357 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -1.0
+2023-02-17 11:44:00,357 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2023-02-17 11:44:00,357 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2023-02-17 11:44:00,357 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2023-02-17 11:44:00,358 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: False
+2023-02-17 11:44:00,358 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2023-02-17 11:44:00,358 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'limit', 'exit': 'limit', 'stoploss': 'limit', 'stoploss_on_exchange': False, 'stoploss_on_exchange_interval': 60}
+2023-02-17 11:44:00,358 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2023-02-17 11:44:00,358 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: BTC
+2023-02-17 11:44:00,358 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: 0.01
+2023-02-17 11:44:00,359 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using protections: []
+2023-02-17 11:44:00,359 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 0
+2023-02-17 11:44:00,359 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2023-02-17 11:44:00,359 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2023-02-17 11:44:00,359 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2023-02-17 11:44:00,359 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2023-02-17 11:44:00,360 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2023-02-17 11:44:00,360 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2023-02-17 11:44:00,360 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2023-02-17 11:44:00,360 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2023-02-17 11:44:00,360 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2023-02-17 11:44:00,360 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 10
+2023-02-17 11:44:00,361 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2023-02-17 11:44:00,369 - freqtrade.exchange.exchange - INFO - Instance is running with dry_run enabled
+2023-02-17 11:44:00,369 - freqtrade.exchange.exchange - INFO - Using CCXT 2.7.12
+2023-02-17 11:44:00,414 - freqtrade.exchange.exchange - INFO - Using Exchange "Binance"
+2023-02-17 11:44:10,505 - freqtrade.exchange.exchange - ERROR - Unable to initialize markets.
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 174, in _new_conn
+    conn = connection.create_connection(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/connection.py", line 95, in create_connection
+    raise err
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/connection.py", line 85, in create_connection
+    sock.connect(sa)
+TimeoutError: timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 386, in _make_request
+    self._validate_conn(conn)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 1042, in _validate_conn
+    conn.connect()
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 358, in connect
+    self.sock = conn = self._new_conn()
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 179, in _new_conn
+    raise ConnectTimeoutError(
+urllib3.exceptions.ConnectTimeoutError: (<urllib3.connection.HTTPSConnection object at 0x7f2ee4ef1000>, 'Connection to api.binance.com timed out. (connect timeout=10)')
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/adapters.py", line 489, in send
+    resp = conn.urlopen(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f2ee4ef1000>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 599, in fetch
+    response = self.session.request(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/sessions.py", line 587, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/sessions.py", line 701, in send
+    r = adapter.send(request, **kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/adapters.py", line 553, in send
+    raise ConnectTimeout(e, request=request)
+requests.exceptions.ConnectTimeout: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f2ee4ef1000>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 479, in _load_markets
+    self._markets = self._api.load_markets(params={})
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 1460, in load_markets
+    markets = self.fetch_markets(params)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/binance.py", line 1683, in fetch_markets
+    promises.append(self.publicGetExchangeInfo(params))
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 505, in inner
+    return entry(_self, **inner_kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/binance.py", line 6201, in request
+    response = self.fetch2(path, api, method, params, headers, body, config, context)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 2830, in fetch2
+    return self.fetch(request['url'], request['method'], request['headers'], request['body'])
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 629, in fetch
+    raise RequestTimeout(details) from e
+ccxt.base.errors.RequestTimeout: binance GET https://api.binance.com/api/v3/exchangeInfo
+2023-02-17 11:44:10,512 - freqtrade.commands.trade_commands - ERROR - Could not load markets, therefore cannot start. Please investigate the above error for more details.
+2023-02-17 11:44:10,512 - freqtrade.commands.trade_commands - ERROR - Fatal exception!
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/commands/trade_commands.py", line 18, in start_trading
+    worker = Worker(args)
+  File "/freqtrade/freqtrade/worker.py", line 37, in __init__
+    self._init(False)
+  File "/freqtrade/freqtrade/worker.py", line 53, in _init
+    self.freqtrade = FreqtradeBot(self._config)
+  File "/freqtrade/freqtrade/freqtradebot.py", line 68, in __init__
+    self.exchange = ExchangeResolver.load_exchange(
+  File "/freqtrade/freqtrade/resolvers/exchange_resolver.py", line 34, in load_exchange
+    exchange = ExchangeResolver._load_exchange(
+  File "/freqtrade/freqtrade/resolvers/exchange_resolver.py", line 60, in _load_exchange
+    exchange = ex_class(**kwargs)
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 181, in __init__
+    self.validate_config(config)
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 212, in validate_config
+    self.validate_stakecurrency(config['stake_currency'])
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 514, in validate_stakecurrency
+    raise OperationalException(
+freqtrade.exceptions.OperationalException: Could not load markets, therefore cannot start. Please investigate the above error for more details.
+2023-02-17 11:44:20,257 - freqtrade.loggers - INFO - Verbosity set to 0
+2023-02-17 11:44:20,258 - freqtrade.configuration.configuration - INFO - Runmode set to dry_run.
+2023-02-17 11:44:20,258 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2023-02-17 11:44:20,258 - freqtrade.configuration.configuration - INFO - Dry run is enabled
+2023-02-17 11:44:20,258 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/tradesv3.sqlite"
+2023-02-17 11:44:20,259 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 10 ...
+2023-02-17 11:44:20,274 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2023-02-17 11:44:20,275 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/binance ...
+2023-02-17 11:44:20,277 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2023-02-17 11:44:20,301 - freqtrade.exchange.check_exchange - INFO - Exchange "binance" is officially supported by the Freqtrade development team.
+2023-02-17 11:44:20,302 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2023-02-17 11:44:20,399 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy SimpleMA_strategy from '/freqtrade/user_data/strategies/SimpleMA_strategy.py'...
+2023-02-17 11:44:20,399 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2023-02-17 11:44:20,400 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'timeframe' with value in config file: 1d.
+2023-02-17 11:44:20,401 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: BTC.
+2023-02-17 11:44:20,401 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: 0.01.
+2023-02-17 11:44:20,401 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2023-02-17 11:44:20,401 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 10.
+2023-02-17 11:44:20,402 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {'0': 100}
+2023-02-17 11:44:20,402 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 1d
+2023-02-17 11:44:20,402 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -1.0
+2023-02-17 11:44:20,402 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2023-02-17 11:44:20,403 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2023-02-17 11:44:20,403 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2023-02-17 11:44:20,403 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: False
+2023-02-17 11:44:20,403 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2023-02-17 11:44:20,403 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'limit', 'exit': 'limit', 'stoploss': 'limit', 'stoploss_on_exchange': False, 'stoploss_on_exchange_interval': 60}
+2023-02-17 11:44:20,404 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2023-02-17 11:44:20,404 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: BTC
+2023-02-17 11:44:20,404 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: 0.01
+2023-02-17 11:44:20,404 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using protections: []
+2023-02-17 11:44:20,405 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 0
+2023-02-17 11:44:20,405 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2023-02-17 11:44:20,405 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2023-02-17 11:44:20,405 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2023-02-17 11:44:20,405 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2023-02-17 11:44:20,405 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2023-02-17 11:44:20,406 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2023-02-17 11:44:20,406 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2023-02-17 11:44:20,406 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2023-02-17 11:44:20,406 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2023-02-17 11:44:20,406 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 10
+2023-02-17 11:44:20,407 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2023-02-17 11:44:20,415 - freqtrade.exchange.exchange - INFO - Instance is running with dry_run enabled
+2023-02-17 11:44:20,416 - freqtrade.exchange.exchange - INFO - Using CCXT 2.7.12
+2023-02-17 11:44:20,467 - freqtrade.exchange.exchange - INFO - Using Exchange "Binance"
+2023-02-17 11:44:30,560 - freqtrade.exchange.exchange - ERROR - Unable to initialize markets.
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 174, in _new_conn
+    conn = connection.create_connection(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/connection.py", line 95, in create_connection
+    raise err
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/connection.py", line 85, in create_connection
+    sock.connect(sa)
+TimeoutError: timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 386, in _make_request
+    self._validate_conn(conn)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 1042, in _validate_conn
+    conn.connect()
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 358, in connect
+    self.sock = conn = self._new_conn()
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connection.py", line 179, in _new_conn
+    raise ConnectTimeoutError(
+urllib3.exceptions.ConnectTimeoutError: (<urllib3.connection.HTTPSConnection object at 0x7ffb0d6cd030>, 'Connection to api.binance.com timed out. (connect timeout=10)')
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/adapters.py", line 489, in send
+    resp = conn.urlopen(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/urllib3/util/retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7ffb0d6cd030>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 599, in fetch
+    response = self.session.request(
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/sessions.py", line 587, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/sessions.py", line 701, in send
+    r = adapter.send(request, **kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/requests/adapters.py", line 553, in send
+    raise ConnectTimeout(e, request=request)
+requests.exceptions.ConnectTimeout: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7ffb0d6cd030>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 479, in _load_markets
+    self._markets = self._api.load_markets(params={})
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 1460, in load_markets
+    markets = self.fetch_markets(params)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/binance.py", line 1683, in fetch_markets
+    promises.append(self.publicGetExchangeInfo(params))
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 505, in inner
+    return entry(_self, **inner_kwargs)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/binance.py", line 6201, in request
+    response = self.fetch2(path, api, method, params, headers, body, config, context)
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 2830, in fetch2
+    return self.fetch(request['url'], request['method'], request['headers'], request['body'])
+  File "/home/ftuser/.local/lib/python3.10/site-packages/ccxt/base/exchange.py", line 629, in fetch
+    raise RequestTimeout(details) from e
+ccxt.base.errors.RequestTimeout: binance GET https://api.binance.com/api/v3/exchangeInfo
+2023-02-17 11:44:30,567 - freqtrade.commands.trade_commands - ERROR - Could not load markets, therefore cannot start. Please investigate the above error for more details.
+2023-02-17 11:44:30,567 - freqtrade.commands.trade_commands - ERROR - Fatal exception!
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/commands/trade_commands.py", line 18, in start_trading
+    worker = Worker(args)
+  File "/freqtrade/freqtrade/worker.py", line 37, in __init__
+    self._init(False)
+  File "/freqtrade/freqtrade/worker.py", line 53, in _init
+    self.freqtrade = FreqtradeBot(self._config)
+  File "/freqtrade/freqtrade/freqtradebot.py", line 68, in __init__
+    self.exchange = ExchangeResolver.load_exchange(
+  File "/freqtrade/freqtrade/resolvers/exchange_resolver.py", line 34, in load_exchange
+    exchange = ExchangeResolver._load_exchange(
+  File "/freqtrade/freqtrade/resolvers/exchange_resolver.py", line 60, in _load_exchange
+    exchange = ex_class(**kwargs)
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 181, in __init__
+    self.validate_config(config)
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 212, in validate_config
+    self.validate_stakecurrency(config['stake_currency'])
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 514, in validate_stakecurrency
+    raise OperationalException(
+freqtrade.exceptions.OperationalException: Could not load markets, therefore cannot start. Please investigate the above error for more details.
+2023-02-17 11:44:41,199 - freqtrade.loggers - INFO - Verbosity set to 0
+2023-02-17 11:44:41,200 - freqtrade.configuration.configuration - INFO - Runmode set to dry_run.
+2023-02-17 11:44:41,200 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2023-02-17 11:44:41,200 - freqtrade.configuration.configuration - INFO - Dry run is enabled
+2023-02-17 11:44:41,201 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/tradesv3.sqlite"
+2023-02-17 11:44:41,201 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 10 ...
+2023-02-17 11:44:41,225 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2023-02-17 11:44:41,226 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/binance ...
+2023-02-17 11:44:41,228 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2023-02-17 11:44:41,261 - freqtrade.exchange.check_exchange - INFO - Exchange "binance" is officially supported by the Freqtrade development team.
+2023-02-17 11:44:41,263 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2023-02-17 11:44:41,377 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy SimpleMA_strategy from '/freqtrade/user_data/strategies/SimpleMA_strategy.py'...
+2023-02-17 11:44:41,378 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2023-02-17 11:44:41,379 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'timeframe' with value in config file: 1d.
+2023-02-17 11:44:41,380 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: BTC.
+2023-02-17 11:44:41,381 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: 0.01.
+2023-02-17 11:44:41,381 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2023-02-17 11:44:41,382 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 10.
+2023-02-17 11:44:41,383 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {'0': 100}
+2023-02-17 11:44:41,383 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 1d
+2023-02-17 11:44:41,384 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -1.0
+2023-02-17 11:44:41,384 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2023-02-17 11:44:41,385 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2023-02-17 11:44:41,385 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2023-02-17 11:44:41,386 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: False
+2023-02-17 11:44:41,386 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2023-02-17 11:44:41,386 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'limit', 'exit': 'limit', 'stoploss': 'limit', 'stoploss_on_exchange': False, 'stoploss_on_exchange_interval': 60}
+2023-02-17 11:44:41,387 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2023-02-17 11:44:41,387 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: BTC
+2023-02-17 11:44:41,388 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: 0.01
+2023-02-17 11:44:41,388 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using protections: []
+2023-02-17 11:44:41,389 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 0
+2023-02-17 11:44:41,389 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2023-02-17 11:44:41,390 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2023-02-17 11:44:41,390 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2023-02-17 11:44:41,391 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2023-02-17 11:44:41,391 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2023-02-17 11:44:41,393 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2023-02-17 11:44:41,393 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2023-02-17 11:44:41,394 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2023-02-17 11:44:41,395 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2023-02-17 11:44:41,396 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 10
+2023-02-17 11:44:41,396 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2023-02-17 11:44:41,407 - freqtrade.exchange.exchange - INFO - Instance is running with dry_run enabled
+2023-02-17 11:44:41,408 - freqtrade.exchange.exchange - INFO - Using CCXT 2.7.12
+2023-02-17 11:44:41,463 - freqtrade.exchange.exchange - INFO - Using Exchange "Binance"
