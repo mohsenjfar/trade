@@ -68,6 +68,26 @@
                     "hyperlinkTitle": ""
                 },
                 "children": []
+            },
+            {
+                "data": {
+                    "id": "cqq432hrjog0",
+                    "created": 1677172649382,
+                    "text": "kucoin",
+                    "hyperlink": "https://www.kucoin.com/",
+                    "hyperlinkTitle": ""
+                },
+                "children": []
+            },
+            {
+                "data": {
+                    "id": "cqq44ozs9o80",
+                    "created": 1677172776725,
+                    "text": "bingx",
+                    "hyperlink": "https://bingx.com/en-us/partner/OMIDFADAVI2/",
+                    "hyperlinkTitle": ""
+                },
+                "children": []
             }
         ]
     },
