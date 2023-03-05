@@ -24,13 +24,13 @@ while True:
     sell_price = eval(res.text)['USDT']['irtPriceSell']
     if sell_price != last_price:
         Ticker.objects.create(price=sell_price)
-        payload = {
-            "text": f"{last_price}",
-            "disable_web_page_preview": False,
-            "disable_notification": False,
-            "reply_to_message_id": None,
-            "chat_id": "@jfar_platform_bot"
-        }
-        response = requests.post(bot_url, json=payload, headers=bot_headers)
+        # payload = {
+        #     "text": f"{last_price}",
+        #     "disable_web_page_preview": False,
+        #     "disable_notification": False,
+        #     "reply_to_message_id": None,
+        #     "chat_id": "@jfar_platform_bot"
+        # }
+        # response = requests.post(bot_url, json=payload, headers=bot_headers)
         last_price = sell_price
     time.sleep(30)
