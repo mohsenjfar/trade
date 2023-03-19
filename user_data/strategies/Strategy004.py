@@ -127,7 +127,7 @@ class Strategy004(IStrategy):
                 ) &
                 (
                     (dataframe['slowfastk-previous'] < 30) &
-                    (dataframe['slowfastd-previous'] < 30)
+                    (dataframe['slowfastd-previous'] < 30) 
                 ) &
                 (dataframe['fastk-previous'] < dataframe['fastd-previous']) &
                 (dataframe['fastk'] > dataframe['fastd']) &

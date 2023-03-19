@@ -67,7 +67,7 @@
         "ws_token": "",
         "CORS_origins": [],
         "username": "",
-        "password": ""
+        "password": "" 
     },
     "edge":{
         "enabled":true
