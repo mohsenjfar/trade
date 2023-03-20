@@ -1734,3 +1734,465 @@
 2023-03-20 05:29:23,250 - freqtrade.rpc.api_server.ws.channel - INFO - Disconnected from channel - WebSocketChannel(362141ec, ('172.18.0.1', 54600))
 2023-03-20 05:29:23,254 - uvicorn.error - INFO - connection closed
 2023-03-20 05:30:06,010 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:31:06,077 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:32:06,136 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:32:56,834 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 20 pairs: ['BTC/USDT', 'ETH/USDT', 'XRP/USDT', 'SOL/USDT', 'FTM/USDT', 'CFX/USDT', 'VRA/USDT', 'MATIC/USDT', 'AGIX/USDT', 'SHIB/USDT', 'STX/USDT', 'OP/USDT', 'LTC/USDT', 'BNB/USDT', 'TON/USDT', 'ADA/USDT', 'DOGE/USDT', 'XMR/USDT', 'USDC/USDT', 'ACH/USDT']
+2023-03-20 05:33:06,202 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:33:36,243 - freqtrade.edge.edge_positioning - INFO - Using stake_currency: USDT ...
+2023-03-20 05:33:36,245 - freqtrade.edge.edge_positioning - INFO - Using local backtesting data (using whitelist in given config) ...
+2023-03-20 05:33:36,469 - freqtrade.data.history.history_utils - INFO - (0/20) - Download history data for "BTC/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T04:20:00 to now
+2023-03-20 05:33:36,805 - freqtrade.exchange.exchange - INFO - Downloaded data for BTC/USDT with length 15.
+2023-03-20 05:33:36,904 - freqtrade.data.history.history_utils - INFO - (1/20) - Download history data for "ETH/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T04:20:00 to now
+2023-03-20 05:33:37,212 - freqtrade.exchange.exchange - INFO - Downloaded data for ETH/USDT with length 15.
+2023-03-20 05:33:37,309 - freqtrade.data.history.history_utils - INFO - (2/20) - Download history data for "XRP/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T04:20:00 to now
+2023-03-20 05:33:37,592 - freqtrade.exchange.exchange - INFO - Downloaded data for XRP/USDT with length 15.
+2023-03-20 05:33:37,680 - freqtrade.data.history.history_utils - INFO - (3/20) - Download history data for "SOL/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T04:20:00 to now
+2023-03-20 05:33:37,976 - freqtrade.exchange.exchange - INFO - Downloaded data for SOL/USDT with length 15.
+2023-03-20 05:33:38,067 - freqtrade.data.history.history_utils - INFO - (4/20) - Download history data for "FTM/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T04:20:00 to now
+2023-03-20 05:33:38,356 - freqtrade.exchange.exchange - INFO - Downloaded data for FTM/USDT with length 15.
+2023-03-20 05:33:38,446 - freqtrade.data.history.history_utils - INFO - (5/20) - Download history data for "CFX/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T04:20:00 to now
+2023-03-20 05:33:38,744 - freqtrade.exchange.exchange - INFO - Downloaded data for CFX/USDT with length 15.
+2023-03-20 05:33:38,855 - freqtrade.data.history.history_utils - INFO - (6/20) - Download history data for "VRA/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T04:20:00 to now
+2023-03-20 05:33:39,139 - freqtrade.exchange.exchange - INFO - Downloaded data for VRA/USDT with length 15.
+2023-03-20 05:33:39,230 - freqtrade.data.history.history_utils - INFO - (7/20) - Download history data for "MATIC/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T04:20:00 to now
+2023-03-20 05:33:39,516 - freqtrade.exchange.exchange - INFO - Downloaded data for MATIC/USDT with length 15.
+2023-03-20 05:33:39,603 - freqtrade.data.history.history_utils - INFO - (8/20) - Download history data for "AGIX/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T04:20:00 to now
+2023-03-20 05:33:39,892 - freqtrade.exchange.exchange - INFO - Downloaded data for AGIX/USDT with length 15.
+2023-03-20 05:33:39,980 - freqtrade.data.history.history_utils - INFO - (9/20) - Download history data for "SHIB/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T04:20:00 to now
+2023-03-20 05:33:40,287 - freqtrade.exchange.exchange - INFO - Downloaded data for SHIB/USDT with length 15.
+2023-03-20 05:33:40,376 - freqtrade.data.history.history_utils - INFO - (10/20) - Download history data for "STX/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T04:20:00 to now
+2023-03-20 05:33:40,662 - freqtrade.exchange.exchange - INFO - Downloaded data for STX/USDT with length 15.
+2023-03-20 05:33:40,755 - freqtrade.data.history.history_utils - INFO - (11/20) - Download history data for "OP/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T04:20:00 to now
+2023-03-20 05:33:41,045 - freqtrade.exchange.exchange - INFO - Downloaded data for OP/USDT with length 15.
+2023-03-20 05:33:41,131 - freqtrade.data.history.history_utils - INFO - (12/20) - Download history data for "LTC/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T04:20:00 to now
+2023-03-20 05:33:41,421 - freqtrade.exchange.exchange - INFO - Downloaded data for LTC/USDT with length 15.
+2023-03-20 05:33:41,506 - freqtrade.data.history.history_utils - INFO - (13/20) - Download history data for "BNB/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T04:20:00 to now
+2023-03-20 05:33:41,792 - freqtrade.exchange.exchange - INFO - Downloaded data for BNB/USDT with length 15.
+2023-03-20 05:33:41,898 - freqtrade.data.history.history_utils - INFO - (14/20) - Download history data for "TON/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T04:20:00 to now
+2023-03-20 05:33:42,198 - freqtrade.exchange.exchange - INFO - Downloaded data for TON/USDT with length 15.
+2023-03-20 05:33:42,303 - freqtrade.data.history.history_utils - INFO - (15/20) - Download history data for "ADA/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T04:20:00 to now
+2023-03-20 05:33:42,594 - freqtrade.exchange.exchange - INFO - Downloaded data for ADA/USDT with length 15.
+2023-03-20 05:33:42,689 - freqtrade.data.history.history_utils - INFO - (16/20) - Download history data for "DOGE/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T04:20:00 to now
+2023-03-20 05:33:43,649 - freqtrade.exchange.exchange - INFO - Downloaded data for DOGE/USDT with length 15.
+2023-03-20 05:33:43,744 - freqtrade.data.history.history_utils - INFO - (17/20) - Download history data for "XMR/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T04:20:00 to now
+2023-03-20 05:33:44,031 - freqtrade.exchange.exchange - INFO - Downloaded data for XMR/USDT with length 15.
+2023-03-20 05:33:44,118 - freqtrade.data.history.history_utils - INFO - (18/20) - Download history data for "USDC/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T04:20:00 to now
+2023-03-20 05:33:44,416 - freqtrade.exchange.exchange - INFO - Downloaded data for USDC/USDT with length 15.
+2023-03-20 05:33:44,522 - freqtrade.data.history.history_utils - INFO - (19/20) - Download history data for "ACH/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T03:20:00 to now
+2023-03-20 05:33:44,815 - freqtrade.exchange.exchange - INFO - Downloaded data for ACH/USDT with length 27.
+2023-03-20 05:33:44,859 - freqtrade.data.history.history_utils - INFO - Using indicator startup period: 30 ...
+2023-03-20 05:33:46,182 - freqtrade.edge.edge_positioning - INFO - Measuring data from 2023-03-04 21:30:00 up to 2023-03-20 05:25:00 (15 days)..
+2023-03-20 05:34:07,051 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:34:17,076 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 05:35:11,015 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:36:11,077 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:37:11,147 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:38:11,216 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:39:11,283 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:39:21,312 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 05:40:16,018 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:41:16,074 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:42:16,137 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:43:16,195 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:44:16,265 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:44:26,293 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 05:45:21,024 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:46:21,094 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:47:21,151 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:48:21,216 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:49:21,284 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:49:26,306 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 05:50:26,031 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:51:26,094 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:52:26,157 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:53:26,209 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:54:26,274 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:54:31,298 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 05:55:31,033 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:56:31,090 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:57:31,145 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:58:31,203 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:59:31,263 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 05:59:36,286 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 06:00:36,047 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:01:36,109 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:02:36,180 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:03:02,080 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 20 pairs: ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'XRP/USDT', 'FTM/USDT', 'CFX/USDT', 'VRA/USDT', 'MATIC/USDT', 'AGIX/USDT', 'SHIB/USDT', 'STX/USDT', 'OP/USDT', 'LTC/USDT', 'BNB/USDT', 'TON/USDT', 'ADA/USDT', 'DOGE/USDT', 'USDC/USDT', 'XMR/USDT', 'ACH/USDT']
+2023-03-20 06:03:36,242 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:04:36,304 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:04:36,320 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 06:05:41,043 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:06:41,116 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:07:41,170 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:08:41,233 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:09:41,289 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:09:41,305 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 06:10:46,052 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:11:46,107 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:12:46,175 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:13:46,237 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:14:41,309 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 06:14:46,298 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:15:51,058 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:16:51,118 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:17:51,187 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:18:51,252 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:19:41,330 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 06:19:51,315 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:20:56,059 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:21:56,121 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:22:56,181 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:23:56,246 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:24:46,314 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 06:24:56,311 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:26:01,065 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:27:01,131 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:28:01,195 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:29:01,252 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:29:51,321 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 06:30:06,008 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:31:06,065 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:32:06,116 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:33:06,178 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:33:51,238 - freqtrade.edge.edge_positioning - INFO - Using stake_currency: USDT ...
+2023-03-20 06:33:51,241 - freqtrade.edge.edge_positioning - INFO - Using local backtesting data (using whitelist in given config) ...
+2023-03-20 06:33:51,316 - freqtrade.data.history.history_utils - INFO - (0/20) - Download history data for "BTC/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T05:20:00 to now
+2023-03-20 06:33:51,680 - freqtrade.exchange.exchange - INFO - Downloaded data for BTC/USDT with length 15.
+2023-03-20 06:33:51,774 - freqtrade.data.history.history_utils - INFO - (1/20) - Download history data for "ETH/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T05:20:00 to now
+2023-03-20 06:33:52,073 - freqtrade.exchange.exchange - INFO - Downloaded data for ETH/USDT with length 15.
+2023-03-20 06:33:52,160 - freqtrade.data.history.history_utils - INFO - (2/20) - Download history data for "SOL/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T05:20:00 to now
+2023-03-20 06:33:52,469 - freqtrade.exchange.exchange - INFO - Downloaded data for SOL/USDT with length 15.
+2023-03-20 06:33:52,560 - freqtrade.data.history.history_utils - INFO - (3/20) - Download history data for "XRP/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T05:20:00 to now
+2023-03-20 06:33:52,855 - freqtrade.exchange.exchange - INFO - Downloaded data for XRP/USDT with length 15.
+2023-03-20 06:33:52,965 - freqtrade.data.history.history_utils - INFO - (4/20) - Download history data for "FTM/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T05:20:00 to now
+2023-03-20 06:33:53,258 - freqtrade.exchange.exchange - INFO - Downloaded data for FTM/USDT with length 15.
+2023-03-20 06:33:53,357 - freqtrade.data.history.history_utils - INFO - (5/20) - Download history data for "CFX/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T05:20:00 to now
+2023-03-20 06:33:53,652 - freqtrade.exchange.exchange - INFO - Downloaded data for CFX/USDT with length 15.
+2023-03-20 06:33:53,741 - freqtrade.data.history.history_utils - INFO - (6/20) - Download history data for "VRA/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T05:20:00 to now
+2023-03-20 06:33:54,037 - freqtrade.exchange.exchange - INFO - Downloaded data for VRA/USDT with length 15.
+2023-03-20 06:33:54,133 - freqtrade.data.history.history_utils - INFO - (7/20) - Download history data for "MATIC/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T05:20:00 to now
+2023-03-20 06:33:54,452 - freqtrade.exchange.exchange - INFO - Downloaded data for MATIC/USDT with length 15.
+2023-03-20 06:33:54,550 - freqtrade.data.history.history_utils - INFO - (8/20) - Download history data for "AGIX/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T05:20:00 to now
+2023-03-20 06:33:54,864 - freqtrade.exchange.exchange - INFO - Downloaded data for AGIX/USDT with length 15.
+2023-03-20 06:33:54,959 - freqtrade.data.history.history_utils - INFO - (9/20) - Download history data for "SHIB/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T05:20:00 to now
+2023-03-20 06:33:55,265 - freqtrade.exchange.exchange - INFO - Downloaded data for SHIB/USDT with length 15.
+2023-03-20 06:33:55,369 - freqtrade.data.history.history_utils - INFO - (10/20) - Download history data for "STX/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T05:20:00 to now
+2023-03-20 06:33:55,686 - freqtrade.exchange.exchange - INFO - Downloaded data for STX/USDT with length 15.
+2023-03-20 06:33:55,782 - freqtrade.data.history.history_utils - INFO - (11/20) - Download history data for "OP/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T05:20:00 to now
+2023-03-20 06:33:56,088 - freqtrade.exchange.exchange - INFO - Downloaded data for OP/USDT with length 15.
+2023-03-20 06:33:56,174 - freqtrade.data.history.history_utils - INFO - (12/20) - Download history data for "LTC/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T05:20:00 to now
+2023-03-20 06:33:56,475 - freqtrade.exchange.exchange - INFO - Downloaded data for LTC/USDT with length 15.
+2023-03-20 06:33:56,571 - freqtrade.data.history.history_utils - INFO - (13/20) - Download history data for "BNB/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T05:20:00 to now
+2023-03-20 06:33:56,864 - freqtrade.exchange.exchange - INFO - Downloaded data for BNB/USDT with length 15.
+2023-03-20 06:33:56,957 - freqtrade.data.history.history_utils - INFO - (14/20) - Download history data for "TON/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T05:20:00 to now
+2023-03-20 06:33:57,247 - freqtrade.exchange.exchange - INFO - Downloaded data for TON/USDT with length 15.
+2023-03-20 06:33:57,295 - freqtrade.data.history.history_utils - INFO - (15/20) - Download history data for "ADA/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T05:20:00 to now
+2023-03-20 06:33:58,050 - freqtrade.exchange.exchange - INFO - Downloaded data for ADA/USDT with length 15.
+2023-03-20 06:33:58,136 - freqtrade.data.history.history_utils - INFO - (16/20) - Download history data for "DOGE/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T05:20:00 to now
+2023-03-20 06:33:58,469 - freqtrade.exchange.exchange - INFO - Downloaded data for DOGE/USDT with length 15.
+2023-03-20 06:33:58,555 - freqtrade.data.history.history_utils - INFO - (17/20) - Download history data for "USDC/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T05:20:00 to now
+2023-03-20 06:33:58,846 - freqtrade.exchange.exchange - INFO - Downloaded data for USDC/USDT with length 15.
+2023-03-20 06:33:58,933 - freqtrade.data.history.history_utils - INFO - (18/20) - Download history data for "XMR/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T05:20:00 to now
+2023-03-20 06:33:59,244 - freqtrade.exchange.exchange - INFO - Downloaded data for XMR/USDT with length 15.
+2023-03-20 06:33:59,332 - freqtrade.data.history.history_utils - INFO - (19/20) - Download history data for "ACH/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T05:20:00 to now
+2023-03-20 06:33:59,652 - freqtrade.exchange.exchange - INFO - Downloaded data for ACH/USDT with length 15.
+2023-03-20 06:33:59,695 - freqtrade.data.history.history_utils - INFO - Using indicator startup period: 30 ...
+2023-03-20 06:34:01,192 - freqtrade.edge.edge_positioning - INFO - Measuring data from 2023-03-04 21:30:00 up to 2023-03-20 06:25:00 (15 days)..
+2023-03-20 06:34:06,970 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:34:52,040 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 06:35:11,015 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:36:11,069 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:37:11,125 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:38:11,189 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:39:11,253 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:39:56,313 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 06:40:16,019 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:41:16,079 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:42:16,139 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:43:16,203 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:44:16,270 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:44:56,327 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 06:45:21,022 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:46:21,082 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:47:21,140 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:48:21,207 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:49:21,265 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:50:01,019 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 06:50:26,031 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:51:26,091 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:52:26,152 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:53:26,219 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:54:26,282 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:55:01,024 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 06:55:31,034 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:56:31,094 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:57:31,156 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:58:31,220 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 06:59:31,286 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:00:01,028 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 07:00:36,042 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:01:36,105 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:02:36,165 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:03:06,208 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 20 pairs: ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'XRP/USDT', 'FTM/USDT', 'CFX/USDT', 'VRA/USDT', 'MATIC/USDT', 'AGIX/USDT', 'SHIB/USDT', 'STX/USDT', 'OP/USDT', 'LTC/USDT', 'BNB/USDT', 'TON/USDT', 'ADA/USDT', 'DOGE/USDT', 'USDC/USDT', 'XMR/USDT', 'ACH/USDT']
+2023-03-20 07:03:11,908 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 20 pairs: ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'XRP/USDT', 'FTM/USDT', 'CFX/USDT', 'VRA/USDT', 'MATIC/USDT', 'AGIX/USDT', 'STX/USDT', 'SHIB/USDT', 'OP/USDT', 'LTC/USDT', 'BNB/USDT', 'TON/USDT', 'ADA/USDT', 'DOGE/USDT', 'XMR/USDT', 'USDC/USDT', 'ACH/USDT']
+2023-03-20 07:03:36,221 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:04:36,285 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:05:06,030 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 07:05:41,047 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:06:41,106 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:07:41,173 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:08:41,240 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:09:41,300 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:10:11,025 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 07:10:46,045 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:11:46,111 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:12:46,176 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:13:46,237 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:14:46,293 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:15:11,032 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 07:15:51,049 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:16:51,109 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:17:51,175 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:18:51,240 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:19:51,309 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:20:16,063 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 07:20:56,051 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:21:56,115 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:22:56,182 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:23:56,240 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:24:56,311 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:25:21,040 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 07:26:01,067 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:27:01,139 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:28:01,205 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:29:01,271 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:30:06,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:30:21,108 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 07:31:06,073 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:32:06,140 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:33:06,204 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:33:16,817 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 20 pairs: ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'XRP/USDT', 'FTM/USDT', 'CFX/USDT', 'MATIC/USDT', 'VRA/USDT', 'AGIX/USDT', 'STX/USDT', 'SHIB/USDT', 'OP/USDT', 'LTC/USDT', 'BNB/USDT', 'TON/USDT', 'ADA/USDT', 'DOGE/USDT', 'USDC/USDT', 'XMR/USDT', 'ACH/USDT']
+2023-03-20 07:34:01,268 - freqtrade.edge.edge_positioning - INFO - Using stake_currency: USDT ...
+2023-03-20 07:34:01,272 - freqtrade.edge.edge_positioning - INFO - Using local backtesting data (using whitelist in given config) ...
+2023-03-20 07:34:01,508 - freqtrade.data.history.history_utils - INFO - (0/20) - Download history data for "BTC/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T06:20:00 to now
+2023-03-20 07:34:01,863 - freqtrade.exchange.exchange - INFO - Downloaded data for BTC/USDT with length 15.
+2023-03-20 07:34:01,930 - freqtrade.data.history.history_utils - INFO - (1/20) - Download history data for "ETH/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T06:20:00 to now
+2023-03-20 07:34:02,241 - freqtrade.exchange.exchange - INFO - Downloaded data for ETH/USDT with length 15.
+2023-03-20 07:34:02,332 - freqtrade.data.history.history_utils - INFO - (2/20) - Download history data for "SOL/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T06:20:00 to now
+2023-03-20 07:34:02,642 - freqtrade.exchange.exchange - INFO - Downloaded data for SOL/USDT with length 15.
+2023-03-20 07:34:02,739 - freqtrade.data.history.history_utils - INFO - (3/20) - Download history data for "XRP/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T06:20:00 to now
+2023-03-20 07:34:03,035 - freqtrade.exchange.exchange - INFO - Downloaded data for XRP/USDT with length 15.
+2023-03-20 07:34:03,129 - freqtrade.data.history.history_utils - INFO - (4/20) - Download history data for "FTM/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T06:20:00 to now
+2023-03-20 07:34:03,426 - freqtrade.exchange.exchange - INFO - Downloaded data for FTM/USDT with length 15.
+2023-03-20 07:34:03,530 - freqtrade.data.history.history_utils - INFO - (5/20) - Download history data for "CFX/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T06:20:00 to now
+2023-03-20 07:34:03,844 - freqtrade.exchange.exchange - INFO - Downloaded data for CFX/USDT with length 15.
+2023-03-20 07:34:03,978 - freqtrade.data.history.history_utils - INFO - (6/20) - Download history data for "MATIC/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T06:20:00 to now
+2023-03-20 07:34:04,280 - freqtrade.exchange.exchange - INFO - Downloaded data for MATIC/USDT with length 15.
+2023-03-20 07:34:04,385 - freqtrade.data.history.history_utils - INFO - (7/20) - Download history data for "VRA/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T06:20:00 to now
+2023-03-20 07:34:04,676 - freqtrade.exchange.exchange - INFO - Downloaded data for VRA/USDT with length 15.
+2023-03-20 07:34:04,777 - freqtrade.data.history.history_utils - INFO - (8/20) - Download history data for "AGIX/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T06:20:00 to now
+2023-03-20 07:34:05,086 - freqtrade.exchange.exchange - INFO - Downloaded data for AGIX/USDT with length 15.
+2023-03-20 07:34:05,184 - freqtrade.data.history.history_utils - INFO - (9/20) - Download history data for "STX/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T06:20:00 to now
+2023-03-20 07:34:05,486 - freqtrade.exchange.exchange - INFO - Downloaded data for STX/USDT with length 15.
+2023-03-20 07:34:05,587 - freqtrade.data.history.history_utils - INFO - (10/20) - Download history data for "SHIB/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T06:20:00 to now
+2023-03-20 07:34:05,911 - freqtrade.exchange.exchange - INFO - Downloaded data for SHIB/USDT with length 15.
+2023-03-20 07:34:06,014 - freqtrade.data.history.history_utils - INFO - (11/20) - Download history data for "OP/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T06:20:00 to now
+2023-03-20 07:34:06,311 - freqtrade.exchange.exchange - INFO - Downloaded data for OP/USDT with length 15.
+2023-03-20 07:34:06,402 - freqtrade.data.history.history_utils - INFO - (12/20) - Download history data for "LTC/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T06:20:00 to now
+2023-03-20 07:34:06,699 - freqtrade.exchange.exchange - INFO - Downloaded data for LTC/USDT with length 15.
+2023-03-20 07:34:06,766 - freqtrade.data.history.history_utils - INFO - (13/20) - Download history data for "BNB/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T06:20:00 to now
+2023-03-20 07:34:07,060 - freqtrade.exchange.exchange - INFO - Downloaded data for BNB/USDT with length 15.
+2023-03-20 07:34:07,150 - freqtrade.data.history.history_utils - INFO - (14/20) - Download history data for "TON/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T06:20:00 to now
+2023-03-20 07:34:07,445 - freqtrade.exchange.exchange - INFO - Downloaded data for TON/USDT with length 15.
+2023-03-20 07:34:07,534 - freqtrade.data.history.history_utils - INFO - (15/20) - Download history data for "ADA/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T06:20:00 to now
+2023-03-20 07:34:07,835 - freqtrade.exchange.exchange - INFO - Downloaded data for ADA/USDT with length 15.
+2023-03-20 07:34:07,931 - freqtrade.data.history.history_utils - INFO - (16/20) - Download history data for "DOGE/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T06:20:00 to now
+2023-03-20 07:34:08,228 - freqtrade.exchange.exchange - INFO - Downloaded data for DOGE/USDT with length 15.
+2023-03-20 07:34:08,318 - freqtrade.data.history.history_utils - INFO - (17/20) - Download history data for "USDC/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T06:20:00 to now
+2023-03-20 07:34:08,618 - freqtrade.exchange.exchange - INFO - Downloaded data for USDC/USDT with length 15.
+2023-03-20 07:34:08,708 - freqtrade.data.history.history_utils - INFO - (18/20) - Download history data for "XMR/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T06:20:00 to now
+2023-03-20 07:34:09,021 - freqtrade.exchange.exchange - INFO - Downloaded data for XMR/USDT with length 15.
+2023-03-20 07:34:09,151 - freqtrade.data.history.history_utils - INFO - (19/20) - Download history data for "ACH/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T06:20:00 to now
+2023-03-20 07:34:09,453 - freqtrade.exchange.exchange - INFO - Downloaded data for ACH/USDT with length 15.
+2023-03-20 07:34:09,510 - freqtrade.data.history.history_utils - INFO - Using indicator startup period: 30 ...
+2023-03-20 07:34:10,958 - freqtrade.edge.edge_positioning - INFO - Measuring data from 2023-03-04 21:30:00 up to 2023-03-20 07:25:00 (15 days)..
+2023-03-20 07:34:11,802 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:35:16,021 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:35:26,054 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 07:36:16,093 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:37:16,161 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:38:16,226 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:39:16,284 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:40:21,021 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:40:26,067 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 07:41:21,085 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:42:21,147 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:43:21,212 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:44:21,277 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:45:26,030 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:45:31,056 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 07:46:26,111 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:47:26,173 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:48:26,239 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:49:26,302 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:50:31,035 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:50:36,082 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 07:51:31,105 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:52:31,166 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:53:31,230 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:54:31,296 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:55:36,039 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:55:41,063 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 07:56:36,098 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:57:36,164 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:58:36,229 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 07:59:36,295 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:00:41,048 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:00:46,070 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 08:01:41,110 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:02:41,170 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:03:23,000 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 20 pairs: ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'XRP/USDT', 'FTM/USDT', 'CFX/USDT', 'MATIC/USDT', 'VRA/USDT', 'AGIX/USDT', 'STX/USDT', 'SHIB/USDT', 'OP/USDT', 'LTC/USDT', 'BNB/USDT', 'ADA/USDT', 'TON/USDT', 'DOGE/USDT', 'USDC/USDT', 'RNDR/USDT', 'ACH/USDT']
+2023-03-20 08:03:41,231 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:04:41,297 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:05:46,052 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:05:46,071 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 08:06:46,113 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:07:46,173 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:08:46,239 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:09:46,309 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:10:51,059 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:10:51,088 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 08:11:51,129 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:12:51,191 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:13:51,255 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:14:51,366 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:15:51,155 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 08:15:56,115 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:16:56,311 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:17:56,551 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:18:56,671 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:19:56,877 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:20:51,245 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 08:21:01,195 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:22:01,372 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:23:01,526 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:24:01,791 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:25:06,021 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:25:56,102 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 08:26:06,093 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:27:06,150 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:28:06,213 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:29:06,279 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:30:11,016 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:30:56,110 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 08:31:11,081 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:32:11,142 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:33:11,193 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:34:11,264 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:34:11,276 - freqtrade.edge.edge_positioning - INFO - Using stake_currency: USDT ...
+2023-03-20 08:34:11,277 - freqtrade.edge.edge_positioning - INFO - Using local backtesting data (using whitelist in given config) ...
+2023-03-20 08:34:11,535 - freqtrade.data.history.history_utils - INFO - (0/20) - Download history data for "BTC/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T07:20:00 to now
+2023-03-20 08:34:11,877 - freqtrade.exchange.exchange - INFO - Downloaded data for BTC/USDT with length 15.
+2023-03-20 08:34:11,986 - freqtrade.data.history.history_utils - INFO - (1/20) - Download history data for "ETH/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T07:20:00 to now
+2023-03-20 08:34:12,294 - freqtrade.exchange.exchange - INFO - Downloaded data for ETH/USDT with length 15.
+2023-03-20 08:34:12,394 - freqtrade.data.history.history_utils - INFO - (2/20) - Download history data for "SOL/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T07:20:00 to now
+2023-03-20 08:34:12,694 - freqtrade.exchange.exchange - INFO - Downloaded data for SOL/USDT with length 15.
+2023-03-20 08:34:12,806 - freqtrade.data.history.history_utils - INFO - (3/20) - Download history data for "XRP/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T07:20:00 to now
+2023-03-20 08:34:13,113 - freqtrade.exchange.exchange - INFO - Downloaded data for XRP/USDT with length 15.
+2023-03-20 08:34:13,222 - freqtrade.data.history.history_utils - INFO - (4/20) - Download history data for "FTM/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T07:20:00 to now
+2023-03-20 08:34:13,535 - freqtrade.exchange.exchange - INFO - Downloaded data for FTM/USDT with length 15.
+2023-03-20 08:34:13,634 - freqtrade.data.history.history_utils - INFO - (5/20) - Download history data for "CFX/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T07:20:00 to now
+2023-03-20 08:34:13,936 - freqtrade.exchange.exchange - INFO - Downloaded data for CFX/USDT with length 15.
+2023-03-20 08:34:14,038 - freqtrade.data.history.history_utils - INFO - (6/20) - Download history data for "MATIC/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T07:20:00 to now
+2023-03-20 08:34:14,346 - freqtrade.exchange.exchange - INFO - Downloaded data for MATIC/USDT with length 15.
+2023-03-20 08:34:14,470 - freqtrade.data.history.history_utils - INFO - (7/20) - Download history data for "VRA/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T07:20:00 to now
+2023-03-20 08:34:14,773 - freqtrade.exchange.exchange - INFO - Downloaded data for VRA/USDT with length 15.
+2023-03-20 08:34:14,880 - freqtrade.data.history.history_utils - INFO - (8/20) - Download history data for "AGIX/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T07:20:00 to now
+2023-03-20 08:34:15,175 - freqtrade.exchange.exchange - INFO - Downloaded data for AGIX/USDT with length 15.
+2023-03-20 08:34:15,285 - freqtrade.data.history.history_utils - INFO - (9/20) - Download history data for "STX/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T07:20:00 to now
+2023-03-20 08:34:15,587 - freqtrade.exchange.exchange - INFO - Downloaded data for STX/USDT with length 15.
+2023-03-20 08:34:15,657 - freqtrade.data.history.history_utils - INFO - (10/20) - Download history data for "SHIB/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T07:20:00 to now
+2023-03-20 08:34:15,953 - freqtrade.exchange.exchange - INFO - Downloaded data for SHIB/USDT with length 15.
+2023-03-20 08:34:16,060 - freqtrade.data.history.history_utils - INFO - (11/20) - Download history data for "OP/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T07:20:00 to now
+2023-03-20 08:34:16,365 - freqtrade.exchange.exchange - INFO - Downloaded data for OP/USDT with length 15.
+2023-03-20 08:34:16,498 - freqtrade.data.history.history_utils - INFO - (12/20) - Download history data for "LTC/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T07:20:00 to now
+2023-03-20 08:34:16,796 - freqtrade.exchange.exchange - INFO - Downloaded data for LTC/USDT with length 15.
+2023-03-20 08:34:16,903 - freqtrade.data.history.history_utils - INFO - (13/20) - Download history data for "BNB/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T07:20:00 to now
+2023-03-20 08:34:17,203 - freqtrade.exchange.exchange - INFO - Downloaded data for BNB/USDT with length 15.
+2023-03-20 08:34:17,305 - freqtrade.data.history.history_utils - INFO - (14/20) - Download history data for "ADA/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T07:20:00 to now
+2023-03-20 08:34:17,631 - freqtrade.exchange.exchange - INFO - Downloaded data for ADA/USDT with length 15.
+2023-03-20 08:34:17,736 - freqtrade.data.history.history_utils - INFO - (15/20) - Download history data for "TON/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T07:20:00 to now
+2023-03-20 08:34:18,054 - freqtrade.exchange.exchange - INFO - Downloaded data for TON/USDT with length 15.
+2023-03-20 08:34:18,167 - freqtrade.data.history.history_utils - INFO - (16/20) - Download history data for "DOGE/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T07:20:00 to now
+2023-03-20 08:34:18,486 - freqtrade.exchange.exchange - INFO - Downloaded data for DOGE/USDT with length 15.
+2023-03-20 08:34:18,585 - freqtrade.data.history.history_utils - INFO - (17/20) - Download history data for "USDC/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T07:20:00 to now
+2023-03-20 08:34:18,883 - freqtrade.exchange.exchange - INFO - Downloaded data for USDC/USDT with length 15.
+2023-03-20 08:34:19,000 - freqtrade.data.history.history_utils - INFO - (18/20) - Download history data for "RNDR/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-19T19:20:00 to now
+2023-03-20 08:34:19,306 - freqtrade.exchange.exchange - INFO - Downloaded data for RNDR/USDT with length 159.
+2023-03-20 08:34:19,414 - freqtrade.data.history.history_utils - INFO - (19/20) - Download history data for "ACH/USDT", 5m, spot and store in /freqtrade/user_data/data/kucoin. From 2023-03-20T07:20:00 to now
+2023-03-20 08:34:19,722 - freqtrade.exchange.exchange - INFO - Downloaded data for ACH/USDT with length 15.
+2023-03-20 08:34:19,783 - freqtrade.data.history.history_utils - INFO - Using indicator startup period: 30 ...
+2023-03-20 08:34:21,620 - freqtrade.edge.edge_positioning - INFO - Measuring data from 2023-03-04 21:30:00 up to 2023-03-20 08:25:00 (15 days)..
+2023-03-20 08:35:16,019 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:36:01,089 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 08:36:16,085 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:37:16,149 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:38:16,209 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:39:16,262 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:40:21,027 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:41:01,103 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 08:41:21,099 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:42:21,163 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:43:21,232 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:44:21,297 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:45:26,032 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:46:01,116 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 08:46:26,095 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:47:26,163 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:48:26,238 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:49:26,301 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:50:31,034 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:51:06,116 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 08:51:31,101 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:52:31,165 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:53:31,241 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:54:31,307 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:55:36,042 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:56:11,109 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 08:56:36,117 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:57:36,195 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:58:36,261 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 08:59:36,337 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 09:00:41,052 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 09:01:16,110 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 09:01:41,123 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 09:02:41,190 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 09:03:26,277 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 20 pairs: ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'XRP/USDT', 'FTM/USDT', 'CFX/USDT', 'MATIC/USDT', 'VRA/USDT', 'AGIX/USDT', 'STX/USDT', 'SHIB/USDT', 'OP/USDT', 'LTC/USDT', 'BNB/USDT', 'ADA/USDT', 'TON/USDT', 'DOGE/USDT', 'USDC/USDT', 'RNDR/USDT', 'ACH/USDT']
+2023-03-20 09:03:33,049 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 20 pairs: ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'XRP/USDT', 'FTM/USDT', 'CFX/USDT', 'MATIC/USDT', 'VRA/USDT', 'AGIX/USDT', 'STX/USDT', 'SHIB/USDT', 'OP/USDT', 'LTC/USDT', 'BNB/USDT', 'ADA/USDT', 'TON/USDT', 'USDC/USDT', 'DOGE/USDT', 'RNDR/USDT', 'ACH/USDT']
+2023-03-20 09:03:41,260 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 09:04:41,328 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 09:05:46,057 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 09:06:16,121 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 09:06:46,128 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 09:07:46,200 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 09:08:46,259 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 09:09:46,336 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 09:10:51,059 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 09:11:16,162 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 09:11:51,121 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 09:11:51,705 - uvicorn.error - INFO - ('172.18.0.1', 37696) - "WebSocket /api/v1/message/ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGl0eSI6eyJ1IjoiZnJlcXRyYWRlciJ9LCJleHAiOjE2NzkzMDQ0MTEsImlhdCI6MTY3OTMwMzUxMSwidHlwZSI6ImFjY2VzcyJ9._8ylpt__kVxgoAlJ6Q8X_n6yfdv1RKUBl-N7cSOYdMQ" [accepted]
+2023-03-20 09:11:51,706 - freqtrade.rpc.api_server.ws.channel - INFO - Connected to channel - WebSocketChannel(fa541d6c, ('172.18.0.1', 37696))
+2023-03-20 09:11:51,708 - uvicorn.error - INFO - connection open
+2023-03-20 09:11:51,833 - freqtrade.wallets - INFO - Wallets synced.
+2023-03-20 09:12:51,192 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 09:13:51,256 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 09:14:51,325 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 09:15:56,061 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 09:16:21,103 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 09:16:56,123 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 09:17:56,193 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 09:18:56,262 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 09:19:56,328 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 09:21:01,077 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 09:21:21,144 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-03-20 09:22:01,153 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
