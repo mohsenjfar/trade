@@ -99,3 +99,443 @@
 2023-03-20 09:49:21,288 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
 2023-03-20 09:50:26,021 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
 2023-03-20 09:51:26,080 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 09:57:12,869 - freqtrade.loggers - INFO - Verbosity set to 0
+2023-03-20 09:57:12,871 - freqtrade.configuration.configuration - INFO - Runmode set to dry_run.
+2023-03-20 09:57:12,871 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2023-03-20 09:57:12,872 - freqtrade.configuration.configuration - INFO - Dry run is enabled
+2023-03-20 09:57:12,872 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/tradesv3.sqlite"
+2023-03-20 09:57:12,872 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 3 ...
+2023-03-20 09:57:12,913 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2023-03-20 09:57:12,914 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/kucoin ...
+2023-03-20 09:57:12,918 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2023-03-20 09:57:12,933 - freqtrade.exchange.check_exchange - WARNING - Exchange "kucoin" is known to the the ccxt library, available for the bot, but not officially supported by the Freqtrade development team. It may work flawlessly (please report back) or have serious issues. Use it at your own discretion.
+2023-03-20 09:57:12,934 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2023-03-20 09:57:13,030 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy SampleStrategy from '/freqtrade/user_data/strategies/sample_strategy.py'...
+2023-03-20 09:57:13,032 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2023-03-20 09:57:13,035 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: USDT.
+2023-03-20 09:57:13,035 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: unlimited.
+2023-03-20 09:57:13,036 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2023-03-20 09:57:13,037 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 3.
+2023-03-20 09:57:13,038 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {'60': 0.01, '30': 0.02, '0': 0.04}
+2023-03-20 09:57:13,039 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 5m
+2023-03-20 09:57:13,040 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -0.1
+2023-03-20 09:57:13,040 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2023-03-20 09:57:13,041 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2023-03-20 09:57:13,042 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2023-03-20 09:57:13,043 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: False
+2023-03-20 09:57:13,043 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2023-03-20 09:57:13,044 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'limit', 'exit': 'limit', 'stoploss': 'market', 'stoploss_on_exchange': False}
+2023-03-20 09:57:13,045 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2023-03-20 09:57:13,046 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: USDT
+2023-03-20 09:57:13,046 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: unlimited
+2023-03-20 09:57:13,047 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using protections: []
+2023-03-20 09:57:13,048 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 30
+2023-03-20 09:57:13,049 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2023-03-20 09:57:13,050 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2023-03-20 09:57:13,050 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2023-03-20 09:57:13,051 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2023-03-20 09:57:13,052 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2023-03-20 09:57:13,053 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2023-03-20 09:57:13,054 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2023-03-20 09:57:13,055 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2023-03-20 09:57:13,055 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2023-03-20 09:57:13,056 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 3
+2023-03-20 09:57:13,057 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2023-03-20 09:57:13,101 - freqtrade.exchange.exchange - INFO - Instance is running with dry_run enabled
+2023-03-20 09:57:13,102 - freqtrade.exchange.exchange - INFO - Using CCXT 2.7.12
+2023-03-20 09:57:13,137 - freqtrade.exchange.exchange - INFO - Using Exchange "KuCoin"
+2023-03-20 09:57:16,022 - freqtrade.resolvers.exchange_resolver - INFO - Using resolved exchange 'Kucoin'...
+2023-03-20 09:57:16,160 - freqtrade.wallets - INFO - Wallets synced.
+2023-03-20 09:57:16,198 - freqtrade.resolvers.iresolver - INFO - Using resolved pairlist VolumePairList from '/freqtrade/freqtrade/plugins/pairlist/VolumePairList.py'...
+2023-03-20 09:57:16,347 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.api_server
+2023-03-20 09:57:17,335 - freqtrade.rpc.api_server.webserver - INFO - Starting HTTP Server at 0.0.0.0:8080
+2023-03-20 09:57:17,335 - freqtrade.rpc.api_server.webserver - WARNING - SECURITY WARNING - Local Rest Server listening to external connections
+2023-03-20 09:57:17,335 - freqtrade.rpc.api_server.webserver - WARNING - SECURITY WARNING - This is insecure please set to your loopback,e.g 127.0.0.1 in config.json
+2023-03-20 09:57:17,336 - freqtrade.rpc.api_server.webserver - INFO - Starting Local Rest Server.
+2023-03-20 09:57:17,370 - uvicorn.error - INFO - Started server process [1]
+2023-03-20 09:57:17,371 - uvicorn.error - INFO - Waiting for application startup.
+2023-03-20 09:57:17,372 - uvicorn.error - INFO - Application startup complete.
+2023-03-20 09:57:17,374 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2023-03-20 09:57:17,394 - freqtrade.resolvers.iresolver - INFO - Using resolved pairlist VolumePairList from '/freqtrade/freqtrade/plugins/pairlist/VolumePairList.py'...
+2023-03-20 09:57:18,010 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 20 pairs: ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'XRP/USDT', 'FTM/USDT', 'CFX/USDT', 'MATIC/USDT', 'VRA/USDT', 'AGIX/USDT', 'STX/USDT', 'SHIB/USDT', 'OP/USDT', 'LTC/USDT', 'BNB/USDT', 'ADA/USDT', 'TON/USDT', 'USDC/USDT', 'DOGE/USDT', 'ACH/USDT', 'RNDR/USDT']
+2023-03-20 09:57:18,011 - freqtrade.strategy.hyper - INFO - No params for buy found, using default values.
+2023-03-20 09:57:18,011 - freqtrade.strategy.hyper - INFO - Strategy Parameter(default): buy_rsi = 30
+2023-03-20 09:57:18,011 - freqtrade.strategy.hyper - INFO - Strategy Parameter(default): exit_short_rsi = 30
+2023-03-20 09:57:18,011 - freqtrade.strategy.hyper - INFO - No params for sell found, using default values.
+2023-03-20 09:57:18,012 - freqtrade.strategy.hyper - INFO - Strategy Parameter(default): sell_rsi = 70
+2023-03-20 09:57:18,012 - freqtrade.strategy.hyper - INFO - Strategy Parameter(default): short_rsi = 70
+2023-03-20 09:57:18,012 - freqtrade.strategy.hyper - INFO - No params for protection found, using default values.
+2023-03-20 09:57:18,012 - freqtrade.plugins.protectionmanager - INFO - No protection Handlers defined.
+2023-03-20 09:57:18,013 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'running'}
+2023-03-20 09:57:18,013 - freqtrade.worker - INFO - Changing state to: RUNNING
+2023-03-20 09:57:18,013 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': warning, 'status': 'Dry run is enabled. All trades are simulated.'}
+2023-03-20 09:57:18,013 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': "*Exchange:* `kucoin`\n*Stake per trade:* `unlimited USDT`\n*Minimum ROI:* `{'60': 0.01, '30': 0.02, '0': 0.04}`\n*Stoploss:* `-0.1`\n*Position adjustment:* `Off`\n*Timeframe:* `5m`\n*Strategy:* `SampleStrategy`"}
+2023-03-20 09:57:18,013 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': "Searching for USDT pairs to buy and sell based on [{'VolumePairList': 'VolumePairList - top 20 volume pairs.'}]"}
+2023-03-20 09:57:20,900 - freqtrade.wallets - INFO - Wallets synced.
+2023-03-20 09:57:21,172 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for TON/USDT with stake_amount: 330.0 ...
+2023-03-20 09:57:21,444 - freqtrade.freqtradebot - INFO - Order #dry_run_buy_1679306241.173413 was created for TON/USDT and status is open.
+2023-03-20 09:57:21,514 - freqtrade.wallets - INFO - Wallets synced.
+2023-03-20 09:57:21,515 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'trade_id': 1, 'type': entry, 'buy_tag': None, 'enter_tag': None, 'exchange': 'Kucoin', 'pair': 'TON/USDT', 'leverage': 1.0, 'direction': 'Long', 'limit': 2.3608, 'open_rate': 2.3608, 'order_type': 'limit', 'stake_amount': 330.0, 'stake_currency': 'USDT', 'fiat_currency': 'USD', 'amount': 139.7831, 'open_date': datetime.datetime(2023, 3, 20, 9, 57, 21, 445265), 'current_rate': 2.3608, 'sub_trade': False}
+2023-03-20 09:57:23,021 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 09:57:23,417 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:57:28,402 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:57:33,463 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:57:38,494 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:57:43,514 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:57:48,496 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:57:53,461 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:57:58,526 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:58:03,497 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:58:08,485 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:58:13,468 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:58:18,498 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:58:23,082 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 09:58:24,176 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:58:28,511 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:58:33,543 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:58:38,560 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:58:43,704 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:58:48,682 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:58:52,082 - uvicorn.error - INFO - ('172.19.0.1', 37136) - "WebSocket /api/v1/message/ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGl0eSI6eyJ1IjoiZnJlcXRyYWRlciJ9LCJleHAiOjE2NzkzMDYzNjIsImlhdCI6MTY3OTMwNTQ2MiwidHlwZSI6ImFjY2VzcyJ9.l4ys7up6AyP1vw0hsDCfDtbQY8qaENNPSo1tlTbwZc0" [accepted]
+2023-03-20 09:58:52,089 - freqtrade.rpc.api_server.ws.channel - INFO - Connected to channel - WebSocketChannel(29a1c1ae, ('172.19.0.1', 37136))
+2023-03-20 09:58:52,101 - uvicorn.error - INFO - connection open
+2023-03-20 09:58:53,520 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:58:58,591 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:59:03,536 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:59:08,526 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:59:13,536 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:59:18,558 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:59:23,136 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 09:59:23,569 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:59:26,122 - freqtrade.rpc.api_server.ws.channel - INFO - Disconnected from channel - WebSocketChannel(29a1c1ae, ('172.19.0.1', 37136))
+2023-03-20 09:59:26,125 - uvicorn.error - INFO - connection closed
+2023-03-20 09:59:28,586 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:59:33,609 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:59:38,587 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:59:43,641 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:59:48,605 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:59:53,560 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 09:59:58,573 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:00:01,844 - freqtrade.exchange.common - WARNING - Kucoin 429 error, avoid triggering DDosProtection backoff delay. 3 tries left before giving up
+2023-03-20 10:00:02,616 - freqtrade.exchange.common - WARNING - Kucoin 429 error, avoid triggering DDosProtection backoff delay. 2 tries left before giving up
+2023-03-20 10:00:04,776 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:00:10,071 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:00:13,853 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:00:18,345 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:00:22,717 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:00:26,013 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:00:27,469 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:00:32,369 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:00:36,406 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:00:41,441 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:00:46,435 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:00:51,477 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:00:56,465 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:01:01,494 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:01:06,509 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:01:11,502 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:01:16,473 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:01:21,505 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:01:26,069 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:01:26,472 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:01:31,475 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:01:36,499 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:01:41,473 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:01:46,475 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:01:51,506 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:01:56,530 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:02:01,468 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:02:06,499 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:02:11,530 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:02:16,517 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:02:21,498 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:02:26,124 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:02:26,557 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:02:31,549 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:02:36,554 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:02:41,565 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:02:46,494 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:02:51,561 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:02:56,584 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:03:01,597 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:03:06,580 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:03:11,624 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:03:16,688 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:03:21,632 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:03:26,181 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:03:26,837 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:03:31,599 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:03:36,588 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:03:41,655 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:03:46,656 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:03:51,654 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:03:56,660 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:04:01,718 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:04:06,706 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:04:11,658 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:04:16,613 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:04:21,650 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:04:26,251 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:04:26,696 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:04:31,690 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:04:36,680 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:04:41,697 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:04:46,675 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:04:51,722 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:04:56,691 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:05:05,042 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:05:08,664 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:05:12,481 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:05:17,238 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:05:22,550 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:05:26,856 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:05:31,020 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:05:31,990 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:05:36,508 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:05:41,445 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:05:46,438 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:05:51,483 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:05:56,518 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:06:01,468 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:06:06,530 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:06:11,472 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:06:16,474 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:06:21,545 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:06:26,522 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:06:31,077 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:06:31,954 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:06:36,475 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:06:41,507 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:06:46,503 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:06:51,479 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:06:56,527 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:07:01,525 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:07:06,537 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:07:11,549 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:07:16,560 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:07:21,533 - freqtrade.freqtradebot - INFO - Found open order for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21)
+2023-03-20 10:07:22,053 - freqtrade.freqtradebot - INFO - Buy order cancelled due to timeout for Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21).
+2023-03-20 10:07:22,054 - freqtrade.freqtradebot - INFO - Buy order fully cancelled. Removing Trade(id=1, pair=TON/USDT, amount=139.78312436, is_short=False, leverage=1.0, open_rate=2.36080000, open_since=2023-03-20 09:57:21) from database.
+2023-03-20 10:07:22,082 - freqtrade.wallets - INFO - Wallets synced.
+2023-03-20 10:07:22,084 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'trade_id': 1, 'type': entry_cancel, 'buy_tag': None, 'enter_tag': None, 'exchange': 'Kucoin', 'pair': 'TON/USDT', 'leverage': 1.0, 'direction': 'Long', 'limit': 2.3608, 'order_type': 'limit', 'stake_amount': 330.0, 'stake_currency': 'USDT', 'fiat_currency': 'USD', 'amount': 139.78312436462218, 'open_date': datetime.datetime(2023, 3, 20, 9, 57, 21, 445265), 'current_rate': 2.3683, 'reason': 'cancelled due to timeout, fully cancelled', 'sub_trade': False}
+2023-03-20 10:07:31,129 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:08:31,193 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:09:31,257 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:10:36,028 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:11:36,091 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:12:36,153 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:13:36,215 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:14:36,273 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:15:41,037 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:16:41,108 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:17:41,166 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:18:41,223 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:19:41,282 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:20:46,041 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:21:46,108 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:22:46,180 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:23:46,243 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:24:46,312 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:25:51,032 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:26:51,099 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:27:22,031 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 20 pairs: ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'XRP/USDT', 'FTM/USDT', 'CFX/USDT', 'MATIC/USDT', 'VRA/USDT', 'AGIX/USDT', 'STX/USDT', 'SHIB/USDT', 'OP/USDT', 'LTC/USDT', 'BNB/USDT', 'ADA/USDT', 'USDC/USDT', 'TON/USDT', 'DOGE/USDT', 'ACH/USDT', 'RNDR/USDT']
+2023-03-20 10:27:51,166 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:28:51,231 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:29:51,304 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:30:56,053 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:31:56,237 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:32:56,320 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:33:56,387 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:34:56,448 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:36:01,050 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:37:01,109 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:37:35,163 - uvicorn.error - INFO - ('172.19.0.1', 32832) - "WebSocket /api/v1/message/ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGl0eSI6eyJ1IjoiZnJlcXRyYWRlciJ9LCJleHAiOjE2NzkzMDk1NTQsImlhdCI6MTY3OTMwODY1NCwidHlwZSI6ImFjY2VzcyJ9.iutWA4I_xOrhgUxYkZPBFP88YbQmNKVsdt94MB_poBw" [accepted]
+2023-03-20 10:37:35,179 - freqtrade.rpc.api_server.ws.channel - INFO - Connected to channel - WebSocketChannel(4785a434, ('172.19.0.1', 32832))
+2023-03-20 10:37:35,196 - uvicorn.error - INFO - connection open
+2023-03-20 10:38:01,684 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:39:01,945 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:40:06,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:41:06,077 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:42:06,156 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:43:06,244 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:44:06,326 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:45:11,008 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:46:03,801 - freqtrade.rpc.api_server.ws.channel - INFO - Disconnected from channel - WebSocketChannel(4785a434, ('172.19.0.1', 32832))
+2023-03-20 10:46:03,842 - uvicorn.error - INFO - connection closed
+2023-03-20 10:46:11,073 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:47:26,464 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 10:56:58,580 - freqtrade.strategy.interface - WARNING - Outdated history for pair BTC/USDT. Last tick is 16 minutes old
+2023-03-20 10:56:59,535 - freqtrade.strategy.interface - WARNING - Outdated history for pair ETH/USDT. Last tick is 16 minutes old
+2023-03-20 10:57:01,166 - freqtrade.strategy.interface - WARNING - Outdated history for pair SOL/USDT. Last tick is 17 minutes old
+2023-03-20 10:57:01,821 - freqtrade.strategy.interface - WARNING - Outdated history for pair XRP/USDT. Last tick is 17 minutes old
+2023-03-20 10:57:02,916 - freqtrade.strategy.interface - WARNING - Outdated history for pair FTM/USDT. Last tick is 17 minutes old
+2023-03-20 10:57:04,184 - freqtrade.strategy.interface - WARNING - Outdated history for pair CFX/USDT. Last tick is 17 minutes old
+2023-03-20 10:57:12,529 - freqtrade.strategy.interface - WARNING - Outdated history for pair MATIC/USDT. Last tick is 17 minutes old
+2023-03-20 10:57:36,810 - freqtrade.strategy.interface - WARNING - Outdated history for pair VRA/USDT. Last tick is 17 minutes old
+2023-03-20 10:58:16,914 - freqtrade.strategy.interface - WARNING - Outdated history for pair AGIX/USDT. Last tick is 18 minutes old
+2023-03-20 10:58:47,128 - freqtrade.strategy.interface - WARNING - Outdated history for pair STX/USDT. Last tick is 18 minutes old
+2023-03-20 10:59:25,513 - freqtrade.strategy.interface - WARNING - Outdated history for pair SHIB/USDT. Last tick is 19 minutes old
+2023-03-20 10:59:48,537 - freqtrade.strategy.interface - WARNING - Outdated history for pair OP/USDT. Last tick is 19 minutes old
+2023-03-20 11:00:15,122 - freqtrade.strategy.interface - WARNING - Outdated history for pair LTC/USDT. Last tick is 20 minutes old
+2023-03-20 11:00:33,039 - freqtrade.strategy.interface - WARNING - Outdated history for pair BNB/USDT. Last tick is 20 minutes old
+2023-03-20 11:01:24,629 - freqtrade.loggers - INFO - Verbosity set to 0
+2023-03-20 11:01:24,631 - freqtrade.configuration.configuration - INFO - Runmode set to dry_run.
+2023-03-20 11:01:24,632 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2023-03-20 11:01:24,632 - freqtrade.configuration.configuration - INFO - Dry run is enabled
+2023-03-20 11:01:24,632 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/tradesv3.sqlite"
+2023-03-20 11:01:24,633 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 3 ...
+2023-03-20 11:01:24,783 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2023-03-20 11:01:24,784 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/kucoin ...
+2023-03-20 11:01:24,787 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2023-03-20 11:01:24,802 - freqtrade.exchange.check_exchange - WARNING - Exchange "kucoin" is known to the the ccxt library, available for the bot, but not officially supported by the Freqtrade development team. It may work flawlessly (please report back) or have serious issues. Use it at your own discretion.
+2023-03-20 11:01:24,802 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2023-03-20 11:01:24,874 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy SampleStrategy from '/freqtrade/user_data/strategies/sample_strategy.py'...
+2023-03-20 11:01:24,874 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2023-03-20 11:01:24,876 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: USDT.
+2023-03-20 11:01:24,876 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: unlimited.
+2023-03-20 11:01:24,876 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2023-03-20 11:01:24,876 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 3.
+2023-03-20 11:01:24,877 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {'60': 0.01, '30': 0.02, '0': 0.04}
+2023-03-20 11:01:24,877 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 5m
+2023-03-20 11:01:24,877 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -0.1
+2023-03-20 11:01:24,877 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2023-03-20 11:01:24,877 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2023-03-20 11:01:24,878 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2023-03-20 11:01:24,878 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: False
+2023-03-20 11:01:24,878 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2023-03-20 11:01:24,878 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'limit', 'exit': 'limit', 'stoploss': 'market', 'stoploss_on_exchange': False}
+2023-03-20 11:01:24,878 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2023-03-20 11:01:24,879 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: USDT
+2023-03-20 11:01:24,879 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: unlimited
+2023-03-20 11:01:24,879 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using protections: []
+2023-03-20 11:01:24,879 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 30
+2023-03-20 11:01:24,879 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2023-03-20 11:01:24,880 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2023-03-20 11:01:24,880 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2023-03-20 11:01:24,880 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2023-03-20 11:01:24,880 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2023-03-20 11:01:24,881 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2023-03-20 11:01:24,881 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2023-03-20 11:01:24,881 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2023-03-20 11:01:24,881 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2023-03-20 11:01:24,881 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 3
+2023-03-20 11:01:24,882 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2023-03-20 11:01:24,928 - freqtrade.exchange.exchange - INFO - Instance is running with dry_run enabled
+2023-03-20 11:01:24,928 - freqtrade.exchange.exchange - INFO - Using CCXT 2.7.12
+2023-03-20 11:01:24,954 - freqtrade.exchange.exchange - INFO - Using Exchange "KuCoin"
+2023-03-20 11:01:28,723 - freqtrade.resolvers.exchange_resolver - INFO - Using resolved exchange 'Kucoin'...
+2023-03-20 11:01:28,835 - freqtrade.wallets - INFO - Wallets synced.
+2023-03-20 11:01:28,879 - freqtrade.resolvers.iresolver - INFO - Using resolved pairlist VolumePairList from '/freqtrade/freqtrade/plugins/pairlist/VolumePairList.py'...
+2023-03-20 11:01:28,989 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.api_server
+2023-03-20 11:01:29,682 - freqtrade.rpc.api_server.webserver - INFO - Starting HTTP Server at 0.0.0.0:8080
+2023-03-20 11:01:29,683 - freqtrade.rpc.api_server.webserver - WARNING - SECURITY WARNING - Local Rest Server listening to external connections
+2023-03-20 11:01:29,683 - freqtrade.rpc.api_server.webserver - WARNING - SECURITY WARNING - This is insecure please set to your loopback,e.g 127.0.0.1 in config.json
+2023-03-20 11:01:29,683 - freqtrade.rpc.api_server.webserver - INFO - Starting Local Rest Server.
+2023-03-20 11:01:29,713 - uvicorn.error - INFO - Started server process [1]
+2023-03-20 11:01:29,714 - uvicorn.error - INFO - Waiting for application startup.
+2023-03-20 11:01:29,715 - uvicorn.error - INFO - Application startup complete.
+2023-03-20 11:01:29,716 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2023-03-20 11:01:29,741 - freqtrade.resolvers.iresolver - INFO - Using resolved pairlist VolumePairList from '/freqtrade/freqtrade/plugins/pairlist/VolumePairList.py'...
+2023-03-20 11:01:30,302 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 20 pairs: ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'XRP/USDT', 'FTM/USDT', 'CFX/USDT', 'MATIC/USDT', 'VRA/USDT', 'STX/USDT', 'AGIX/USDT', 'SHIB/USDT', 'OP/USDT', 'LTC/USDT', 'BNB/USDT', 'ADA/USDT', 'USDC/USDT', 'TON/USDT', 'DOGE/USDT', 'ACH/USDT', 'GALAX/USDT']
+2023-03-20 11:01:30,303 - freqtrade.strategy.hyper - INFO - No params for buy found, using default values.
+2023-03-20 11:01:30,304 - freqtrade.strategy.hyper - INFO - Strategy Parameter(default): buy_rsi = 30
+2023-03-20 11:01:30,304 - freqtrade.strategy.hyper - INFO - Strategy Parameter(default): exit_short_rsi = 30
+2023-03-20 11:01:30,304 - freqtrade.strategy.hyper - INFO - No params for sell found, using default values.
+2023-03-20 11:01:30,305 - freqtrade.strategy.hyper - INFO - Strategy Parameter(default): sell_rsi = 70
+2023-03-20 11:01:30,305 - freqtrade.strategy.hyper - INFO - Strategy Parameter(default): short_rsi = 70
+2023-03-20 11:01:30,305 - freqtrade.strategy.hyper - INFO - No params for protection found, using default values.
+2023-03-20 11:01:30,306 - freqtrade.plugins.protectionmanager - INFO - No protection Handlers defined.
+2023-03-20 11:01:30,306 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'running'}
+2023-03-20 11:01:30,307 - freqtrade.worker - INFO - Changing state to: RUNNING
+2023-03-20 11:01:30,307 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': warning, 'status': 'Dry run is enabled. All trades are simulated.'}
+2023-03-20 11:01:30,307 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': "*Exchange:* `kucoin`\n*Stake per trade:* `unlimited USDT`\n*Minimum ROI:* `{'60': 0.01, '30': 0.02, '0': 0.04}`\n*Stoploss:* `-0.1`\n*Position adjustment:* `Off`\n*Timeframe:* `5m`\n*Strategy:* `SampleStrategy`"}
+2023-03-20 11:01:30,307 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': "Searching for USDT pairs to buy and sell based on [{'VolumePairList': 'VolumePairList - top 20 volume pairs.'}]"}
+2023-03-20 11:01:35,323 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:02:35,385 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:03:35,448 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:04:35,515 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:05:36,023 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:06:36,100 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:07:36,164 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:08:36,268 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:09:36,335 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:10:41,038 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:11:41,104 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:12:41,168 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:13:41,226 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:14:41,292 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:15:06,362 - freqtrade.exchange.common - WARNING - Kucoin 429 error, avoid triggering DDosProtection backoff delay. 3 tries left before giving up
+2023-03-20 11:15:46,043 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:16:46,108 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:17:46,167 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:18:46,239 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:19:46,306 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:20:51,042 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:21:51,106 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:22:51,174 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:23:51,234 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:24:51,302 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:25:56,050 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:26:56,112 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:27:56,167 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:28:56,224 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:29:56,280 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:31:01,047 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:31:33,817 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 20 pairs: ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'FTM/USDT', 'XRP/USDT', 'CFX/USDT', 'MATIC/USDT', 'VRA/USDT', 'STX/USDT', 'AGIX/USDT', 'SHIB/USDT', 'OP/USDT', 'LTC/USDT', 'BNB/USDT', 'USDC/USDT', 'ADA/USDT', 'TON/USDT', 'DOGE/USDT', 'ACH/USDT', 'XMR/USDT']
+2023-03-20 11:32:01,105 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:33:01,168 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:34:01,237 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:35:06,007 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:36:06,061 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:37:06,121 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:38:06,193 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:39:06,268 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:40:11,009 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:41:11,064 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:42:11,127 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:43:11,189 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:44:11,246 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:45:16,014 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:46:16,072 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:47:16,135 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:48:16,194 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:49:16,252 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:50:21,020 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:51:21,083 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:52:21,139 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:53:21,195 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:54:21,250 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:55:26,019 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:56:26,072 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:57:26,125 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:58:26,170 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 11:59:26,211 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 12:00:12,246 - freqtrade.exchange.common - WARNING - Kucoin 429 error, avoid triggering DDosProtection backoff delay. 2 tries left before giving up
+2023-03-20 12:00:31,017 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 12:01:31,063 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 12:01:35,243 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 20 pairs: ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'FTM/USDT', 'XRP/USDT', 'CFX/USDT', 'MATIC/USDT', 'VRA/USDT', 'STX/USDT', 'AGIX/USDT', 'SHIB/USDT', 'OP/USDT', 'LTC/USDT', 'BNB/USDT', 'USDC/USDT', 'ADA/USDT', 'TON/USDT', 'DOGE/USDT', 'ACH/USDT', 'GALAX/USDT']
+2023-03-20 12:02:31,432 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 12:03:31,495 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 12:04:31,544 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 12:05:36,026 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 12:06:36,075 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 12:07:36,116 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 12:08:36,145 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 12:09:36,192 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 12:10:41,029 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 12:11:41,077 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 12:12:41,123 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 12:13:41,171 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 12:14:41,315 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 12:15:06,380 - freqtrade.exchange.common - WARNING - Kucoin 429 error, avoid triggering DDosProtection backoff delay. 3 tries left before giving up
+2023-03-20 12:15:46,042 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 12:16:46,120 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 12:17:46,184 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 12:18:46,240 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 12:19:46,308 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 12:20:51,070 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 12:21:51,138 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 12:22:51,202 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 12:23:51,265 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 12:24:51,321 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
+2023-03-20 12:25:56,048 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.1', state='RUNNING'
