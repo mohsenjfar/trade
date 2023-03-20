@@ -49,9 +49,16 @@
             "number_assets": 20,
             "sort_key": "quoteVolume",
             "min_value": 0,
-            "refresh_period": 1800
+            "refresh_period": 1800,
+            "AgeFilter":7
         }
     ],
+    "edge":{
+        "enabled":true,
+        "process_throttle_secs":3600,
+        "allowed_risk":0.01,
+        "calculate_since_number_of_days":7
+    },
     "telegram": {
         "enabled": false,
         "token": "",
@@ -68,11 +75,6 @@
         "CORS_origins": [],
         "username": "",
         "password": "" 
-    },
-    "edge":{
-        "enabled":true,
-        "process_throttle_secs":3600,
-        "allowed_risk":0.01
     },
     "bot_name": "freqtrade",
     "initial_state": "running",
