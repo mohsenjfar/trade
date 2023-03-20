@@ -52,15 +52,15 @@ class SimpleMA_strategy(IStrategy):
     #     "30": 0.02,
     #     "0": 0.04
     # }
-    minimal_roi = {
-        "0": 100
-    }
+    # minimal_roi = {
+    #     "0": 100
+    # }
     
-    stoploss = -0.05
-    trailing_stop = True
-    trailing_stop_positive = 0.01
-    trailing_stop_positive_offset = 0.011
-    trailing_only_offset_is_reached = True
+    # stoploss = -0.05
+    # trailing_stop = True
+    # trailing_stop_positive = 0.01
+    # trailing_stop_positive_offset = 0.011
+    # trailing_only_offset_is_reached = True
 
     # Optimal stoploss designed for the strategy.
     # This attribute will be overridden if the config file contains "stoploss".

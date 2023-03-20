@@ -1,6 +1,6 @@
 
 {
-    "max_open_trades":3,
+    "max_open_trades":-1,
     "stake_currency": "USDT",
     "stake_amount": "unlimited",
     "tradable_balance_ratio": 0.99,
@@ -70,12 +70,11 @@
         "password": "" 
     },
     "edge":{
-        "enabled":true
+        "enabled":true,
+        "process_throttle_secs":3600,
+        "allowed_risk":0.01
     },
     "bot_name": "freqtrade",
     "initial_state": "running",
-    "force_entry_enable": false,
-    "internals": {
-        "process_throttle_secs": 5
-    }
+    "force_entry_enable": false
 }
