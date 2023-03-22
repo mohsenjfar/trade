@@ -24,15 +24,15 @@ class Strategy004(IStrategy):
     # Minimal ROI designed for the strategy.
     # This attribute will be overridden if the config file contains "minimal_roi"
     minimal_roi = {
-        "60":  0.01,
-        "30":  0.03,
-        "20":  0.04,
-        "0":  0.05
+        "0": 0.091,
+        "38": 0.046,
+        "95": 0.011,
+        "213": 0
     }
 
     # Optimal stoploss designed for the strategy
     # This attribute will be overridden if the config file contains "stoploss"
-    stoploss = -0.10
+    stoploss = -0.24
 
     # Optimal timeframe for the strategy
     timeframe = '5m'

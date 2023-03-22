@@ -1,8 +1,8 @@
 
 {
-    "max_open_trades": 3,
+    "max_open_trades": 5,
     "stake_currency": "USDT",
-    "stake_amount": "unlimited",
+    "stake_amount": 990,
     "tradable_balance_ratio": 0.99,
     "fiat_display_currency": "USD",
     "dry_run": true,
@@ -38,29 +38,15 @@
         "ccxt_config": {},
         "ccxt_async_config": {},
         "pair_whitelist": [
-            "BTC/USDT", 
-            "ETH/USDT", 
-            "SOL/USDT", 
-            "XRP/USDT", 
-            "FTM/USDT", 
-            "CFX/USDT", 
-            "MATIC/USDT", 
-            "VRA/USDT", 
-            "AGIX/USDT", 
-            "STX/USDT", 
-            "SHIB/USDT", 
-            "OP/USDT", 
-            "LTC/USDT", 
-            "BNB/USDT", 
-            "ADA/USDT", 
-            "TON/USDT", 
-            "USDC/USDT", 
-            "DOGE/USDT", 
-            "ACH/USDT", 
-            "RNDR/USDT"
+            "XMR/USDT","ATOM/USDT","FTM/USDT","CHR/USDT","BNB/USDT","ALGO/USDT","XEM/USDT","XTZ/USDT","ZEC/USDT","ADA/USDT",
+            "CHZ/USDT","BTT/USDT","LUNA/USDT","VRA/USDT","KSM/USDT","DASH/USDT","COMP/USDT","CRO/USDT","WAVES/USDT","MKR/USDT",
+            "DIA/USDT","LINK/USDT","DOT/USDT","YFI/USDT","UNI/USDT","FIL/USDT","AAVE/USDT","KCS/USDT","LTC/USDT","BSV/USDT",
+            "XLM/USDT","ETC/USDT","ETH/USDT","BTC/USDT","XRP/USDT","TRX/USDT","VET/USDT","NEO/USDT","EOS/USDT","BCH/USDT",
+            "CRV/USDT","SUSHI/USDT","KLV/USDT","DOGE/USDT","CAKE/USDT","AVAX/USDT","MANA/USDT","SAND/USDT","SHIB/USDT",
+            "KDA/USDT","ICP/USDT","MATIC/USDT","ELON/USDT","NFT/USDT","ARRR/USDT","NEAR/USDT","CLV/USDT","SOL/USDT","SLP/USDT",
+            "XPR/USDT","DYDX/USDT","FTT/USDT","KAVA/USDT","XEC/USDT"
         ],
         "pair_blacklist": [
-            "BNB/.*"
         ]
     },
     "pairlists": [
@@ -76,7 +62,7 @@
     "api_server": {
         "enabled": true,
         "listen_ip_address": "0.0.0.0",
-        "listen_port": 8081,
+        "listen_port": 8080,
         "verbosity": "error",
         "enable_openapi": false,
         "jwt_secret_key": "",

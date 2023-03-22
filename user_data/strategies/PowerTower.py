@@ -56,14 +56,12 @@ class PowerTower(IStrategy):
     
     # ROI table:
     minimal_roi = {
-        "0": 0.213,
-        "39": 0.048,
-        "56": 0.029,
-        "159": 0
+        "0": 0.161,
+        "23": 0.052,
+        "50": 0.032,
+        "170": 0
     }
-
-    # Stoploss:
-    stoploss = -0.288
+    stoploss = -0.336
 
     # Trailing stop:
     trailing_stop = False  # value loaded from strategy
@@ -75,8 +73,8 @@ class PowerTower(IStrategy):
     startup_candle_count: int = 30
 
     # Strategy parameters
-    buy_pow = DecimalParameter(0, 4, decimals=3, default=3.849, space="buy")
-    sell_pow = DecimalParameter(0, 4, decimals=3, default=3.798, space="sell")
+    buy_pow = DecimalParameter(0, 4, decimals=3, default=3.481, space="buy")
+    sell_pow = DecimalParameter(0, 4, decimals=3, default=3.121, space="sell")
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         return dataframe
