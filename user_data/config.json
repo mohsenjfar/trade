@@ -4,8 +4,7 @@
   "stake_amount": "unlimited",
   "tradable_balance_ratio": 0.99,
   "fiat_display_currency": "USD",
-  "dry_run": true,
-  "dry_run_wallet": 2000,
+  "dry_run": false,
   "cancel_open_orders_on_exit": false,
   "trading_mode": "spot",
   "margin_mode": "",
@@ -38,8 +37,6 @@
 },
   "exchange": {
     "name": "kucoin",
-    "key": "",
-    "secret": "",
     "ccxt_config": {},
     "ccxt_async_config": {},
     "pair_whitelist": [
@@ -54,7 +51,6 @@
       "VELO/USDT",
       "FLOKI/USDT",
       "ARB/USDT",
-      "ROSN/USDT",
       "TON/USDT",
       "FLUX/USDT",
       "MATIC/USDT",
@@ -106,9 +102,7 @@
     }
   ],
   "telegram": {
-    "enabled": false,
-    "token": "",
-    "chat_id": ""
+    "enabled": false
   },
   "api_server": {
     "enabled": true,
@@ -116,16 +110,15 @@
     "listen_port": 8080,
     "verbosity": "error",
     "enable_openapi": false,
-    "jwt_secret_key": "",
-    "ws_token": "",
-    "CORS_origins": [],
-    "username": "",
-    "password": ""
+    "CORS_origins": []
   },
   "bot_name": "freqtrade",
   "initial_state": "running",
   "force_entry_enable": false,
   "internals": {
     "process_throttle_secs": 5
-  }
+  },
+  "add_config_files": [
+    "secrets.json"
+  ]
 }
