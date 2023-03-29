@@ -24,25 +24,24 @@ class Strategy004(IStrategy):
     # Minimal ROI designed for the strategy.
     # This attribute will be overridden if the config file contains "minimal_roi"
     minimal_roi = {
-        "0": 0.091,
-        "19": 0.046,
-        "50": 0.018,
-        "131": 0
+        "0": 0.105,
+        "36": 0.039,
+        "61": 0.013,
+        "163": 0
     }
 
     # Optimal stoploss designed for the strategy
     # This attribute will be overridden if the config file contains "stoploss"
-    stoploss = -0.166
+    stoploss = -0.171
 
     # Optimal timeframe for the strategy
     timeframe = '5m'
 
-    # trailing stoploss
+    # Trailing stop:
     trailing_stop = True
-    trailing_stop_positive = 0.297
-    trailing_stop_positive_offset = 0.359
+    trailing_stop_positive = 0.099
+    trailing_stop_positive_offset = 0.101
     trailing_only_offset_is_reached = False
-
 
     # run "populate_indicators" only for new candle
     process_only_new_candles = False
