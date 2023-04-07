@@ -5,6 +5,7 @@
   "tradable_balance_ratio": 0.99,
   "fiat_display_currency": "USD",
   "dry_run": false,
+  "dry_run_wallet":2000,
   "cancel_open_orders_on_exit": false,
   "trading_mode": "spot",
   "margin_mode": "",
@@ -37,6 +38,7 @@
 },
   "exchange": {
     "name": "kucoin",
+    "log_responses": true,
     "ccxt_config": {},
     "ccxt_async_config": {},
     "pair_whitelist": [
