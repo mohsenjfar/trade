@@ -249,3 +249,10 @@
 2023-04-09 14:17:29,439 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 17 minutes old
 2023-04-09 14:17:34,322 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 17 minutes old
 2023-04-09 14:17:39,375 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 17 minutes old
+2023-04-09 14:17:45,021 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 17 minutes old
+2023-04-09 14:17:49,645 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 17 minutes old
+2023-04-09 14:17:55,059 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 17 minutes old
+2023-04-09 14:17:59,325 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 17 minutes old
+2023-04-09 14:18:04,642 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 18 minutes old
+2023-04-09 14:18:09,564 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 18 minutes old
+2023-04-09 14:18:12,110 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
