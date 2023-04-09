@@ -234,3 +234,18 @@
 2023-04-09 14:16:19,867 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 16 minutes old
 2023-04-09 14:16:24,957 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 16 minutes old
 2023-04-09 14:16:30,595 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 16 minutes old
+2023-04-09 14:16:34,698 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 16 minutes old
+2023-04-09 14:16:39,464 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 16 minutes old
+2023-04-09 14:16:44,329 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 16 minutes old
+2023-04-09 14:16:49,853 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 16 minutes old
+2023-04-09 14:16:54,944 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 16 minutes old
+2023-04-09 14:16:59,685 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 16 minutes old
+2023-04-09 14:17:04,681 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 17 minutes old
+2023-04-09 14:17:09,765 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 17 minutes old
+2023-04-09 14:17:12,079 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:17:14,559 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 17 minutes old
+2023-04-09 14:17:19,729 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 17 minutes old
+2023-04-09 14:17:24,596 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 17 minutes old
+2023-04-09 14:17:29,439 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 17 minutes old
+2023-04-09 14:17:34,322 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 17 minutes old
+2023-04-09 14:17:39,375 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 17 minutes old
