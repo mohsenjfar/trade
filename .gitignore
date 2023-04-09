@@ -1,9 +1,8 @@
 *.sqlite
 *.sqlite-shm
 *.sqlite-wal
+*.log
 
 data
 
 .venv
-
-*.log

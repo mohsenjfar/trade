@@ -258,3 +258,132 @@
 2023-04-09 14:18:12,110 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
 2023-04-09 14:18:14,540 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 18 minutes old
 2023-04-09 14:18:19,492 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 18 minutes old
+2023-04-09 14:19:12,147 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:20:14,900 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:21:14,961 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:22:14,998 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:23:15,038 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:24:15,084 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:25:20,987 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:26:21,010 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:27:21,043 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:28:21,076 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:29:21,115 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:30:21,198 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:31:21,226 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:32:21,258 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:33:21,293 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:34:21,329 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:35:08,311 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 15 minutes old
+2023-04-09 14:35:15,193 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 15 minutes old
+2023-04-09 14:35:21,092 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 15 minutes old
+2023-04-09 14:35:25,491 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 15 minutes old
+2023-04-09 14:35:26,198 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:35:30,037 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 15 minutes old
+2023-04-09 14:35:35,182 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 15 minutes old
+2023-04-09 14:35:39,843 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 15 minutes old
+2023-04-09 14:35:45,076 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 15 minutes old
+2023-04-09 14:35:49,637 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 15 minutes old
+2023-04-09 14:35:54,564 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 15 minutes old
+2023-04-09 14:35:59,355 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 15 minutes old
+2023-04-09 14:36:04,389 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 16 minutes old
+2023-04-09 14:36:09,281 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 16 minutes old
+2023-04-09 14:36:14,423 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 16 minutes old
+2023-04-09 14:36:19,273 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 16 minutes old
+2023-04-09 14:36:24,212 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 16 minutes old
+2023-04-09 14:36:26,217 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:36:29,557 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 16 minutes old
+2023-04-09 14:36:34,221 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 16 minutes old
+2023-04-09 14:36:39,121 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 16 minutes old
+2023-04-09 14:36:44,397 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 16 minutes old
+2023-04-09 14:36:49,069 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 16 minutes old
+2023-04-09 14:36:54,018 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 16 minutes old
+2023-04-09 14:36:59,667 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 16 minutes old
+2023-04-09 14:37:04,061 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 17 minutes old
+2023-04-09 14:37:08,916 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 17 minutes old
+2023-04-09 14:37:13,929 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 17 minutes old
+2023-04-09 14:37:18,815 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 17 minutes old
+2023-04-09 14:37:24,669 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 17 minutes old
+2023-04-09 14:37:26,241 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:37:28,895 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 17 minutes old
+2023-04-09 14:37:34,161 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 17 minutes old
+2023-04-09 14:37:38,767 - freqtrade.strategy.interface - WARNING - Outdated history for pair FLUX/USDT. Last tick is 17 minutes old
+2023-04-09 14:38:27,499 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:39:27,530 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:40:07,987 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:08,066 - freqtrade.strategy.interface - WARNING - Outdated history for pair SUSHI/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:08,079 - freqtrade.strategy.interface - WARNING - Outdated history for pair SRM/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:14,112 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:14,160 - freqtrade.strategy.interface - WARNING - Outdated history for pair SUSHI/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:14,173 - freqtrade.strategy.interface - WARNING - Outdated history for pair SRM/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:19,753 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:19,804 - freqtrade.strategy.interface - WARNING - Outdated history for pair SUSHI/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:19,817 - freqtrade.strategy.interface - WARNING - Outdated history for pair SRM/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:23,495 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:23,535 - freqtrade.strategy.interface - WARNING - Outdated history for pair SUSHI/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:23,545 - freqtrade.strategy.interface - WARNING - Outdated history for pair SRM/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:28,664 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:28,712 - freqtrade.strategy.interface - WARNING - Outdated history for pair SUSHI/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:28,724 - freqtrade.strategy.interface - WARNING - Outdated history for pair SRM/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:29,838 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:40:33,857 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:33,905 - freqtrade.strategy.interface - WARNING - Outdated history for pair SUSHI/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:33,918 - freqtrade.strategy.interface - WARNING - Outdated history for pair SRM/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:38,458 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:38,507 - freqtrade.strategy.interface - WARNING - Outdated history for pair SUSHI/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:38,519 - freqtrade.strategy.interface - WARNING - Outdated history for pair SRM/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:43,100 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:43,148 - freqtrade.strategy.interface - WARNING - Outdated history for pair SUSHI/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:43,166 - freqtrade.strategy.interface - WARNING - Outdated history for pair SRM/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:47,777 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:47,821 - freqtrade.strategy.interface - WARNING - Outdated history for pair SUSHI/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:47,832 - freqtrade.strategy.interface - WARNING - Outdated history for pair SRM/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:53,454 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:53,506 - freqtrade.strategy.interface - WARNING - Outdated history for pair SUSHI/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:53,519 - freqtrade.strategy.interface - WARNING - Outdated history for pair SRM/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:57,736 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:57,821 - freqtrade.strategy.interface - WARNING - Outdated history for pair SUSHI/USDT. Last tick is 15 minutes old
+2023-04-09 14:40:57,835 - freqtrade.strategy.interface - WARNING - Outdated history for pair SRM/USDT. Last tick is 15 minutes old
+2023-04-09 14:41:03,032 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 16 minutes old
+2023-04-09 14:41:03,081 - freqtrade.strategy.interface - WARNING - Outdated history for pair SUSHI/USDT. Last tick is 16 minutes old
+2023-04-09 14:41:08,176 - freqtrade.strategy.interface - WARNING - Outdated history for pair SUSHI/USDT. Last tick is 16 minutes old
+2023-04-09 14:41:13,291 - freqtrade.strategy.interface - WARNING - Outdated history for pair SUSHI/USDT. Last tick is 16 minutes old
+2023-04-09 14:41:29,859 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:42:29,892 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:43:29,931 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:44:29,984 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:45:08,812 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 15 minutes old
+2023-04-09 14:45:16,881 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 15 minutes old
+2023-04-09 14:45:23,213 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 15 minutes old
+2023-04-09 14:45:28,726 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 15 minutes old
+2023-04-09 14:45:33,938 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 15 minutes old
+2023-04-09 14:45:34,071 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:45:38,595 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 15 minutes old
+2023-04-09 14:45:44,310 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 15 minutes old
+2023-04-09 14:45:48,526 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 15 minutes old
+2023-04-09 14:45:54,241 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 15 minutes old
+2023-04-09 14:45:58,048 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 15 minutes old
+2023-04-09 14:46:03,098 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 16 minutes old
+2023-04-09 14:46:08,932 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 16 minutes old
+2023-04-09 14:46:14,409 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 16 minutes old
+2023-04-09 14:46:19,142 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 16 minutes old
+2023-04-09 14:46:24,644 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 16 minutes old
+2023-04-09 14:46:28,284 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 16 minutes old
+2023-04-09 14:46:33,408 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 16 minutes old
+2023-04-09 14:46:36,015 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:46:38,586 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 16 minutes old
+2023-04-09 14:46:43,255 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 16 minutes old
+2023-04-09 14:46:48,290 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 16 minutes old
+2023-04-09 14:46:53,163 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 16 minutes old
+2023-04-09 14:46:58,251 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 16 minutes old
+2023-04-09 14:47:03,163 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 17 minutes old
+2023-04-09 14:47:08,133 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 17 minutes old
+2023-04-09 14:47:13,267 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 17 minutes old
+2023-04-09 14:47:18,095 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 17 minutes old
+2023-04-09 14:47:22,992 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 17 minutes old
+2023-04-09 14:47:28,055 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 17 minutes old
+2023-04-09 14:47:33,381 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 17 minutes old
+2023-04-09 14:47:36,048 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
+2023-04-09 14:47:38,315 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 17 minutes old
+2023-04-09 14:47:42,952 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 17 minutes old
+2023-04-09 14:47:48,332 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 17 minutes old
