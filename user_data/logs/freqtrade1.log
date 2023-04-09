@@ -232,3 +232,5 @@
 2023-04-09 14:16:12,051 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-5e13b486', state='RUNNING'
 2023-04-09 14:16:15,448 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 16 minutes old
 2023-04-09 14:16:19,867 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 16 minutes old
+2023-04-09 14:16:24,957 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 16 minutes old
+2023-04-09 14:16:30,595 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMT/USDT. Last tick is 16 minutes old
