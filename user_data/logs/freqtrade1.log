@@ -15821,3 +15821,6 @@
 2023-04-10 12:00:10,617 - freqtrade.strategy.interface - WARNING - Outdated history for pair TRU/USDT. Last tick is 15 minutes old
 2023-04-10 12:00:10,690 - freqtrade.strategy.interface - WARNING - Outdated history for pair MAGIC/USDT. Last tick is 15 minutes old
 2023-04-10 12:00:10,769 - freqtrade.strategy.interface - WARNING - Outdated history for pair LRC/USDT. Last tick is 15 minutes old
+2023-04-10 12:00:19,120 - freqtrade.strategy.interface - WARNING - Outdated history for pair TRU/USDT. Last tick is 15 minutes old
+2023-04-10 12:00:19,185 - freqtrade.strategy.interface - WARNING - Outdated history for pair MAGIC/USDT. Last tick is 15 minutes old
+2023-04-10 12:00:19,282 - freqtrade.strategy.interface - WARNING - Outdated history for pair LRC/USDT. Last tick is 15 minutes old
