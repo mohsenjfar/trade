@@ -2,7 +2,6 @@
 version: '3'
 services:
   freqtrade:
-    # image: freqtradeorg/freqtrade:stable
     image: freqtradeorg/freqtrade:develop
     # Use plotting image
     # image: freqtradeorg/freqtrade:develop_plot
@@ -50,4 +49,4 @@ services:
       --logfile /freqtrade/user_data/logs/freqtrade1.log
       --db-url sqlite:////freqtrade/user_data/fradesv3_freqtrade2.sqlite
       --config /freqtrade/user_data/config.freqtrade1.json
-      --strategy Strategy004
+      --strategy Strategy004_
