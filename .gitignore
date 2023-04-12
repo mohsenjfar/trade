@@ -1,7 +1,0 @@
-*.sqlite
-*.sqlite-shm
-*.sqlite-wal
-
-logs
-data
-.venv
