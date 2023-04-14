@@ -1,0 +1,144 @@
+2023-04-14 06:09:15,467 - freqtrade.loggers - INFO - Verbosity set to 0
+2023-04-14 06:09:15,468 - freqtrade.configuration.configuration - INFO - Runmode set to dry_run.
+2023-04-14 06:09:15,468 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2023-04-14 06:09:15,468 - freqtrade.configuration.configuration - INFO - Dry run is enabled
+2023-04-14 06:09:15,468 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/tradesv3.sqlite"
+2023-04-14 06:09:15,468 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 9 ...
+2023-04-14 06:09:15,494 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2023-04-14 06:09:15,496 - freqtrade.configuration.directory_operations - INFO - Created data directory: None
+2023-04-14 06:09:15,496 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/kucoin ...
+2023-04-14 06:09:15,498 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2023-04-14 06:09:15,513 - freqtrade.exchange.check_exchange - WARNING - Exchange "kucoin" is known to the the ccxt library, available for the bot, but not officially supported by the Freqtrade development team. It may work flawlessly (please report back) or have serious issues. Use it at your own discretion.
+2023-04-14 06:09:15,513 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2023-04-14 06:09:15,542 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy Most from '/freqtrade/user_data/strategies/Most.py'...
+2023-04-14 06:09:15,542 - freqtrade.strategy.hyper - INFO - Loading parameters from file /freqtrade/user_data/strategies/Most.json
+2023-04-14 06:09:15,544 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: USDT.
+2023-04-14 06:09:15,544 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: unlimited.
+2023-04-14 06:09:15,544 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2023-04-14 06:09:15,544 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 9.
+2023-04-14 06:09:15,545 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {'0': 0.16, '26': 0.025, '42': 0.011, '90': 0}
+2023-04-14 06:09:15,545 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 5m
+2023-04-14 06:09:15,545 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -0.129
+2023-04-14 06:09:15,546 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: True
+2023-04-14 06:09:15,546 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive: 0.06
+2023-04-14 06:09:15,546 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.113
+2023-04-14 06:09:15,546 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2023-04-14 06:09:15,547 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: False
+2023-04-14 06:09:15,547 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: False
+2023-04-14 06:09:15,547 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'limit', 'exit': 'limit', 'stoploss': 'market', 'stoploss_on_exchange': False}
+2023-04-14 06:09:15,547 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2023-04-14 06:09:15,547 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: USDT
+2023-04-14 06:09:15,548 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: unlimited
+2023-04-14 06:09:15,548 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using protections: []
+2023-04-14 06:09:15,548 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 0
+2023-04-14 06:09:15,548 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2023-04-14 06:09:15,549 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2023-04-14 06:09:15,549 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: True
+2023-04-14 06:09:15,549 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2023-04-14 06:09:15,549 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2023-04-14 06:09:15,549 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2023-04-14 06:09:15,550 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2023-04-14 06:09:15,550 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2023-04-14 06:09:15,550 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2023-04-14 06:09:15,550 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 9
+2023-04-14 06:09:15,551 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2023-04-14 06:09:15,565 - freqtrade.exchange.exchange - INFO - Instance is running with dry_run enabled
+2023-04-14 06:09:15,566 - freqtrade.exchange.exchange - INFO - Using CCXT 3.0.58
+2023-04-14 06:09:15,592 - freqtrade.exchange.exchange - INFO - Using Exchange "KuCoin"
+2023-04-14 06:09:18,999 - freqtrade.resolvers.exchange_resolver - INFO - Using resolved exchange 'Kucoin'...
+2023-04-14 06:09:19,115 - freqtrade.wallets - INFO - Wallets synced.
+2023-04-14 06:09:19,119 - freqtrade.resolvers.iresolver - INFO - Using resolved pairlist StaticPairList from '/freqtrade/freqtrade/plugins/pairlist/StaticPairList.py'...
+2023-04-14 06:09:19,286 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.telegram ...
+2023-04-14 06:09:19,993 - apscheduler.scheduler - INFO - Scheduler started
+2023-04-14 06:09:20,169 - freqtrade.rpc.telegram - INFO - rpc.telegram is listening for following commands: [['status'], ['profit'], ['balance'], ['start'], ['stop'], ['forcesell', 'forceexit', 'fx'], ['forcebuy', 'forcelong'], ['forceshort'], ['trades'], ['delete'], ['coo', 'cancel_open_order'], ['performance'], ['buys', 'entries'], ['sells', 'exits'], ['mix_tags'], ['stats'], ['daily'], ['weekly'], ['monthly'], ['count'], ['locks'], ['unlock', 'delete_locks'], ['reload_config', 'reload_conf'], ['show_config', 'show_conf'], ['stopbuy', 'stopentry'], ['whitelist'], ['blacklist'], ['blacklist_delete', 'bl_delete'], ['logs'], ['edge'], ['health'], ['help'], ['version'], ['marketdir']]
+2023-04-14 06:09:20,170 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.api_server
+2023-04-14 06:09:21,110 - freqtrade.rpc.api_server.webserver - INFO - Starting HTTP Server at 0.0.0.0:8080
+2023-04-14 06:09:21,111 - freqtrade.rpc.api_server.webserver - WARNING - SECURITY WARNING - Local Rest Server listening to external connections
+2023-04-14 06:09:21,111 - freqtrade.rpc.api_server.webserver - WARNING - SECURITY WARNING - This is insecure please set to your loopback,e.g 127.0.0.1 in config.json
+2023-04-14 06:09:21,111 - freqtrade.rpc.api_server.webserver - INFO - Starting Local Rest Server.
+2023-04-14 06:09:21,184 - uvicorn.error - INFO - Started server process [1]
+2023-04-14 06:09:21,185 - uvicorn.error - INFO - Waiting for application startup.
+2023-04-14 06:09:21,186 - uvicorn.error - INFO - Application startup complete.
+2023-04-14 06:09:21,187 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2023-04-14 06:09:21,191 - freqtrade.resolvers.iresolver - INFO - Using resolved pairlist StaticPairList from '/freqtrade/freqtrade/plugins/pairlist/StaticPairList.py'...
+2023-04-14 06:09:21,350 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 53 pairs: ['VID/USDT', 'IOI/USDT', 'TRU/USDT', 'POLX/USDT', 'CARE/USDT', 'PIX/USDT', 'GMM/USDT', 'TRIAS/USDT', 'VELO/USDT', 'FLOKI/USDT', 'ARB/USDT', 'TON/USDT', 'FLUX/USDT', 'MATIC/USDT', 'SFUND/USDT', 'AGIX/USDT', 'MAGIC/USDT', 'BAX/USDT', 'XPR/USDT', 'ACH/USDT', 'SAND/USDT', 'GMT/USDT', 'SNX/USDT', 'SHIB/USDT', 'OP/USDT', 'TRX/USDT', 'XRP/USDT', 'AVAX/USDT', 'XMR/USDT', 'GALAX/USDT', 'FT/USDT', 'ETH/USDT', 'IMX/USDT', 'LRC/USDT', 'ADA/USDT', 'ATOM/USDT', 'LUNA/USDT', 'NEO/USDT', 'BLUR/USDT', 'JASMY/USDT', 'SUSHI/USDT', 'HBAR/USDT', 'BTC/USDT', 'QNT/USDT', 'KCS/USDT', 'SRM/USDT', 'ZEC/USDT', 'LINK/USDT', 'XLM/USDT', 'MANA/USDT', 'TEL/USDT', 'LUNC/USDT', 'VRA/USDT']
+2023-04-14 06:09:21,351 - freqtrade.strategy.hyper - INFO - No params for buy found, using default values.
+2023-04-14 06:09:21,351 - freqtrade.strategy.hyper - INFO - No params for sell found, using default values.
+2023-04-14 06:09:21,352 - freqtrade.strategy.hyper - INFO - No params for protection found, using default values.
+2023-04-14 06:09:21,352 - freqtrade.plugins.protectionmanager - INFO - No protection Handlers defined.
+2023-04-14 06:09:21,353 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'running'}
+2023-04-14 06:09:21,533 - freqtrade.worker - INFO - Changing state to: RUNNING
+2023-04-14 06:09:21,578 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': warning, 'status': 'Dry run is enabled. All trades are simulated.'}
+2023-04-14 06:09:21,667 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': "*Exchange:* `kucoin`\n*Stake per trade:* `unlimited USDT`\n*Minimum ROI:* `{'0': 0.16, '26': 0.025, '42': 0.011, '90': 0}`\n*Trailing Stoploss:* `-0.129`\n*Position adjustment:* `Off`\n*Timeframe:* `5m`\n*Strategy:* `Most`"}
+2023-04-14 06:09:21,740 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': "Searching for USDT pairs to buy and sell based on [{'StaticPairList': 'StaticPairList'}]"}
+2023-04-14 06:09:28,748 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-605cc20a', state='RUNNING'
+2023-04-14 06:10:00,868 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 15 minutes old
+2023-04-14 06:10:05,262 - freqtrade.exchange.common - WARNING - Kucoin 429 error, avoid triggering DDosProtection backoff delay. 3 tries left before giving up
+2023-04-14 06:10:10,977 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 15 minutes old
+2023-04-14 06:10:16,927 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 15 minutes old
+2023-04-14 06:10:26,450 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 15 minutes old
+2023-04-14 06:10:30,818 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 15 minutes old
+2023-04-14 06:10:32,782 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-605cc20a', state='RUNNING'
+2023-04-14 06:10:36,668 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 15 minutes old
+2023-04-14 06:10:40,902 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 15 minutes old
+2023-04-14 06:10:46,583 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 15 minutes old
+2023-04-14 06:10:50,281 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 15 minutes old
+2023-04-14 06:10:55,525 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 15 minutes old
+2023-04-14 06:11:00,367 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 16 minutes old
+2023-04-14 06:11:05,753 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 16 minutes old
+2023-04-14 06:11:10,265 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 16 minutes old
+2023-04-14 06:11:15,382 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 16 minutes old
+2023-04-14 06:11:20,011 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 16 minutes old
+2023-04-14 06:11:24,983 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 16 minutes old
+2023-04-14 06:11:29,738 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 16 minutes old
+2023-04-14 06:11:32,811 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-605cc20a', state='RUNNING'
+2023-04-14 06:11:35,230 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 16 minutes old
+2023-04-14 06:11:39,870 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 16 minutes old
+2023-04-14 06:11:44,974 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 16 minutes old
+2023-04-14 06:11:50,456 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 16 minutes old
+2023-04-14 06:11:54,997 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 16 minutes old
+2023-04-14 06:12:00,533 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 17 minutes old
+2023-04-14 06:12:06,049 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 17 minutes old
+2023-04-14 06:12:10,060 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 17 minutes old
+2023-04-14 06:12:14,882 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 17 minutes old
+2023-04-14 06:12:20,143 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 17 minutes old
+2023-04-14 06:12:24,763 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 17 minutes old
+2023-04-14 06:12:29,972 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 17 minutes old
+2023-04-14 06:12:32,843 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-605cc20a', state='RUNNING'
+2023-04-14 06:12:34,610 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 17 minutes old
+2023-04-14 06:12:39,994 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 17 minutes old
+2023-04-14 06:12:44,900 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 17 minutes old
+2023-04-14 06:12:49,823 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 17 minutes old
+2023-04-14 06:12:54,548 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 17 minutes old
+2023-04-14 06:12:59,919 - freqtrade.strategy.interface - WARNING - Outdated history for pair GMM/USDT. Last tick is 17 minutes old
+2023-04-14 06:13:32,885 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-605cc20a', state='RUNNING'
+2023-04-14 06:14:32,932 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-605cc20a', state='RUNNING'
+2023-04-14 06:14:57,569 - freqtrade.rpc.telegram - INFO - Rejected unauthorized message from: 5960108957
+2023-04-14 06:15:35,559 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-605cc20a', state='RUNNING'
+2023-04-14 06:16:35,589 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-605cc20a', state='RUNNING'
+2023-04-14 06:17:35,626 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-605cc20a', state='RUNNING'
+2023-04-14 06:18:35,673 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-605cc20a', state='RUNNING'
+2023-04-14 06:19:35,715 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-605cc20a', state='RUNNING'
+2023-04-14 06:20:09,016 - freqtrade.strategy.interface - WARNING - Outdated history for pair TEL/USDT. Last tick is 15 minutes old
+2023-04-14 06:20:16,678 - freqtrade.strategy.interface - WARNING - Outdated history for pair TEL/USDT. Last tick is 15 minutes old
+2023-04-14 06:20:21,336 - freqtrade.strategy.interface - WARNING - Outdated history for pair TEL/USDT. Last tick is 15 minutes old
+2023-04-14 06:20:25,072 - freqtrade.strategy.interface - WARNING - Outdated history for pair TEL/USDT. Last tick is 15 minutes old
+2023-04-14 06:20:29,875 - freqtrade.strategy.interface - WARNING - Outdated history for pair TEL/USDT. Last tick is 15 minutes old
+2023-04-14 06:20:35,324 - freqtrade.strategy.interface - WARNING - Outdated history for pair TEL/USDT. Last tick is 15 minutes old
+2023-04-14 06:20:36,691 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-605cc20a', state='RUNNING'
+2023-04-14 06:20:40,745 - freqtrade.strategy.interface - WARNING - Outdated history for pair TEL/USDT. Last tick is 15 minutes old
+2023-04-14 06:20:44,927 - freqtrade.strategy.interface - WARNING - Outdated history for pair TEL/USDT. Last tick is 15 minutes old
+2023-04-14 06:20:49,497 - freqtrade.strategy.interface - WARNING - Outdated history for pair TEL/USDT. Last tick is 15 minutes old
+2023-04-14 06:20:54,128 - freqtrade.strategy.interface - WARNING - Outdated history for pair TEL/USDT. Last tick is 15 minutes old
+2023-04-14 06:20:59,116 - freqtrade.strategy.interface - WARNING - Outdated history for pair TEL/USDT. Last tick is 15 minutes old
+2023-04-14 06:21:04,443 - freqtrade.strategy.interface - WARNING - Outdated history for pair TEL/USDT. Last tick is 16 minutes old
+2023-04-14 06:21:09,560 - freqtrade.strategy.interface - WARNING - Outdated history for pair TEL/USDT. Last tick is 16 minutes old
+2023-04-14 06:21:14,091 - freqtrade.strategy.interface - WARNING - Outdated history for pair TEL/USDT. Last tick is 16 minutes old
+2023-04-14 06:21:19,322 - freqtrade.strategy.interface - WARNING - Outdated history for pair TEL/USDT. Last tick is 16 minutes old
+2023-04-14 06:21:24,473 - freqtrade.strategy.interface - WARNING - Outdated history for pair TEL/USDT. Last tick is 16 minutes old
+2023-04-14 06:21:29,082 - freqtrade.strategy.interface - WARNING - Outdated history for pair TEL/USDT. Last tick is 16 minutes old
+2023-04-14 06:21:33,800 - freqtrade.strategy.interface - WARNING - Outdated history for pair TEL/USDT. Last tick is 16 minutes old
+2023-04-14 06:21:36,722 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2023.4.dev-605cc20a', state='RUNNING'
+2023-04-14 06:21:38,888 - freqtrade.strategy.interface - WARNING - Outdated history for pair TEL/USDT. Last tick is 16 minutes old
+2023-04-14 06:21:44,226 - freqtrade.strategy.interface - WARNING - Outdated history for pair TEL/USDT. Last tick is 16 minutes old
+2023-04-14 06:21:48,884 - freqtrade.strategy.interface - WARNING - Outdated history for pair TEL/USDT. Last tick is 16 minutes old

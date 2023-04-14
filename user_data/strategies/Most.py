@@ -9,39 +9,11 @@ from pandas import DataFrame
 import talib.abstract as ta
 
 
-class Strategy004(IStrategy):
-
-    """
-    Strategy 004
-    author@: Gerald Lonlas
-    github@: https://github.com/freqtrade/freqtrade-strategies
-
-    How to use it?
-    > python3 ./freqtrade/main.py -s Strategy004
-    """
+class Most(IStrategy):
 
     INTERFACE_VERSION: int = 3
-    # Minimal ROI designed for the strategy.
-    # This attribute will be overridden if the config file contains "minimal_roi"
-    minimal_roi = {
-        "0": 0.16,
-        "26": 0.025,
-        "42": 0.011,
-        "90": 0
-    }
 
-    # Optimal stoploss designed for the strategy
-    # This attribute will be overridden if the config file contains "stoploss"
-    stoploss = -0.129
-
-    # Optimal timeframe for the strategy
     timeframe = '5m'
-
-    # Trailing stop:
-    trailing_stop = True
-    trailing_stop_positive = 0.06
-    trailing_stop_positive_offset = 0.113
-    trailing_only_offset_is_reached = False
 
     # run "populate_indicators" only for new candle
     process_only_new_candles = False
@@ -73,13 +45,6 @@ class Strategy004(IStrategy):
         return []
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        """
-        Adds several different TA indicators to the given DataFrame
-
-        Performance Note: For the best performance be frugal on the number of indicators
-        you are using. Let uncomment only the indicator you are using in your strategies
-        or your hyperopt configuration, otherwise you will waste your memory and CPU usage.
-        """
 
         # ADX
         dataframe['adx'] = ta.ADX(dataframe)
@@ -113,11 +78,7 @@ class Strategy004(IStrategy):
         return dataframe
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        """
-        Based on TA indicators, populates the buy signal for the given dataframe
-        :param dataframe: DataFrame
-        :return: DataFrame with buy column
-        """
+
         dataframe.loc[
             (
                 (
@@ -143,11 +104,7 @@ class Strategy004(IStrategy):
         return dataframe
 
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        """
-        Based on TA indicators, populates the sell signal for the given dataframe
-        :param dataframe: DataFrame
-        :return: DataFrame with buy column
-        """
+
         dataframe.loc[
             (
                 (dataframe['slowadx'] < 25) &
