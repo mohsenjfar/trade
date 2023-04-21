@@ -18,7 +18,7 @@ import pandas_ta as pta
 from technical import qtpylib
 
 
-class SampleStrategy(IStrategy):
+class combinedStrategy(IStrategy):
     """
     This is a strategy template to get you started.
     More information in https://www.freqtrade.io/en/latest/strategy-customization/
