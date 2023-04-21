@@ -1,0 +1,11 @@
+backtest_results
+data
+freqaimodels
+hyperopt_results
+hyperopt_results
+logs
+notebooks
+plot
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
