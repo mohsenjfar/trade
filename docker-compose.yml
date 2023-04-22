@@ -1,7 +1,7 @@
 ---
 version: '3'
 services:
-  freqtrade_most:
+  ft1:
     # image: freqtradeorg/freqtrade:stable
     image: freqtradeorg/freqtrade:develop
     # Use plotting image
@@ -17,8 +17,8 @@ services:
     # Expose api on port 8080 (localhost only)
     # Please read the https://www.freqtrade.io/en/stable/rest-api/ documentation
     # before enabling this.
-    ports:
-      - "127.0.0.1:8081:8081"
+    # ports:
+    #   - "127.0.0.1:8081:8081"
     # Default command used when running `docker compose up`
     command: >
       trade
@@ -26,7 +26,7 @@ services:
       --db-url sqlite:////cryptobot/user_data/tradesv3.sqlite
       --config /cryptobot/user_data/config.json
       --strategy Most
-  freqtrade_combined_strategy:
+  ft2:
     # image: freqtradeorg/freqtrade:stable
     image: freqtradeorg/freqtrade:develop
     # Use plotting image
