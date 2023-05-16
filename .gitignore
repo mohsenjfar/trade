@@ -4,7 +4,6 @@ freqaimodels
 hyperopt_results
 hyperopt_results
 logs
-notebooks
 plot
 *.sqlite
 *.sqlite-shm
@@ -13,3 +12,4 @@ plot
 .venv
 .env
 *.lock
+.git

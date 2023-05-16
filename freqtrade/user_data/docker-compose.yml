@@ -1,0 +1,53 @@
+---
+version: '3'
+services:
+  ft1:
+    # image: freqtradeorg/freqtrade:stable
+    image: freqtradeorg/freqtrade:develop
+    # Use plotting image
+    # image: freqtradeorg/freqtrade:develop_plot
+    # Build step - only needed when additional dependencies are needed
+    # build:
+    #   context: .
+    #   dockerfile: "./docker/Dockerfile.custom"
+    restart: unless-stopped
+    container_name: Most
+    volumes:
+      - "./user_data:/freqtrade/user_data"
+    # Expose api on port 8080 (localhost only)
+    # Please read the https://www.freqtrade.io/en/stable/rest-api/ documentation
+    # before enabling this.
+    # ports:
+    #   - "127.0.0.1:8081:8081"
+    # Default command used when running `docker compose up`
+    command: >
+      trade
+      --logfile /cryptobot/user_data/logs/freqtrade.log
+      --db-url sqlite:////cryptobot/user_data/tradesv3.sqlite
+      --config /cryptobot/user_data/config.json
+      --strategy Most
+  ft2:
+    # image: freqtradeorg/freqtrade:stable
+    image: freqtradeorg/freqtrade:develop
+    # Use plotting image
+    # image: freqtradeorg/freqtrade:develop_plot
+    # Build step - only needed when additional dependencies are needed
+    # build:
+    #   context: .
+    #   dockerfile: "./docker/Dockerfile.custom"
+    restart: unless-stopped
+    container_name: combinedStrategy
+    volumes:
+      - "./user_data:/freqtrade/user_data"
+    # Expose api on port 8080 (localhost only)
+    # Please read the https://www.freqtrade.io/en/stable/rest-api/ documentation
+    # before enabling this.
+    # ports:
+    #   - "127.0.0.1:8082:8082"
+    # Default command used when running `docker compose up`
+    command: >
+      trade
+      --logfile /freqtrade/user_data/logs/combined_freqtrade.log
+      --db-url sqlite:////freqtrade/user_data/combined_tradesv3.sqlite
+      --config /freqtrade/user_data/combined_config.json
+      --strategy combinedStrategy
