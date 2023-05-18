@@ -12,4 +12,4 @@ plot
 .venv
 .env
 *.lock
-.git
+freqtrade
