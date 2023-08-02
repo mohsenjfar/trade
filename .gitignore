@@ -13,3 +13,4 @@ plot
 .env
 *.lock
 freqtrade
+secrets*

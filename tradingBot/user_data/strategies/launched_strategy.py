@@ -22,7 +22,7 @@ class LS(IStrategy):
 
     timeframe = '5m'
 
-    stoploss = -0.5
+    stoploss = -1
 
     can_short: bool = False
 
@@ -39,30 +39,11 @@ class LS(IStrategy):
     }
 
     buy_rsi = IntParameter(low=1, high=100, default=30, space='buy', optimize=True)
-    buy_ema_short = IntParameter(3, 50, default=5, space='buy', optimize=True)
-    buy_ema_long = IntParameter(15, 200, default=50, space='buy', optimize=True)
 
     sell_rsi = IntParameter(low=1, high=100, default=70, space='sell', optimize=True)
 
-    # Buy hyperspace params:
-    buy_params = {
-        "buy_ema_long": 30,
-        "buy_ema_short": 40,
-        "buy_rsi": 62,
-    }
-
-    # Sell hyperspace params:
-    sell_params = {
-        "sell_rsi": 53,
-    }
     
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
- 
-        for val in self.buy_ema_short.range:
-            dataframe[f'ema_short_{val}'] = ta.EMA(dataframe, timeperiod=val)
-
-        for val in self.buy_ema_long.range:
-            dataframe[f'ema_long_{val}'] = ta.EMA(dataframe, timeperiod=val)
 
         dataframe['rsi'] = ta.RSI(dataframe)
 
@@ -71,9 +52,6 @@ class LS(IStrategy):
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         
         conditions = []
-        conditions.append(qtpylib.crossed_above(
-                dataframe[f'ema_short_{self.buy_ema_short.value}'], dataframe[f'ema_long_{self.buy_ema_long.value}']
-            ))
         
         conditions.append(dataframe['rsi'] < self.buy_rsi.value)
 
@@ -87,9 +65,6 @@ class LS(IStrategy):
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         
         conditions = []
-        conditions.append(qtpylib.crossed_above(
-                dataframe[f'ema_long_{self.buy_ema_long.value}'], dataframe[f'ema_short_{self.buy_ema_short.value}']
-            ))
         
         conditions.append(dataframe['rsi'] > self.sell_rsi.value)
 

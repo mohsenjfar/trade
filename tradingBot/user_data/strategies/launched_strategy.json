@@ -1,10 +1,6 @@
 {
   "strategy_name": "LS",
   "params": {
-    "roi": {},
-    "stoploss": {
-      "stoploss": -0.5
-    },
     "trailing": {
       "trailing_stop": false,
       "trailing_stop_positive": null,
@@ -15,15 +11,22 @@
       "max_open_trades": 1
     },
     "buy": {
-      "buy_ema_long": 30,
-      "buy_ema_short": 40,
-      "buy_rsi": 62
+      "buy_rsi": 50
     },
     "sell": {
-      "sell_rsi": 53
+      "sell_rsi": 99
     },
-    "protection": {}
+    "protection": {},
+    "roi": {
+      "0": 0.17500000000000002,
+      "20": 0.10500000000000001,
+      "49": 0.036,
+      "73": 0
+    },
+    "stoploss": {
+      "stoploss": -0.335
+    }
   },
   "ft_stratparam_v": 1,
-  "export_time": "2023-07-16 15:15:29.212460+00:00"
+  "export_time": "2023-08-02 16:13:18.757936+00:00"
 }
