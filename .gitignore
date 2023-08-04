@@ -2,16 +2,14 @@ backtest_results
 data
 freqaimodels
 hyperopt_results
-hyperopt_results
-logs
 plot
 *.sqlite
 *.sqlite-shm
 *.sqlite-wal
+hyperopts
 
 .venv
 .env
 *.lock
 freqtrade
-# secrets*
 models

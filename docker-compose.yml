@@ -1,7 +1,7 @@
 ---
 version: '3'
 services:
-  # binance:
+  # mexc:
   #   # image: freqtradeorg/freqtrade:stable
   #   # image: freqtradeorg/freqtrade:develop
   #   image: freqtradeorg/freqtrade:develop_plot
@@ -9,16 +9,16 @@ services:
   #   #   context: .
   #   #   dockerfile: "./docker/Dockerfile.custom"
   #   restart: unless-stopped
-  #   container_name: bitmart
+  #   container_name: mexc
   #   volumes:
   #     - "./user_data:/freqtrade/user_data"
   #   ports:
-  #     - "127.0.0.1:8080:8080"
+  #     - "127.0.0.1:8081:8081"
   #   command: >
   #     trade
-  #     --logfile /freqtrade/user_data/logs/bitmart.log
-  #     --db-url sqlite:////freqtrade/user_data/tradesv3_bitmart.sqlite
-  #     --config /freqtrade/user_data/configBitmart.json
+  #     --logfile /freqtrade/user_data/logs/mexc.log
+  #     --db-url sqlite:////freqtrade/user_data/tradesv3_mexc.sqlite
+  #     --config /freqtrade/user_data/configMEXC.json
   #     --strategy LS
   binance:
     # image: freqtradeorg/freqtrade:stable
