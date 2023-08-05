@@ -1,0 +1,248 @@
+2023-08-05 19:42:22,737 - freqtrade.loggers - INFO - Verbosity set to 0
+2023-08-05 19:42:22,738 - freqtrade.configuration.configuration - INFO - Runmode set to dry_run.
+2023-08-05 19:42:22,738 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2023-08-05 19:42:22,738 - freqtrade.configuration.configuration - WARNING - `force_entry_enable` RPC message enabled.
+2023-08-05 19:42:22,739 - freqtrade.configuration.configuration - INFO - Dry run is enabled
+2023-08-05 19:42:22,739 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/tradesv3_mexc.sqlite"
+2023-08-05 19:42:22,739 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 3 ...
+2023-08-05 19:42:22,776 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2023-08-05 19:42:22,777 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/mexc ...
+2023-08-05 19:42:22,779 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2023-08-05 19:42:22,791 - freqtrade.exchange.check_exchange - WARNING - Exchange "mexc" is known to the the ccxt library, available for the bot, but not officially supported by the Freqtrade development team. It may work flawlessly (please report back) or have serious issues. Use it at your own discretion.
+2023-08-05 19:42:22,791 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2023-08-05 19:42:22,895 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy LTS from '/freqtrade/user_data/strategies/LaunchTimeStrategy.py'...
+2023-08-05 19:42:22,896 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2023-08-05 19:42:22,897 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: USDT.
+2023-08-05 19:42:22,897 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: 10.
+2023-08-05 19:42:22,897 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2023-08-05 19:42:22,898 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 3.
+2023-08-05 19:42:22,898 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {'10': 0.0, '9': 0.1, '8': 0.3, '7': 0.5, '6': 1, '5': 2, '4': 3, '3': 4, '2': 5, '1': 10, '0': 20}
+2023-08-05 19:42:22,898 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 1m
+2023-08-05 19:42:22,898 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -0.5
+2023-08-05 19:42:22,898 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2023-08-05 19:42:22,899 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2023-08-05 19:42:22,899 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2023-08-05 19:42:22,899 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: False
+2023-08-05 19:42:22,899 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2023-08-05 19:42:22,899 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'market', 'exit': 'market', 'force_entry': 'market', 'force_exit': 'market', 'stoploss': 'market', 'stoploss_on_exchange': False}
+2023-08-05 19:42:22,899 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2023-08-05 19:42:22,900 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: USDT
+2023-08-05 19:42:22,900 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: 10
+2023-08-05 19:42:22,900 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using protections: []
+2023-08-05 19:42:22,900 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 0
+2023-08-05 19:42:22,900 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2023-08-05 19:42:22,901 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2023-08-05 19:42:22,903 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2023-08-05 19:42:22,904 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2023-08-05 19:42:22,904 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2023-08-05 19:42:22,904 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2023-08-05 19:42:22,905 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2023-08-05 19:42:22,905 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2023-08-05 19:42:22,905 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2023-08-05 19:42:22,905 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 3
+2023-08-05 19:42:22,906 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2023-08-05 19:42:22,929 - freqtrade.resolvers.exchange_resolver - INFO - No Mexc specific subclass found. Using the generic class instead.
+2023-08-05 19:42:22,930 - freqtrade.exchange.exchange - INFO - Instance is running with dry_run enabled
+2023-08-05 19:42:22,931 - freqtrade.exchange.exchange - INFO - Using CCXT 4.0.36
+2023-08-05 19:42:22,957 - freqtrade.exchange.exchange - INFO - Using Exchange "MEXC Global"
+2023-08-05 19:42:27,492 - freqtrade.wallets - INFO - Wallets synced.
+2023-08-05 19:42:27,530 - freqtrade.resolvers.iresolver - INFO - Using resolved pairlist StaticPairList from '/freqtrade/freqtrade/plugins/pairlist/StaticPairList.py'...
+2023-08-05 19:42:27,653 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.telegram ...
+2023-08-05 19:42:28,686 - freqtrade.resolvers.iresolver - INFO - Using resolved pairlist StaticPairList from '/freqtrade/freqtrade/plugins/pairlist/StaticPairList.py'...
+2023-08-05 19:42:28,715 - freqtrade.rpc.telegram - INFO - rpc.telegram is listening for following commands: [['status'], ['profit'], ['balance'], ['start'], ['stop'], ['forceexit', 'forcesell', 'fx'], ['forcebuy', 'forcelong'], ['forceshort'], ['reload_trade'], ['trades'], ['delete'], ['cancel_open_order', 'coo'], ['performance'], ['buys', 'entries'], ['exits', 'sells'], ['mix_tags'], ['stats'], ['daily'], ['weekly'], ['monthly'], ['count'], ['locks'], ['delete_locks', 'unlock'], ['reload_conf', 'reload_config'], ['show_conf', 'show_config'], ['stopbuy', 'stopentry'], ['whitelist'], ['blacklist'], ['bl_delete', 'blacklist_delete'], ['logs'], ['edge'], ['health'], ['help'], ['version'], ['marketdir']]
+2023-08-05 19:42:28,722 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['SWCH/USDT']
+2023-08-05 19:42:28,723 - freqtrade.strategy.hyper - INFO - No params for buy found, using default values.
+2023-08-05 19:42:28,724 - freqtrade.strategy.hyper - INFO - No params for sell found, using default values.
+2023-08-05 19:42:28,727 - freqtrade.strategy.hyper - INFO - No params for protection found, using default values.
+2023-08-05 19:42:28,734 - freqtrade.plugins.protectionmanager - INFO - No protection Handlers defined.
+2023-08-05 19:42:28,739 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'running'}
+2023-08-05 19:42:28,740 - freqtrade.worker - INFO - Changing state to: RUNNING
+2023-08-05 19:42:28,771 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': warning, 'status': 'Dry run is enabled. All trades are simulated.'}
+2023-08-05 19:42:28,772 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': "*Exchange:* `mexc`\n*Stake per trade:* `10 USDT`\n*Minimum ROI:* `{'10': 0.0, '9': 0.1, '8': 0.3, '7': 0.5, '6': 1, '5': 2, '4': 3, '3': 4, '2': 5, '1': 10, '0': 20}`\n*Stoploss:* `-0.5`\n*Position adjustment:* `Off`\n*Timeframe:* `1m`\n*Strategy:* `LTS`"}
+2023-08-05 19:42:28,775 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': "Searching for USDT pairs to buy and sell based on [{'StaticPairList': 'StaticPairList'}]"}
+2023-08-05 19:42:28,836 - telegram.ext.Application - INFO - Application started
+2023-08-05 19:42:29,564 - freqtrade.strategy.interface - WARNING - Unable to analyze candle (OHLCV) data for pair SWCH/USDT: enter_long/buy column not set.
+2023-08-05 19:42:29,587 - freqtrade.commands.trade_commands - ERROR - 'enter_long'
+2023-08-05 19:42:29,588 - freqtrade.commands.trade_commands - ERROR - Fatal exception!
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.11/site-packages/pandas/core/indexes/base.py", line 3653, in get_loc
+    return self._engine.get_loc(casted_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/index.pyx", line 147, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 176, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7080, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7088, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'enter_long'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/commands/trade_commands.py", line 25, in start_trading
+    worker.run()
+  File "/freqtrade/freqtrade/worker.py", line 75, in run
+    state = self._worker(old_state=state)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/freqtrade/freqtrade/worker.py", line 116, in _worker
+    self._throttle(func=self._process_running, throttle_secs=self._throttle_secs,
+  File "/freqtrade/freqtrade/worker.py", line 147, in _throttle
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/freqtrade/freqtrade/worker.py", line 180, in _process_running
+    self.freqtrade.process()
+  File "/freqtrade/freqtrade/freqtradebot.py", line 248, in process
+    self.enter_positions()
+  File "/freqtrade/freqtrade/freqtradebot.py", line 534, in enter_positions
+    trades_created += self.create_trade(pair)
+                      ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/freqtrade/freqtrade/freqtradebot.py", line 564, in create_trade
+    (signal, enter_tag) = self.strategy.get_entry_signal(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/freqtrade/freqtrade/strategy/interface.py", line 1029, in get_entry_signal
+    enter_long = latest[SignalType.ENTER_LONG.value] == 1
+                 ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.11/site-packages/pandas/core/series.py", line 1007, in __getitem__
+    return self._get_value(key)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.11/site-packages/pandas/core/series.py", line 1116, in _get_value
+    loc = self.index.get_loc(label)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.11/site-packages/pandas/core/indexes/base.py", line 3655, in get_loc
+    raise KeyError(key) from err
+KeyError: 'enter_long'
+2023-08-05 19:42:29,611 - freqtrade.commands.trade_commands - INFO - worker found ... calling exit
+2023-08-05 19:42:29,611 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'process died'}
+2023-08-05 19:42:29,612 - freqtrade.freqtradebot - INFO - Cleaning up modules ...
+2023-08-05 19:42:29,615 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc modules ...
+2023-08-05 19:42:29,616 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc.telegram ...
+2023-08-05 19:42:29,618 - telegram.ext.Application - INFO - Application is stopping. This might take a moment.
+2023-08-05 19:42:29,618 - telegram.ext.Application - INFO - Application.stop() complete
+2023-08-05 19:42:29,621 - freqtrade.rpc.telegram - WARNING - Telegram NetworkError: httpx.ReadError: ! Trying one more time.
+2023-08-05 19:42:29,621 - freqtrade.rpc.telegram - WARNING - TelegramError: Unknown error in HTTP implementation: RuntimeError('This HTTPXRequest is not initialized!')! Giving up on that message.
+2023-08-05 19:42:29,622 - freqtrade.rpc.telegram - WARNING - Telegram NetworkError: httpx.ReadError: ! Trying one more time.
+2023-08-05 19:42:29,622 - freqtrade.rpc.telegram - WARNING - TelegramError: Unknown error in HTTP implementation: RuntimeError('This HTTPXRequest is not initialized!')! Giving up on that message.
+2023-08-05 19:42:29,623 - freqtrade.rpc.telegram - WARNING - Telegram NetworkError: httpx.ReadError: ! Trying one more time.
+2023-08-05 19:42:29,627 - freqtrade.rpc.telegram - WARNING - TelegramError: Unknown error in HTTP implementation: RuntimeError('This HTTPXRequest is not initialized!')! Giving up on that message.
+2023-08-05 19:42:29,628 - freqtrade.rpc.telegram - WARNING - Telegram NetworkError: httpx.ReadError: ! Trying one more time.
+2023-08-05 19:42:29,628 - freqtrade.rpc.telegram - WARNING - TelegramError: Unknown error in HTTP implementation: RuntimeError('This HTTPXRequest is not initialized!')! Giving up on that message.
+2023-08-05 19:42:29,629 - freqtrade.rpc.telegram - WARNING - Telegram NetworkError: httpx.ReadError: ! Trying one more time.
+2023-08-05 19:42:29,630 - freqtrade.rpc.telegram - WARNING - TelegramError: Unknown error in HTTP implementation: RuntimeError('This HTTPXRequest is not initialized!')! Giving up on that message.
+2023-08-05 19:42:56,649 - freqtrade.loggers - INFO - Verbosity set to 0
+2023-08-05 19:42:56,650 - freqtrade.configuration.configuration - INFO - Runmode set to dry_run.
+2023-08-05 19:42:56,650 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2023-08-05 19:42:56,650 - freqtrade.configuration.configuration - WARNING - `force_entry_enable` RPC message enabled.
+2023-08-05 19:42:56,651 - freqtrade.configuration.configuration - INFO - Dry run is enabled
+2023-08-05 19:42:56,651 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/tradesv3_mexc.sqlite"
+2023-08-05 19:42:56,651 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 3 ...
+2023-08-05 19:42:56,776 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2023-08-05 19:42:56,777 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/mexc ...
+2023-08-05 19:42:56,780 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2023-08-05 19:42:56,790 - freqtrade.exchange.check_exchange - WARNING - Exchange "mexc" is known to the the ccxt library, available for the bot, but not officially supported by the Freqtrade development team. It may work flawlessly (please report back) or have serious issues. Use it at your own discretion.
+2023-08-05 19:42:56,790 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2023-08-05 19:42:56,874 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy LTS from '/freqtrade/user_data/strategies/LaunchTimeStrategy.py'...
+2023-08-05 19:42:56,875 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2023-08-05 19:42:56,876 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: USDT.
+2023-08-05 19:42:56,876 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: 10.
+2023-08-05 19:42:56,876 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2023-08-05 19:42:56,876 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 3.
+2023-08-05 19:42:56,877 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {'10': 0.0, '9': 0.1, '8': 0.3, '7': 0.5, '6': 1, '5': 2, '4': 3, '3': 4, '2': 5, '1': 10, '0': 20}
+2023-08-05 19:42:56,877 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 1m
+2023-08-05 19:42:56,877 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -0.5
+2023-08-05 19:42:56,877 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2023-08-05 19:42:56,877 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2023-08-05 19:42:56,878 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2023-08-05 19:42:56,878 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: False
+2023-08-05 19:42:56,878 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2023-08-05 19:42:56,878 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'market', 'exit': 'market', 'force_entry': 'market', 'force_exit': 'market', 'stoploss': 'market', 'stoploss_on_exchange': False}
+2023-08-05 19:42:56,878 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2023-08-05 19:42:56,878 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: USDT
+2023-08-05 19:42:56,879 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: 10
+2023-08-05 19:42:56,879 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using protections: []
+2023-08-05 19:42:56,879 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 0
+2023-08-05 19:42:56,879 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2023-08-05 19:42:56,879 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2023-08-05 19:42:56,880 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2023-08-05 19:42:56,880 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2023-08-05 19:42:56,880 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2023-08-05 19:42:56,880 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2023-08-05 19:42:56,880 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2023-08-05 19:42:56,880 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2023-08-05 19:42:56,880 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2023-08-05 19:42:56,881 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 3
+2023-08-05 19:42:56,881 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2023-08-05 19:42:56,890 - freqtrade.resolvers.exchange_resolver - INFO - No Mexc specific subclass found. Using the generic class instead.
+2023-08-05 19:42:56,902 - freqtrade.exchange.exchange - INFO - Instance is running with dry_run enabled
+2023-08-05 19:42:56,902 - freqtrade.exchange.exchange - INFO - Using CCXT 4.0.36
+2023-08-05 19:42:56,930 - freqtrade.exchange.exchange - INFO - Using Exchange "MEXC Global"
+2023-08-05 19:43:01,343 - freqtrade.wallets - INFO - Wallets synced.
+2023-08-05 19:43:01,345 - freqtrade.resolvers.iresolver - INFO - Using resolved pairlist StaticPairList from '/freqtrade/freqtrade/plugins/pairlist/StaticPairList.py'...
+2023-08-05 19:43:01,420 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.telegram ...
+2023-08-05 19:43:02,194 - freqtrade.resolvers.iresolver - INFO - Using resolved pairlist StaticPairList from '/freqtrade/freqtrade/plugins/pairlist/StaticPairList.py'...
+2023-08-05 19:43:02,211 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['SWCH/USDT']
+2023-08-05 19:43:02,213 - freqtrade.strategy.hyper - INFO - No params for buy found, using default values.
+2023-08-05 19:43:02,214 - freqtrade.strategy.hyper - INFO - No params for sell found, using default values.
+2023-08-05 19:43:02,215 - freqtrade.strategy.hyper - INFO - No params for protection found, using default values.
+2023-08-05 19:43:02,216 - freqtrade.plugins.protectionmanager - INFO - No protection Handlers defined.
+2023-08-05 19:43:02,216 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'running'}
+2023-08-05 19:43:02,217 - freqtrade.worker - INFO - Changing state to: RUNNING
+2023-08-05 19:43:02,234 - freqtrade.rpc.telegram - INFO - rpc.telegram is listening for following commands: [['status'], ['profit'], ['balance'], ['start'], ['stop'], ['forceexit', 'forcesell', 'fx'], ['forcebuy', 'forcelong'], ['forceshort'], ['reload_trade'], ['trades'], ['delete'], ['cancel_open_order', 'coo'], ['performance'], ['buys', 'entries'], ['exits', 'sells'], ['mix_tags'], ['stats'], ['daily'], ['weekly'], ['monthly'], ['count'], ['locks'], ['delete_locks', 'unlock'], ['reload_conf', 'reload_config'], ['show_conf', 'show_config'], ['stopbuy', 'stopentry'], ['whitelist'], ['blacklist'], ['bl_delete', 'blacklist_delete'], ['logs'], ['edge'], ['health'], ['help'], ['version'], ['marketdir']]
+2023-08-05 19:43:02,249 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': warning, 'status': 'Dry run is enabled. All trades are simulated.'}
+2023-08-05 19:43:02,250 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': "*Exchange:* `mexc`\n*Stake per trade:* `10 USDT`\n*Minimum ROI:* `{'10': 0.0, '9': 0.1, '8': 0.3, '7': 0.5, '6': 1, '5': 2, '4': 3, '3': 4, '2': 5, '1': 10, '0': 20}`\n*Stoploss:* `-0.5`\n*Position adjustment:* `Off`\n*Timeframe:* `1m`\n*Strategy:* `LTS`"}
+2023-08-05 19:43:02,250 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': "Searching for USDT pairs to buy and sell based on [{'StaticPairList': 'StaticPairList'}]"}
+2023-08-05 19:43:02,381 - telegram.ext.Application - INFO - Application started
+2023-08-05 19:43:02,844 - freqtrade.strategy.interface - WARNING - Unable to analyze candle (OHLCV) data for pair SWCH/USDT: enter_long/buy column not set.
+2023-08-05 19:43:02,856 - freqtrade.commands.trade_commands - ERROR - 'enter_long'
+2023-08-05 19:43:02,857 - freqtrade.commands.trade_commands - ERROR - Fatal exception!
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.11/site-packages/pandas/core/indexes/base.py", line 3653, in get_loc
+    return self._engine.get_loc(casted_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/index.pyx", line 147, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 176, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7080, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7088, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'enter_long'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/commands/trade_commands.py", line 25, in start_trading
+    worker.run()
+  File "/freqtrade/freqtrade/worker.py", line 75, in run
+    state = self._worker(old_state=state)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/freqtrade/freqtrade/worker.py", line 116, in _worker
+    self._throttle(func=self._process_running, throttle_secs=self._throttle_secs,
+  File "/freqtrade/freqtrade/worker.py", line 147, in _throttle
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/freqtrade/freqtrade/worker.py", line 180, in _process_running
+    self.freqtrade.process()
+  File "/freqtrade/freqtrade/freqtradebot.py", line 248, in process
+    self.enter_positions()
+  File "/freqtrade/freqtrade/freqtradebot.py", line 534, in enter_positions
+    trades_created += self.create_trade(pair)
+                      ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/freqtrade/freqtrade/freqtradebot.py", line 564, in create_trade
+    (signal, enter_tag) = self.strategy.get_entry_signal(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/freqtrade/freqtrade/strategy/interface.py", line 1029, in get_entry_signal
+    enter_long = latest[SignalType.ENTER_LONG.value] == 1
+                 ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.11/site-packages/pandas/core/series.py", line 1007, in __getitem__
+    return self._get_value(key)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.11/site-packages/pandas/core/series.py", line 1116, in _get_value
+    loc = self.index.get_loc(label)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.11/site-packages/pandas/core/indexes/base.py", line 3655, in get_loc
+    raise KeyError(key) from err
+KeyError: 'enter_long'
+2023-08-05 19:43:02,870 - freqtrade.commands.trade_commands - INFO - worker found ... calling exit
+2023-08-05 19:43:02,871 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'process died'}
+2023-08-05 19:43:02,877 - freqtrade.freqtradebot - INFO - Cleaning up modules ...
+2023-08-05 19:43:02,878 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc modules ...
+2023-08-05 19:43:02,879 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc.telegram ...
+2023-08-05 19:43:02,881 - telegram.ext.Application - INFO - Application is stopping. This might take a moment.
+2023-08-05 19:43:02,882 - telegram.ext.Application - INFO - Application.stop() complete
+2023-08-05 19:43:02,884 - freqtrade.rpc.telegram - WARNING - Telegram NetworkError: httpx.ReadError: ! Trying one more time.
+2023-08-05 19:43:02,885 - freqtrade.rpc.telegram - WARNING - TelegramError: Unknown error in HTTP implementation: RuntimeError('This HTTPXRequest is not initialized!')! Giving up on that message.
