@@ -49,13 +49,8 @@ class LTS(IStrategy):
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        if self.config['runmode'] in ('live', 'dry_run'):
-
+        if self.config['runmode'].value in ('live', 'dry_run'):
             trade = Trade.get_trades_proxy(pair=metadata['pair'], is_open=False)
-            
-            print(trade)
-
-
             if trade:
                 dataframe['enter_long'] = 0
             else:
