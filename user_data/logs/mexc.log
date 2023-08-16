@@ -10443,3 +10443,494 @@ telegram.error.NetworkError: Bad Gateway
 2023-08-10 04:07:16,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
 2023-08-10 04:07:41,051 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
 2023-08-10 04:08:16,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:08:46,066 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:09:21,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:09:51,040 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:10:21,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:10:51,065 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:11:26,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:11:56,063 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:12:26,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:13:01,033 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:13:31,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:14:06,060 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:14:31,009 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:15:11,037 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:15:36,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:16:11,044 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:16:41,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:17:16,045 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:17:46,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:18:21,069 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:18:46,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:19:21,074 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:19:46,013 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:20:26,037 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:20:51,009 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:21:26,039 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:21:56,007 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:22:31,044 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:22:56,021 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:23:36,058 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:24:01,000 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:24:36,064 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:25:06,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:25:41,035 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:26:06,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:26:41,038 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:27:06,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:27:41,045 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:28:01,497 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 0 pairs: []
+2023-08-10 04:28:06,502 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:28:41,535 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:29:11,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:29:46,049 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:30:11,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:30:51,038 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:31:11,017 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:31:51,075 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:32:16,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:32:56,046 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:33:16,013 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:33:56,068 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:34:21,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:35:01,050 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:35:26,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:36:06,051 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:36:26,013 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:37:11,035 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:37:31,008 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:38:16,032 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:38:36,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:39:21,053 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:39:41,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:40:21,060 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:40:41,011 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:41:26,044 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:41:46,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:42:31,054 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:42:46,012 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:43:36,019 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:43:51,007 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:44:36,042 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:44:51,012 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:45:41,056 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:45:56,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:46:46,025 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:47:01,000 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:47:46,040 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:48:06,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:48:51,057 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:49:11,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:49:56,041 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:50:16,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:51:01,040 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:51:16,008 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:52:06,038 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:52:21,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:53:06,056 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:53:21,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:54:11,056 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:54:21,007 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:55:16,037 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:55:26,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:56:21,018 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:56:31,008 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:57:21,063 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:57:31,034 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:58:26,034 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:58:36,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 04:59:31,023 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 04:59:41,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:00:31,036 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:00:46,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:01:36,037 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:01:46,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:02:36,059 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:02:46,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:03:41,041 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:03:51,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:04:46,039 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:04:56,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:05:46,059 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:05:56,007 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:06:51,064 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:06:56,021 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:07:56,060 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:08:01,000 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:09:01,065 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:09:06,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:10:06,031 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:10:11,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:11:11,030 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:11:16,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:12:11,039 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:12:16,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:13:16,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:13:16,030 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:14:16,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:14:16,040 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:15:16,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:15:16,043 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:16:21,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:16:21,064 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:17:21,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:17:26,058 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:18:26,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:18:31,037 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:19:26,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:19:31,047 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:20:26,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:20:36,031 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:21:26,014 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:21:36,047 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:22:31,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:22:41,047 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:23:31,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:23:46,044 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:24:31,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:24:46,061 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:25:36,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:25:51,056 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:26:36,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:26:56,052 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:27:41,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:28:01,056 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:28:11,147 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 0 pairs: []
+2023-08-10 05:28:41,153 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:29:06,035 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:29:46,009 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:30:11,029 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:30:51,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:31:16,037 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:31:56,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:32:21,033 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:32:56,008 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:33:26,053 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:33:56,008 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:34:31,036 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:35:01,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:35:31,050 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:36:06,000 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:36:36,050 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:37:11,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:37:36,067 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:38:11,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:38:41,053 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:39:11,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:39:46,045 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:40:16,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:40:51,062 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:41:21,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:41:56,043 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:42:26,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:43:01,030 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:43:26,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:44:01,052 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:44:31,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:45:01,056 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:45:36,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:46:06,049 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:46:36,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:47:11,036 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:47:36,010 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:48:16,039 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:48:41,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:49:16,054 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:49:46,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:50:21,017 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:50:46,009 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:51:21,043 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:51:51,007 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:52:21,057 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:52:51,008 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:53:26,041 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:53:56,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:54:31,046 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:54:56,009 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:55:36,058 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:55:56,009 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:56:41,081 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:56:56,009 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:57:46,045 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:58:01,000 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:58:46,060 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 05:59:06,000 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 05:59:51,044 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:00:06,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:00:51,057 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:01:11,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:01:56,052 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:02:11,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:03:01,018 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:03:11,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:04:01,038 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:04:16,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:05:06,046 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:05:21,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:06:06,054 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:06:26,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:07:11,026 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:07:26,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:08:11,039 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:08:31,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:09:11,053 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:09:31,008 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:10:16,055 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:10:36,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:11:21,048 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:11:36,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:12:26,032 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:12:41,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:13:26,035 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:13:41,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:14:26,058 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:14:41,012 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:15:31,050 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:15:46,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:16:36,038 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:16:46,013 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:17:36,047 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:17:51,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:18:36,052 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:18:51,011 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:19:41,047 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:19:56,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:20:46,036 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:21:01,000 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:21:46,059 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:22:01,000 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:22:46,067 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:23:01,000 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:23:51,033 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:24:01,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:24:51,039 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:25:06,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:25:51,044 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:26:11,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:26:56,042 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:27:11,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:27:56,058 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:28:11,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:28:20,263 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 0 pairs: []
+2023-08-10 06:29:01,033 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:29:16,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:30:06,027 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:30:21,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:31:11,060 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:31:26,008 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:32:16,033 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:32:31,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:33:21,037 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:33:31,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:34:26,039 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:34:36,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:35:31,038 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:35:36,010 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:36:36,033 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:36:41,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:37:41,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:37:41,047 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:38:41,007 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:38:46,034 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:39:46,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:39:46,043 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:40:46,020 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:40:46,054 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:41:51,015 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:41:51,046 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:42:56,007 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:42:56,044 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:43:56,008 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:43:56,047 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:45:01,000 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:45:01,030 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:46:01,000 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:46:06,056 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:47:01,000 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:47:11,033 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:48:06,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:48:16,035 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:49:11,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:49:21,052 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:50:16,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:50:26,042 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:51:21,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:51:26,046 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:52:21,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:52:31,053 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:53:26,018 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:53:36,075 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:54:31,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:54:41,035 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:55:31,008 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:55:41,042 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:56:31,010 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:56:46,048 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:57:36,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:57:51,047 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:58:36,013 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:58:51,052 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 06:59:41,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 06:59:56,033 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:00:41,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:00:56,046 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:01:41,010 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:02:01,049 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:02:46,008 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:03:06,030 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:03:46,015 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:04:06,039 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:04:51,007 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:05:11,027 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:05:56,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:06:16,046 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:06:56,009 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:07:21,032 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:08:01,000 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:08:21,036 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:09:01,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:09:26,060 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:10:06,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:10:31,043 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:11:11,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:11:36,047 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:12:11,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:12:41,058 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:13:11,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:13:46,066 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:14:16,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:14:51,064 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:15:21,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:15:56,039 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:16:21,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:16:56,042 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:17:26,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:18:01,047 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:18:26,007 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:19:06,040 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:19:31,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:20:11,039 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:20:31,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:21:16,041 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:21:31,009 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:22:21,045 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:22:36,007 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:23:26,034 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:23:41,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:24:26,056 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:26:45,189 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:26:45,824 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:28:38,360 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:29:00,813 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:30:07,226 - freqtrade.loggers - INFO - Verbosity set to 0
+2023-08-10 07:30:07,228 - freqtrade.configuration.configuration - INFO - Runmode set to dry_run.
+2023-08-10 07:30:07,228 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2023-08-10 07:30:07,228 - freqtrade.configuration.configuration - WARNING - `force_entry_enable` RPC message enabled.
+2023-08-10 07:30:07,229 - freqtrade.configuration.configuration - INFO - Dry run is enabled
+2023-08-10 07:30:07,229 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/tradesv3_mexc.sqlite"
+2023-08-10 07:30:07,229 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 3 ...
+2023-08-10 07:30:07,411 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2023-08-10 07:30:07,413 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/mexc ...
+2023-08-10 07:30:07,416 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2023-08-10 07:30:07,428 - freqtrade.exchange.check_exchange - WARNING - Exchange "mexc" is known to the the ccxt library, available for the bot, but not officially supported by the Freqtrade development team. It may work flawlessly (please report back) or have serious issues. Use it at your own discretion.
+2023-08-10 07:30:07,428 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2023-08-10 07:30:07,526 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy LTS from '/freqtrade/user_data/strategies/LaunchTimeStrategy.py'...
+2023-08-10 07:30:07,527 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2023-08-10 07:30:07,529 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: USDT.
+2023-08-10 07:30:07,530 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: 10.
+2023-08-10 07:30:07,530 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2023-08-10 07:30:07,531 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 3.
+2023-08-10 07:30:07,531 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {'10': 0.0, '9': 0.1, '8': 0.3, '7': 0.5, '6': 1, '5': 2, '4': 3, '3': 4, '2': 5, '1': 10, '0': 20}
+2023-08-10 07:30:07,532 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 1m
+2023-08-10 07:30:07,532 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -0.5
+2023-08-10 07:30:07,532 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2023-08-10 07:30:07,532 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2023-08-10 07:30:07,533 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2023-08-10 07:30:07,533 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: False
+2023-08-10 07:30:07,533 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2023-08-10 07:30:07,534 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'market', 'exit': 'market', 'force_entry': 'market', 'force_exit': 'market', 'stoploss': 'market', 'stoploss_on_exchange': False}
+2023-08-10 07:30:07,534 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2023-08-10 07:30:07,534 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: USDT
+2023-08-10 07:30:07,534 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: 10
+2023-08-10 07:30:07,535 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using protections: []
+2023-08-10 07:30:07,535 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 0
+2023-08-10 07:30:07,535 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2023-08-10 07:30:07,535 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2023-08-10 07:30:07,535 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2023-08-10 07:30:07,536 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2023-08-10 07:30:07,536 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2023-08-10 07:30:07,536 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2023-08-10 07:30:07,536 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2023-08-10 07:30:07,536 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2023-08-10 07:30:07,537 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2023-08-10 07:30:07,537 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 3
+2023-08-10 07:30:07,537 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2023-08-10 07:30:07,544 - freqtrade.resolvers.exchange_resolver - INFO - No Mexc specific subclass found. Using the generic class instead.
+2023-08-10 07:30:07,548 - freqtrade.exchange.exchange - INFO - Instance is running with dry_run enabled
+2023-08-10 07:30:07,548 - freqtrade.exchange.exchange - INFO - Using CCXT 4.0.36
+2023-08-10 07:30:07,568 - freqtrade.exchange.exchange - INFO - Using Exchange "MEXC Global"
+2023-08-10 07:30:11,667 - freqtrade.wallets - INFO - Wallets synced.
+2023-08-10 07:30:11,672 - freqtrade.resolvers.iresolver - INFO - Using resolved pairlist StaticPairList from '/freqtrade/freqtrade/plugins/pairlist/StaticPairList.py'...
+2023-08-10 07:30:11,838 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.telegram ...
+2023-08-10 07:30:12,776 - freqtrade.resolvers.iresolver - INFO - Using resolved pairlist StaticPairList from '/freqtrade/freqtrade/plugins/pairlist/StaticPairList.py'...
+2023-08-10 07:30:12,795 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 0 pairs: []
+2023-08-10 07:30:12,797 - freqtrade.strategy.hyper - INFO - No params for buy found, using default values.
+2023-08-10 07:30:12,799 - freqtrade.strategy.hyper - INFO - No params for sell found, using default values.
+2023-08-10 07:30:12,799 - freqtrade.strategy.hyper - INFO - No params for protection found, using default values.
+2023-08-10 07:30:12,800 - freqtrade.plugins.protectionmanager - INFO - No protection Handlers defined.
+2023-08-10 07:30:12,800 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'running'}
+2023-08-10 07:30:12,801 - freqtrade.worker - INFO - Changing state to: RUNNING
+2023-08-10 07:30:12,816 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': warning, 'status': 'Dry run is enabled. All trades are simulated.'}
+2023-08-10 07:30:12,818 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': "*Exchange:* `mexc`\n*Stake per trade:* `10 USDT`\n*Minimum ROI:* `{'10': 0.0, '9': 0.1, '8': 0.3, '7': 0.5, '6': 1, '5': 2, '4': 3, '3': 4, '2': 5, '1': 10, '0': 20}`\n*Stoploss:* `-0.5`\n*Position adjustment:* `Off`\n*Timeframe:* `1m`\n*Strategy:* `LTS`"}
+2023-08-10 07:30:12,819 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': "Searching for USDT pairs to buy and sell based on [{'StaticPairList': 'StaticPairList'}]"}
+2023-08-10 07:30:12,854 - freqtrade.rpc.telegram - INFO - rpc.telegram is listening for following commands: [['status'], ['profit'], ['balance'], ['start'], ['stop'], ['forceexit', 'forcesell', 'fx'], ['forcebuy', 'forcelong'], ['forceshort'], ['reload_trade'], ['trades'], ['delete'], ['cancel_open_order', 'coo'], ['performance'], ['buys', 'entries'], ['exits', 'sells'], ['mix_tags'], ['stats'], ['daily'], ['weekly'], ['monthly'], ['count'], ['locks'], ['delete_locks', 'unlock'], ['reload_conf', 'reload_config'], ['show_conf', 'show_config'], ['stopbuy', 'stopentry'], ['whitelist'], ['blacklist'], ['bl_delete', 'blacklist_delete'], ['logs'], ['edge'], ['health'], ['help'], ['version'], ['marketdir']]
+2023-08-10 07:30:12,864 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:30:13,004 - telegram.ext.Application - INFO - Application started
+2023-08-10 07:30:17,828 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:31:16,025 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:31:21,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:32:21,034 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:32:26,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:33:26,031 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:33:31,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:34:31,030 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:34:36,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:35:31,032 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:35:41,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:36:36,033 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:36:46,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:37:41,028 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:37:46,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:38:46,030 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:38:51,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:39:51,032 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:39:56,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:40:56,013 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:40:56,039 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:42:01,000 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:42:01,029 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:43:06,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:43:06,029 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:44:11,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:44:11,029 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:45:11,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:45:16,030 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:46:11,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:46:21,033 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:47:16,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:47:26,029 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:48:16,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:48:26,035 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:49:21,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:49:26,039 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:50:21,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2023.7', state='RUNNING'
+2023-08-10 07:50:31,032 - freqtrade.freqtradebot - INFO - Active pair whitelist is empty.
+2023-08-10 07:51:11,090 - freqtrade.commands.trade_commands - INFO - SIGINT received, aborting ...
+2023-08-10 07:51:11,091 - freqtrade.commands.trade_commands - INFO - worker found ... calling exit
+2023-08-10 07:51:11,091 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'process died'}
+2023-08-10 07:51:11,092 - freqtrade.freqtradebot - INFO - Cleaning up modules ...
+2023-08-10 07:51:11,106 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc modules ...
+2023-08-10 07:51:11,107 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc.telegram ...
+2023-08-10 07:51:11,111 - telegram.ext.Application - INFO - Application is stopping. This might take a moment.
+2023-08-10 07:51:11,112 - telegram.ext.Application - INFO - Application.stop() complete
