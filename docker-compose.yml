@@ -1,0 +1,13 @@
+---
+version: '3'
+services:
+  mexc:
+    container_name: mexc
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      - TOKEN=${TOKEN}
+      - KEY=${KEY}
+      - SECRET=${SECRET}
