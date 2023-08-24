@@ -16,7 +16,7 @@ logging.basicConfig(
     filename='mexc.log',
     filemode='w',
     format="%(asctime)s - %(levelname)s - %(message)s",
-    level=logging.DEBUG
+    level=logging.INFO
 )
 
 market = mexc_spot_v3.mexc_market(mexc_hosts=hosts)
@@ -104,8 +104,8 @@ def ticker_api_buy(ticker):
         params = {
             "symbol": ticker,
             "side": "BUY",
-            "type": "MARKET",
-            "quoteOrderQty": 10
+            "type": "LIMIT",
+            "quoteOrderQty": 1
         }
         response = trade.post_order(params)
         if response.get('code'):
@@ -157,26 +157,6 @@ def ticker_driver_sell(driver, quantity):
         driver.quit()
         return False
 
-def get_capital_price(ticker):
-    ord_price = 0.6272
-    params = {
-        'symbol':ticker
-    }
-    current_price = float(market.get_price(params=params)['price'])
-    current_profit = (current_price - ord_price)/ord_price*100
-    tickers = account.get_account_info()['balances']
-    for t in tickers:
-        if ticker == t:
-            volume = float(t['free'])
-    total_worth = round(volume*current_price,2)
-    values = {
-        'current_price':current_price,
-        'order_price':ord_price,
-        'current_profit':current_profit,
-        'total_worth':total_worth
-    }
-    return values
-
 def new_tickers_check(tickers):
     new_tickers = get_new_tickers()
     new_tickers = new_tickers - set(tickers)
@@ -199,22 +179,29 @@ def new_tickers_check(tickers):
 
 def trade_check(tickers):
     for ticker in tickers:
-        if datetime.now() > tickers[ticker]['launch_time'] - timedelta(minutes=1):
+        if datetime.now() > tickers[ticker]['launch_time'] - timedelta(minutes=2):
             logging.info(f"{ticker} is about to launch, getting ready...")
             # driver = execute_driver()
             # if mexc_login(driver, ticker):
             #     print("driver is ready.")
+            params = {
+                'symbol':ticker,
+            }
             while True:
-                if datetime.now() > tickers[ticker]['launch_time'] - timedelta(seconds=1):
-                    response = ticker_api_buy(ticker)
-                    if response != 'no_api' and response != 'timeout':
-                        time.sleep(10)
-                        ticker_api_sell(ticker, response)
-                    # else:
-                    #     quantity = ticker_driver_buy(driver, ticker)
-                    #     time.sleep(10)
-                    #     ticker_driver_sell(driver, quantity)
-                    tickers[ticker].pop()
+                if datetime.now() > tickers[ticker]['launch_time'] - timedelta(minutes=1):
+                    logging.info('-----------------------------------------------------------------------------------------------')
+                    logging.info(market.get_price(params=params))
+                    logging.info(market.get_depth(params=params))
+            #         response = ticker_api_buy(ticker)
+            #         if response != 'no_api' and response != 'timeout':
+            #             time.sleep(10)
+            #             ticker_api_sell(ticker, response)
+            #         # else:
+            #         #     quantity = ticker_driver_buy(driver, ticker)
+            #         #     time.sleep(10)
+            #         #     ticker_driver_sell(driver, quantity)
+                if datetime.now() > tickers[ticker]['launch_time'] + timedelta(minutes=30):
+                    tickers.pop(ticker)
                     break
     return tickers
 
