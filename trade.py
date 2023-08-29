@@ -178,7 +178,7 @@ def new_tickers_check(tickers):
     return tickers
 
 def trade_check(tickers):
-    for ticker in tickers:
+    for ticker in list(tickers):
         if datetime.now() > tickers[ticker]['launch_time'] - timedelta(minutes=2):
             logging.info(f"{ticker} is about to launch, getting ready...")
             # driver = execute_driver()
@@ -189,9 +189,7 @@ def trade_check(tickers):
             }
             while True:
                 if datetime.now() > tickers[ticker]['launch_time'] - timedelta(minutes=1):
-                    logging.info('-----------------------------------------------------------------------------------------------')
                     logging.info(market.get_price(params=params))
-                    logging.info(market.get_depth(params=params))
             #         response = ticker_api_buy(ticker)
             #         if response != 'no_api' and response != 'timeout':
             #             time.sleep(10)
