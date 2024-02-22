@@ -3,3 +3,5 @@ __pycache__
 data
 hyperopts
 backtest_results
+*secret.json
+.env
