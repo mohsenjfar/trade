@@ -5,3 +5,4 @@ hyperopts
 backtest_results
 *secret.json
 .env
+*.sqlite*
