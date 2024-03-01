@@ -6,3 +6,5 @@ backtest_results
 *secret.json
 .env
 *.sqlite*
+models
+logs

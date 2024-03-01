@@ -3,7 +3,7 @@ version: '3'
 services:
   freqtrade:
     image: freqtradeorg/freqtrade:stable
-    restart: "no"
+    restart: unless-stopped
     container_name: freqtrade
     volumes:
       - "./user_data:/freqtrade/user_data"
@@ -15,17 +15,18 @@ services:
       --db-url sqlite:////freqtrade/user_data/ReactionBreakStrategy_dry.sqlite
       --config /freqtrade/user_data/rb_config.json
       --strategy ReactionBreakStrategy
-  # freqtrade2:
-  #   image: freqtradeorg/freqtrade:stable
-  #   restart: "no"
-  #   container_name: freqtrade2
-  #   volumes:
-  #     - "./user_data:/freqtrade/user_data"
-  #   ports:
-  #     - "127.0.0.1:8080:8080"
-  #   command: >
-  #     trade
-  #     --logfile /freqtrade/user_data/logs/FixedRiskRewardLoss.log
-  #     --db-url sqlite:////freqtrade/user_data/FixedRiskRewardLoss_dry.sqlite
-  #     --config /freqtrade/user_data/break_config.json
-  #     --strategy FixedRiskRewardLoss
+  freqtrade2:
+    image: freqtradeorg/freqtrade:develop_freqai
+    restart: unless-stopped
+    container_name: XGBoostStrategy
+    volumes:
+      - "./user_data:/freqtrade/user_data"
+    ports:
+      - "127.0.0.1:8080:8080"
+    command: >
+      trade
+      --logfile /freqtrade/user_data/logs/XGBoostStrategy.log
+      --db-url sqlite:////freqtrade/user_data/XGBoostStrategy.sqlite
+      --config /freqtrade/user_data/rb_config.json
+      --strategy XGBoostStrategy
+      --freqaimodel XGBoostClassifier

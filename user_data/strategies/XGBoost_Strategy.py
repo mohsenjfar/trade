@@ -7,8 +7,8 @@ import talib.abstract as ta
 from pandas import DataFrame
 from technical import qtpylib
 from freqtrade.persistence import Trade
-from datetime import datetime, timedelta
-from freqtrade.strategy import IntParameter, IStrategy, merge_informative_pair  # noqa
+from datetime import datetime, timedelta, timezone
+from freqtrade.strategy import IntParameter, IStrategy, stoploss_from_absolute, timeframe_to_prev_date  # noqa
 from typing import Optional, Union
 
 logger = logging.getLogger(__name__)
@@ -42,8 +42,28 @@ class XGBoostStrategy(IStrategy):
     use_custom_stoploss = True
 
     total_risk = 0.01
+    timeframe = '15m'
 
     custom_info = {}
+
+    @property
+    def protections(self):
+        trades = Trade.get_trades_proxy(
+            open_date=datetime.now(timezone.utc).today(),
+        )
+        curdayprofit = sum(trade.close_profit for trade in trades)
+        self.dp.send_msg(f"Today profit {curdayprofit}")
+        return [
+            {
+                "method": "StoplossGuard",
+                "lookback_period_candles": 24,
+                "trade_limit": 4,
+                "stop_duration_candles": 4,
+                "required_profit": 0.0,
+                "only_per_pair": False,
+                "only_per_side": False
+            }
+        ]
 
     # Hyperoptable parameters
     buy_rsi = IntParameter(low=1, high=50, default=30, space='buy', optimize=True, load=True)
@@ -101,7 +121,7 @@ class XGBoostStrategy(IStrategy):
     def set_freqai_targets(self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
 
         self.freqai.class_names = ["down", "up"]
-        dataframe['&s-up_or_down'] = np.where(dataframe["close"].shift(-8) >
+        dataframe['&s-up_or_down'] = np.where(dataframe["close"].shift(-4) >
                                               dataframe["close"], 'up', 'down')
 
         return dataframe
@@ -111,50 +131,20 @@ class XGBoostStrategy(IStrategy):
 
         dataframe = self.freqai.start(dataframe, metadata, self)
 
-        dataframe['rsi'] = ta.RSI(dataframe)
-
-        bollinger = qtpylib.bollinger_bands(qtpylib.typical_price(dataframe), window=20, stds=2)
-        dataframe['bb_lowerband'] = bollinger['lower']
-        dataframe['bb_middleband'] = bollinger['mid']
-        dataframe['bb_upperband'] = bollinger['upper']
-        dataframe["bb_percent"] = (
-            (dataframe["close"] - dataframe["bb_lowerband"]) /
-            (dataframe["bb_upperband"] - dataframe["bb_lowerband"])
-        )
-        dataframe["bb_width"] = (
-            (dataframe["bb_upperband"] - dataframe["bb_lowerband"]) / dataframe["bb_middleband"]
-        )
-
-        dataframe['tema'] = ta.TEMA(dataframe, timeperiod=9)
-        dataframe['atr'] = ta.ATR(dataframe)
-        dataframe['stop_loss'] = dataframe['close']-(dataframe['atr']*2)
-
         return dataframe
     
     def populate_entry_trend(self, df: DataFrame, metadata: dict) -> DataFrame:
 
         df.loc[
             (
-                # Signal: RSI crosses above 30
-                (qtpylib.crossed_above(df['rsi'], self.buy_rsi.value)) &
-                (df['tema'] <= df['bb_middleband']) &  # Guard: tema below BB middle
-                (df['tema'] > df['tema'].shift(1)) &  # Guard: tema is raising
-                (df['volume'] > 0) &  # Make sure Volume is not 0
-                (df['do_predict'] == 1) &  # Make sure Freqai is confident in the prediction
-                # Only enter trade if Freqai thinks the trend is in this direction
+                (df['open'] < df['close']) &
                 (df['&s-up_or_down'] == 'up')
             ),
             'enter_long'] = 1
 
         df.loc[
             (
-                # Signal: RSI crosses above 70
-                (qtpylib.crossed_above(df['rsi'], self.short_rsi.value)) &
-                (df['tema'] > df['bb_middleband']) &  # Guard: tema above BB middle
-                (df['tema'] < df['tema'].shift(1)) &  # Guard: tema is falling
-                (df['volume'] > 0) &  # Make sure Volume is not 0
-                (df['do_predict'] == 1) &  # Make sure Freqai is confident in the prediction
-                # Only enter trade if Freqai thinks the trend is in this direction
+                (df['open'] > df['close']) &
                 (df['&s-up_or_down'] == 'down')
             ),
             'enter_short'] = 1
@@ -165,11 +155,11 @@ class XGBoostStrategy(IStrategy):
 
         return df
 
-    def position_size(self, total_asset, leverage, stop, total_risk):
-        if stop < total_risk:
-            return total_asset
+    def position_size(self, total_asset, risk, leverage):
+        if risk > self.total_risk:
+            return (total_asset * self.total_risk) / (leverage * risk * self.config['max_open_trades'])
         else:
-            return (total_asset * total_risk) / (leverage * stop)
+            return total_asset / (leverage * self.config['max_open_trades'])
 
     def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
                             proposed_stake: float, min_stake: Optional[float], max_stake: float,
@@ -178,50 +168,49 @@ class XGBoostStrategy(IStrategy):
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         previous_candle = dataframe.iloc[-2].squeeze()
-        stop = previous_candle['stop_loss']
-        stake = self.position_size(max_stake, leverage, stop, self.total_risk)
+
+        if side == 'long':
+            risk = previous_candle['high'] / previous_candle['close'] - 1
+        elif side == 'short':
+            risk = 1 - previous_candle['low'] / previous_candle['close']
+        
+        stake = self.position_size(max_stake, risk, leverage)
 
         return stake
 
-    def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime, current_rate: float, current_profit: float, **kwargs) -> float:
-        
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
-        prev_candle = dataframe.iloc[-2].squeeze()
-
-        if (current_time - timedelta(minutes=60) > trade.open_date_utc):
-            if current_profit >= 0.03:
-                return 0.01
-            
-    def custom_exit(self, pair: str, trade: Trade, current_time: datetime, current_rate: float, current_profit: float, **kwargs) -> Optional[Union[str, bool]]:
+    def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
+                        current_rate: float, current_profit: float, after_fill: bool, 
+                        **kwargs) -> Optional[float]:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
-        current_candle = dataframe.iloc[-1].squeeze()
-        current_profit = trade.calc_profit_ratio(current_candle['close'])
+        trade_date = timeframe_to_prev_date(self.timeframe, trade.open_date_utc)
+        prev_trade_dataframe = dataframe.loc[dataframe['date'] < trade_date]
+        prev_trade_candle = prev_trade_dataframe.iloc[-1].squeeze()
 
-        if (current_time - timedelta(minutes=51) > trade.open_date_utc):
-            if current_profit < 0:
-                self.custom_info[pair] = {}
-                if trade.is_short:
-                    self.custom_info[pair]["short_reverse"] = True
-                else:
-                    self.custom_info[pair]["long_reverse"] = True
-                self.custom_info[pair]["unlock_me"] = True
-                message = f"Trade expired, changing direction for {pair}"
-                self.dp.send_msg(message)
-                return True
+        start = prev_trade_candle['high'] if trade.is_short else prev_trade_candle['low']
 
-    def bot_loop_start(self, current_time: datetime, **kwargs) -> None:
+        return stoploss_from_absolute(
+            start,
+            prev_trade_candle['close'],
+            is_short=trade.is_short,
+            leverage=trade.leverage
+        )
+    
+    def custom_exit(self, pair: str, trade: 'Trade', current_time: 'datetime', current_rate: float,
+                    current_profit: float, **kwargs):
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
+        trade_date = timeframe_to_prev_date(self.timeframe, trade.open_date_utc)
+        prev_trade_dataframe = dataframe.loc[dataframe['date'] < trade_date]
+        prev_trade_candle = prev_trade_dataframe.iloc[-1].squeeze()
 
-        for pair in list(self.custom_info):
-            if "unlock_me" in self.custom_info[pair]:
-                message = f"Unlocking {pair}"
-                self.dp.send_msg(message)
-                self.unlock_pair(pair)
-                del self.custom_info[pair]
+        start = prev_trade_candle['high'] if trade.is_short else prev_trade_candle['low']
 
-    def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
-                            time_in_force: str, current_time: datetime, entry_tag: Optional[str],
-                            side: str, **kwargs) -> bool:
-        if self.custom_info.get(pair):
-            del self.custom_info[pair]
-        return True
+        risk = stoploss_from_absolute(
+            start,
+            prev_trade_candle['close'],
+            is_short=trade.is_short,
+            leverage=trade.leverage
+        )
+
+        if current_profit > abs(risk) * 2:
+            return f"Reward for pair {pair}, exiting trade..."

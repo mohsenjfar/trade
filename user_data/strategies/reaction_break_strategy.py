@@ -6,7 +6,7 @@ import numpy as np  # noqa
 import pandas as pd  # noqa
 from pandas import DataFrame
 from typing import Optional, Union
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from freqtrade.persistence import Trade
 
 from freqtrade.strategy import (
@@ -91,6 +91,26 @@ class ReactionBreakStrategy(IStrategy):
             }
         }
     }
+
+
+    @property
+    def protections(self):
+        trades = Trade.get_trades_proxy(
+            open_date=datetime.now(timezone.utc).today(),
+        )
+        curdayprofit = sum(trade.close_profit for trade in trades)
+        self.dp.send_msg(f"Today profit {curdayprofit}")
+        return [
+            {
+                "method": "StoplossGuard",
+                "lookback_period_candles": 24,
+                "trade_limit": 4,
+                "stop_duration_candles": 4,
+                "required_profit": 0.0,
+                "only_per_pair": False,
+                "only_per_side": False
+            }
+        ]
 
     def informative_pairs(self):
 
