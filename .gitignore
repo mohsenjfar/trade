@@ -7,4 +7,4 @@ backtest_results
 .env
 *.sqlite*
 models
-logs
+*.log
