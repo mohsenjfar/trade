@@ -34,6 +34,8 @@ class HoldStrategy(IStrategy):
 
     use_custom_stoploss = True
 
+    position_adjustment_enable = False
+
     startup_candle_count: int = 200
 
     order_types = {
@@ -101,17 +103,50 @@ class HoldStrategy(IStrategy):
         stake = self.position_size(max_stake, risk)
 
         return stake
+    
+    def adjust_trade_position(self, trade: Trade, current_time: datetime,
+                              current_rate: float, current_profit: float,
+                              min_stake: Optional[float], max_stake: float,
+                              current_entry_rate: float, current_exit_rate: float,
+                              current_entry_profit: float, current_exit_profit: float,
+                              **kwargs
+                              ) -> Union[Optional[float], Tuple[Optional[float], Optional[str]]]:
 
-    def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
-                            time_in_force: str, current_time: datetime, entry_tag: Optional[str],
-                            side: str, **kwargs) -> bool:
+        if current_profit > 0.05 and trade.nr_of_successful_exits == 0:
+            # Take half of the profit at +5%
+            return -(trade.stake_amount / 2), 'half_profit_5%'
 
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
-        current_candle = dataframe.iloc[-1].squeeze()
-        if current_candle['date'] + timedelta(seconds=910) > current_time:
-            return True
+        if current_profit > -0.05:
+            return None
 
-        return False
+        # Obtain pair dataframe (just to show how to access it)
+        dataframe, _ = self.dp.get_analyzed_dataframe(trade.pair, self.timeframe)
+        # Only buy when not actively falling price.
+        last_candle = dataframe.iloc[-1].squeeze()
+        previous_candle = dataframe.iloc[-2].squeeze()
+        if last_candle['close'] < previous_candle['close']:
+            return None
+
+        filled_entries = trade.select_filled_orders(trade.entry_side)
+        count_of_entries = trade.nr_of_successful_entries
+        # Allow up to 3 additional increasingly larger buys (4 in total)
+        # Initial buy is 1x
+        # If that falls to -5% profit, we buy 1.25x more, average profit should increase to roughly -2.2%
+        # If that falls down to -5% again, we buy 1.5x more
+        # If that falls once again down to -5%, we buy 1.75x more
+        # Total stake for this trade would be 1 + 1.25 + 1.5 + 1.75 = 5.5x of the initial allowed stake.
+        # That is why max_dca_multiplier is 5.5
+        # Hope you have a deep wallet!
+        try:
+            # This returns first order stake size
+            stake_amount = filled_entries[0].stake_amount
+            # This then calculates current safety order size
+            stake_amount = stake_amount * (1 + (count_of_entries * 0.25))
+            return stake_amount, '1/3rd_increase'
+        except Exception as exception:
+            return None
+
+        return None
 
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
                         current_rate: float, current_profit: float, after_fill: bool, 
