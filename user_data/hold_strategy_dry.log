@@ -1,0 +1,154 @@
+2024-03-07 06:53:28,420 - freqtrade.loggers - INFO - Verbosity set to 0
+2024-03-07 06:53:28,421 - freqtrade.configuration.configuration - INFO - Runmode set to dry_run.
+2024-03-07 06:53:28,421 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2024-03-07 06:53:28,421 - freqtrade.configuration.configuration - INFO - Dry run is enabled
+2024-03-07 06:53:28,422 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/hold_strategy_dry.sqlite"
+2024-03-07 06:53:28,422 - freqtrade.configuration.configuration - INFO - Using max_open_trades: -1 ...
+2024-03-07 06:53:28,536 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2024-03-07 06:53:28,538 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/kucoin ...
+2024-03-07 06:53:28,541 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2024-03-07 06:53:28,552 - freqtrade.exchange.check_exchange - WARNING - Exchange "kucoin" is known to the the ccxt library, available for the bot, but not officially supported by the Freqtrade development team. It may work flawlessly (please report back) or have serious issues. Use it at your own discretion.
+2024-03-07 06:53:28,553 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2024-03-07 06:53:28,688 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy HoldStrategy from '/freqtrade/user_data/strategies/hold_strategy.py'...
+2024-03-07 06:53:28,688 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2024-03-07 06:53:28,689 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: USDT.
+2024-03-07 06:53:28,690 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: 100.
+2024-03-07 06:53:28,690 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2024-03-07 06:53:28,690 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: inf.
+2024-03-07 06:53:28,690 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {}
+2024-03-07 06:53:28,691 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 15m
+2024-03-07 06:53:28,691 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -0.1
+2024-03-07 06:53:28,691 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2024-03-07 06:53:28,691 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2024-03-07 06:53:28,691 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2024-03-07 06:53:28,692 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: True
+2024-03-07 06:53:28,692 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2024-03-07 06:53:28,692 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'limit', 'exit': 'limit', 'stoploss': 'limit', 'stoploss_on_exchange': True}
+2024-03-07 06:53:28,692 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2024-03-07 06:53:28,692 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: USDT
+2024-03-07 06:53:28,693 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: 100
+2024-03-07 06:53:28,693 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using protections: [{'method': 'StoplossGuard', 'lookback_period_candles': 24, 'trade_limit': 4, 'stop_duration_candles': 4, 'required_profit': 0.0, 'only_per_pair': False, 'only_per_side': False}]
+2024-03-07 06:53:28,693 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 200
+2024-03-07 06:53:28,693 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2024-03-07 06:53:28,693 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: False
+2024-03-07 06:53:28,694 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2024-03-07 06:53:28,694 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2024-03-07 06:53:28,694 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2024-03-07 06:53:28,694 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2024-03-07 06:53:28,694 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2024-03-07 06:53:28,695 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2024-03-07 06:53:28,695 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2024-03-07 06:53:28,695 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: inf
+2024-03-07 06:53:28,695 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2024-03-07 06:53:28,702 - freqtrade.exchange.exchange - INFO - Instance is running with dry_run enabled
+2024-03-07 06:53:28,703 - freqtrade.exchange.exchange - INFO - Using CCXT 4.2.25
+2024-03-07 06:53:28,726 - freqtrade.exchange.exchange - INFO - Using Exchange "KuCoin"
+2024-03-07 06:53:35,059 - freqtrade.resolvers.exchange_resolver - INFO - Using resolved exchange 'Kucoin'...
+2024-03-07 06:53:35,298 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 06:53:35,303 - freqtrade.resolvers.iresolver - INFO - Using resolved pairlist StaticPairList from '/freqtrade/freqtrade/plugins/pairlist/StaticPairList.py'...
+2024-03-07 06:53:35,529 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.telegram ...
+2024-03-07 06:53:36,566 - freqtrade.resolvers.iresolver - INFO - Using resolved pairlist StaticPairList from '/freqtrade/freqtrade/plugins/pairlist/StaticPairList.py'...
+2024-03-07 06:53:36,581 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['RSR/USDT']
+2024-03-07 06:53:36,582 - freqtrade.strategy.hyper - INFO - No params for buy found, using default values.
+2024-03-07 06:53:36,583 - freqtrade.strategy.hyper - INFO - No params for sell found, using default values.
+2024-03-07 06:53:36,584 - freqtrade.strategy.hyper - INFO - No params for protection found, using default values.
+2024-03-07 06:53:36,604 - freqtrade.resolvers.iresolver - INFO - Using resolved protection StoplossGuard from '/freqtrade/freqtrade/plugins/protections/stoploss_guard.py'...
+2024-03-07 06:53:36,604 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'running'}
+2024-03-07 06:53:36,605 - freqtrade.worker - INFO - Changing state to: RUNNING
+2024-03-07 06:53:36,645 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': warning, 'status': 'Dry run is enabled. All trades are simulated.'}
+2024-03-07 06:53:36,646 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': '*Exchange:* `kucoin`\n*Stake per trade:* `100 USDT`\n*Minimum ROI:* `{}`\n*Stoploss:* `-0.1`\n*Position adjustment:* `Off`\n*Timeframe:* `15m`\n*Strategy:* `HoldStrategy`'}
+2024-03-07 06:53:36,646 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': "Searching for USDT pairs to buy and sell based on [{'StaticPairList': 'StaticPairList'}]"}
+2024-03-07 06:53:36,647 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': 'Using Protections: \nStoplossGuard - Frequent Stoploss Guard, 4 stoplosses with profit < 0.00% within 24 candles.'}
+2024-03-07 06:53:36,787 - freqtrade.rpc.telegram - INFO - rpc.telegram is listening for following commands: [['status'], ['profit'], ['balance'], ['start'], ['stop'], ['forceexit', 'forcesell', 'fx'], ['forcebuy', 'forcelong'], ['forceshort'], ['reload_trade'], ['trades'], ['delete'], ['cancel_open_order', 'coo'], ['performance'], ['buys', 'entries'], ['exits', 'sells'], ['mix_tags'], ['stats'], ['daily'], ['weekly'], ['monthly'], ['count'], ['locks'], ['delete_locks', 'unlock'], ['reload_conf', 'reload_config'], ['show_conf', 'show_config'], ['stopbuy', 'stopentry'], ['whitelist'], ['blacklist'], ['bl_delete', 'blacklist_delete'], ['logs'], ['edge'], ['health'], ['help'], ['version'], ['marketdir'], ['order']]
+2024-03-07 06:53:36,941 - telegram.ext.Application - INFO - Application started
+2024-03-07 06:53:41,656 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2024.1', state='RUNNING'
+2024-03-07 06:54:41,662 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2024.1', state='RUNNING'
+2024-03-07 06:55:41,668 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2024.1', state='RUNNING'
+2024-03-07 06:56:41,675 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2024.1', state='RUNNING'
+2024-03-07 06:57:41,681 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2024.1', state='RUNNING'
+2024-03-07 06:58:41,687 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2024.1', state='RUNNING'
+2024-03-07 06:59:41,694 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2024.1', state='RUNNING'
+2024-03-07 07:00:27,171 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 07:00:27,478 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for RSR/USDT with stake_amount: 27.3982800373306 ...
+2024-03-07 07:00:27,479 - freqtrade.freqtradebot - INFO - User denied entry for RSR/USDT.
+2024-03-07 07:00:31,037 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 07:00:31,359 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for RSR/USDT with stake_amount: 27.3982800373306 ...
+2024-03-07 07:00:31,360 - freqtrade.freqtradebot - INFO - User denied entry for RSR/USDT.
+2024-03-07 07:00:36,035 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 07:00:36,488 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for RSR/USDT with stake_amount: 27.385126758388054 ...
+2024-03-07 07:00:36,489 - freqtrade.freqtradebot - INFO - User denied entry for RSR/USDT.
+2024-03-07 07:00:41,035 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 07:00:41,874 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for RSR/USDT with stake_amount: 27.385126758388054 ...
+2024-03-07 07:00:41,875 - freqtrade.freqtradebot - INFO - User denied entry for RSR/USDT.
+2024-03-07 07:00:46,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2024.1', state='RUNNING'
+2024-03-07 07:00:46,035 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 07:00:46,360 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for RSR/USDT with stake_amount: 27.380742332073865 ...
+2024-03-07 07:00:46,361 - freqtrade.freqtradebot - INFO - User denied entry for RSR/USDT.
+2024-03-07 07:00:51,036 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 07:00:51,331 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for RSR/USDT with stake_amount: 27.35882020050295 ...
+2024-03-07 07:00:51,333 - freqtrade.freqtradebot - INFO - User denied entry for RSR/USDT.
+2024-03-07 07:00:56,037 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 07:00:56,847 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for RSR/USDT with stake_amount: 27.35882020050295 ...
+2024-03-07 07:00:56,849 - freqtrade.freqtradebot - INFO - User denied entry for RSR/USDT.
+2024-03-07 07:01:01,040 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 07:01:01,371 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for RSR/USDT with stake_amount: 27.35882020050295 ...
+2024-03-07 07:01:01,373 - freqtrade.freqtradebot - INFO - User denied entry for RSR/USDT.
+2024-03-07 07:01:06,038 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 07:01:06,349 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for RSR/USDT with stake_amount: 27.35882020050295 ...
+2024-03-07 07:01:06,351 - freqtrade.freqtradebot - INFO - User denied entry for RSR/USDT.
+2024-03-07 07:01:11,038 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 07:01:11,324 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for RSR/USDT with stake_amount: 27.30182265841857 ...
+2024-03-07 07:01:11,326 - freqtrade.freqtradebot - INFO - User denied entry for RSR/USDT.
+2024-03-07 07:01:16,039 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 07:01:17,136 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for RSR/USDT with stake_amount: 27.293053805790205 ...
+2024-03-07 07:01:17,137 - freqtrade.freqtradebot - INFO - User denied entry for RSR/USDT.
+2024-03-07 07:01:21,038 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 07:01:21,536 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for RSR/USDT with stake_amount: 27.293053805790205 ...
+2024-03-07 07:01:21,537 - freqtrade.freqtradebot - INFO - User denied entry for RSR/USDT.
+2024-03-07 07:01:26,042 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 07:01:26,513 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for RSR/USDT with stake_amount: 27.249209542648373 ...
+2024-03-07 07:01:26,514 - freqtrade.freqtradebot - INFO - User denied entry for RSR/USDT.
+2024-03-07 07:01:31,039 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 07:01:31,548 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for RSR/USDT with stake_amount: 27.222902984763277 ...
+2024-03-07 07:01:31,549 - freqtrade.freqtradebot - INFO - User denied entry for RSR/USDT.
+2024-03-07 07:01:36,042 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 07:01:36,389 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for RSR/USDT with stake_amount: 27.27551610053347 ...
+2024-03-07 07:01:36,390 - freqtrade.freqtradebot - INFO - User denied entry for RSR/USDT.
+2024-03-07 07:01:41,040 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 07:01:41,500 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for RSR/USDT with stake_amount: 27.25797839527674 ...
+2024-03-07 07:01:41,501 - freqtrade.freqtradebot - INFO - User denied entry for RSR/USDT.
+2024-03-07 07:01:46,008 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2024.1', state='RUNNING'
+2024-03-07 07:01:46,042 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 07:01:46,874 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for RSR/USDT with stake_amount: 27.271131674219287 ...
+2024-03-07 07:01:46,876 - freqtrade.freqtradebot - INFO - User denied entry for RSR/USDT.
+2024-03-07 07:01:51,042 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 07:01:51,387 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for RSR/USDT with stake_amount: 27.328129216303672 ...
+2024-03-07 07:01:51,389 - freqtrade.freqtradebot - INFO - User denied entry for RSR/USDT.
+2024-03-07 07:01:56,046 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 07:01:57,046 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for RSR/USDT with stake_amount: 27.328129216303672 ...
+2024-03-07 07:01:57,047 - freqtrade.freqtradebot - INFO - User denied entry for RSR/USDT.
+2024-03-07 07:02:01,049 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 07:02:01,575 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for RSR/USDT with stake_amount: 27.271131674219287 ...
+2024-03-07 07:02:01,576 - freqtrade.freqtradebot - INFO - User denied entry for RSR/USDT.
+2024-03-07 07:02:06,043 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 07:02:06,511 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for RSR/USDT with stake_amount: 27.31059151104694 ...
+2024-03-07 07:02:06,512 - freqtrade.freqtradebot - INFO - User denied entry for RSR/USDT.
+2024-03-07 07:02:11,042 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 07:02:11,710 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for RSR/USDT with stake_amount: 27.30182265841857 ...
+2024-03-07 07:02:11,711 - freqtrade.freqtradebot - INFO - User denied entry for RSR/USDT.
+2024-03-07 07:02:16,044 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 07:02:16,498 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for RSR/USDT with stake_amount: 27.293053805790205 ...
+2024-03-07 07:02:16,499 - freqtrade.freqtradebot - INFO - User denied entry for RSR/USDT.
+2024-03-07 07:02:21,044 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 07:02:21,352 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for RSR/USDT with stake_amount: 27.27551610053347 ...
+2024-03-07 07:02:21,353 - freqtrade.freqtradebot - INFO - User denied entry for RSR/USDT.
+2024-03-07 07:02:26,043 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 07:02:26,893 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for RSR/USDT with stake_amount: 27.288669379476023 ...
+2024-03-07 07:02:26,894 - freqtrade.freqtradebot - INFO - User denied entry for RSR/USDT.
+2024-03-07 07:02:31,046 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 07:02:31,552 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for RSR/USDT with stake_amount: 27.271131674219287 ...
+2024-03-07 07:02:31,553 - freqtrade.freqtradebot - INFO - User denied entry for RSR/USDT.
+2024-03-07 07:02:36,054 - freqtrade.wallets - INFO - Wallets synced.
+2024-03-07 07:02:36,551 - freqtrade.freqtradebot - INFO - Long signal found: about create a new trade for RSR/USDT with stake_amount: 27.20536527950654 ...
+2024-03-07 07:02:36,552 - freqtrade.freqtradebot - INFO - User denied entry for RSR/USDT.
+2024-03-07 07:02:41,057 - freqtrade.wallets - INFO - Wallets synced.

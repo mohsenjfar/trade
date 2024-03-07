@@ -1,32 +1,32 @@
 ---
 version: '3'
 services:
-  freqtrade:
+  hold_strategy:
     image: freqtradeorg/freqtrade:stable
-    restart: unless-stopped
-    container_name: freqtrade
+    restart: "no"
+    container_name: hold_strategy
     volumes:
       - "./user_data:/freqtrade/user_data"
     ports:
       - "127.0.0.1:8080:8080"
     command: >
       trade
-      --logfile /freqtrade/user_data/logs/ReactionBreakStrategy_dry.log
-      --db-url sqlite:////freqtrade/user_data/ReactionBreakStrategy_dry.sqlite
-      --config /freqtrade/user_data/rb_config.json
-      --strategy ReactionBreakStrategy
-  freqtrade2:
-    image: freqtradeorg/freqtrade:develop_freqai
-    restart: unless-stopped
-    container_name: XGBoostStrategy
-    volumes:
-      - "./user_data:/freqtrade/user_data"
-    ports:
-      - "127.0.0.1:8080:8080"
-    command: >
-      trade
-      --logfile /freqtrade/user_data/logs/XGBoostStrategy.log
-      --db-url sqlite:////freqtrade/user_data/XGBoostStrategy.sqlite
-      --config /freqtrade/user_data/rb_config.json
-      --strategy XGBoostStrategy
-      --freqaimodel XGBoostClassifier
+      --logfile /freqtrade/user_data/hold_strategy_dry.log
+      --db-url sqlite:////freqtrade/user_data/hold_strategy_dry.sqlite
+      --config /freqtrade/user_data/kucoin_config.json
+      --strategy HoldStrategy
+  # freqtrade2:
+  #   image: freqtradeorg/freqtrade:develop_freqai
+  #   restart: unless-stopped
+  #   container_name: XGBoostStrategy
+  #   volumes:
+  #     - "./user_data:/freqtrade/user_data"
+  #   ports:
+  #     - "127.0.0.1:8080:8080"
+  #   command: >
+  #     trade
+  #     --logfile /freqtrade/user_data/logs/XGBoostStrategy.log
+  #     --db-url sqlite:////freqtrade/user_data/XGBoostStrategy.sqlite
+  #     --config /freqtrade/user_data/rb_config.json
+  #     --strategy XGBoostStrategy
+  #     --freqaimodel XGBoostClassifier
