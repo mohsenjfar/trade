@@ -17,7 +17,7 @@ services:
   #     --strategy HoldStrategy
   hold_strategy_dry:
     image: freqtradeorg/freqtrade:develop_freqai
-    restart: "no"
+    restart: unless-stopped
     container_name: hold_strategy_dry
     volumes:
       - "./user_data:/freqtrade/user_data"

@@ -25,7 +25,7 @@ class HoldStrategy(IStrategy):
 
     timeframe = '15m'
 
-    total_risk = 0.01
+    total_risk = 0.005
 
     process_only_new_candles = True
 
@@ -39,7 +39,7 @@ class HoldStrategy(IStrategy):
 
     position_adjustment_enable = False
 
-    startup_candle_count: int = 200
+    startup_candle_count: int = 5936
 
     custom_info = {}
 
@@ -64,14 +64,12 @@ class HoldStrategy(IStrategy):
                 "trade_limit": 2,
                 "stop_duration_candles": 8,
                 "required_profit": 0.0,
-                "only_per_pair": False,
+                "only_per_pair": True,
                 "only_per_side": False
             }
         ]
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-
-        dataframe = dataframe[dataframe.date >= '2023-01-01']
         dataframe_ = dataframe.copy()
         for c in range(1,4):
             X = dataframe_['close'].values.reshape(-1,1)
@@ -93,12 +91,10 @@ class HoldStrategy(IStrategy):
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        c_max = dataframe.groupby(['label_3']).max().at['cluster_0','close']
-
         dataframe.loc[
             (
-                (dataframe['label_2'] == 'cluster_2') &
-                (qtpylib.crossed_above(dataframe['close'], c_max))
+                (dataframe.label_3.shift(1) == 'cluster_0') &
+                (dataframe.label_3 == 'cluster_1')
             ),
             'enter_long'
         ] = 1
@@ -128,33 +124,15 @@ class HoldStrategy(IStrategy):
         self.custom_info[pair] = {'init_c_min':c_min, 'init_risk':risk}
 
         return stake
-    
-    def adjust_trade_position(self, trade: Trade, current_time: datetime,
-                              current_rate: float, current_profit: float,
-                              min_stake: Optional[float], max_stake: float,
-                              current_entry_rate: float, current_exit_rate: float,
-                              current_entry_profit: float, current_exit_profit: float,
-                              **kwargs
-                              ) -> Union[Optional[float], Tuple[Optional[float], Optional[str]]]:
-
-        last_order_date = timeframe_to_prev_date(self.timeframe, trade.date_last_filled_utc)
-        dataframe, _ = self.dp.get_analyzed_dataframe(trade.pair, self.timeframe)
-        last_candle = dataframe.iloc[-2].squeeze()
-
-        if (current_time > last_order_date + timedelta(minutes=15)) and last_candle['enter_long'] == 1:
-            risk = last_candle['atr'] / current_rate * 2
-            return self.position_size(max_stake, risk)
-        
-        return None
 
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
-        trade_date = timeframe_to_prev_date(self.timeframe, trade.open_date_utc)
+        
 
-        c_min = self.custom_info[pair]['init_c_min']
+
 
         return stoploss_from_absolute(
             c_min,
