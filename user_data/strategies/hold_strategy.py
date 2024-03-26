@@ -69,23 +69,25 @@ class HoldStrategy(IStrategy):
             }
         ]
 
+    def cluster(self, dataframe):
+        X = dataframe['close'].values.reshape(-1,1)
+        kmeans = KMeans(n_clusters=3, random_state=42).fit(X)
+        return kmeans.predict(X)
+
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        dataframe_ = dataframe.copy()
-        for c in range(1,4):
-            X = dataframe_['close'].values.reshape(-1,1)
-            kmeans = KMeans(n_clusters=3, random_state=42).fit(X)
-            dataframe_[f'label_{c}'] = kmeans.predict(X)
-            dataframe[f'label_{c}'] = dataframe_[f'label_{c}'].astype(str)
-            labels_sorted = dataframe[[f'label_{c}','close']].groupby(f'label_{c}').min()
-            labels_sorted = labels_sorted.sort_values(by=['close']).reset_index().to_dict('index')
-            labels_sorted = {value[f'label_{c}']:f'cluster_{key}' for key, value in labels_sorted.items()}
-            dataframe = dataframe.replace({f'label_{c}':labels_sorted})
-            X = dataframe_.index.values.reshape(-1,1)
-            y = dataframe_.close.values
-            model = LinearRegression()
-            model.fit(X, y)
-            dataframe[f'label_{c}_coef'] = model.coef_[0]
-            dataframe_ = dataframe_[dataframe_[f'label_{c}']==dataframe_[f'label_{c}'].iat[-1]]
+
+        dataframe['label_1'] = self.cluster(dataframe)
+
+        grouped = dataframe.groupby(['label_1']).apply(self.cluster).to_dict()
+        for c, values in grouped.items():
+            condition_1 = dataframe['label_1'] == c
+            dataframe.loc[condition_1, 'label_2'] = values
+
+        grouped = dataframe.groupby(['label_1','label_2']).apply(self.cluster).to_dict()
+        for c, values in grouped.items():
+            condition_1 = dataframe['label_1'] == c[0]
+            condition_2 = dataframe['label_2'] == c[1]
+            dataframe.loc[(condition_1 & condition_2), 'label_3'] = values
 
         return dataframe
 
@@ -93,10 +95,18 @@ class HoldStrategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe.label_3.shift(1) == 'cluster_0') &
-                (dataframe.label_3 == 'cluster_1')
+                (dataframe.label_3.shift(1) == 0) &
+                (dataframe.label_3 == 1)
             ),
             'enter_long'
+        ] = 1
+
+        dataframe.loc[
+            (
+                (dataframe.label_3.shift(1) == 2) &
+                (dataframe.label_3 == 1)
+            ),
+            'enter_short'
         ] = 1
 
         return dataframe
@@ -117,11 +127,9 @@ class HoldStrategy(IStrategy):
                             **kwargs) -> float:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        c_min = dataframe.groupby(['label_3']).min().at['cluster_0','close']
-        risk = 1 - c_min / current_rate
+        mins = dataframe.groupby([f'label_{i}' for i in [1,2,3]]).min().close.sort_values().values
+        risk = 1 - mins[mins < current_rate][-1] / current_rate
         stake = self.position_size(max_stake, risk)
-
-        self.custom_info[pair] = {'init_c_min':c_min, 'init_risk':risk}
 
         return stake
 
@@ -130,13 +138,12 @@ class HoldStrategy(IStrategy):
                         **kwargs) -> Optional[float]:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
-        
-
-
+        mins = dataframe.groupby([f'label_{i}' for i in [1,2,3]]).min().close.sort_values().values
+        prev_close = dataframe.close.iat[-2]
 
         return stoploss_from_absolute(
-            c_min,
-            trade.open_rate,
+            mins[mins < prev_close][-1],
+            prev_close,
             is_short=trade.is_short,
             leverage=trade.leverage
         )
