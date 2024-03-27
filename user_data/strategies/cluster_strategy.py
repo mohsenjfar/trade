@@ -15,11 +15,11 @@ from freqtrade.strategy import (
     timeframe_to_prev_date
 )
 
-class HoldStrategy(IStrategy):
+class ClusterStrategy(IStrategy):
 
     INTERFACE_VERSION = 3
 
-    can_short: bool = False
+    can_short: bool = True
 
     stoploss = -0.1
 
@@ -27,7 +27,7 @@ class HoldStrategy(IStrategy):
 
     total_risk = 0.005
 
-    process_only_new_candles = True
+    process_only_new_candles = False
 
     use_exit_signal = False
 
@@ -39,7 +39,7 @@ class HoldStrategy(IStrategy):
 
     position_adjustment_enable = False
 
-    startup_candle_count: int = 5936
+    startup_candle_count: int = 2500
 
     custom_info = {}
 
@@ -128,9 +128,9 @@ class HoldStrategy(IStrategy):
         mins = dataframe.groupby([f'label_{i}' for i in [1,2,3]]).min().close.sort_values().values
         
         if side == 'long':
-            risk = 1 - mins[mins < current_rate][-2] / current_rate
+            risk = 1 - mins[mins < current_rate][-1] / current_rate
         else:
-            risk = mins[mins > current_rate][1] / current_rate - 1
+            risk = mins[mins > current_rate][0] / current_rate - 1
         
         stake = self.position_size(max_stake, risk)
 
@@ -146,14 +146,14 @@ class HoldStrategy(IStrategy):
 
         if trade.is_short:
             return stoploss_from_absolute(
-                mins[mins > prev_close][1],
+                mins[mins > prev_close][0],
                 prev_close,
                 is_short=trade.is_short,
                 leverage=trade.leverage
             )
         
         return stoploss_from_absolute(
-                mins[mins < prev_close][-2],
+                mins[mins < prev_close][-1],
                 prev_close,
                 is_short=trade.is_short,
                 leverage=trade.leverage
