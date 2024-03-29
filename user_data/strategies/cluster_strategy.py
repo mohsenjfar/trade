@@ -25,9 +25,9 @@ class ClusterStrategy(IStrategy):
 
     timeframe = '15m'
 
-    total_risk = 0.005
+    total_risk = 0.01
 
-    process_only_new_candles = False
+    process_only_new_candles = True
 
     use_exit_signal = False
 
@@ -60,9 +60,9 @@ class ClusterStrategy(IStrategy):
         return [
             {
                 "method": "StoplossGuard",
-                "lookback_period_candles": 96,
+                "lookback_period_candles": 24,
                 "trade_limit": 2,
-                "stop_duration_candles": 8,
+                "stop_duration_candles": 4,
                 "required_profit": 0.0,
                 "only_per_pair": True,
                 "only_per_side": False
@@ -95,14 +95,16 @@ class ClusterStrategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe.label_3.shift(1) < dataframe.label_3)
+                (dataframe.label_3.shift(1) == 0) &
+                (dataframe.label_3 == 1)
             ),
             'enter_long'
         ] = 1
 
         dataframe.loc[
             (
-                (dataframe.label_3.shift(1) > dataframe.label_3)
+                (dataframe.label_3.shift(1) == 2) &
+                (dataframe.label_3 == 1)
             ),
             'enter_short'
         ] = 1
@@ -126,11 +128,12 @@ class ClusterStrategy(IStrategy):
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         mins = dataframe.groupby([f'label_{i}' for i in [1,2,3]]).min().close.sort_values().values
+        prev_close = dataframe.close.iat[-2]
         
         if side == 'long':
-            risk = 1 - mins[mins < current_rate][-1] / current_rate
+            risk = 1 - mins[mins < prev_close][-2] / prev_close
         else:
-            risk = mins[mins > current_rate][0] / current_rate - 1
+            risk = mins[mins > prev_close][1] / prev_close - 1
         
         stake = self.position_size(max_stake, risk)
 
@@ -146,14 +149,14 @@ class ClusterStrategy(IStrategy):
 
         if trade.is_short:
             return stoploss_from_absolute(
-                mins[mins > prev_close][0],
+                mins[mins > prev_close][1],
                 prev_close,
                 is_short=trade.is_short,
                 leverage=trade.leverage
             )
         
         return stoploss_from_absolute(
-                mins[mins < prev_close][-1],
+                mins[mins < prev_close][-2],
                 prev_close,
                 is_short=trade.is_short,
                 leverage=trade.leverage
