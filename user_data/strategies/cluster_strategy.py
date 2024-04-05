@@ -1,18 +1,15 @@
-import numpy as np  # noqa
-import pandas as pd  # noqa
+import numpy as np
 from pandas import DataFrame
-from typing import Optional, Union, Tuple
-from datetime import datetime, timedelta
 from freqtrade.persistence import Trade
-import talib.abstract as ta
-from technical import qtpylib
 from sklearn.cluster import KMeans
-from sklearn.linear_model import LinearRegression
+from freqtrade.data.history import load_pair_history
+from freqtrade.enums import CandleType
+from datetime import datetime
+from typing import Optional
 
 from freqtrade.strategy import (
     IStrategy,
-    stoploss_from_absolute,
-    timeframe_to_prev_date
+    stoploss_from_absolute
 )
 
 class ClusterStrategy(IStrategy):
@@ -23,7 +20,7 @@ class ClusterStrategy(IStrategy):
 
     stoploss = -0.1
 
-    timeframe = '15m'
+    timeframe = '5m'
 
     total_risk = 0.01
 
@@ -39,9 +36,7 @@ class ClusterStrategy(IStrategy):
 
     position_adjustment_enable = False
 
-    startup_candle_count: int = 2500
-
-    custom_info = {}
+    startup_candle_count: int = 300
 
     order_types = {
         'entry': 'limit',
@@ -71,23 +66,27 @@ class ClusterStrategy(IStrategy):
 
     def cluster(self, dataframe):
         X = dataframe['close'].values.reshape(-1,1)
-        kmeans = KMeans(n_clusters=3, random_state=42).fit(X)
+        kmeans = KMeans(n_clusters=5, random_state=42).fit(X)
         return kmeans.predict(X)
+
+    def pair_levels(self, pair):
+        dataframe = load_pair_history(
+            datadir = self.config["datadir"],
+            timeframe = self.timeframe,
+            pair = pair,
+            data_format = "feather",
+            candle_type=CandleType.FUTURES,
+        )
+        dataframe['cluster'] = self.cluster(dataframe)
+        levels = dataframe.groupby(['cluster']).min().close.sort_values().values
+        levels = np.append(levels, dataframe.close.max())
+        return levels
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe['label_1'] = self.cluster(dataframe)
-
-        grouped = dataframe.groupby(['label_1']).apply(self.cluster).to_dict()
-        for c, values in grouped.items():
-            condition_1 = dataframe['label_1'] == c
-            dataframe.loc[condition_1, 'label_2'] = values
-
-        grouped = dataframe.groupby(['label_1','label_2']).apply(self.cluster).to_dict()
-        for c, values in grouped.items():
-            condition_1 = dataframe['label_1'] == c[0]
-            condition_2 = dataframe['label_2'] == c[1]
-            dataframe.loc[(condition_1 & condition_2), 'label_3'] = values
+        levels = self.pair_levels(metadata['pair'])
+        for c, level in enumerate(levels):
+            dataframe.loc[(dataframe.close >= level),'cluster'] = c
 
         return dataframe
 
@@ -95,16 +94,16 @@ class ClusterStrategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe.label_3.shift(1) == 0) &
-                (dataframe.label_3 == 1)
+                (dataframe.cluster.shift(1) == 0) &
+                (dataframe.cluster == 1)
             ),
             'enter_long'
         ] = 1
 
         dataframe.loc[
             (
-                (dataframe.label_3.shift(1) == 2) &
-                (dataframe.label_3 == 1)
+                (dataframe.cluster.shift(1) == 4) &
+                (dataframe.cluster == 3)
             ),
             'enter_short'
         ] = 1
@@ -127,13 +126,14 @@ class ClusterStrategy(IStrategy):
                             **kwargs) -> float:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        mins = dataframe.groupby([f'label_{i}' for i in [1,2,3]]).min().close.sort_values().values
+        levels = dataframe.groupby(['cluster']).min().close.sort_values().values
+        levels = np.append(levels, dataframe.close.max())
         prev_close = dataframe.close.iat[-2]
         
         if side == 'long':
-            risk = 1 - mins[mins < prev_close][-2] / prev_close
+            risk = 1 - levels[levels < prev_close][-2] / prev_close
         else:
-            risk = mins[mins > prev_close][1] / prev_close - 1
+            risk = levels[levels > prev_close][1] / prev_close - 1
         
         stake = self.position_size(max_stake, risk)
 
@@ -144,19 +144,26 @@ class ClusterStrategy(IStrategy):
                         **kwargs) -> Optional[float]:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
-        mins = dataframe.groupby([f'label_{i}' for i in [1,2,3]]).min().close.sort_values().values
+        levels = dataframe.groupby(['cluster']).min().close.sort_values().values
+        levels = np.append(levels, dataframe.close.max())
         prev_close = dataframe.close.iat[-2]
 
+        if current_rate > levels[-1]:
+            self.dp.send_msg('Price crossed above cluster')
+        
+        if current_rate < levels[0]:
+            self.dp.send_msg('Price crossed below cluster')
+        
         if trade.is_short:
             return stoploss_from_absolute(
-                mins[mins > prev_close][1],
+                levels[levels > prev_close][1],
                 prev_close,
                 is_short=trade.is_short,
                 leverage=trade.leverage
             )
         
         return stoploss_from_absolute(
-                mins[mins < prev_close][-2],
+                levels[levels < prev_close][-2],
                 prev_close,
                 is_short=trade.is_short,
                 leverage=trade.leverage
