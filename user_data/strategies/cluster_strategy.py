@@ -20,7 +20,7 @@ class ClusterStrategy(IStrategy):
 
     stoploss = -0.1
 
-    timeframe = '5m'
+    timeframe = '1m'
 
     total_risk = 0.01
 
@@ -77,6 +77,7 @@ class ClusterStrategy(IStrategy):
             data_format = "feather",
             candle_type=CandleType.FUTURES,
         )
+        dataframe = dataframe[dataframe.date>='2024-04-05 02:00']
         dataframe['cluster'] = self.cluster(dataframe)
         levels = dataframe.groupby(['cluster']).min().close.sort_values().values
         levels = np.append(levels, dataframe.close.max())
@@ -126,9 +127,8 @@ class ClusterStrategy(IStrategy):
                             **kwargs) -> float:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        levels = dataframe.groupby(['cluster']).min().close.sort_values().values
-        levels = np.append(levels, dataframe.close.max())
         prev_close = dataframe.close.iat[-2]
+        levels = self.pair_levels(pair)
         
         if side == 'long':
             risk = 1 - levels[levels < prev_close][-2] / prev_close
@@ -144,9 +144,8 @@ class ClusterStrategy(IStrategy):
                         **kwargs) -> Optional[float]:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
-        levels = dataframe.groupby(['cluster']).min().close.sort_values().values
-        levels = np.append(levels, dataframe.close.max())
         prev_close = dataframe.close.iat[-2]
+        levels = self.pair_levels(pair)
 
         if current_rate > levels[-1]:
             self.dp.send_msg('Price crossed above cluster')
@@ -168,3 +167,12 @@ class ClusterStrategy(IStrategy):
                 is_short=trade.is_short,
                 leverage=trade.leverage
             )
+
+    # def bot_loop_start(self, current_time: datetime, **kwargs) -> None:
+
+    #     # if self.config['runmode'].value in ('live'):
+    #     #     if self.wallets:
+    #     #         self.dp.send_msg(self.wallets.get_total('USDT'))
+        
+    #     levels = self.pair_levels(self.config['exchange']["pair_whitelist"][0])
+    #     self.dp.send_msg(str(levels))
