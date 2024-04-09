@@ -6,6 +6,7 @@ from freqtrade.data.history import load_pair_history
 from freqtrade.enums import CandleType
 from datetime import datetime
 from typing import Optional
+from freqtrade.persistence import Trade
 
 from freqtrade.strategy import (
     IStrategy,
@@ -77,7 +78,7 @@ class ClusterStrategy(IStrategy):
             data_format = "feather",
             candle_type=CandleType.FUTURES,
         )
-        dataframe = dataframe[dataframe.date>='2024-04-05 02:00']
+        # dataframe = dataframe[dataframe.date>='2024-04-05 02:00']
         dataframe['cluster'] = self.cluster(dataframe)
         levels = dataframe.groupby(['cluster']).min().close.sort_values().values
         levels = np.append(levels, dataframe.close.max())
@@ -95,16 +96,14 @@ class ClusterStrategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe.cluster.shift(1) == 0) &
-                (dataframe.cluster == 1)
+                (dataframe.cluster.shift(1) < dataframe.cluster)
             ),
             'enter_long'
         ] = 1
 
         dataframe.loc[
             (
-                (dataframe.cluster.shift(1) == 4) &
-                (dataframe.cluster == 3)
+                (dataframe.cluster.shift(1) > dataframe.cluster)
             ),
             'enter_short'
         ] = 1
@@ -131,8 +130,12 @@ class ClusterStrategy(IStrategy):
         levels = self.pair_levels(pair)
         
         if side == 'long':
+            levels = np.append(levels, dataframe.low.iat[-2])
+            levels = np.sort(levels)
             risk = 1 - levels[levels < prev_close][-2] / prev_close
         else:
+            levels = np.append(levels, dataframe.high.iat[-2])
+            levels = np.sort(levels)
             risk = levels[levels > prev_close][1] / prev_close - 1
         
         stake = self.position_size(max_stake, risk)
@@ -146,33 +149,61 @@ class ClusterStrategy(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
         prev_close = dataframe.close.iat[-2]
         levels = self.pair_levels(pair)
+        stop = trade.get_custom_data(key='stop')
 
-        if current_rate > levels[-1]:
-            self.dp.send_msg('Price crossed above cluster')
-        
-        if current_rate < levels[0]:
-            self.dp.send_msg('Price crossed below cluster')
-        
-        if trade.is_short:
+        if stop:
+            if trade.is_short:
+                levels = np.append(levels, stop)
+                levels = np.sort(levels)
+                return stoploss_from_absolute(
+                    levels[levels > prev_close][1],
+                    prev_close,
+                    is_short=trade.is_short,
+                    leverage=trade.leverage
+                )
+            levels = np.append(levels, stop)
+            levels = np.sort(levels)
             return stoploss_from_absolute(
-                levels[levels > prev_close][1],
-                prev_close,
-                is_short=trade.is_short,
-                leverage=trade.leverage
-            )
+                    levels[levels < prev_close][-2],
+                    prev_close,
+                    is_short=trade.is_short,
+                    leverage=trade.leverage
+                )
         
-        return stoploss_from_absolute(
-                levels[levels < prev_close][-2],
-                prev_close,
-                is_short=trade.is_short,
-                leverage=trade.leverage
-            )
+        return -1
 
-    # def bot_loop_start(self, current_time: datetime, **kwargs) -> None:
+    def order_filled(self, pair: str, trade: Trade, order: 'Order', current_time: datetime, **kwargs) -> None:
 
-    #     # if self.config['runmode'].value in ('live'):
-    #     #     if self.wallets:
-    #     #         self.dp.send_msg(self.wallets.get_total('USDT'))
+        # Obtain pair dataframe (just to show how to access it)
+        dataframe, _ = self.dp.get_analyzed_dataframe(trade.pair, self.timeframe)
+        prev_candle = dataframe.iloc[-2].squeeze()
+
+        if trade.nr_of_successful_entries == 1:
+            if trade.is_short:
+                trade.set_custom_data(key='stop', value=prev_candle['high'])
+            else:
+                trade.set_custom_data(key='stop', value=prev_candle['low'])
+
+        return None
+    
+    def bot_loop_start(self, current_time: datetime, **kwargs) -> None:
+
+        pairs = self.dp.current_whitelist()
+
+        if self.config['runmode'].value in ('live'):
+            if self.wallets:
+                for pair in pairs:
+                    ticker = self.dp.ticker(pair)
+                    self.dp.send_msg(self.wallets.get_total(ticker))
+                self.dp.send_msg(self.wallets.get_total('USDT'))
         
-    #     levels = self.pair_levels(self.config['exchange']["pair_whitelist"][0])
-    #     self.dp.send_msg(str(levels))
+        for pair in pairs:
+            dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
+            if not dataframe.empty:
+                prev_close = dataframe.close.iat[-2]
+                levels = self.pair_levels(pair)
+                if prev_close > levels[-1]:
+                    self.dp.send_msg('Price crossed above cluster')
+                
+                if prev_close < levels[0]:
+                    self.dp.send_msg('Price crossed below cluster')
