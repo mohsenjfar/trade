@@ -26,7 +26,7 @@ class ClusterStrategy(IStrategy):
 
     total_risk = 0.01
 
-    process_only_new_candles = True
+    process_only_new_candles = False
 
     use_exit_signal = False
 
@@ -38,7 +38,7 @@ class ClusterStrategy(IStrategy):
 
     position_adjustment_enable = False
 
-    startup_candle_count: int = 300
+    startup_candle_count: int = 240
 
     order_types = {
         'entry': 'limit',
@@ -52,36 +52,32 @@ class ClusterStrategy(IStrategy):
         'exit': 'GTC'
     }
 
-    # @property
-    # def protections(self):
-    #     return [
-    #         {
-    #             "method": "StoplossGuard",
-    #             "lookback_period_candles": 24,
-    #             "trade_limit": 2,
-    #             "stop_duration_candles": 4,
-    #             "required_profit": 0.0,
-    #             "only_per_pair": True,
-    #             "only_per_side": False
-    #         }
-    #     ]
+    custom_info = None
 
-    def cluster(self, dataframe):
-        X = dataframe['close'].values.reshape(-1,1)
-        kmeans = KMeans(n_clusters=5, random_state=42).fit(X)
-        return kmeans.predict(X)
+    def cluster_borders(self):
+        dataframe = self.dp.get_pair_dataframe(pair="WIF/USDT:USDT", timeframe="1h")
+        dataframe = dataframe[dataframe.date>='2024-04-02']
+        X = dataframe.close.values.reshape(-1,1)
+        kmeans = KMeans(n_clusters=9, random_state=42).fit(X)
+        dataframe['cluster'] = kmeans.predict(X)
+        borders = dataframe.groupby(['cluster']).min().close.sort_values().values
+        return np.append(borders, dataframe.close.max())
 
-    def pair_levels(self, pair):
-
-        levels = np.genfromtxt('user_data/notebooks/levels.csv', delimiter=',')
-
-        return levels
+    def informative_pairs(self):
+        return [
+            ("WIF/USDT:USDT", "1h", "futures"),
+        ]
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        levels = self.pair_levels(metadata['pair'])
-        for c, level in enumerate(levels):
-            dataframe.loc[(dataframe.close >= level),'cluster'] = c
+        borders = self.cluster_borders()
+
+        if str(borders) != self.custom_info:
+            self.dp.send_msg(f"{borders}")
+            self.custom_info = str(borders)
+
+        for c, border in enumerate(borders):
+            dataframe.loc[(dataframe.close >= border),'cluster'] = c
 
         return dataframe
 
@@ -118,18 +114,17 @@ class ClusterStrategy(IStrategy):
                             leverage: float, entry_tag: Optional[str], side: str,
                             **kwargs) -> float:
 
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        prev_close = dataframe.close.iat[-2]
-        levels = self.pair_levels(pair)
+        # dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        borders = self.cluster_borders()
         
         if side == 'long':
-            levels = np.append(levels, dataframe.low.iat[-2])
-            levels = np.sort(levels)
-            risk = 1 - levels[levels < prev_close][-2] / prev_close
+            # borders = np.append(borders, dataframe.low.iat[-2])
+            # borders = np.sort(borders)
+            risk = 1 - borders[borders < current_rate][-2] / current_rate
         else:
-            levels = np.append(levels, dataframe.high.iat[-2])
-            levels = np.sort(levels)
-            risk = levels[levels > prev_close][1] / prev_close - 1
+            # borders = np.append(borders, dataframe.high.iat[-2])
+            # borders = np.sort(borders)
+            risk = borders[borders > current_rate][1] / current_rate - 1
         
         stake = self.position_size(max_stake, risk)
 
@@ -139,32 +134,30 @@ class ClusterStrategy(IStrategy):
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
-        prev_close = dataframe.close.iat[-2]
-        levels = self.pair_levels(pair)
+        borders = self.cluster_borders()
         stop = trade.get_custom_data(key='stop')
 
         if stop:
             if trade.is_short:
-                levels = np.append(levels, stop)
-                levels = np.sort(levels)
+                borders = np.append(borders, stop)
+                borders = np.sort(borders)
                 return stoploss_from_absolute(
-                    levels[levels > prev_close][1],
-                    prev_close,
+                    borders[borders > current_rate][1],
+                    current_rate,
                     is_short=trade.is_short,
                     leverage=trade.leverage
                 )
-            levels = np.append(levels, stop)
-            levels = np.sort(levels)
+            borders = np.append(borders, stop)
+            borders = np.sort(borders)
             return stoploss_from_absolute(
-                    levels[levels < prev_close][-2],
-                    prev_close,
+                    borders[borders < current_rate][-2],
+                    current_rate,
                     is_short=trade.is_short,
                     leverage=trade.leverage
                 )
         
         return -1
-
+    
     def order_filled(self, pair: str, trade: Trade, order: 'Order', current_time: datetime, **kwargs) -> None:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(trade.pair, self.timeframe)
@@ -175,27 +168,13 @@ class ClusterStrategy(IStrategy):
                 trade.set_custom_data(key='stop', value=prev_candle['high'])
             else:
                 trade.set_custom_data(key='stop', value=prev_candle['low'])
+            trade.set_custom_data(key='OB', value=self.dp.orderbook(trade.pair, maximum=200))
 
         return None
-    
+
     def bot_loop_start(self, current_time: datetime, **kwargs) -> None:
 
         pairs = self.dp.current_whitelist()
-
-        if self.config['runmode'].value in ('live','dry_run'):
-            if self.wallets:
-                for pair in pairs:
-                    ticker = self.dp.ticker(pair)
-                    self.dp.send_msg(self.wallets.get_total(ticker))
-                self.dp.send_msg(self.wallets.get_total('USDT'))
-        
         for pair in pairs:
-            dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
-            if not dataframe.empty:
-                prev_close = dataframe.close.iat[-2]
-                levels = self.pair_levels(pair)
-                if prev_close > levels[-1]:
-                    self.dp.send_msg('Price crossed above main cluster')
-                
-                if prev_close < levels[0]:
-                    self.dp.send_msg('Price crossed below main cluster')
+            if self.is_pair_locked(pair):
+                self.unlock_pair(pair)
