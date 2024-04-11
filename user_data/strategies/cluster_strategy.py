@@ -7,6 +7,7 @@ from freqtrade.enums import CandleType
 from datetime import datetime
 from typing import Optional
 from freqtrade.persistence import Trade
+import numpy as np
 
 from freqtrade.strategy import (
     IStrategy,
@@ -51,19 +52,19 @@ class ClusterStrategy(IStrategy):
         'exit': 'GTC'
     }
 
-    @property
-    def protections(self):
-        return [
-            {
-                "method": "StoplossGuard",
-                "lookback_period_candles": 24,
-                "trade_limit": 2,
-                "stop_duration_candles": 4,
-                "required_profit": 0.0,
-                "only_per_pair": True,
-                "only_per_side": False
-            }
-        ]
+    # @property
+    # def protections(self):
+    #     return [
+    #         {
+    #             "method": "StoplossGuard",
+    #             "lookback_period_candles": 24,
+    #             "trade_limit": 2,
+    #             "stop_duration_candles": 4,
+    #             "required_profit": 0.0,
+    #             "only_per_pair": True,
+    #             "only_per_side": False
+    #         }
+    #     ]
 
     def cluster(self, dataframe):
         X = dataframe['close'].values.reshape(-1,1)
@@ -71,17 +72,9 @@ class ClusterStrategy(IStrategy):
         return kmeans.predict(X)
 
     def pair_levels(self, pair):
-        dataframe = load_pair_history(
-            datadir = self.config["datadir"],
-            timeframe = self.timeframe,
-            pair = pair,
-            data_format = "feather",
-            candle_type=CandleType.FUTURES,
-        )
-        # dataframe = dataframe[dataframe.date>='2024-04-05 02:00']
-        dataframe['cluster'] = self.cluster(dataframe)
-        levels = dataframe.groupby(['cluster']).min().close.sort_values().values
-        levels = np.append(levels, dataframe.close.max())
+
+        levels = np.genfromtxt('user_data/notebooks/levels.csv', delimiter=',')
+
         return levels
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
@@ -174,7 +167,6 @@ class ClusterStrategy(IStrategy):
 
     def order_filled(self, pair: str, trade: Trade, order: 'Order', current_time: datetime, **kwargs) -> None:
 
-        # Obtain pair dataframe (just to show how to access it)
         dataframe, _ = self.dp.get_analyzed_dataframe(trade.pair, self.timeframe)
         prev_candle = dataframe.iloc[-2].squeeze()
 
@@ -190,7 +182,7 @@ class ClusterStrategy(IStrategy):
 
         pairs = self.dp.current_whitelist()
 
-        if self.config['runmode'].value in ('live'):
+        if self.config['runmode'].value in ('live','dry_run'):
             if self.wallets:
                 for pair in pairs:
                     ticker = self.dp.ticker(pair)
@@ -203,7 +195,7 @@ class ClusterStrategy(IStrategy):
                 prev_close = dataframe.close.iat[-2]
                 levels = self.pair_levels(pair)
                 if prev_close > levels[-1]:
-                    self.dp.send_msg('Price crossed above cluster')
+                    self.dp.send_msg('Price crossed above main cluster')
                 
                 if prev_close < levels[0]:
-                    self.dp.send_msg('Price crossed below cluster')
+                    self.dp.send_msg('Price crossed below main cluster')
