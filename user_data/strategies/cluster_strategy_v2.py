@@ -1,13 +1,9 @@
-import numpy as np
 from pandas import DataFrame
 from freqtrade.persistence import Trade
 from sklearn.cluster import KMeans
-from freqtrade.data.history import load_pair_history
-from freqtrade.enums import CandleType
 from datetime import datetime
 from typing import Optional
 from freqtrade.persistence import Trade
-import numpy as np
 
 from freqtrade.strategy import (
     IStrategy,
@@ -15,6 +11,15 @@ from freqtrade.strategy import (
 )
 
 class ClusterStrategyV2(IStrategy):
+
+    ''' Specs:
+    - Use 4h timeframe as cluster timeframe
+    - Use 1m timeframe as main timeframe
+    - Split cluster timeframe to 6 clusters
+    - When price crosses above one cluster border open long position and put stop second border below
+    - When price crosses below one cluster border open short position and put stop second border above
+    - Trail after each border
+    '''
 
     INTERFACE_VERSION = 3
 
