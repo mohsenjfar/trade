@@ -14,17 +14,17 @@ from freqtrade.strategy import (
     stoploss_from_absolute
 )
 
-class ClusterStrategy(IStrategy):
+class ClusterStrategyV1(IStrategy):
 
     INTERFACE_VERSION = 3
 
     can_short: bool = True
 
-    stoploss = -0.1
+    stoploss = -0.01
 
     timeframe = '1m'
 
-    total_risk = 0.01
+    total_risk = 0.005
 
     process_only_new_candles = False
 
@@ -52,29 +52,36 @@ class ClusterStrategy(IStrategy):
         'exit': 'GTC'
     }
 
-    custom_info = None
+    @property
+    def protections(self):
+        return [
+            {
+                "method": "StoplossGuard",
+                "lookback_period_candles": 30,
+                "trade_limit": 2,
+                "stop_duration_candles": 15,
+                "required_profit": 0.0,
+                "only_per_pair": True,
+                "only_per_side": False
+            }
+        ]
 
     def cluster_borders(self):
-        dataframe = self.dp.get_pair_dataframe(pair="WIF/USDT:USDT", timeframe="1h")
-        dataframe = dataframe[dataframe.date>='2024-04-02']
+        dataframe = self.dp.get_pair_dataframe(pair="WIF/USDT:USDT", timeframe="15m")
+        dataframe = dataframe[-16:]
         X = dataframe.close.values.reshape(-1,1)
-        kmeans = KMeans(n_clusters=9, random_state=42).fit(X)
+        kmeans = KMeans(n_clusters=6, random_state=42).fit(X)
         dataframe['cluster'] = kmeans.predict(X)
-        borders = dataframe.groupby(['cluster']).min().close.sort_values().values
-        return np.append(borders, dataframe.close.max())
+        return dataframe.groupby(['cluster']).min().close.sort_values().values
 
     def informative_pairs(self):
         return [
-            ("WIF/USDT:USDT", "1h", "futures"),
+            ("WIF/USDT:USDT", "15m", "futures"),
         ]
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         borders = self.cluster_borders()
-
-        if str(borders) != self.custom_info:
-            self.dp.send_msg(f"{borders}")
-            self.custom_info = str(borders)
 
         for c, border in enumerate(borders):
             dataframe.loc[(dataframe.close >= border),'cluster'] = c
@@ -114,17 +121,12 @@ class ClusterStrategy(IStrategy):
                             leverage: float, entry_tag: Optional[str], side: str,
                             **kwargs) -> float:
 
-        # dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         borders = self.cluster_borders()
         
         if side == 'long':
-            # borders = np.append(borders, dataframe.low.iat[-2])
-            # borders = np.sort(borders)
-            risk = 1 - borders[borders < current_rate][-2] / current_rate
+            risk = 1 - borders[borders < current_rate][-1] / current_rate
         else:
-            # borders = np.append(borders, dataframe.high.iat[-2])
-            # borders = np.sort(borders)
-            risk = borders[borders > current_rate][1] / current_rate - 1
+            risk = borders[borders > current_rate][0] / current_rate - 1
         
         stake = self.position_size(max_stake, risk)
 
@@ -136,45 +138,59 @@ class ClusterStrategy(IStrategy):
 
         borders = self.cluster_borders()
         stop = trade.get_custom_data(key='stop')
+        adjusted_stop = trade.get_custom_data(key='adjusted_stop')
 
-        if stop:
-            if trade.is_short:
-                borders = np.append(borders, stop)
-                borders = np.sort(borders)
-                return stoploss_from_absolute(
-                    borders[borders > current_rate][1],
-                    current_rate,
-                    is_short=trade.is_short,
-                    leverage=trade.leverage
-                )
-            borders = np.append(borders, stop)
-            borders = np.sort(borders)
+        if (current_rate - trade.open_rate) * 3 >= stop:
             return stoploss_from_absolute(
-                    borders[borders < current_rate][-2],
-                    current_rate,
-                    is_short=trade.is_short,
-                    leverage=trade.leverage
-                )
-        
-        return -1
+                stop * 2,
+                current_rate,
+                is_short=trade.is_short,
+                leverage=trade.leverage
+            )
+
+        if adjusted_stop:
+            return None
+
+        if current_profit > 0 and ((current_rate - trade.open_rate) / 2 >= stop):
+            adjusted_stop = (current_rate - trade.open_rate) / 2
+            trade.set_custom_data(key='adjusted_stop', value = adjusted_stop)
+            return stoploss_from_absolute(
+                adjusted_stop,
+                current_rate,
+                is_short=trade.is_short,
+                leverage=trade.leverage
+            )
+
+        if trade.is_short:
+            return stoploss_from_absolute(
+                borders[borders > current_rate][0],
+                current_rate,
+                is_short=trade.is_short,
+                leverage=trade.leverage
+            )
+        return stoploss_from_absolute(
+                borders[borders < current_rate][-1],
+                current_rate,
+                is_short=trade.is_short,
+                leverage=trade.leverage
+            )
     
     def order_filled(self, pair: str, trade: Trade, order: 'Order', current_time: datetime, **kwargs) -> None:
 
-        dataframe, _ = self.dp.get_analyzed_dataframe(trade.pair, self.timeframe)
-        prev_candle = dataframe.iloc[-2].squeeze()
+        borders = self.cluster_borders()
 
         if trade.nr_of_successful_entries == 1:
             if trade.is_short:
-                trade.set_custom_data(key='stop', value=prev_candle['high'])
+                trade.set_custom_data(key='stop', value=borders[borders > trade.open_rate][0])
             else:
-                trade.set_custom_data(key='stop', value=prev_candle['low'])
+                trade.set_custom_data(key='stop', value=borders[borders < trade.open_rate][-1])
             trade.set_custom_data(key='OB', value=self.dp.orderbook(trade.pair, maximum=200))
 
         return None
 
-    def bot_loop_start(self, current_time: datetime, **kwargs) -> None:
+    # def bot_loop_start(self, current_time: datetime, **kwargs) -> None:
 
-        pairs = self.dp.current_whitelist()
-        for pair in pairs:
-            if self.is_pair_locked(pair):
-                self.unlock_pair(pair)
+    #     pairs = self.dp.current_whitelist()
+    #     for pair in pairs:
+    #         if self.is_pair_locked(pair):
+    #             self.unlock_pair(pair)
