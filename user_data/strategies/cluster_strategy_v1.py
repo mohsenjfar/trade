@@ -97,16 +97,16 @@ class ClusterStrategyV1(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe.cluster.shift(-1) == 5) &
-                (dataframe.cluster == 4)
+                (dataframe.cluster.shift(1) == 0) &
+                (dataframe.cluster == 1)
             ),
             'enter_long'
         ] = 1
 
         dataframe.loc[
             (
-                (dataframe.cluster.shift(-1) == 0) &
-                (dataframe.cluster == 1)
+                (dataframe.cluster.shift(1) == 5) &
+                (dataframe.cluster == 4)
             ),
             'enter_short'
         ] = 1
@@ -166,10 +166,10 @@ class ClusterStrategyV1(IStrategy):
         prev_candle = dataframe.iloc[-2].squeeze()
 
         if trade.is_short:
-            if (last_candle['cluster'] == 4) & (prev_candle['cluster'] == 5):
+            if (last_candle['cluster'] == 0) & (prev_candle['cluster'] == 1):
                 return 'Short exit signal'
         
-        if (last_candle['cluster'] == 1) & (prev_candle['cluster'] == 0):
+        if (last_candle['cluster'] == 4) & (prev_candle['cluster'] == 5):
             return 'Long exit signal'
         
         
