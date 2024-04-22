@@ -205,6 +205,5 @@ class ClusterStrategyV1(IStrategy):
         for trade in Trade.get_open_trades():
             current_borders = self.cluster_borders(trade.pair)
             borders = trade.get_custom_data(key='borders')
-            if borders[-1] != current_borders:
-                borders.append(current_borders)
-        return super().bot_loop_start(**kwargs)
+            if borders[-1] != list(current_borders):
+                borders.append(list(current_borders))
