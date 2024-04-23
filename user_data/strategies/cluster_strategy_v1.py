@@ -41,8 +41,6 @@ class ClusterStrategyV1(IStrategy):
 
     use_custom_stoploss = True
 
-    position_adjustment_enable = False
-
     startup_candle_count: int = 240
 
     order_types = {
@@ -115,6 +113,22 @@ class ClusterStrategyV1(IStrategy):
 
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
+        dataframe.loc[
+            (
+                (dataframe.cluster.shift(1) == 5) &
+                (dataframe.cluster == 4)
+            ),
+            'exit_long'
+        ] = 1
+
+        dataframe.loc[
+            (
+                (dataframe.cluster.shift(1) == 0) &
+                (dataframe.cluster == 1)
+            ),
+            'exit_short'
+        ] = 1
+
         return dataframe
 
     def position_size(self, max_stake, risk):
@@ -134,15 +148,15 @@ class ClusterStrategyV1(IStrategy):
         today_trades = Trade.get_trades_proxy(
             open_date = date.today(),
             is_open=False
-        ).all()
-        today_losses = len(trade.realized_profit for trade in today_trades if trade.realized_profit < 0)
+        )
+        today_losses = len([trade.realized_profit for trade in today_trades if trade.realized_profit < 0])
 
-        week_day = date.weekday(datetime.date.today())
+        week_day = date.weekday(date.today())
         this_week_trades = Trade.get_trades_proxy(
             open_date = date.today() - timedelta(days=week_day),
             is_open=False
-        ).all()
-        this_week_losses = len(trade.realized_profit for trade in this_week_trades if trade.realized_profit < 0)
+        )
+        this_week_losses = len([trade.realized_profit for trade in this_week_trades if trade.realized_profit < 0])
 
         if (today_losses >= self.config['max_open_trades']) or (this_week_losses >= 3 * self.config['max_open_trades']):
             return None
@@ -161,16 +175,10 @@ class ClusterStrategyV1(IStrategy):
     
     def custom_exit(self, pair: str, trade: 'Trade', current_time: 'datetime', current_rate: float,
                     current_profit: float, **kwargs):
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
-        last_candle = dataframe.iloc[-1].squeeze()
-        prev_candle = dataframe.iloc[-2].squeeze()
-
-        if trade.is_short:
-            if (last_candle['cluster'] == 0) & (prev_candle['cluster'] == 1):
-                return 'Short exit signal'
         
-        if (last_candle['cluster'] == 4) & (prev_candle['cluster'] == 5):
-            return 'Long exit signal'
+        # risk to reward calculation here
+
+        return None
         
         
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
@@ -205,5 +213,5 @@ class ClusterStrategyV1(IStrategy):
         for trade in Trade.get_open_trades():
             current_borders = self.cluster_borders(trade.pair)
             borders = trade.get_custom_data(key='borders')
-            if borders[-1] != list(current_borders):
+            if borders and borders[-1] != list(current_borders):
                 borders.append(list(current_borders))
