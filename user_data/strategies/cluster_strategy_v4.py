@@ -122,6 +122,10 @@ class ClusterStrategyV4(IStrategy):
         stake = self.position_size(max_stake, risk)
         return stake
 
+    custom_info = {
+        'max_day_not_notified': True,
+        'max_week_not_notified': True
+    }
     
     def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
                             time_in_force: str, current_time: datetime, entry_tag: Optional[str],
@@ -141,12 +145,20 @@ class ClusterStrategyV4(IStrategy):
         this_week_losses = len([trade.realized_profit for trade in this_week_trades if trade.realized_profit < 0])
 
         if (today_losses >= self.config['max_open_trades']):
-            self.dp.send_msg("Max day's loss is reached, stop trade entry ...")
+            if self.custom_info.get('max_day_not_notified'):
+                self.dp.send_msg("Max day's loss is reached, stop trade entry ...")
+                self.custom_info['max_day_not_notified'] = False
+
             return False
         
         if this_week_losses >= 3 * self.config['max_open_trades']:
-            self.dp.send_msg("Max week's loss is reached, stop trade entry ...")
+            if self.custom_info.get('max_week_not_notified'):
+                self.dp.send_msg("Max week's loss is reached, stop trade entry ...")
+                self.custom_info['max_week_not_notified'] = False
             return False
+
+        self.custom_info['max_week_not_notified'] = True
+        self.custom_info['max_day_not_notified'] = True
 
         return True
     
