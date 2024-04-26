@@ -10,15 +10,15 @@ from freqtrade.strategy import (
     stoploss_from_absolute
 )
 
-class ClusterStrategyV1(IStrategy):
+class ClusterStrategyV3(IStrategy):
     
     ''' Specs:
     - Use 4h timeframe as cluster timeframe
     - Use 1m timeframe as main timeframe
     - Split cluster timeframe into 6 clusters
-    - Move from 5 to 4 open long position and put stop second border below
-    - Move from 0 to 1 open short position and put stop second border above
-    - Trail after each border
+    - When price crosses above one cluster border open long position and put stop second border below
+    - When price crosses below one cluster border open short position and put stop second border above
+    - Exit trade as 3th reward is reached
     '''
 
     INTERFACE_VERSION = 3
@@ -55,20 +55,6 @@ class ClusterStrategyV1(IStrategy):
         'exit': 'GTC'
     }
 
-    @property
-    def protections(self):
-        return [
-            {
-                "method": "StoplossGuard",
-                "lookback_period_candles": 60,
-                "trade_limit": 2,
-                "stop_duration_candles": 60,
-                "required_profit": 0.0,
-                "only_per_pair": True,
-                "only_per_side": False
-            }
-        ]
-
     def cluster_borders(self, pair):
         dataframe = self.dp.get_pair_dataframe(pair=pair, timeframe="5m")
         dataframe = dataframe[-48:]
@@ -78,8 +64,10 @@ class ClusterStrategyV1(IStrategy):
         return dataframe.groupby(['cluster']).min().close.sort_values().values
 
     def informative_pairs(self):
+        pairs = self.dp.current_whitelist()
         return [
-            ("WIF/USDT:USDT", "5m", "futures"),
+            (pair, "5m", "futures")
+            for pair in pairs
         ]
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
@@ -95,16 +83,14 @@ class ClusterStrategyV1(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe.cluster.shift(1) == 0) &
-                (dataframe.cluster == 1)
+                (dataframe.cluster.shift(1) > dataframe.cluster)
             ),
             'enter_long'
         ] = 1
 
         dataframe.loc[
             (
-                (dataframe.cluster.shift(1) == 5) &
-                (dataframe.cluster == 4)
+                (dataframe.cluster.shift(1) < dataframe.cluster)
             ),
             'enter_short'
         ] = 1
@@ -113,32 +99,14 @@ class ClusterStrategyV1(IStrategy):
 
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe.loc[
-            (
-                (dataframe.cluster.shift(1) == 5) &
-                (dataframe.cluster == 4)
-            ),
-            'exit_long'
-        ] = 1
-
-        dataframe.loc[
-            (
-                (dataframe.cluster.shift(1) == 0) &
-                (dataframe.cluster == 1)
-            ),
-            'exit_short'
-        ] = 1
-
         return dataframe
 
     def position_size(self, max_stake, risk):
 
         if risk > self.max_risk:
-            size = (max_stake * self.max_risk) / (risk * self.config['max_open_trades'])
+            return (max_stake * self.max_risk) / (risk * self.config['max_open_trades'])
         else:
-            size = max_stake / self.config['max_open_trades']
-
-        return size
+            return max_stake / self.config['max_open_trades']
 
     def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
                             proposed_stake: float, min_stake: Optional[float], max_stake: float,
@@ -146,14 +114,11 @@ class ClusterStrategyV1(IStrategy):
                             **kwargs) -> float:
 
         borders = self.cluster_borders(pair)
-
         if side == 'long':
             risk = 1 - borders[-1] / current_rate
         else:
             risk = borders[0] / current_rate - 1
-        
         stake = self.position_size(max_stake, risk)
-
         return stake
 
     
@@ -186,8 +151,12 @@ class ClusterStrategyV1(IStrategy):
     
     def custom_exit(self, pair: str, trade: 'Trade', current_time: 'datetime', current_rate: float,
                     current_profit: float, **kwargs):
-        
-        # risk to reward calculation here
+
+        stop = trade.get_custom_data(key='stop')
+        risk_ratio = abs(1 - stop / trade.open_rate)
+
+        if current_profit >= risk_ratio * 3:
+            return '3th reward optained!'
 
         return None
         
@@ -196,33 +165,41 @@ class ClusterStrategyV1(IStrategy):
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
-        borders = self.cluster_borders(pair)
-
-        if trade.is_short:
+        stop = trade.get_custom_data(key='stop')
+        if stop:
             return stoploss_from_absolute(
-                borders[0],
-                current_rate,
+                stop,
+                trade.open_rate,
                 is_short=trade.is_short,
                 leverage=trade.leverage
             )
-        return stoploss_from_absolute(
-                borders[-1],
-                current_rate,
-                is_short=trade.is_short,
-                leverage=trade.leverage
-            )
+        return None
+        
 
     def order_filled(self, pair: str, trade: Trade, order: 'Order', current_time: datetime, **kwargs) -> None:
+
+        borders = self.cluster_borders(pair)
+        if trade.is_short:
+            stop = borders[borders > trade.open_rate][1]
+        else:
+            stop = borders[borders < trade.open_rate][-2]
 
         if trade.nr_of_successful_entries == 1:
             trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
             trade.set_custom_data(key='borders', value=list(self.cluster_borders(pair)))
+            trade.set_custom_data(key='stop', value=stop)
 
         return None
     
     def bot_loop_start(self, **kwargs) -> None:
+        
         for trade in Trade.get_open_trades():
             current_borders = self.cluster_borders(trade.pair)
             borders = trade.get_custom_data(key='borders')
             if borders and borders[-1] != list(current_borders):
                 borders.append(list(current_borders))
+        
+        pairs = self.dp.current_whitelist()
+        for pair in pairs:
+            if self.is_pair_locked(pair):
+                self.unlock_pair(pair)

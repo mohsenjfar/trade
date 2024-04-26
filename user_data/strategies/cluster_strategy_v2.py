@@ -1,7 +1,7 @@
 from pandas import DataFrame
 from freqtrade.persistence import Trade
 from sklearn.cluster import KMeans
-from datetime import datetime
+from datetime import datetime, timedelta, date
 from typing import Optional
 from freqtrade.persistence import Trade
 
@@ -11,37 +11,35 @@ from freqtrade.strategy import (
 )
 
 class ClusterStrategyV2(IStrategy):
-
+    
     ''' Specs:
     - Use 4h timeframe as cluster timeframe
     - Use 1m timeframe as main timeframe
-    - Split cluster timeframe to 6 clusters
+    - Split cluster timeframe into 6 clusters
     - When price crosses above one cluster border open long position and put stop second border below
     - When price crosses below one cluster border open short position and put stop second border above
-    - Trail after each border
+    - Exit trade as 2th reward is reached
     '''
 
     INTERFACE_VERSION = 3
 
     can_short: bool = True
 
-    stoploss = -0.01
+    stoploss = -0.1
 
     timeframe = '1m'
 
-    total_risk = 0.005
+    max_risk = 0.02
 
     process_only_new_candles = False
 
-    use_exit_signal = False
+    use_exit_signal = True
 
     exit_profit_only = False
 
     ignore_roi_if_entry_signal = False
 
     use_custom_stoploss = True
-
-    position_adjustment_enable = False
 
     startup_candle_count: int = 240
 
@@ -57,36 +55,24 @@ class ClusterStrategyV2(IStrategy):
         'exit': 'GTC'
     }
 
-    @property
-    def protections(self):
-        return [
-            {
-                "method": "StoplossGuard",
-                "lookback_period_candles": 30,
-                "trade_limit": 2,
-                "stop_duration_candles": 15,
-                "required_profit": 0.0,
-                "only_per_pair": True,
-                "only_per_side": False
-            }
-        ]
-
-    def cluster_borders(self):
-        dataframe = self.dp.get_pair_dataframe(pair="WIF/USDT:USDT", timeframe="15m")
-        dataframe = dataframe[-16:]
+    def cluster_borders(self, pair):
+        dataframe = self.dp.get_pair_dataframe(pair=pair, timeframe="5m")
+        dataframe = dataframe[-48:]
         X = dataframe.close.values.reshape(-1,1)
         kmeans = KMeans(n_clusters=6, random_state=42).fit(X)
         dataframe['cluster'] = kmeans.predict(X)
         return dataframe.groupby(['cluster']).min().close.sort_values().values
 
     def informative_pairs(self):
+        pairs = self.dp.current_whitelist()
         return [
-            ("WIF/USDT:USDT", "15m", "futures"),
+            (pair, "5m", "futures")
+            for pair in pairs
         ]
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        borders = self.cluster_borders()
+        borders = self.cluster_borders(metadata['pair'])
 
         for c, border in enumerate(borders):
             dataframe.loc[(dataframe.close >= border),'cluster'] = c
@@ -97,14 +83,14 @@ class ClusterStrategyV2(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe.cluster.shift(1) < dataframe.cluster)
+                (dataframe.cluster.shift(1) > dataframe.cluster)
             ),
             'enter_long'
         ] = 1
 
         dataframe.loc[
             (
-                (dataframe.cluster.shift(1) > dataframe.cluster)
+                (dataframe.cluster.shift(1) < dataframe.cluster)
             ),
             'enter_short'
         ] = 1
@@ -115,87 +101,105 @@ class ClusterStrategyV2(IStrategy):
 
         return dataframe
 
-    def position_size(self, total_asset, risk):
+    def position_size(self, max_stake, risk):
 
-        size = total_asset * self.total_risk / risk if risk > self.total_risk else total_asset
-
-        return size
+        if risk > self.max_risk:
+            return (max_stake * self.max_risk) / (risk * self.config['max_open_trades'])
+        else:
+            return max_stake / self.config['max_open_trades']
 
     def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
                             proposed_stake: float, min_stake: Optional[float], max_stake: float,
                             leverage: float, entry_tag: Optional[str], side: str,
                             **kwargs) -> float:
 
-        borders = self.cluster_borders()
-        
+        borders = self.cluster_borders(pair)
         if side == 'long':
-            risk = 1 - borders[borders < current_rate][-1] / current_rate
+            risk = 1 - borders[-1] / current_rate
         else:
-            risk = borders[borders > current_rate][0] / current_rate - 1
-        
+            risk = borders[0] / current_rate - 1
         stake = self.position_size(max_stake, risk)
-
         return stake
 
+    
+    def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
+                            time_in_force: str, current_time: datetime, entry_tag: Optional[str],
+                            side: str, **kwargs) -> bool:
+
+        today_trades = Trade.get_trades_proxy(
+            open_date = date.today(),
+            is_open=False
+        )
+        today_losses = len([trade.realized_profit for trade in today_trades if trade.realized_profit < 0])
+
+        week_day = date.weekday(date.today())
+        this_week_trades = Trade.get_trades_proxy(
+            open_date = date.today() - timedelta(days=week_day),
+            is_open=False
+        )
+        this_week_losses = len([trade.realized_profit for trade in this_week_trades if trade.realized_profit < 0])
+
+        if (today_losses >= self.config['max_open_trades']):
+            self.dp.send_msg("Max day's loss is reached, stop trade entry ...")
+            return False
+        
+        if this_week_losses >= 3 * self.config['max_open_trades']:
+            self.dp.send_msg("Max week's loss is reached, stop trade entry ...")
+            return False
+
+        return True
+    
+    def custom_exit(self, pair: str, trade: 'Trade', current_time: 'datetime', current_rate: float,
+                    current_profit: float, **kwargs):
+
+        stop = trade.get_custom_data(key='stop')
+        risk_ratio = abs(1 - stop / trade.open_rate)
+
+        if current_profit >= risk_ratio * 2:
+            return '2th reward optained!'
+
+        return None
+        
+        
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
-        borders = self.cluster_borders()
         stop = trade.get_custom_data(key='stop')
-        adjusted_stop = trade.get_custom_data(key='adjusted_stop')
-
-        if (current_rate - trade.open_rate) * 3 >= stop:
+        if stop:
             return stoploss_from_absolute(
-                stop * 2,
-                current_rate,
+                stop,
+                trade.open_rate,
                 is_short=trade.is_short,
                 leverage=trade.leverage
             )
+        return None
+        
 
-        if adjusted_stop:
-            return None
-
-        if current_profit > 0 and ((current_rate - trade.open_rate) / 2 >= stop):
-            adjusted_stop = (current_rate - trade.open_rate) / 2
-            trade.set_custom_data(key='adjusted_stop', value = adjusted_stop)
-            return stoploss_from_absolute(
-                adjusted_stop,
-                current_rate,
-                is_short=trade.is_short,
-                leverage=trade.leverage
-            )
-
-        if trade.is_short:
-            return stoploss_from_absolute(
-                borders[borders > current_rate][0],
-                current_rate,
-                is_short=trade.is_short,
-                leverage=trade.leverage
-            )
-        return stoploss_from_absolute(
-                borders[borders < current_rate][-1],
-                current_rate,
-                is_short=trade.is_short,
-                leverage=trade.leverage
-            )
-    
     def order_filled(self, pair: str, trade: Trade, order: 'Order', current_time: datetime, **kwargs) -> None:
 
-        borders = self.cluster_borders()
+        borders = self.cluster_borders(pair)
+        if trade.is_short:
+            stop = borders[borders > trade.open_rate][1]
+        else:
+            stop = borders[borders < trade.open_rate][-2]
 
         if trade.nr_of_successful_entries == 1:
-            if trade.is_short:
-                trade.set_custom_data(key='stop', value=borders[borders > trade.open_rate][0])
-            else:
-                trade.set_custom_data(key='stop', value=borders[borders < trade.open_rate][-1])
-            trade.set_custom_data(key='OB', value=self.dp.orderbook(trade.pair, maximum=200))
+            trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
+            trade.set_custom_data(key='borders', value=list(borders))
+            trade.set_custom_data(key='stop', value=stop)
 
         return None
-
-    # def bot_loop_start(self, current_time: datetime, **kwargs) -> None:
-
-    #     pairs = self.dp.current_whitelist()
-    #     for pair in pairs:
-    #         if self.is_pair_locked(pair):
-    #             self.unlock_pair(pair)
+    
+    def bot_loop_start(self, **kwargs) -> None:
+        
+        for trade in Trade.get_open_trades():
+            current_borders = self.cluster_borders(trade.pair)
+            borders = trade.get_custom_data(key='borders')
+            if borders and borders[-1] != list(current_borders):
+                borders.append(list(current_borders))
+        
+        pairs = self.dp.current_whitelist()
+        for pair in pairs:
+            if self.is_pair_locked(pair):
+                self.unlock_pair(pair)
