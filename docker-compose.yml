@@ -7,6 +7,8 @@ services:
     container_name: cluster_strategy_V1_dry
     volumes:
       - "./user_data:/freqtrade/user_data"
+    ports:
+      - "127.0.0.1:8081:8080"
     command: >
       trade
       --logfile /freqtrade/user_data/logs/cluster_strategy_V1_dry.log
@@ -19,6 +21,8 @@ services:
     container_name: cluster_strategy_V2_dry
     volumes:
       - "./user_data:/freqtrade/user_data"
+    ports:
+      - "127.0.0.1:8082:8080"
     command: >
       trade
       --logfile /freqtrade/user_data/logs/cluster_strategy_V2_dry.log
@@ -31,6 +35,8 @@ services:
     container_name: cluster_strategy_V3_dry
     volumes:
       - "./user_data:/freqtrade/user_data"
+    ports:
+      - "127.0.0.1:8083:8080"
     command: >
       trade
       --logfile /freqtrade/user_data/logs/cluster_strategy_V3_dry.log
@@ -43,6 +49,8 @@ services:
     container_name: cluster_strategy_V4_dry
     volumes:
       - "./user_data:/freqtrade/user_data"
+    ports:
+      - "127.0.0.1:8084:8080"
     command: >
       trade
       --logfile /freqtrade/user_data/logs/cluster_strategy_V4_dry.log
