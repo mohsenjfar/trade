@@ -199,7 +199,7 @@ class ClusterStrategyV4(IStrategy):
     def order_filled(self, pair: str, trade: Trade, order: 'Order', current_time: datetime, **kwargs) -> None:
 
         borders = self.cluster_borders(pair)
-        if trade.is_short:
+        if trade.is_short and len(borders) > 1:
             stop = borders[borders > trade.open_rate][1]
         else:
             stop = borders[borders < trade.open_rate][-2]
