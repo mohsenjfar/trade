@@ -165,29 +165,22 @@ class ClusterStrategyV1(IStrategy):
                             time_in_force: str, current_time: datetime, entry_tag: Optional[str],
                             side: str, **kwargs) -> bool:
 
-        today_trades = Trade.get_trades_proxy(
-            open_date = date.today(),
-            is_open=False
-        )
-        today_losses = len([trade.realized_profit for trade in today_trades if trade.realized_profit < 0])
+        today_trades = Trade.get_trades_proxy(open_date = date.today())
+        today_loss = sum(trade.close_profit for trade in today_trades if trade.close_profit < 0)
 
         week_day = date.weekday(date.today())
-        this_week_trades = Trade.get_trades_proxy(
-            open_date = date.today() - timedelta(days=week_day),
-            is_open=False
-        )
-        this_week_losses = len([trade.realized_profit for trade in this_week_trades if trade.realized_profit < 0])
+        this_week_trades = Trade.get_trades_proxy(open_date = date.today() - timedelta(days=week_day))
+        this_week_loss = sum(trade.close_profit for trade in this_week_trades if trade.close_profit < 0)
 
-        if (today_losses >= self.config['max_open_trades']):
+        if (today_loss <= -0.02):
             if self.custom_info.get('max_day_not_notified'):
-                self.dp.send_msg("Max day's loss is reached, stop trade entry ...")
+                self.dp.send_msg(f"Max day's loss ({today_loss}) is reached, stop trade entry ...")
                 self.custom_info['max_day_not_notified'] = False
-
             return False
         
-        if this_week_losses >= 3 * self.config['max_open_trades']:
+        if this_week_loss <= -0.06:
             if self.custom_info.get('max_week_not_notified'):
-                self.dp.send_msg("Max week's loss is reached, stop trade entry ...")
+                self.dp.send_msg(f"Max week's loss ({this_week_loss}) is reached, stop trade entry ...")
                 self.custom_info['max_week_not_notified'] = False
             return False
 
