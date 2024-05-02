@@ -163,8 +163,9 @@ class ClusterStrategyV4(IStrategy):
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
-        borders = np.array(trade.get_custom_data(key='borders'))
+        borders = trade.get_custom_data(key='borders')
         if borders:
+            borders = np.array(borders)
             if trade.is_short:
                 risk_ratio = borders[0] / trade.open_rate - 1
                 border = borders[borders > current_rate][0]
