@@ -26,9 +26,11 @@ class ClusterStrategyV4(IStrategy):
 
     can_short: bool = True
 
-    stoploss = -0.02
+    stoploss = -0.1
 
     timeframe = '1m'
+
+    max_risk = 0.02
 
     process_only_new_candles = False
 
@@ -102,8 +104,8 @@ class ClusterStrategyV4(IStrategy):
 
     def position_size(self, max_stake, risk):
 
-        if risk > self.abs(self.stoploss):
-            return (max_stake * self.abs(self.stoploss)) / (risk * self.config['max_open_trades'])
+        if risk > self.max_risk:
+            return (max_stake * self.max_risk) / (risk * self.config['max_open_trades'])
         else:
             return max_stake / self.config['max_open_trades']
 
@@ -147,11 +149,6 @@ class ClusterStrategyV4(IStrategy):
                 self.dp.send_msg(f"Max week's loss ({this_week_loss}) is reached, stop trade entry ...")
                 self.custom_info['max_week_not_notified'] = False
             return False
-        
-        borders = self.cluster_borders(pair)
-        if len(borders) == 0:
-            self.dp.send_msg(f"Border miscalculation!")
-            return False
 
         self.custom_info['max_week_not_notified'] = True
         self.custom_info['max_day_not_notified'] = True
@@ -163,41 +160,31 @@ class ClusterStrategyV4(IStrategy):
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
-        borders = trade.get_custom_data(key='borders')
-        if borders:
+        stop = trade.get_custom_data(key='stop')
+        if stop:
+            risk_ratio = abs(1 - stop / trade.open_rate)
+            borders = self.cluster_borders(pair)
+            
             if trade.is_short:
-                risk_ratio = borders[0] / trade.open_rate - 1
                 border = borders[borders > current_rate][0]
-                if border <= (trade.open_rate - risk_ratio * 2):
-                    return stoploss_from_absolute(
-                        border,
-                        current_rate,
-                        is_short=trade.is_short,
-                        leverage=trade.leverage
-                    )
-                return stoploss_from_absolute(
-                    borders[0],
-                    trade.open_rate,
-                    is_short=trade.is_short,
-                    leverage=trade.leverage
-                )
-            risk_ratio = 1 - borders[-1] / trade.open_rate
-            border = borders[borders < current_rate][-1]
-            if border >= (trade.open_rate + risk_ratio * 2):
+                condition = border <= (trade.open_rate - risk_ratio * 2)
+            else:
+                border = borders[borders < current_rate][-1]
+                condition = border >= (trade.open_rate + risk_ratio * 2)
+            if condition:
                 return stoploss_from_absolute(
                     border,
                     current_rate,
                     is_short=trade.is_short,
                     leverage=trade.leverage
                 )
+
             return stoploss_from_absolute(
-                borders[-1],
+                stop,
                 trade.open_rate,
                 is_short=trade.is_short,
                 leverage=trade.leverage
             )
-        
-        # Rest api update here
         
         return None
         
@@ -206,19 +193,27 @@ class ClusterStrategyV4(IStrategy):
 
         borders = self.cluster_borders(pair)
         if trade.is_short:
-            borders = list(borders[borders > trade.open_rate])
+            border = borders[borders > trade.open_rate]
+            stop = border[0] if len(border) > 1 else trade.open_rate
         else:
-            borders = list(borders[borders < trade.open_rate])
+            border = borders[borders < trade.open_rate]
+            stop = border[-1] if len(border) > 1 else trade.open_rate
 
         if trade.nr_of_successful_entries == 1:
             trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
-            trade.set_custom_data(key='borders', value=borders)
-
-        # Rest api insert and open order to close order update here
+            trade.set_custom_data(key='borders', value=list(self.cluster_borders(pair)))
+            trade.set_custom_data(key='stop', value=stop)
 
         return None
     
     def bot_loop_start(self, **kwargs) -> None:
+        
+        for trade in Trade.get_open_trades():
+            current_borders = self.cluster_borders(trade.pair)
+            borders = trade.get_custom_data(key='borders')
+            if borders and borders[-1] != list(current_borders):
+                borders.append(list(current_borders))
+        
         pairs = self.dp.current_whitelist()
         for pair in pairs:
             if self.is_pair_locked(pair):
