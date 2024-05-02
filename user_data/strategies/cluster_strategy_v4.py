@@ -102,8 +102,8 @@ class ClusterStrategyV4(IStrategy):
 
     def position_size(self, max_stake, risk):
 
-        if risk > self.abs(self.stoploss):
-            return (max_stake * self.abs(self.stoploss)) / (risk * self.config['max_open_trades'])
+        if risk > abs(self.stoploss):
+            return (max_stake * abs(self.stoploss)) / (risk * self.config['max_open_trades'])
         else:
             return max_stake / self.config['max_open_trades']
 
@@ -130,19 +130,19 @@ class ClusterStrategyV4(IStrategy):
                             side: str, **kwargs) -> bool:
 
         today_trades = Trade.get_trades_proxy(open_date = date.today())
-        today_loss = sum(trade.close_profit for trade in today_trades)
+        today_loss = sum(trade.close_profit for trade in today_trades) / self.config['max_open_trades']
 
         week_day = date.weekday(date.today())
         this_week_trades = Trade.get_trades_proxy(open_date = date.today() - timedelta(days=week_day))
-        this_week_loss = sum(trade.close_profit for trade in this_week_trades)
+        this_week_loss = sum(trade.close_profit for trade in this_week_trades) / self.config['max_open_trades']
 
-        if (today_loss <= -0.02):
+        if (today_loss <= self.stoploss):
             if self.custom_info.get('max_day_not_notified'):
                 self.dp.send_msg(f"Max day's loss ({today_loss}) is reached, stop trade entry ...")
                 self.custom_info['max_day_not_notified'] = False
             return False
         
-        if this_week_loss <= -0.06:
+        if this_week_loss <= (self.stoploss * 3):
             if self.custom_info.get('max_week_not_notified'):
                 self.dp.send_msg(f"Max week's loss ({this_week_loss}) is reached, stop trade entry ...")
                 self.custom_info['max_week_not_notified'] = False
@@ -150,7 +150,7 @@ class ClusterStrategyV4(IStrategy):
         
         borders = self.cluster_borders(pair)
         if len(borders) == 0:
-            self.dp.send_msg(f"Border miscalculation!")
+            self.dp.send_msg(f"Border miscalculation, exiting trade entry...")
             return False
 
         self.custom_info['max_week_not_notified'] = True
@@ -163,7 +163,7 @@ class ClusterStrategyV4(IStrategy):
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
-        borders = trade.get_custom_data(key='borders')
+        borders = np.array(trade.get_custom_data(key='borders'))
         if borders:
             if trade.is_short:
                 risk_ratio = borders[0] / trade.open_rate - 1
@@ -205,14 +205,13 @@ class ClusterStrategyV4(IStrategy):
     def order_filled(self, pair: str, trade: Trade, order: 'Order', current_time: datetime, **kwargs) -> None:
 
         borders = self.cluster_borders(pair)
+        borders = borders[borders < trade.open_rate]
         if trade.is_short:
-            borders = list(borders[borders > trade.open_rate])
-        else:
-            borders = list(borders[borders < trade.open_rate])
+            borders = borders[borders > trade.open_rate]
 
         if trade.nr_of_successful_entries == 1:
             trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
-            trade.set_custom_data(key='borders', value=borders)
+            trade.set_custom_data(key='borders', value=list(borders))
 
         # Rest api insert and open order to close order update here
 
