@@ -14,12 +14,12 @@ from freqtrade.strategy import (
 class ClusterStrategyV4(IStrategy):
     
     ''' Specs:
-    - Use 4h timeframe as cluster timeframe
+    - Use 4h timeframe as cluster timeframe using 3m candles
     - Use 1m timeframe as main timeframe
     - Split cluster timeframe into 6 clusters
-    - When price crosses above one cluster border open long position and put stop second border below
-    - When price crosses below one cluster border open short position and put stop second border above
-    - Trail trade as 2th reward is reached
+    - Enter long when price crosses above max price (the highest cluster border)
+    - Enter short when price crosses below min price (the lowest cluster border)
+    - Trail from second custer border 
     '''
 
     INTERFACE_VERSION = 3
@@ -30,17 +30,9 @@ class ClusterStrategyV4(IStrategy):
 
     timeframe = '1m'
 
-    process_only_new_candles = False
-
     use_exit_signal = True
 
-    exit_profit_only = False
-
-    ignore_roi_if_entry_signal = False
-
     use_custom_stoploss = True
-
-    api_sync = False
 
     startup_candle_count: int = 240
 
@@ -84,14 +76,16 @@ class ClusterStrategyV4(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe.cluster.shift(1) > dataframe.cluster)
+                (dataframe.cluster.shift(1) == 4) &
+                (dataframe.cluster == 5)
             ),
             'enter_long'
         ] = 1
 
         dataframe.loc[
             (
-                (dataframe.cluster.shift(1) < dataframe.cluster)
+                (dataframe.cluster.shift(1) == 1) &
+                (dataframe.cluster == 0)
             ),
             'enter_short'
         ] = 1
@@ -103,22 +97,24 @@ class ClusterStrategyV4(IStrategy):
         return dataframe
 
     def position_size(self, max_stake, risk):
-
-        if risk > abs(self.stoploss):
-            return (max_stake * abs(self.stoploss)) / (risk * self.config['max_open_trades'])
-        else:
-            return max_stake / self.config['max_open_trades']
+        return max((max_stake - max_stake / (abs(self.stoploss) * 100) * risk), 6)
 
     def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
                             proposed_stake: float, min_stake: Optional[float], max_stake: float,
                             leverage: float, entry_tag: Optional[str], side: str,
                             **kwargs) -> float:
 
+        self.dp.send_msg('\n'.join((
+            f"proposed_stake: {proposed_stake}",
+            f"min_stake: {min_stake}",
+            f"max_stake: {max_stake}"))
+        )
+
         borders = self.cluster_borders(pair)
         if side == 'long':
-            risk = 1 - borders[-1] / current_rate
+            risk = 1 - borders[-2] / current_rate
         else:
-            risk = borders[0] / current_rate - 1
+            risk = borders[1] / current_rate - 1
         stake = self.position_size(max_stake, risk)
         return stake
 
@@ -160,79 +156,40 @@ class ClusterStrategyV4(IStrategy):
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
-        if self.api_sync:
+        if self.dp.runmode.value in ('live'):
             api.update_task(trade, current_time)
-
-        stop = trade.get_custom_data(key='stop')
-        if stop:
-            risk_ratio = abs(1 - stop / trade.open_rate)
-            borders = self.cluster_borders(pair)
-            
-            if trade.is_short:
-                border = borders[borders > current_rate][0]
-                condition = border <= (trade.open_rate - risk_ratio * 2)
-            else:
-                border = borders[borders < current_rate][-1]
-                condition = border >= (trade.open_rate + risk_ratio * 2)
-            if condition:
-                return stoploss_from_absolute(
-                    border,
-                    current_rate,
-                    is_short=trade.is_short,
-                    leverage=trade.leverage
-                )
-
-            return stoploss_from_absolute(
-                stop,
-                trade.open_rate,
-                is_short=trade.is_short,
-                leverage=trade.leverage
-            )
-        
-        return None
-        
-
-    def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
 
         borders = self.cluster_borders(pair)
         if trade.is_short:
-            border = borders[borders > trade.open_rate]
-            stop = border[0] if len(border) > 1 else trade.open_rate
+            border = borders[borders > current_rate][1]
         else:
-            border = borders[borders < trade.open_rate]
-            stop = border[-1] if len(border) > 1 else trade.open_rate
+            border = borders[borders < current_rate][-2]
+        return stoploss_from_absolute(
+            border,
+            current_rate,
+            is_short=trade.is_short,
+            leverage=trade.leverage
+        )
+
+
+    def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
 
         if trade.nr_of_successful_entries == 1:
             trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
-            trade.set_custom_data(key='borders', value=list(self.cluster_borders(pair)))
-            trade.set_custom_data(key='stop', value=stop)
             
-            if self.api_sync:
+            if self.dp.runmode.value in ('live'):
                 task = api.create_task(trade, __class__.__name__)
                 trade.set_custom_data(key='task_id', value=task.get('id'))
                 self.dp.send_msg(f"Task {task.get('summary')} created")
 
-        if trade.nr_of_successful_entries == 2 and self.api_sync:
+        if trade.nr_of_successful_entries == 2 and self.dp.runmode.value in ('live'):
             task = api.complete(trade)
             self.dp.send_msg(f"Task {task.get('summary')} completed")
 
         return None
     
-    def bot_loop_start(self, **kwargs) -> None:
-        
-        for trade in Trade.get_open_trades():
-            current_borders = self.cluster_borders(trade.pair)
-            borders = trade.get_custom_data(key='borders')
-            if borders and borders[-1] != list(current_borders):
-                borders.append(list(current_borders))
-        
-        pairs = self.dp.current_whitelist()
-        for pair in pairs:
-            if self.is_pair_locked(pair):
-                self.unlock_pair(pair)
-
     
     def bot_start(self, **kwargs) -> None:
-        if self.api_sync:
+        if self.dp.runmode.value in ('live'):
             res = api.create_parent(__class__.__name__)
             self.dp.send_msg(f"Parent {res.get('title')} created")
