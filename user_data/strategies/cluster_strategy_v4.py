@@ -4,7 +4,7 @@ from sklearn.cluster import KMeans
 from datetime import datetime, timedelta, date
 from typing import Optional
 from freqtrade.persistence import Trade
-import numpy as np
+from . import api
 
 from freqtrade.strategy import (
     IStrategy,
@@ -40,13 +40,15 @@ class ClusterStrategyV4(IStrategy):
 
     use_custom_stoploss = True
 
+    api_sync = False
+
     startup_candle_count: int = 240
 
     order_types = {
         'entry': 'limit',
         'exit': 'limit',
         'stoploss': 'limit',
-        'stoploss_on_exchange': True
+        'stoploss_on_exchange': False
     }
 
     order_time_in_force = {
@@ -55,8 +57,8 @@ class ClusterStrategyV4(IStrategy):
     }
 
     def cluster_borders(self, pair):
-        dataframe = self.dp.get_pair_dataframe(pair=pair, timeframe="5m")
-        dataframe = dataframe[-48:]
+        dataframe = self.dp.get_pair_dataframe(pair=pair, timeframe="3m")
+        dataframe = dataframe[-80:]
         X = dataframe.close.values.reshape(-1,1)
         kmeans = KMeans(n_clusters=6, random_state=42).fit(X)
         dataframe['cluster'] = kmeans.predict(X)
@@ -65,7 +67,7 @@ class ClusterStrategyV4(IStrategy):
     def informative_pairs(self):
         pairs = self.dp.current_whitelist()
         return [
-            (pair, "5m", "futures")
+            (pair, "3m", "futures")
             for pair in pairs
         ]
 
@@ -148,11 +150,6 @@ class ClusterStrategyV4(IStrategy):
                 self.custom_info['max_week_not_notified'] = False
             return False
         
-        borders = self.cluster_borders(pair)
-        if len(borders) == 0:
-            self.dp.send_msg(f"Border miscalculation, exiting trade entry...")
-            return False
-
         self.custom_info['max_week_not_notified'] = True
         self.custom_info['max_day_not_notified'] = True
 
@@ -163,63 +160,79 @@ class ClusterStrategyV4(IStrategy):
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
-        borders = trade.get_custom_data(key='borders')
-        if borders:
-            borders = np.array(borders)
+        if self.api_sync:
+            api.update_task(trade, current_time)
+
+        stop = trade.get_custom_data(key='stop')
+        if stop:
+            risk_ratio = abs(1 - stop / trade.open_rate)
+            borders = self.cluster_borders(pair)
+            
             if trade.is_short:
-                risk_ratio = borders[0] / trade.open_rate - 1
                 border = borders[borders > current_rate][0]
-                if border <= (trade.open_rate - risk_ratio * 2):
-                    return stoploss_from_absolute(
-                        border,
-                        current_rate,
-                        is_short=trade.is_short,
-                        leverage=trade.leverage
-                    )
-                return stoploss_from_absolute(
-                    borders[0],
-                    trade.open_rate,
-                    is_short=trade.is_short,
-                    leverage=trade.leverage
-                )
-            risk_ratio = 1 - borders[-1] / trade.open_rate
-            border = borders[borders < current_rate][-1]
-            if border >= (trade.open_rate + risk_ratio * 2):
+                condition = border <= (trade.open_rate - risk_ratio * 2)
+            else:
+                border = borders[borders < current_rate][-1]
+                condition = border >= (trade.open_rate + risk_ratio * 2)
+            if condition:
                 return stoploss_from_absolute(
                     border,
                     current_rate,
                     is_short=trade.is_short,
                     leverage=trade.leverage
                 )
+
             return stoploss_from_absolute(
-                borders[-1],
+                stop,
                 trade.open_rate,
                 is_short=trade.is_short,
                 leverage=trade.leverage
             )
         
-        # Rest api update here
-        
         return None
         
 
-    def order_filled(self, pair: str, trade: Trade, order: 'Order', current_time: datetime, **kwargs) -> None:
+    def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
 
         borders = self.cluster_borders(pair)
-        borders = borders[borders < trade.open_rate]
         if trade.is_short:
-            borders = borders[borders > trade.open_rate]
+            border = borders[borders > trade.open_rate]
+            stop = border[0] if len(border) > 1 else trade.open_rate
+        else:
+            border = borders[borders < trade.open_rate]
+            stop = border[-1] if len(border) > 1 else trade.open_rate
 
         if trade.nr_of_successful_entries == 1:
             trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
-            trade.set_custom_data(key='borders', value=list(borders))
+            trade.set_custom_data(key='borders', value=list(self.cluster_borders(pair)))
+            trade.set_custom_data(key='stop', value=stop)
+            
+            if self.api_sync:
+                task = api.create_task(trade, __class__.__name__)
+                trade.set_custom_data(key='task_id', value=task.get('id'))
+                self.dp.send_msg(f"Task {task.get('summary')} created")
 
-        # Rest api insert and open order to close order update here
+        if trade.nr_of_successful_entries == 2 and self.api_sync:
+            task = api.complete(trade)
+            self.dp.send_msg(f"Task {task.get('summary')} completed")
 
         return None
     
     def bot_loop_start(self, **kwargs) -> None:
+        
+        for trade in Trade.get_open_trades():
+            current_borders = self.cluster_borders(trade.pair)
+            borders = trade.get_custom_data(key='borders')
+            if borders and borders[-1] != list(current_borders):
+                borders.append(list(current_borders))
+        
         pairs = self.dp.current_whitelist()
         for pair in pairs:
             if self.is_pair_locked(pair):
                 self.unlock_pair(pair)
+
+    
+    def bot_start(self, **kwargs) -> None:
+        if self.api_sync:
+            res = api.create_parent(__class__.__name__)
+            self.dp.send_msg(f"Parent {res.get('title')} created")
