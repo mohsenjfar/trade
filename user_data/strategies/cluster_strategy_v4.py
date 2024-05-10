@@ -4,7 +4,7 @@ from sklearn.cluster import KMeans
 from datetime import datetime, timedelta, date
 from typing import Optional
 from freqtrade.persistence import Trade
-from . import api
+import api
 
 from freqtrade.strategy import (
     IStrategy,
@@ -187,7 +187,6 @@ class ClusterStrategyV4(IStrategy):
             self.dp.send_msg(f"Task {task.get('summary')} completed")
 
         return None
-    
     
     def bot_start(self, **kwargs) -> None:
         if self.dp.runmode.value in ('live'):
