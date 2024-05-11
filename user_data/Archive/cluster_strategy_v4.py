@@ -119,6 +119,7 @@ class ClusterStrategyV4(IStrategy):
             risk = 1 - borders[-1] / current_rate
         else:
             risk = borders[0] / current_rate - 1
+            
         stake = self.position_size(max_stake, risk)
         return stake
 

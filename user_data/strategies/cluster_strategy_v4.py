@@ -5,11 +5,18 @@ from datetime import datetime, timedelta, date
 from typing import Optional
 from freqtrade.persistence import Trade
 import api
+from freqtrade_client import FtRestClient 
 
 from freqtrade.strategy import (
     IStrategy,
-    stoploss_from_absolute
+    stoploss_from_absolute,
+    stoploss_from_open
 )
+
+server_url = 'http://127.0.0.1:8080'
+username = ''
+password = "a88923695f80935a17b99e51df8275bc3440b92defa52106c0cea26ca1bf1ce1"
+client = FtRestClient(server_url, username, password)
 
 class ClusterStrategyV4(IStrategy):
     
@@ -35,6 +42,8 @@ class ClusterStrategyV4(IStrategy):
     use_custom_stoploss = True
 
     startup_candle_count: int = 240
+
+    long_border, short_border = 0, -1
 
     order_types = {
         'entry': 'limit',
@@ -76,16 +85,14 @@ class ClusterStrategyV4(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe.cluster.shift(1) == 4) &
-                (dataframe.cluster == 5)
+                (dataframe.cluster.shift(1) < dataframe.cluster)
             ),
             'enter_long'
         ] = 1
 
         dataframe.loc[
             (
-                (dataframe.cluster.shift(1) == 1) &
-                (dataframe.cluster == 0)
+                (dataframe.cluster.shift(1) > dataframe.cluster)
             ),
             'enter_short'
         ] = 1
@@ -96,53 +103,64 @@ class ClusterStrategyV4(IStrategy):
 
         return dataframe
 
-    def position_size(self, max_stake, risk):
-        return max((max_stake - max_stake / (abs(self.stoploss) * 100) * risk), 6)
+    def position_size(self, max_stake, risk, min_stake):
+        return max((max_stake - max_stake / (abs(self.stoploss * risk) * 100) * (abs(risk) * 100)), min_stake)
 
     def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
                             proposed_stake: float, min_stake: Optional[float], max_stake: float,
                             leverage: float, entry_tag: Optional[str], side: str,
                             **kwargs) -> float:
 
-        self.dp.send_msg('\n'.join((
-            f"proposed_stake: {proposed_stake}",
-            f"min_stake: {min_stake}",
-            f"max_stake: {max_stake}"))
-        )
-
         borders = self.cluster_borders(pair)
         if side == 'long':
-            risk = 1 - borders[-2] / current_rate
+            borders = borders[borders < current_rate]
+            if len(borders) >= 1:
+                risk = 1 - borders[self.short_border] / current_rate
+            else:
+                return None
         else:
-            risk = borders[1] / current_rate - 1
-        stake = self.position_size(max_stake, risk)
+            borders = borders[borders > current_rate]
+            if len(borders) >= 1:
+                risk = borders[self.long_border] / current_rate - 1
+            else:
+                return None
+
+        if risk > 0.005:
+            return None
+        
+        stake = self.position_size(max_stake, risk, min_stake)
         return stake
 
     custom_info = {
         'max_day_not_notified': True,
         'max_week_not_notified': True
     }
+
+    def custom_exit(self, pair: str, trade: 'Trade', current_time: 'datetime', current_rate: float,
+                    current_profit: float, **kwargs):
+
+        if current_profit > 0.01:
+            return 'ROI Hit!!'
+
+        if (current_time - trade.open_date_utc).seconds >= 180:
+            return 'Trade Expired!'
     
     def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
                             time_in_force: str, current_time: datetime, entry_tag: Optional[str],
                             side: str, **kwargs) -> bool:
 
-        today_trades = Trade.get_trades_proxy(open_date = date.today())
-        today_loss = sum(trade.close_profit for trade in today_trades) / self.config['max_open_trades']
+        today_profit = client.daily(1).get('data')[0].get('rel_profit')
+        this_week_profit = client.weekly(1).get('data')[0].get('rel_profit')
 
-        week_day = date.weekday(date.today())
-        this_week_trades = Trade.get_trades_proxy(open_date = date.today() - timedelta(days=week_day))
-        this_week_loss = sum(trade.close_profit for trade in this_week_trades) / self.config['max_open_trades']
-
-        if (today_loss <= self.stoploss):
+        if (today_profit <= self.stoploss):
             if self.custom_info.get('max_day_not_notified'):
-                self.dp.send_msg(f"Max day's loss ({today_loss}) is reached, stop trade entry ...")
+                self.dp.send_msg(f"Max day's loss ({today_profit:.2f}) is reached, stop trade entry ...")
                 self.custom_info['max_day_not_notified'] = False
             return False
         
-        if this_week_loss <= (self.stoploss * 3):
+        if this_week_profit <= (self.stoploss * 3):
             if self.custom_info.get('max_week_not_notified'):
-                self.dp.send_msg(f"Max week's loss ({this_week_loss}) is reached, stop trade entry ...")
+                self.dp.send_msg(f"Max week's loss ({this_week_profit:.2f}) is reached, stop trade entry ...")
                 self.custom_info['max_week_not_notified'] = False
             return False
         
@@ -151,7 +169,7 @@ class ClusterStrategyV4(IStrategy):
 
         return True
     
-        
+    
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
@@ -159,11 +177,14 @@ class ClusterStrategyV4(IStrategy):
         if self.dp.runmode.value in ('live'):
             api.update_task(trade, current_time)
 
+        if (current_time - trade.open_date_utc).seconds >= 60 and current_profit > 0:
+            return current_profit / 2
+        
         borders = self.cluster_borders(pair)
         if trade.is_short:
-            border = borders[borders > current_rate][1]
+            border = borders[borders > current_rate][self.short_border]
         else:
-            border = borders[borders < current_rate][-2]
+            border = borders[borders < current_rate][self.long_border]
         return stoploss_from_absolute(
             border,
             current_rate,
@@ -192,3 +213,8 @@ class ClusterStrategyV4(IStrategy):
         if self.dp.runmode.value in ('live'):
             res = api.create_parent(__class__.__name__)
             self.dp.send_msg(f"Parent {res.get('title')} created")
+
+        pairs = self.dp.current_whitelist()
+        for pair in pairs:
+            if self.is_pair_locked(pair):
+                self.unlock_pair(pair)
