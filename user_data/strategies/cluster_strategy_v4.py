@@ -43,7 +43,7 @@ class ClusterStrategyV4(IStrategy):
 
     startup_candle_count: int = 240
 
-    long_border, short_border = 0, -1
+    long_border, short_border = 1, -2
 
     order_types = {
         'entry': 'limit',
@@ -56,6 +56,20 @@ class ClusterStrategyV4(IStrategy):
         'entry': 'GTC',
         'exit': 'GTC'
     }
+
+    @property
+    def protections(self):
+        return [
+            {
+                "method": "StoplossGuard",
+                "lookback_period_candles": 30,
+                "trade_limit": 2,
+                "stop_duration_candles": 60,
+                "required_profit": 0.0,
+                "only_per_pair": True,
+                "only_per_side": False
+            }
+        ]
 
     def cluster_borders(self, pair):
         dataframe = self.dp.get_pair_dataframe(pair=pair, timeframe="3m")
@@ -104,7 +118,7 @@ class ClusterStrategyV4(IStrategy):
         return dataframe
 
     def position_size(self, max_stake, risk, min_stake):
-        return max((max_stake - max_stake / (abs(self.stoploss * risk) * 100) * (abs(risk) * 100)), min_stake)
+        return max(max_stake - max_stake * risk * 100 / abs(self.stoploss * 100), min_stake)
 
     def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
                             proposed_stake: float, min_stake: Optional[float], max_stake: float,
@@ -114,19 +128,21 @@ class ClusterStrategyV4(IStrategy):
         borders = self.cluster_borders(pair)
         if side == 'long':
             borders = borders[borders < current_rate]
-            if len(borders) >= 1:
-                risk = 1 - borders[self.short_border] / current_rate
+            if len(borders) >= abs(self.short_border):
+                risk = abs(1 - borders[self.short_border] / current_rate)
             else:
                 return None
         else:
             borders = borders[borders > current_rate]
-            if len(borders) >= 1:
-                risk = borders[self.long_border] / current_rate - 1
+            if len(borders) >= abs(self.short_border):
+                risk = abs(borders[self.long_border] / current_rate - 1)
             else:
                 return None
 
         if risk > 0.005:
             return None
+        
+        self.dp.send_msg(f'Side: {side}\nBorders: {borders}\nRisk: {risk:.4}')
         
         stake = self.position_size(max_stake, risk, min_stake)
         return stake
@@ -141,9 +157,6 @@ class ClusterStrategyV4(IStrategy):
 
         if current_profit > 0.01:
             return 'ROI Hit!!'
-
-        if (current_time - trade.open_date_utc).seconds >= 180:
-            return 'Trade Expired!'
     
     def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
                             time_in_force: str, current_time: datetime, entry_tag: Optional[str],
@@ -180,13 +193,9 @@ class ClusterStrategyV4(IStrategy):
         if (current_time - trade.open_date_utc).seconds >= 60 and current_profit > 0:
             return current_profit / 2
         
-        borders = self.cluster_borders(pair)
-        if trade.is_short:
-            border = borders[borders > current_rate][self.short_border]
-        else:
-            border = borders[borders < current_rate][self.long_border]
+        stop = trade.set_custom_data(key='stop', value=stop)
         return stoploss_from_absolute(
-            border,
+            stop,
             current_rate,
             is_short=trade.is_short,
             leverage=trade.leverage
@@ -197,6 +206,13 @@ class ClusterStrategyV4(IStrategy):
 
         if trade.nr_of_successful_entries == 1:
             trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
+            
+            borders = self.cluster_borders(pair)
+            if trade.is_short:
+                stop = borders[borders > trade.open_rate][self.short_border]
+            else:
+                stop = borders[borders < trade.open_rate][self.long_border]
+            trade.set_custom_data(key='stop', value=stop)
             
             if self.dp.runmode.value in ('live'):
                 task = api.create_task(trade, __class__.__name__)
@@ -213,8 +229,3 @@ class ClusterStrategyV4(IStrategy):
         if self.dp.runmode.value in ('live'):
             res = api.create_parent(__class__.__name__)
             self.dp.send_msg(f"Parent {res.get('title')} created")
-
-        pairs = self.dp.current_whitelist()
-        for pair in pairs:
-            if self.is_pair_locked(pair):
-                self.unlock_pair(pair)
