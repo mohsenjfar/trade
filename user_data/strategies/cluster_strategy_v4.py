@@ -49,7 +49,7 @@ class ClusterStrategyV4(IStrategy):
         'entry': 'limit',
         'exit': 'limit',
         'stoploss': 'limit',
-        'stoploss_on_exchange': False
+        'stoploss_on_exchange': True
     }
 
     order_time_in_force = {
@@ -190,10 +190,10 @@ class ClusterStrategyV4(IStrategy):
         if self.dp.runmode.value in ('live'):
             api.update_task(trade, current_time)
 
-        if (current_time - trade.open_date_utc).seconds >= 60 and current_profit > 0:
-            return current_profit / 2
+        # if (current_time - trade.open_date_utc).seconds >= 60 and current_profit > 0:
+        #     return current_profit / 2
         
-        stop = trade.set_custom_data(key='stop', value=stop)
+        stop = trade.get_custom_data(key='stop', value=stop)
         return stoploss_from_absolute(
             stop,
             current_rate,
