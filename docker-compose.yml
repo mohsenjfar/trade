@@ -15,3 +15,17 @@ services:
       --db-url sqlite:////freqtrade/user_data/cluster_strategy_V4_dry.sqlite
       --config /freqtrade/user_data/cluster_strategy_v4_config.json
       --strategy ClusterStrategyV4
+  cluster_strategy_V4_1_dry:
+    image: freqtradeorg/freqtrade:stable
+    restart: unless-stopped
+    container_name: cluster_strategy_V4_1_dry
+    volumes:
+      - "./user_data:/freqtrade/user_data"
+    ports:
+      - "127.0.0.1:8081:8080"
+    command: >
+      trade
+      --logfile /freqtrade/user_data/logs/cluster_strategy_V4_1_dry.log
+      --db-url sqlite:////freqtrade/user_data/cluster_strategy_V4_1_dry.sqlite
+      --config /freqtrade/user_data/cluster_strategy_v4_1_config.json
+      --strategy ClusterStrategyV4_1

@@ -19,7 +19,7 @@ username = ''
 password = "a88923695f80935a17b99e51df8275bc3440b92defa52106c0cea26ca1bf1ce1"
 client = FtRestClient(server_url, username, password)
 
-class ClusterStrategyV4(IStrategy):
+class ClusterStrategyV4_1(IStrategy):
     
     ''' Specs:
     - Use 4h timeframe as cluster timeframe using 3m candles
@@ -46,6 +46,8 @@ class ClusterStrategyV4(IStrategy):
 
     total_risk = -0.02
 
+    direction = 'enter_long'
+
     custom_info = {
         'max_day_not_notified': True,
         'max_week_not_notified': True
@@ -63,32 +65,6 @@ class ClusterStrategyV4(IStrategy):
         'exit': 'GTC'
     }
 
-    @property
-    def protections(self):
-        return [
-            {
-                "method": "StoplossGuard",
-                "lookback_period_candles": 60,
-                "trade_limit": 2,
-                "stop_duration_candles": 240,
-                "required_profit": 0.0,
-                "only_per_pair": True,
-                "only_per_side": False
-            }
-        ]
-
-    def cluster_borders(self, pair, timeframe='3m', lookback_period=23, n_clusters=6):
-        dataframe = self.dp.get_pair_dataframe(pair=pair, timeframe=timeframe)
-        end = pd.Timestamp('now').floor('H')
-        start = end - pd.Timedelta(hours=lookback_period)
-        condition_1 = dataframe.date >= start.ctime()
-        condition_2 = dataframe.date < end.ctime()
-        dataframe_ = dataframe[condition_1 & condition_2].reset_index()
-        X = dataframe_.close.values.reshape(-1,1)
-        kmeans = KMeans(n_clusters=n_clusters, random_state=42).fit(X)
-        dataframe_['cluster'] = kmeans.predict(X)
-        return dataframe_.groupby(['cluster']).min().close.sort_values().values
-
     def informative_pairs(self):
         pairs = self.dp.current_whitelist()
         return [
@@ -98,28 +74,11 @@ class ClusterStrategyV4(IStrategy):
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        borders = self.cluster_borders(metadata['pair'])
-
-        for c, border in enumerate(borders):
-            dataframe.loc[(dataframe.close >= border),'cluster'] = c
-
         return dataframe
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe.loc[
-            (
-                (dataframe.cluster.shift(1) < dataframe.cluster)
-            ),
-            'enter_long'
-        ] = 1
-
-        dataframe.loc[
-            (
-                (dataframe.cluster.shift(1) > dataframe.cluster)
-            ),
-            'enter_short'
-        ] = 1
+        dataframe[self.direction] = 1
 
         return dataframe
 
@@ -142,10 +101,6 @@ class ClusterStrategyV4(IStrategy):
     def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
                             time_in_force: str, current_time: datetime, entry_tag: Optional[str],
                             side: str, **kwargs) -> bool:
-        
-        # trades = Trade.get_trades_proxy(pair=pair, is_open=False)
-        # if trades and trades[-1].is_short == (side == 'short'):
-        #     return False
     
         today_profit = client.daily(1).get('data')[0].get('rel_profit')
         this_week_profit = client.weekly(1).get('data')[0].get('rel_profit')
@@ -194,13 +149,21 @@ class ClusterStrategyV4(IStrategy):
                 trade.set_custom_data(key='task_id', value=task.get('id'))
                 self.dp.send_msg(f"Task {task.get('summary')} created")
 
-        if trade.nr_of_successful_entries == 2 and self.dp.runmode.value in ('live'):
-            task = api.complete(trade)
-            self.dp.send_msg(f"Task {task.get('summary')} completed")
+        if trade.nr_of_successful_entries == 2:
+            self.direction = 'enter_short' if self.direction == 'enter_long' else 'enter_long'
+
+            if self.dp.runmode.value in ('live'):
+                task = api.complete(trade)
+                self.dp.send_msg(f"Task {task.get('summary')} completed")
 
         return None
     
     def bot_start(self, **kwargs) -> None:
         if self.dp.runmode.value in ('live'):
             res = api.create_parent(__class__.__name__)
-            self.dp.send_msg(f"Parent {res.get('title')} created")    
+            self.dp.send_msg(f"Parent {res.get('title')} created")
+        
+        pairs = self.dp.current_whitelist()
+        for pair in pairs:
+            if self.is_pair_locked(pair):
+                self.unlock_pair(pair)
