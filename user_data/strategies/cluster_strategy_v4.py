@@ -7,11 +7,11 @@ from freqtrade.persistence import Trade
 import api
 from freqtrade_client import FtRestClient
 import pandas as pd
+import numpy as np
 
 from freqtrade.strategy import (
     IStrategy,
-    stoploss_from_absolute,
-    stoploss_from_open
+    stoploss_from_absolute
 )
 
 server_url = 'http://127.0.0.1:8080'
@@ -44,11 +44,10 @@ class ClusterStrategyV4(IStrategy):
 
     startup_candle_count: int = 240
 
-    total_risk = -0.02
-
     custom_info = {
         'max_day_not_notified': True,
-        'max_week_not_notified': True
+        'max_week_not_notified': True,
+        'total_risk': -0.02
     }
 
     order_types = {
@@ -128,7 +127,7 @@ class ClusterStrategyV4(IStrategy):
         return dataframe
 
     def position_size(self, max_stake, risk, min_stake):
-        return max(max_stake - max_stake * risk * 100 / abs(self.total_risk * 100), min_stake)
+        return max(max_stake - max_stake * risk * 100 / abs(self.custom_info["total_risk"] * 100), min_stake)
 
     def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
                             proposed_stake: float, min_stake: Optional[float], max_stake: float,
@@ -143,20 +142,20 @@ class ClusterStrategyV4(IStrategy):
                             time_in_force: str, current_time: datetime, entry_tag: Optional[str],
                             side: str, **kwargs) -> bool:
         
-        # trades = Trade.get_trades_proxy(pair=pair, is_open=False)
-        # if trades and trades[-1].is_short == (side == 'short'):
-        #     return False
+        trades = Trade.get_trades_proxy(pair=pair, is_open=False)
+        if trades and trades[-1].is_short == (side == 'short'):
+            return False
     
         today_profit = client.daily(1).get('data')[0].get('rel_profit')
         this_week_profit = client.weekly(1).get('data')[0].get('rel_profit')
 
-        if (today_profit <= self.total_risk):
+        if (today_profit <= self.custom_info["total_risk"]):
             if self.custom_info.get('max_day_not_notified'):
                 self.dp.send_msg(f"Max day's loss ({today_profit:.2f}) is reached, stop trade entry ...")
                 self.custom_info['max_day_not_notified'] = False
             return False
         
-        if this_week_profit <= (self.total_risk * 3):
+        if this_week_profit <= (self.custom_info["total_risk"] * 3):
             if self.custom_info.get('max_week_not_notified'):
                 self.dp.send_msg(f"Max week's loss ({this_week_profit:.2f}) is reached, stop trade entry ...")
                 self.custom_info['max_week_not_notified'] = False
@@ -175,19 +174,43 @@ class ClusterStrategyV4(IStrategy):
         if self.dp.runmode.value in ('live'):
             api.update_task(trade, current_time)
 
-        if current_profit >= 0.015:
-            return stoploss_from_open(
-                0.01,
-                current_profit,
+        borders = self.cluster_borders(pair)
+        if after_fill:
+            stop = trade.get_custom_data(key='stop')
+            reward = trade.get_custom_data(key='reward')
+            if trade.is_short:
+                borders = np.flip(np.sort(np.append(borders, (stop, trade.open_rate, reward))))
+                border = borders[(borders > current_rate) & (borders <= stop)][-2]
+                if border < stop:
+                    trade.set_custom_data(key='stop', value=border)
+            else:
+                borders = np.sort(np.append(borders, (stop, trade.open_rate, reward)))
+                border = borders[(borders < current_rate) & (borders >= stop)][-2]
+                if border > stop:
+                    trade.set_custom_data(key='stop', value=border)   
+            return stoploss_from_absolute(
+                trade.get_custom_data(key='stop'),
+                current_rate,
                 is_short=trade.is_short,
                 leverage=trade.leverage
             )
+        
+        return None
 
 
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
 
         if trade.nr_of_successful_entries == 1:
             trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
+            
+            if trade.is_short:
+                stop = trade.open_rate / (1 - abs(self.stoploss))
+                reward = trade.open_rate / (1 + 2 * abs(self.stoploss))
+            else:
+                stop = trade.open_rate * (1 - abs(self.stoploss))
+                reward = trade.open_rate * (1 + 2 * abs(self.stoploss))
+            trade.set_custom_data(key='stop', value=stop)
+            trade.set_custom_data(key='reward', value=reward)
             
             if self.dp.runmode.value in ('live'):
                 task = api.create_task(trade, __class__.__name__)
