@@ -47,7 +47,8 @@ class ClusterStrategyV4(IStrategy):
     custom_info = {
         'max_day_not_notified': True,
         'max_week_not_notified': True,
-        'total_risk': -0.02
+        'total_risk': -0.02,
+        'borders': [],
     }
 
     order_types = {
@@ -175,27 +176,29 @@ class ClusterStrategyV4(IStrategy):
             api.update_task(trade, current_time)
 
         borders = self.cluster_borders(pair)
-        if after_fill:
-            stop = trade.get_custom_data(key='stop')
-            reward = trade.get_custom_data(key='reward')
-            if trade.is_short:
-                borders = np.flip(np.sort(np.append(borders, (stop, trade.open_rate, reward))))
-                border = borders[(borders > current_rate) & (borders <= stop)][-2]
-                if border < stop:
-                    trade.set_custom_data(key='stop', value=border)
-            else:
-                borders = np.sort(np.append(borders, (stop, trade.open_rate, reward)))
-                border = borders[(borders < current_rate) & (borders >= stop)][-2]
-                if border > stop:
-                    trade.set_custom_data(key='stop', value=border)   
-            return stoploss_from_absolute(
-                trade.get_custom_data(key='stop'),
-                current_rate,
-                is_short=trade.is_short,
-                leverage=trade.leverage
-            )
+        stop = trade.get_custom_data(key='stop')
+        reward = trade.get_custom_data(key='reward')
+        if trade.is_short:
+            borders = np.flip(np.sort(np.append(borders, (stop, trade.open_rate, reward))))
+            border = borders[(borders > current_rate) & (borders <= stop)][-2]
+            if border < stop:
+                trade.set_custom_data(key='stop', value=border)
+        else:
+            borders = np.sort(np.append(borders, (stop, trade.open_rate, reward)))
+            border = borders[(borders < current_rate) & (borders >= stop)][-2]
+            if border > stop:
+                trade.set_custom_data(key='stop', value=border)
         
-        return None
+        if str(borders) != self.custom_info['borders']:
+            self.dp.send_msg(str(borders))
+            self.custom_info['borders'] = borders
+        
+        return stoploss_from_absolute(
+            trade.get_custom_data(key='stop'),
+            current_rate,
+            is_short=trade.is_short,
+            leverage=trade.leverage
+        )
 
 
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
