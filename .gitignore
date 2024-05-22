@@ -8,3 +8,4 @@ backtest_results
 *.sqlite*
 models
 *.log
+*.log.*
