@@ -22,8 +22,8 @@ client = FtRestClient(server_url, username, password)
 class ClusterStrategyV4(IStrategy):
     
     ''' Specs:
-    - Use 4h timeframe as cluster timeframe using 3m candles
-    - Use 1m timeframe as main timeframe
+    - Use 1d timeframe as cluster timeframe using 3m candles
+    - Use 3m timeframe as main timeframe
     - Split cluster timeframe into 6 clusters
     - Enter long when price crosses above max price (the highest cluster border)
     - Enter short when price crosses below min price (the lowest cluster border)
@@ -36,7 +36,7 @@ class ClusterStrategyV4(IStrategy):
 
     stoploss = -0.005
 
-    timeframe = '1m'
+    timeframe = '3m'
 
     use_exit_signal = True
 
@@ -62,8 +62,8 @@ class ClusterStrategyV4(IStrategy):
         'exit': 'GTC'
     }
 
-    def cluster_borders(self, pair, timeframe='3m', lookback_period=23, n_clusters=6):
-        dataframe = self.dp.get_pair_dataframe(pair=pair, timeframe=timeframe)
+    def cluster_borders(self, pair, lookback_period=23, n_clusters=6):
+        dataframe = self.dp.get_pair_dataframe(pair=pair, timeframe=self.timeframe)
         end = pd.Timestamp('now').floor('H')
         start = end - pd.Timedelta(hours=lookback_period)
         condition_1 = dataframe.date >= start.ctime()
@@ -74,12 +74,6 @@ class ClusterStrategyV4(IStrategy):
         dataframe_['cluster'] = kmeans.predict(X)
         return dataframe_.groupby(['cluster']).min().close.sort_values().values
 
-    def informative_pairs(self):
-        pairs = self.dp.current_whitelist()
-        return [
-            (pair, "3m", "futures")
-            for pair in pairs
-        ]
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
@@ -96,29 +90,37 @@ class ClusterStrategyV4(IStrategy):
             (
                 (
                     ((dataframe.cluster.shift(1) == 0) &
-                    (dataframe.cluster == 1)) |
+                    (dataframe.cluster == 1))
+                )
+            ),
+            ['enter_long', 'enter_tag']] = (1, 'lc')
+
+        dataframe.loc[
+            (
+                (
                     ((dataframe.cluster.shift(1) == 4) &
                     (dataframe.cluster == 5))
-                ) &
-                (dataframe.close.shift(1) > dataframe.close.shift(2)) &
-                (dataframe.close > dataframe.close.shift(1))
+                )
             ),
-            'enter_long'
-        ] = 1
+            ['enter_long', 'enter_tag']] = (1, 'hc')
 
         dataframe.loc[
             (
                 (
                     ((dataframe.cluster.shift(1) == 5) &
-                    (dataframe.cluster == 4)) |
+                    (dataframe.cluster == 4))
+                )
+            ),
+            ['enter_short', 'enter_tag']] = (1, 'hc')
+
+        dataframe.loc[
+            (
+                (
                     ((dataframe.cluster.shift(1) == 1) &
                     (dataframe.cluster == 0))
-                ) &
-                (dataframe.close.shift(1) < dataframe.close.shift(2)) &
-                (dataframe.close < dataframe.close.shift(1))
+                )
             ),
-            'enter_short'
-        ] = 1
+            ['enter_short', 'enter_tag']] = (1, 'lc')
 
         return dataframe
 
@@ -158,19 +160,19 @@ class ClusterStrategyV4(IStrategy):
         starting_balance = client.daily(1).get('data')[0].get('starting_balance')
         dataframe = pd.DataFrame(client.trades().get('trades'))
         dataframe['rel_stake'] = dataframe['stake_amount'] / starting_balance
-        dataframe['rel_profit'] = dataframe['close_profit_pct'] * dataframe['rel_stake']
+        dataframe['rel_profit'] = dataframe['close_profit_pct'] * dataframe['rel_stake'] / 100
         today_rel_profit = dataframe[
             (dataframe.close_date > date.today().strftime('%Y-%m-%d')) &
             (dataframe.close_profit_pct < 0)
         ].rel_profit.sum()
 
-        if today_rel_profit <= self.stoploss * 4:
+        if today_rel_profit <= self.stoploss * 4: # ~2%
             if self.custom_info.get('max_day_not_notified'):
                 self.dp.send_msg(f"Max day's loss ({today_rel_profit:.2f}) is reached, stop trade entry ...")
                 self.custom_info['max_day_not_notified'] = False
             return False
         
-        if this_week_profit <= self.stoploss * 12:
+        if this_week_profit <= self.stoploss * 12: # ~6%
             if self.custom_info.get('max_week_not_notified'):
                 self.dp.send_msg(f"Max week's loss ({this_week_profit:.2f}) is reached, stop trade entry ...")
                 self.custom_info['max_week_not_notified'] = False
@@ -181,7 +183,19 @@ class ClusterStrategyV4(IStrategy):
 
         return True
 
+    def custom_exit(self, pair: str, trade: 'Trade', current_time: 'datetime', current_rate: float,
+                    current_profit: float, **kwargs):
     
+        stop = trade.get_custom_data(key='stop')
+        if trade.is_short:
+            profit = stop / trade.open_rate - 1 
+            if trade.enter_tag == 'lc' and current_profit >= 2 * profit:
+                return "2nd reward for short direction"
+        else:
+            profit = trade.open_rate  / stop - 1 
+            if trade.enter_tag == 'hc' and current_profit >= 2 * profit:
+                return "2nd reward for long direction"
+        
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
@@ -235,7 +249,7 @@ class ClusterStrategyV4(IStrategy):
             trade.set_custom_data(key='stop', value=stop)
             trade.set_custom_data(key='reward', value=reward)
             self.dp.send_msg(
-                f"Borders: {str(borders)}\nStop: {stop}\nReward: {reward}"
+                f"Borders: {str(borders)}\nStop: {stop:.4f}\nReward: {reward:.4f}\nOpen rate: {trade.open_rate:4f}"
             )
             
             if self.dp.runmode.value in ('live'):
