@@ -34,12 +34,14 @@ https://github.com/sponsors/robcaulk
 """
 
 
-class QuickAdapterV35(IStrategy):
+class QuickAdapterV4(IStrategy):
 
     position_adjustment_enable = False
 
     # Attempts to handle large drops with DCA. High stoploss is required.
     stoploss = -0.04
+
+    accuracy_scores = DataFrame()
 
     order_types = {
         "entry": "limit",
@@ -72,22 +74,12 @@ class QuickAdapterV35(IStrategy):
                     "type": "line"
                 },
                 "&s-minima_sort_threshold": {
-                    "color": "#4ae747",
+                    "color": "#f66151",
                     "type": "line"
                 },
                 "&s-maxima_sort_threshold": {
-                    "color": "#5b5e4b",
+                    "color": "#8ff0a4",
                     "type": "line"
-                }
-            },
-            "min_max": {
-                "maxima-exit": {
-                    "color": "#a29db9",
-                    "type": "bar"
-                },
-                "minima-exit": {
-                    "color": "#ac7fc",
-                    "type": "bar"
                 }
             },
             "range_est": {
@@ -98,6 +90,26 @@ class QuickAdapterV35(IStrategy):
                 "&-s_min": {
                     "color": "#ac7fc",
                     "type": "line"
+                }
+            },
+            "truth": {
+                "maxima-exit": {
+                    "color": "#8ff0a4",
+                    "type": "bar"
+                },
+                "minima-exit": {
+                    "color": "#f66151",
+                    "type": "bar"
+                }
+            },
+            "reddit": {
+                "%%-social_volume_reddit/bitcoin": {
+                    "color": "#75e918"
+                }
+            },
+            "nvt": {
+                "%%-nvt_5min/bitcoin": {
+                    "color": "#be2306"
                 }
             }
         }
@@ -119,6 +131,11 @@ class QuickAdapterV35(IStrategy):
 
     use_exit_signal = True
     startup_candle_count: int = 80
+    # # Trailing stop:
+    trailing_stop = True
+    trailing_stop_positive = 0.01
+    trailing_stop_positive_offset = 0.025
+    trailing_only_offset_is_reached = True
 
     def feature_engineering_expand_all(self, dataframe, period, **kwargs):
         dataframe["%-rsi-period"] = ta.RSI(dataframe, timeperiod=period)
@@ -134,8 +151,7 @@ class QuickAdapterV35(IStrategy):
         dataframe["%-linear-period"] = ta.LINEARREG_ANGLE(
             dataframe['close'], timeperiod=period)
         dataframe["%-atr-period"] = ta.ATR(dataframe, timeperiod=period)
-        dataframe["%-atr-periodp"] = dataframe[f"%-atr-period"] / \
-            dataframe['close'] * 1000
+        dataframe["%-atr-periodp"] = dataframe[f"%-atr-period"] / dataframe['close'] * 1000
         return dataframe
 
     def feature_engineering_expand_basic(self, dataframe, **kwargs):
@@ -150,6 +166,8 @@ class QuickAdapterV35(IStrategy):
         dataframe["bb_upperband"] = bollinger["upper"]
         dataframe["%-bb_width"] = (dataframe["bb_upperband"] -
                                    dataframe["bb_lowerband"]) / dataframe["bb_middleband"]
+        dataframe["%-ibs"] = ((dataframe['close'] - dataframe['low']) /
+                              (dataframe['high'] - dataframe['low']))
         dataframe['ema_50'] = ta.EMA(dataframe, timeperiod=50)
         dataframe['ema_12'] = ta.EMA(dataframe, timeperiod=12)
         dataframe['ema_26'] = ta.EMA(dataframe, timeperiod=26)
@@ -247,6 +265,12 @@ class QuickAdapterV35(IStrategy):
         dataframe['&s-extrema'] = dataframe['&s-extrema'].rolling(
             window=5, win_type='gaussian', center=True).mean(std=0.5)
 
+        # predict the expected range
+        dataframe['&-s_max'] = dataframe["close"].shift(-kernel).rolling(
+            kernel).max()/dataframe["close"] - 1
+        dataframe['&-s_min'] = dataframe["close"].shift(-kernel).rolling(
+            kernel).min()/dataframe["close"] - 1
+
         return dataframe
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
@@ -267,10 +291,12 @@ class QuickAdapterV35(IStrategy):
         enter_long_conditions = [
             df["do_predict"] == 1,
             df["DI_catch"] == 1,
-            df["&s-extrema"] < df["minima_sort_threshold"]
+            df["&s-extrema"] < df["minima_sort_threshold"],
+            df['&-s_max'] >= 0.015
         ]
 
         if enter_long_conditions:
+            self.dp.send_msg("long position detected")
             df.loc[
                 reduce(lambda x, y: x & y, enter_long_conditions), [
                     "enter_long", "enter_tag"]
@@ -279,10 +305,12 @@ class QuickAdapterV35(IStrategy):
         enter_short_conditions = [
             df["do_predict"] == 1,
             df["DI_catch"] == 1,
-            df["&s-extrema"] > df["maxima_sort_threshold"]
+            df["&s-extrema"] > df["maxima_sort_threshold"],
+            abs(df['&-s_min']) >= 0.015
         ]
 
         if enter_short_conditions:
+            self.dp.send_msg("short position detected")
             df.loc[
                 reduce(lambda x, y: x & y, enter_short_conditions), [
                     "enter_short", "enter_tag"]
@@ -322,10 +350,25 @@ class QuickAdapterV35(IStrategy):
 
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
 
+        trade_max = trade_candle["&-s_max"]
+        trade_min = trade_candle["&-s_min"]
+
         if trade_duration > 1000:
             return "trade expired"
 
-        if last_candle["DI_catch"] == 0:
+        if entry_tag == "long" and current_profit > trade_max:
+            return "Hit long target"
+
+        if entry_tag == "long" and current_profit < -trade_max:
+            return "Missed long target"
+
+        if entry_tag == "short" and current_profit > abs(trade_min):
+            return "Hit short target"
+
+        if entry_tag == "short" and current_profit < trade_min:
+            return "Missed short target"
+
+        if last_candle["DI_catch"] == 0  and current_profit < 0:
             return "Outlier detected"
 
         if (

@@ -14,11 +14,11 @@ from pandas import DataFrame
 import numpy as np
 from sklearn.model_selection import train_test_split
 import random
-import optuna
+# import optuna
 # import warnings
 from freqtrade.freqai.tensorboard import TBCallback
 import sklearn
-from optuna.samplers import TPESampler
+# from optuna.samplers import TPESampler
 
 logger = logging.getLogger(__name__)
 

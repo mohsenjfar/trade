@@ -8,6 +8,7 @@ import api
 from freqtrade_client import FtRestClient
 import pandas as pd
 import numpy as np
+import talib.abstract as ta
 
 from freqtrade.strategy import (
     IStrategy,
@@ -47,7 +48,7 @@ class ClusterStrategyV4(IStrategy):
     custom_info = {
         'max_day_not_notified': True,
         'max_week_not_notified': True,
-        'borders': '',
+        'borders': None,
     }
 
     order_types = {
@@ -77,10 +78,12 @@ class ClusterStrategyV4(IStrategy):
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        borders = self.cluster_borders(metadata['pair'])
+        self.custom_info['borders'] = self.cluster_borders(metadata['pair'])
 
-        for c, border in enumerate(borders):
+        for c, border in enumerate(self.custom_info['borders']):
             dataframe.loc[(dataframe.close >= border),'cluster'] = c
+
+        dataframe['atr'] = ta.ATR(dataframe, timeperiod=14)
 
         return dataframe
 
@@ -138,16 +141,15 @@ class ClusterStrategyV4(IStrategy):
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
-        borders = self.cluster_borders(pair)
+        ob = self.dp.orderbook(pair, 1)
+        best_bid = ob['bids'][0][0]
+        best_ask = ob['asks'][0][0]
         if side == "short":
-            borders = np.flip(borders)
-            stop = borders[borders > last_candle.close][-1]
-            risk = stop / last_candle.close - 1
+            self.custom_info['risk'] = (last_candle.close + last_candle.atr - best_ask) / best_ask
         else:
-            stop = borders[borders < last_candle.close][-1]
-            risk = last_candle.close / stop - 1
+            self.custom_info['risk'] = (best_bid - last_candle.close - last_candle.atr) / best_bid
         
-        stake = self.position_size(max_stake, risk, min_stake)
+        stake = self.position_size(max_stake, self.custom_info['risk'], min_stake)
 
         return stake
     
@@ -155,6 +157,7 @@ class ClusterStrategyV4(IStrategy):
                             time_in_force: str, current_time: datetime, entry_tag: Optional[str],
                             side: str, **kwargs) -> bool:
     
+
         this_week_profit = client.weekly(1).get('data')[0].get('rel_profit')
 
         starting_balance = client.daily(1).get('data')[0].get('starting_balance')
@@ -183,18 +186,6 @@ class ClusterStrategyV4(IStrategy):
 
         return True
 
-    def custom_exit(self, pair: str, trade: 'Trade', current_time: 'datetime', current_rate: float,
-                    current_profit: float, **kwargs):
-    
-        stop = trade.get_custom_data(key='stop')
-        if trade.is_short:
-            profit = stop / trade.open_rate - 1 
-            if trade.enter_tag == 'lc' and current_profit >= 2 * profit:
-                return "2nd reward for short direction"
-        else:
-            profit = trade.open_rate  / stop - 1 
-            if trade.enter_tag == 'hc' and current_profit >= 2 * profit:
-                return "2nd reward for long direction"
         
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
                         current_rate: float, current_profit: float, after_fill: bool, 
@@ -203,25 +194,37 @@ class ClusterStrategyV4(IStrategy):
         if self.dp.runmode.value in ('live'):
             api.update_task(trade, current_time)
 
-        borders = self.cluster_borders(pair)
-
-        stop = trade.get_custom_data(key='stop')
-        reward = trade.get_custom_data(key='reward')
-        borders = np.sort(np.append(borders, (stop, trade.open_rate, reward)))
-        if borders.size > 1:
-            if trade.is_short:
+        if trade.is_short:
+            if trade.enter_tag == 'lc':
+                dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
+                candle = dataframe.iloc[-1].squeeze()
+                trade.set_custom_data(key='stop', value=current_rate + candle['atr'])
+            else:
+                borders = self.custom_info['borders']
+                stop = trade.get_custom_data(key='stop')
+                reward = trade.get_custom_data(key='reward')
+                borders = np.sort(np.append(borders, (stop, trade.open_rate, reward)))
                 borders = np.flip(borders)
                 borders = borders[borders > current_rate]
                 if borders.size > 1:
                     if borders[-2] < stop:
                         trade.set_custom_data(key='stop', value=borders[-2])
+        else:
+            if trade.enter_tag == 'hc':
+                dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
+                candle = dataframe.iloc[-1].squeeze()
+                trade.set_custom_data(key='stop', value=current_rate - candle['atr'])
             else:
+                borders = self.custom_info['borders']
+                stop = trade.get_custom_data(key='stop')
+                reward = trade.get_custom_data(key='reward')
+                borders = np.sort(np.append(borders, (stop, trade.open_rate, reward)))
                 borders = borders[borders < current_rate]
                 if borders.size > 1:
                     if borders[-2] > stop:
                         trade.set_custom_data(key='stop', value=borders[-2])
 
-        if str(borders) != self.custom_info['borders']:
+        if str(borders) != str(self.custom_info['borders']):
             self.dp.send_msg(str(borders))
             self.custom_info['borders'] = str(borders)
 
@@ -238,18 +241,16 @@ class ClusterStrategyV4(IStrategy):
         if trade.nr_of_successful_entries == 1:
             trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
 
-            borders = self.cluster_borders(pair)
             if trade.is_short:
-                borders = np.flip(borders)
-                stop = borders[borders > trade.open_rate][-1]
-                reward = trade.open_rate - 2 * (stop / trade.open_rate - 1)
+                stop = trade.open_rate * (1 + self.custom_info['risk'])
+                reward = trade.open_rate * (1 - 2 * self.custom_info['risk'])
             else:
-                stop = borders[borders < trade.open_rate][-1]
-                reward = trade.open_rate + 2 * (trade.open_rate / stop - 1)
+                stop = trade.open_rate * (1 - self.custom_info['risk'])
+                reward = trade.open_rate * (1 + 2 * self.custom_info['risk'])
             trade.set_custom_data(key='stop', value=stop)
             trade.set_custom_data(key='reward', value=reward)
             self.dp.send_msg(
-                f"Borders: {str(borders)}\nStop: {stop:.4f}\nReward: {reward:.4f}\nOpen rate: {trade.open_rate:4f}"
+                f"Stop: {stop:.4f}\nReward: {reward:.4f}\nOpen rate: {trade.open_rate:4f}"
             )
             
             if self.dp.runmode.value in ('live'):

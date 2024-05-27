@@ -1,17 +1,18 @@
 ---
 version: '3'
 services:
-  cluster_strategy_V4_dry:
-    image: freqtradeorg/freqtrade:stable
-    restart: unless-stopped
-    container_name: cluster_strategy_V4_dry
-    volumes:
-      - "./user_data:/freqtrade/user_data"
-    ports:
-      - "127.0.0.1:8080:8080"
-    command: >
-      trade
-      --logfile /freqtrade/user_data/logs/cluster_strategy_V4_dry.log
-      --db-url sqlite:////freqtrade/user_data/cluster_strategy_V4_dry.sqlite
-      --config /freqtrade/user_data/cluster_strategy_v4_config.json
-      --strategy ClusterStrategyV4
+  freqai:
+      image: freqtradeorg/freqtrade:develop_freqai
+      restart: unless-stopped
+      container_name: QuickAdapterV3
+      volumes:
+        - "./user_data:/freqtrade/user_data"
+      ports:
+        - "127.0.0.1:8080:8080"
+      command: >
+        trade
+        --logfile /freqtrade/user_data/logs/QuickAdapterV3.log
+        --db-url sqlite:////freqtrade/user_data/tradesv3_QuickAdapterV3.sqlite
+        --config /freqtrade/user_data/config_xgboost.json
+        --strategy QuickAdapterV3
+        --freqaimodel XGBoostRegressorQuickAdapterV3

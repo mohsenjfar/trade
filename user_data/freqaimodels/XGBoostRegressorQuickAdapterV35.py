@@ -7,7 +7,7 @@ from freqtrade.freqai.base_models.BaseRegressionModel import BaseRegressionModel
 from freqtrade.freqai.data_kitchen import FreqaiDataKitchen
 import pandas as pd
 import scipy as spy
-import optuna
+# import optuna
 import sklearn
 
 N_TRIALS = 26
