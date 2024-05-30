@@ -4,15 +4,15 @@ services:
   freqai:
       image: freqtradeorg/freqtrade:develop_freqai
       restart: unless-stopped
-      container_name: QuickAdapterV3
+      container_name: FreqaiExampleHybridStrategy
       volumes:
         - "./user_data:/freqtrade/user_data"
       ports:
         - "127.0.0.1:8080:8080"
       command: >
         trade
-        --logfile /freqtrade/user_data/logs/QuickAdapterV3.log
-        --db-url sqlite:////freqtrade/user_data/tradesv3_QuickAdapterV3.sqlite
+        --logfile /freqtrade/user_data/logs/FreqaiExampleHybridStrategy.log
+        --db-url sqlite:////freqtrade/user_data/tradesv3_FreqaiExampleHybridStrategy.sqlite
         --config /freqtrade/user_data/config_xgboost.json
-        --strategy QuickAdapterV3
-        --freqaimodel XGBoostRegressorQuickAdapterV3
+        --strategy FreqaiExampleHybridStrategy
+        --freqaimodel XGBoostClassifier

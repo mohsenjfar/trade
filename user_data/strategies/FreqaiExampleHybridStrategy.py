@@ -6,60 +6,14 @@ import pandas as pd  # noqa
 import talib.abstract as ta
 from pandas import DataFrame
 from technical import qtpylib
-from freqtrade.persistence import Trade
-from datetime import datetime, timedelta, timezone
-from freqtrade.strategy import IntParameter, IStrategy, stoploss_from_absolute, timeframe_to_prev_date  # noqa
-from typing import Optional, Union
+
+from freqtrade.strategy import IntParameter, IStrategy, merge_informative_pair  # noqa
+
 
 logger = logging.getLogger(__name__)
 
 
-class XGBoostStrategy(IStrategy):
-    """
-    Example of a hybrid FreqAI strat, designed to illustrate how a user may employ
-    FreqAI to bolster a typical Freqtrade strategy.
-
-    Launching this strategy would be:
-
-    freqtrade trade --strategy FreqaiExampleHybridStrategy --strategy-path freqtrade/templates
-    --freqaimodel CatboostClassifier --config config_examples/config_freqai.example.json
-
-    or the user simply adds this to their config:
-
-    "freqai": {
-        "enabled": true,
-        "purge_old_models": 2,
-        "train_period_days": 15,
-        "identifier": "uniqe-id",
-        "feature_parameters": {
-            "include_timeframes": [
-                "3m",
-                "15m",
-                "1h"
-            ],
-            "include_corr_pairlist": [
-                "BTC/USDT",
-                "ETH/USDT"
-            ],
-            "label_period_candles": 20,
-            "include_shifted_candles": 2,
-            "DI_threshold": 0.9,
-            "weight_factor": 0.9,
-            "principal_component_analysis": false,
-            "use_SVM_to_remove_outliers": true,
-            "indicator_periods_candles": [10, 20]
-        },
-        "data_split_parameters": {
-            "test_size": 0,
-            "random_state": 1
-        },
-        "model_training_parameters": {
-            "n_estimators": 800
-        }
-    },
-
-    Thanks to @smarmau and @johanvulgt for developing and sharing the strategy.
-    """
+class FreqaiExampleHybridStrategy(IStrategy):
 
     minimal_roi = {
         "60": 0.01,
@@ -316,63 +270,3 @@ class XGBoostStrategy(IStrategy):
             'exit_short'] = 1
 
         return df
-
-    def position_size(self, total_asset, risk, leverage):
-        if risk > self.total_risk:
-            return (total_asset * self.total_risk) / (leverage * risk * self.config['max_open_trades'])
-        else:
-            return total_asset / (leverage * self.config['max_open_trades'])
-
-    def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
-                            proposed_stake: float, min_stake: Optional[float], max_stake: float,
-                            leverage: float, entry_tag: Optional[str], side: str,
-                            **kwargs) -> float:
-
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        previous_candle = dataframe.iloc[-2].squeeze()
-
-        if side == 'long':
-            risk = previous_candle['high'] / previous_candle['close'] - 1
-        elif side == 'short':
-            risk = 1 - previous_candle['low'] / previous_candle['close']
-        
-        stake = self.position_size(max_stake, risk, leverage)
-
-        return stake
-
-    def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
-                        current_rate: float, current_profit: float, after_fill: bool, 
-                        **kwargs) -> Optional[float]:
-
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
-        trade_date = timeframe_to_prev_date(self.timeframe, trade.open_date_utc)
-        prev_trade_dataframe = dataframe.loc[dataframe['date'] < trade_date]
-        prev_trade_candle = prev_trade_dataframe.iloc[-1].squeeze()
-
-        start = prev_trade_candle['high'] if trade.is_short else prev_trade_candle['low']
-
-        return stoploss_from_absolute(
-            start,
-            prev_trade_candle['close'],
-            is_short=trade.is_short,
-            leverage=trade.leverage
-        )
-    
-    def custom_exit(self, pair: str, trade: 'Trade', current_time: 'datetime', current_rate: float,
-                    current_profit: float, **kwargs):
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
-        trade_date = timeframe_to_prev_date(self.timeframe, trade.open_date_utc)
-        prev_trade_dataframe = dataframe.loc[dataframe['date'] < trade_date]
-        prev_trade_candle = prev_trade_dataframe.iloc[-1].squeeze()
-
-        start = prev_trade_candle['high'] if trade.is_short else prev_trade_candle['low']
-
-        risk = stoploss_from_absolute(
-            start,
-            prev_trade_candle['close'],
-            is_short=trade.is_short,
-            leverage=trade.leverage
-        )
-
-        if current_profit > abs(risk) * 2:
-            return f"Reward for pair {pair}, exiting trade..."
