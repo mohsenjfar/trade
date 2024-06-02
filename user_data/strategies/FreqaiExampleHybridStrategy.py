@@ -14,6 +14,51 @@ logger = logging.getLogger(__name__)
 
 
 class FreqaiExampleHybridStrategy(IStrategy):
+    """
+    Example of a hybrid FreqAI strat, designed to illustrate how a user may employ
+    FreqAI to bolster a typical Freqtrade strategy.
+
+    Launching this strategy would be:
+
+    freqtrade trade --strategy FreqaiExampleHybridStrategy --strategy-path freqtrade/templates
+    --freqaimodel CatboostClassifier --config config_examples/config_freqai.example.json
+
+    or the user simply adds this to their config:
+
+    "freqai": {
+        "enabled": true,
+        "purge_old_models": 2,
+        "train_period_days": 15,
+        "identifier": "uniqe-id",
+        "feature_parameters": {
+            "include_timeframes": [
+                "3m",
+                "15m",
+                "1h"
+            ],
+            "include_corr_pairlist": [
+                "BTC/USDT",
+                "ETH/USDT"
+            ],
+            "label_period_candles": 20,
+            "include_shifted_candles": 2,
+            "DI_threshold": 0.9,
+            "weight_factor": 0.9,
+            "principal_component_analysis": false,
+            "use_SVM_to_remove_outliers": true,
+            "indicator_periods_candles": [10, 20]
+        },
+        "data_split_parameters": {
+            "test_size": 0,
+            "random_state": 1
+        },
+        "model_training_parameters": {
+            "n_estimators": 800
+        }
+    },
+
+    Thanks to @smarmau and @johanvulgt for developing and sharing the strategy.
+    """
 
     minimal_roi = {
         "60": 0.01,

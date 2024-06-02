@@ -9,3 +9,4 @@ backtest_results
 models
 *.log
 *.log.*
+hyperopt_results
