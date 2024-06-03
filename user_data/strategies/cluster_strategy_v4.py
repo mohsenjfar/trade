@@ -1,23 +1,19 @@
 from pandas import DataFrame
 from freqtrade.persistence import Trade
 from sklearn.cluster import KMeans
-from datetime import datetime, timedelta, date
+from datetime import datetime
 from typing import Optional
-from freqtrade.persistence import Trade
 import api
-from freqtrade_client import FtRestClient
-import pandas as pd
-import numpy as np
 
 from freqtrade.strategy import (
     IStrategy,
     stoploss_from_absolute
 )
 
-server_url = 'http://127.0.0.1:8080'
-username = ''
-password = "a88923695f80935a17b99e51df8275bc3440b92defa52106c0cea26ca1bf1ce1"
-client = FtRestClient(server_url, username, password)
+# server_url = 'http://127.0.0.1:8080'
+# username = ''
+# password = "a88923695f80935a17b99e51df8275bc3440b92defa52106c0cea26ca1bf1ce1"
+# client = FtRestClient(server_url, username, password)
 
 class ClusterStrategyV4(IStrategy):
     
@@ -34,17 +30,19 @@ class ClusterStrategyV4(IStrategy):
 
     can_short: bool = True
 
-    stoploss = -0.005
+    stoploss = -0.02
 
-    timeframe = '5m'
+    timeframe = '15m'
 
     use_exit_signal = True
 
     use_custom_stoploss = True
 
-    startup_candle_count: int = 240
+    startup_candle_count: int = 2000
 
     cluster_timeframe = '1d'
+
+    cluster_size = 6
 
     custom_info = {
         'max_day_not_notified': True,
@@ -65,7 +63,7 @@ class ClusterStrategyV4(IStrategy):
         'exit': 'GTC'
     }
 
-    def cluster_borders(self, pair, n_clusters=6):
+    def cluster_borders(self, pair, n_clusters):
         dataframe_ = self.dp.get_pair_dataframe(pair=pair, timeframe=self.cluster_timeframe)
         dataframe_ = dataframe_[dataframe_.date >= '2024-03-13']
         X = dataframe_.close.values.reshape(-1,1)
@@ -82,7 +80,7 @@ class ClusterStrategyV4(IStrategy):
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        borders = self.cluster_borders(metadata['pair'], n_clusters=6)
+        borders = self.cluster_borders(metadata['pair'], n_clusters=self.cluster_size)
 
         for c, border in enumerate(borders):
             dataframe.loc[(dataframe.close >= border),'cluster'] = c
@@ -93,16 +91,16 @@ class ClusterStrategyV4(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe.cluster.shift(1) == 1) &
-                (dataframe.cluster == 2)
+                (dataframe.cluster.shift(1) == 0) &
+                (dataframe.cluster == 1)
             ),
             'enter_long'
         ] = 1
 
         dataframe.loc[
             (
-                (dataframe.cluster.shift(1) == 4) &
-                (dataframe.cluster == 3)
+                (dataframe.cluster.shift(1) == self.cluster_size) &
+                (dataframe.cluster == (self.cluster_size - 1))
             ),
             'enter_short'
         ] = 1
@@ -165,60 +163,52 @@ class ClusterStrategyV4(IStrategy):
         if self.dp.runmode.value in ('live'):
             api.update_task(trade, current_time)
 
-        borders = self.cluster_borders(pair)
-        stop = trade.get_custom_data(key='stop')
-        reward = trade.get_custom_data(key='reward')
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        prev_candle = dataframe.iloc[-2].squeeze()
+
         if trade.is_short:
-            borders = np.flip(np.sort(np.append(borders, (stop, trade.open_rate, reward))))
-            if borders.size > 1:
-                border = borders[borders > current_rate][-2]
-                if border < stop:
-                    trade.set_custom_data(key='stop', value=border)
+            stop = dataframe[dataframe.cluster == (prev_candle.cluster + 1)].close.max()
+            if stop < trade.get_custom_data(key='stop', default=self.stoploss):
+                trade.set_custom_data(key='stop', value=stop)
         else:
-            borders = np.sort(np.append(borders, (stop, trade.open_rate, reward)))
-            if borders.size > 1:
-                border = borders[borders < current_rate][-2]
-                if border > stop:
-                    trade.set_custom_data(key='stop', value=border)
-        
-        if str(borders) != self.custom_info['borders']:
-            self.dp.send_msg(str(borders))
-            self.custom_info['borders'] = str(borders)
+            stop = dataframe[dataframe.cluster == (prev_candle.cluster - 1)].close.min()
+            if stop > trade.get_custom_data(key='stop', default=self.stoploss):
+                trade.set_custom_data(key='stop', value=stop)
         
         return stoploss_from_absolute(
-            trade.get_custom_data(key='stop'),
+            trade.get_custom_data(key='stop', default=self.stoploss),
             current_rate,
             is_short=trade.is_short,
             leverage=trade.leverage
         )
 
 
-    def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
+    # def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
 
-        if trade.nr_of_successful_entries == 1:
-            trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
+    #     if trade.nr_of_successful_entries == 1:
+    #         trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
             
-            if trade.is_short:
-                stop = trade.open_rate / (1 - abs(self.stoploss))
-                reward = trade.open_rate / (1 + 2 * abs(self.stoploss))
-            else:
-                stop = trade.open_rate * (1 - abs(self.stoploss))
-                reward = trade.open_rate * (1 + 2 * abs(self.stoploss))
-            trade.set_custom_data(key='stop', value=stop)
-            trade.set_custom_data(key='reward', value=reward)
+    #         if trade.is_short:
+    #             stop = trade.open_rate / (1 - abs(self.stoploss))
+    #             reward = trade.open_rate / (1 + 2 * abs(self.stoploss))
+    #         else:
+    #             stop = trade.open_rate * (1 - abs(self.stoploss))
+    #             reward = trade.open_rate * (1 + 2 * abs(self.stoploss))
+    #         trade.set_custom_data(key='stop', value=stop)
+    #         trade.set_custom_data(key='reward', value=reward)
             
-            if self.dp.runmode.value in ('live'):
-                task = api.create_task(trade, __class__.__name__)
-                trade.set_custom_data(key='task_id', value=task.get('id'))
-                self.dp.send_msg(f"Task {task.get('summary')} created")
+    #         if self.dp.runmode.value in ('live'):
+    #             task = api.create_task(trade, __class__.__name__)
+    #             trade.set_custom_data(key='task_id', value=task.get('id'))
+    #             self.dp.send_msg(f"Task {task.get('summary')} created")
 
-        if trade.nr_of_successful_entries == 2 and self.dp.runmode.value in ('live'):
-            task = api.complete(trade)
-            self.dp.send_msg(f"Task {task.get('summary')} completed")
+    #     if trade.nr_of_successful_entries == 2 and self.dp.runmode.value in ('live'):
+    #         task = api.complete(trade)
+    #         self.dp.send_msg(f"Task {task.get('summary')} completed")
 
-        return None
+    #     return None
     
-    def bot_start(self, **kwargs) -> None:
-        if self.dp.runmode.value in ('live'):
-            res = api.create_parent(__class__.__name__)
-            self.dp.send_msg(f"Parent {res.get('title')} created")
+    # def bot_start(self, **kwargs) -> None:
+    #     if self.dp.runmode.value in ('live'):
+    #         res = api.create_parent(__class__.__name__)
+    #         self.dp.send_msg(f"Parent {res.get('title')} created")
