@@ -1,0 +1,28 @@
+{
+  "strategy_name": "ClusterStrategyV4",
+  "params": {
+    "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+    },
+    "max_open_trades": {
+      "max_open_trades": 1
+    },
+    "buy": {},
+    "sell": {},
+    "protection": {},
+    "roi": {
+      "0": 0.31599999999999995,
+      "98": 0.11099999999999999,
+      "153": 0.022,
+      "510": 0
+    },
+    "stoploss": {
+      "stoploss": -0.2
+    }
+  },
+  "ft_stratparam_v": 1,
+  "export_time": "2024-06-05 10:56:09.609306+00:00"
+}

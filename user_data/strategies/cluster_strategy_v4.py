@@ -3,7 +3,7 @@ from freqtrade.persistence import Trade
 from sklearn.cluster import KMeans
 from datetime import datetime
 from typing import Optional
-import api
+# import api
 
 from freqtrade.strategy import (
     IStrategy,
@@ -44,13 +44,6 @@ class ClusterStrategyV4(IStrategy):
 
     cluster_size = 6
 
-    custom_info = {
-        'max_day_not_notified': True,
-        'max_week_not_notified': True,
-        'total_risk': -0.02,
-        'borders': '',
-    }
-
     order_types = {
         'entry': 'limit',
         'exit': 'limit',
@@ -64,12 +57,12 @@ class ClusterStrategyV4(IStrategy):
     }
 
     def cluster_borders(self, pair, n_clusters):
-        dataframe_ = self.dp.get_pair_dataframe(pair=pair, timeframe=self.cluster_timeframe)
-        dataframe_ = dataframe_[dataframe_.date >= '2024-03-13']
-        X = dataframe_.close.values.reshape(-1,1)
+        dataframe = self.dp.get_pair_dataframe(pair=pair, timeframe=self.cluster_timeframe)
+        dataframe = dataframe[dataframe.date >= '2024-03-13'].reset_index()
+        X = dataframe.close.values.reshape(-1,1)
         kmeans = KMeans(n_clusters=n_clusters, random_state=42).fit(X)
-        dataframe_['cluster'] = kmeans.predict(X)
-        return dataframe_.groupby(['cluster']).min().close.sort_values().values
+        dataframe['cluster'] = kmeans.predict(X)
+        return dataframe.groupby(['cluster']).min().close.sort_values().values
 
     def informative_pairs(self):
         pairs = self.dp.current_whitelist()
@@ -89,18 +82,32 @@ class ClusterStrategyV4(IStrategy):
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
+        # dataframe.loc[
+        #     (
+        #         (dataframe.cluster.shift(1) == 0) &
+        #         (dataframe.cluster == 1)
+        #     ),
+        #     'enter_long'
+        # ] = 1
+
+        # dataframe.loc[
+        #     (
+        #         (dataframe.cluster.shift(1) == self.cluster_size) &
+        #         (dataframe.cluster == (self.cluster_size - 1))
+        #     ),
+        #     'enter_short'
+        # ] = 1
+
         dataframe.loc[
             (
-                (dataframe.cluster.shift(1) == 0) &
-                (dataframe.cluster == 1)
+                dataframe.cluster.shift(1) < dataframe.cluster
             ),
             'enter_long'
         ] = 1
 
         dataframe.loc[
             (
-                (dataframe.cluster.shift(1) == self.cluster_size) &
-                (dataframe.cluster == (self.cluster_size - 1))
+                dataframe.cluster.shift(1) > dataframe.cluster
             ),
             'enter_short'
         ] = 1
@@ -110,51 +117,6 @@ class ClusterStrategyV4(IStrategy):
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         return dataframe
-
-    def position_size(self, max_stake, risk, min_stake):
-        return max(max_stake - max_stake * risk * 100 / abs(self.custom_info["total_risk"] * 100), min_stake)
-
-    # def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
-    #                         proposed_stake: float, min_stake: Optional[float], max_stake: float,
-    #                         leverage: float, entry_tag: Optional[str], side: str,
-    #                         **kwargs) -> float:
-
-    #     stake = self.position_size(max_stake, abs(self.stoploss), min_stake)
-
-    #     return stake
-    
-    def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
-                            time_in_force: str, current_time: datetime, entry_tag: Optional[str],
-                            side: str, **kwargs) -> bool:
-    
-        # this_week_profit = client.weekly(1).get('data')[0].get('rel_profit')
-
-        # starting_balance = client.daily(1).get('data')[0].get('starting_balance')
-        # dataframe = pd.DataFrame(client.trades().get('trades'))
-        # dataframe['rel_stake'] = dataframe['stake_amount'] / starting_balance
-        # dataframe['rel_profit'] = dataframe['close_profit_pct'] * dataframe['rel_stake']
-        # today_rel_profit = dataframe[
-        #     (dataframe.close_date > (date.today() - timedelta(days=1)).strftime('%Y-%m-%d')) &
-        #     (dataframe.close_profit_pct > 0)
-        # ].rel_profit.sum()
-
-        # if (today_rel_profit <= self.custom_info["total_risk"]):
-        #     if self.custom_info.get('max_day_not_notified'):
-        #         self.dp.send_msg(f"Max day's loss ({today_rel_profit:.2f}) is reached, stop trade entry ...")
-        #         self.custom_info['max_day_not_notified'] = False
-        #     return False
-        
-        # if this_week_profit <= (self.custom_info["total_risk"] * 3):
-        #     if self.custom_info.get('max_week_not_notified'):
-        #         self.dp.send_msg(f"Max week's loss ({this_week_profit:.2f}) is reached, stop trade entry ...")
-        #         self.custom_info['max_week_not_notified'] = False
-        #     return False
-        
-        # self.custom_info['max_week_not_notified'] = True
-        # self.custom_info['max_day_not_notified'] = True
-
-        return True
-
     
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
                         current_rate: float, current_profit: float, after_fill: bool, 
@@ -165,18 +127,19 @@ class ClusterStrategyV4(IStrategy):
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         prev_candle = dataframe.iloc[-2].squeeze()
+        stop = trade.get_custom_data(key='stop', default=self.stoploss)
 
         if trade.is_short:
-            stop = dataframe[dataframe.cluster == (prev_candle.cluster + 1)].close.max()
-            if stop < trade.get_custom_data(key='stop', default=self.stoploss):
-                trade.set_custom_data(key='stop', value=stop)
+            border = dataframe[dataframe.cluster == (prev_candle.cluster + 1)].close.max()
+            if border < stop:
+                trade.set_custom_data(key='stop', value=border)
         else:
-            stop = dataframe[dataframe.cluster == (prev_candle.cluster - 1)].close.min()
-            if stop > trade.get_custom_data(key='stop', default=self.stoploss):
-                trade.set_custom_data(key='stop', value=stop)
+            border = dataframe[dataframe.cluster == (prev_candle.cluster - 1)].close.min()
+            if border > stop:
+                trade.set_custom_data(key='stop', value=border)
         
         return stoploss_from_absolute(
-            trade.get_custom_data(key='stop', default=self.stoploss),
+            stop,
             current_rate,
             is_short=trade.is_short,
             leverage=trade.leverage
