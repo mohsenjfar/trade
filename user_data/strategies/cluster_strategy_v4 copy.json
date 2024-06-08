@@ -10,21 +10,19 @@
     "max_open_trades": {
       "max_open_trades": 1
     },
-    "buy": {
-      "cluster_size": 21
-    },
+    "buy": {},
     "sell": {},
     "protection": {},
     "roi": {
-      "0": 0.147,
-      "119": 0.126,
-      "272": 0.021,
-      "370": 0
+      "0": 0.063,
+      "45": 0.037,
+      "202": 0.022,
+      "510": 0
     },
     "stoploss": {
-      "stoploss": -0.267
+      "stoploss": -0.126
     }
   },
   "ft_stratparam_v": 1,
-  "export_time": "2024-06-08 13:12:50.869354+00:00"
+  "export_time": "2024-06-05 13:57:43.002961+00:00"
 }

@@ -6,8 +6,12 @@ from typing import Optional
 # import api
 
 from freqtrade.strategy import (
+    # stoploss_from_absolute,
+    # BooleanParameter,
+    # CategoricalParameter,
+    # DecimalParameter,
     IStrategy,
-    stoploss_from_absolute
+    IntParameter
 )
 
 # server_url = 'http://127.0.0.1:8080'
@@ -42,7 +46,7 @@ class ClusterStrategyV4(IStrategy):
 
     cluster_timeframe = '1d'
 
-    cluster_size = 6
+    cluster_size = IntParameter(2, 30, default=6, space="buy")
 
     order_types = {
         'entry': 'limit',
@@ -73,41 +77,25 @@ class ClusterStrategyV4(IStrategy):
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        borders = self.cluster_borders(metadata['pair'], n_clusters=self.cluster_size)
-
-        for c, border in enumerate(borders):
-            dataframe.loc[(dataframe.close >= border),'cluster'] = c
+        for val in self.cluster_size.range:
+            borders = self.cluster_borders(metadata['pair'], n_clusters=val)
+            for c, border in enumerate(borders):
+                dataframe.loc[(dataframe.close >= border),f'cluster_{val}'] = c
 
         return dataframe
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        # dataframe.loc[
-        #     (
-        #         (dataframe.cluster.shift(1) == 0) &
-        #         (dataframe.cluster == 1)
-        #     ),
-        #     'enter_long'
-        # ] = 1
-
-        # dataframe.loc[
-        #     (
-        #         (dataframe.cluster.shift(1) == self.cluster_size) &
-        #         (dataframe.cluster == (self.cluster_size - 1))
-        #     ),
-        #     'enter_short'
-        # ] = 1
-
         dataframe.loc[
             (
-                dataframe.cluster.shift(1) < dataframe.cluster
+                dataframe[f'cluster_{self.cluster_size.value}'].shift(1) < dataframe[f'cluster_{self.cluster_size.value}']
             ),
             'enter_long'
         ] = 1
 
         dataframe.loc[
             (
-                dataframe.cluster.shift(1) > dataframe.cluster
+                dataframe[f'cluster_{self.cluster_size.value}'].shift(1) > dataframe[f'cluster_{self.cluster_size.value}']
             ),
             'enter_short'
         ] = 1
@@ -118,47 +106,54 @@ class ClusterStrategyV4(IStrategy):
 
         return dataframe
     
-    def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
-                        current_rate: float, current_profit: float, after_fill: bool, 
-                        **kwargs) -> Optional[float]:
 
-        if self.dp.runmode.value in ('live'):
-            api.update_task(trade, current_time)
+    # def position_size(self, max_stake, risk, min_stake):
+    #     return max(max_stake - max_stake * risk * 100 / abs(self.custom_info["total_risk"] * 100), min_stake)
 
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        prev_candle = dataframe.iloc[-2].squeeze()
-        stop = trade.get_custom_data(key='stop', default=self.stoploss)
+    # def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
+    #                         proposed_stake: float, min_stake: Optional[float], max_stake: float,
+    #                         leverage: float, entry_tag: Optional[str], side: str,
+    #                         **kwargs) -> float:
 
-        if trade.is_short:
-            border = dataframe[dataframe.cluster == (prev_candle.cluster + 1)].close.max()
-            if border < stop:
-                trade.set_custom_data(key='stop', value=border)
-        else:
-            border = dataframe[dataframe.cluster == (prev_candle.cluster - 1)].close.min()
-            if border > stop:
-                trade.set_custom_data(key='stop', value=border)
+
+    #     stake = self.position_size(max_stake, abs(self.stoploss), min_stake)
+
+    #     return stake
+    
+    # def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
+    #                     current_rate: float, current_profit: float, after_fill: bool, 
+    #                     **kwargs) -> Optional[float]:
+
+    #     if self.dp.runmode.value in ('live'):
+    #         api.update_task(trade, current_time)
+
+    #     dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+    #     prev_candle = dataframe.iloc[-2].squeeze()
+
+    #     side = -1 if trade.is_short else 1
+    #     stop = trade.get_custom_data(key='stop', default= trade.open_rate * (1 + side * self.stoploss))
+
+    #     if trade.is_short:
+    #         border = dataframe[dataframe.cluster == (prev_candle.cluster + 1)].close.max()
+    #         if border < stop:
+    #             trade.set_custom_data(key='stop', value=border)
+    #     else:
+    #         border = dataframe[dataframe.cluster == (prev_candle.cluster - 1)].close.min()
+    #         if border > stop:
+    #             trade.set_custom_data(key='stop', value=border)
         
-        return stoploss_from_absolute(
-            stop,
-            current_rate,
-            is_short=trade.is_short,
-            leverage=trade.leverage
-        )
+    #     return stoploss_from_absolute(
+    #         stop,
+    #         current_rate,
+    #         is_short=trade.is_short,
+    #         leverage=trade.leverage
+    #     )
 
 
     # def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
 
     #     if trade.nr_of_successful_entries == 1:
     #         trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
-            
-    #         if trade.is_short:
-    #             stop = trade.open_rate / (1 - abs(self.stoploss))
-    #             reward = trade.open_rate / (1 + 2 * abs(self.stoploss))
-    #         else:
-    #             stop = trade.open_rate * (1 - abs(self.stoploss))
-    #             reward = trade.open_rate * (1 + 2 * abs(self.stoploss))
-    #         trade.set_custom_data(key='stop', value=stop)
-    #         trade.set_custom_data(key='reward', value=reward)
             
     #         if self.dp.runmode.value in ('live'):
     #             task = api.create_task(trade, __class__.__name__)
