@@ -6,7 +6,7 @@ from typing import Optional
 # import api
 
 from freqtrade.strategy import (
-    # stoploss_from_absolute,
+    stoploss_from_absolute,
     # BooleanParameter,
     # CategoricalParameter,
     # DecimalParameter,
@@ -120,35 +120,46 @@ class ClusterStrategyV4(IStrategy):
 
     #     return stake
     
-    # def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
-    #                     current_rate: float, current_profit: float, after_fill: bool, 
-    #                     **kwargs) -> Optional[float]:
+    def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
+                        current_rate: float, current_profit: float, after_fill: bool, 
+                        **kwargs) -> Optional[float]:
 
-    #     if self.dp.runmode.value in ('live'):
-    #         api.update_task(trade, current_time)
+        # if self.dp.runmode.value in ('live'):
+        #     api.update_task(trade, current_time)
 
-    #     dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-    #     prev_candle = dataframe.iloc[-2].squeeze()
+        side = -1 if trade.is_short else 1
 
-    #     side = -1 if trade.is_short else 1
-    #     stop = trade.get_custom_data(key='stop', default= trade.open_rate * (1 + side * self.stoploss))
-
-    #     if trade.is_short:
-    #         border = dataframe[dataframe.cluster == (prev_candle.cluster + 1)].close.max()
-    #         if border < stop:
-    #             trade.set_custom_data(key='stop', value=border)
-    #     else:
-    #         border = dataframe[dataframe.cluster == (prev_candle.cluster - 1)].close.min()
-    #         if border > stop:
-    #             trade.set_custom_data(key='stop', value=border)
+        if current_profit > 0.147:
+            return stoploss_from_absolute(
+                trade.open_rate * side * (1 + 0.126),
+                current_rate,
+                is_short=trade.is_short,
+                leverage=trade.leverage
+            )
         
-    #     return stoploss_from_absolute(
-    #         stop,
-    #         current_rate,
-    #         is_short=trade.is_short,
-    #         leverage=trade.leverage
-    #     )
+        if current_profit > 0.126:
+            return stoploss_from_absolute(
+                trade.open_rate * side * (1 + 0.021),
+                current_rate,
+                is_short=trade.is_short,
+                leverage=trade.leverage
+            )
 
+        if current_profit > 0.021:
+            return stoploss_from_absolute(
+                trade.open_rate * side * (1 + 0.01),
+                current_rate,
+                is_short=trade.is_short,
+                leverage=trade.leverage
+            )
+        
+        if current_profit > 0.01:
+            return stoploss_from_absolute(
+                trade.open_rate * side * (1 + trade.fee_open),
+                current_rate,
+                is_short=trade.is_short,
+                leverage=trade.leverage
+            )
 
     # def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
 
