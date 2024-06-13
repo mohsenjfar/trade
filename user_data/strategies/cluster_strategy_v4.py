@@ -119,7 +119,15 @@ class ClusterStrategyV4(IStrategy):
     #     stake = self.position_size(max_stake, abs(self.stoploss), min_stake)
 
     #     return stake
-    
+
+    def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
+                            time_in_force: str, current_time: datetime, entry_tag: Optional[str],
+                            side: str, **kwargs) -> bool:
+
+        trades = Trade.get_trades_proxy(pair=pair, is_open=False)
+        if trades:
+            return trades[-1].is_short != (side == 'short')
+
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
@@ -128,30 +136,6 @@ class ClusterStrategyV4(IStrategy):
         #     api.update_task(trade, current_time)
 
         side = -1 if trade.is_short else 1
-
-        if current_profit > 0.147:
-            return stoploss_from_absolute(
-                trade.open_rate * side * (1 + 0.126),
-                current_rate,
-                is_short=trade.is_short,
-                leverage=trade.leverage
-            )
-        
-        if current_profit > 0.126:
-            return stoploss_from_absolute(
-                trade.open_rate * side * (1 + 0.021),
-                current_rate,
-                is_short=trade.is_short,
-                leverage=trade.leverage
-            )
-
-        if current_profit > 0.021:
-            return stoploss_from_absolute(
-                trade.open_rate * side * (1 + 0.01),
-                current_rate,
-                is_short=trade.is_short,
-                leverage=trade.leverage
-            )
         
         if current_profit > 0.01:
             return stoploss_from_absolute(
