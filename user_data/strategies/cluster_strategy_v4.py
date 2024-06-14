@@ -1,15 +1,10 @@
 from pandas import DataFrame
 from freqtrade.persistence import Trade
 from sklearn.cluster import KMeans
-from datetime import datetime
-from typing import Optional
+from datetime import datetime, timedelta
 # import api
 
 from freqtrade.strategy import (
-    stoploss_from_absolute,
-    # BooleanParameter,
-    # CategoricalParameter,
-    # DecimalParameter,
     IStrategy,
     IntParameter
 )
@@ -46,7 +41,7 @@ class ClusterStrategyV4(IStrategy):
 
     cluster_timeframe = '1d'
 
-    cluster_size = IntParameter(2, 30, default=6, space="buy")
+    cluster_size = IntParameter(20, 40, default=30, space="buy")
 
     order_types = {
         'entry': 'limit',
@@ -105,8 +100,16 @@ class ClusterStrategyV4(IStrategy):
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         return dataframe
-    
 
+    def custom_exit(self, pair: str, trade: 'Trade', current_time: 'datetime', current_rate: float,
+                    current_profit: float, **kwargs):
+        
+        max_t = max(int(key) for  key in self.minimal_roi)
+        if current_time > trade.open_date + timedelta(minutes=max_t):
+            return "Trade expired!"
+
+        return None
+    
     # def position_size(self, max_stake, risk, min_stake):
     #     return max(max_stake - max_stake * risk * 100 / abs(self.custom_info["total_risk"] * 100), min_stake)
 
@@ -129,22 +132,22 @@ class ClusterStrategyV4(IStrategy):
     #         return trades[-1].is_short != (side == 'short')
     #     return True
 
-    def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
-                        current_rate: float, current_profit: float, after_fill: bool, 
-                        **kwargs) -> Optional[float]:
+    # def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
+    #                     current_rate: float, current_profit: float, after_fill: bool, 
+    #                     **kwargs) -> Optional[float]:
 
-        # if self.dp.runmode.value in ('live'):
-        #     api.update_task(trade, current_time)
+    #     # if self.dp.runmode.value in ('live'):
+    #     #     api.update_task(trade, current_time)
 
-        side = -1 if trade.is_short else 1
+    #     side = -1 if trade.is_short else 1
         
-        if current_profit > 0.01:
-            return stoploss_from_absolute(
-                trade.open_rate * side * (1 + trade.fee_open),
-                current_rate,
-                is_short=trade.is_short,
-                leverage=trade.leverage
-            )
+    #     if current_profit > 0.01:
+    #         return stoploss_from_absolute(
+    #             trade.open_rate * (1 + side * (trade.fee_open + trade.fee_close)),
+    #             current_rate,
+    #             is_short=trade.is_short,
+    #             leverage=trade.leverage
+    #         )
 
     # def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
 
