@@ -120,13 +120,14 @@ class ClusterStrategyV4(IStrategy):
 
     #     return stake
 
-    def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
-                            time_in_force: str, current_time: datetime, entry_tag: Optional[str],
-                            side: str, **kwargs) -> bool:
+    # def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
+    #                         time_in_force: str, current_time: datetime, entry_tag: Optional[str],
+    #                         side: str, **kwargs) -> bool:
 
-        trades = Trade.get_trades_proxy(pair=pair, is_open=False)
-        if trades:
-            return trades[-1].is_short != (side == 'short')
+    #     trades = Trade.get_trades_proxy(pair=pair, is_open=False)
+    #     if trades:
+    #         return trades[-1].is_short != (side == 'short')
+    #     return True
 
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
                         current_rate: float, current_profit: float, after_fill: bool, 
