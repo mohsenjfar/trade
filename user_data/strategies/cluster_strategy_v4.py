@@ -101,14 +101,14 @@ class ClusterStrategyV4(IStrategy):
 
         return dataframe
 
-    def custom_exit(self, pair: str, trade: 'Trade', current_time: 'datetime', current_rate: float,
-                    current_profit: float, **kwargs):
+    # def custom_exit(self, pair: str, trade: 'Trade', current_time: 'datetime', current_rate: float,
+    #                 current_profit: float, **kwargs):
         
-        max_t = max(int(key) for  key in self.minimal_roi)
-        if current_time > trade.open_date + timedelta(minutes=max_t):
-            return "Trade expired!"
+    #     max_t = max(int(key) for  key in self.minimal_roi)
+    #     if (current_time > trade.open_date + timedelta(minutes=max_t)) and current_profit < 0:
+    #         return "Trade expired!"
 
-        return None
+    #     return None
     
     # def position_size(self, max_stake, risk, min_stake):
     #     return max(max_stake - max_stake * risk * 100 / abs(self.custom_info["total_risk"] * 100), min_stake)
