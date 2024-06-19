@@ -1,17 +1,24 @@
 #!/bin/bash
 
-config=user_data/cluster_strategy_v4_config.json
-log_file=user_data/hyperopt.log
-strat=ClusterStrategyV4
+config=user_data/cluster_strategy_v5_config.json
+log_file=user_data/hyperopt_.log
+strat=ClusterStrategyV5
+model=XGBoostClassifier
+range=20240501-
+loss=ShortTradeDurHyperOptLoss
+spaces="buy stoploss roi"
+timeframes="5m 1h"
 
-freqtrade download-data -c $config -t 1h 15m
+freqtrade download-data -c $config -t $timeframes
 
 for i in {1..10};
 do
     echo "---------------------------------------- Period #${i} `date` ----------------------------------------" >> $log_file
-    freqtrade hyperopt -c $config -s $strat --timerange 20240501- --hyperopt-loss ShortTradeDurHyperOptLoss --spaces buy stoploss roi -e 1000 >> $log_file
-    freqtrade backtesting -c $config -s $strat --timerange 20240501- >> $log_file
+    freqtrade hyperopt -c $config -s $strat --timerange $range --hyperopt-loss $loss --spaces $spaces -e 1000 >> $log_file
+    freqtrade backtesting -c $config -s $strat --timerange $range  >> $log_file
 done
 
 # ShortTradeDurHyperOptLoss
 # SharpeHyperOptLossDaily
+# freqtrade hyperopt -c $config -s $strat --freqaimodel $model --timerange $range --hyperopt-loss $loss --spaces $spaces -e 1000 >> $log_file
+# freqtrade backtesting -c $config -s $strat --freqaimodel $model --timerange $range  >> $log_file

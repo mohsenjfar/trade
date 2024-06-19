@@ -2,17 +2,16 @@ from pandas import DataFrame
 from freqtrade.persistence import Trade
 from sklearn.cluster import KMeans
 from datetime import datetime, timedelta
+import numpy as np
+from typing import Optional, Dict
+from technical import qtpylib
+import talib.abstract as ta
 # import api
 
 from freqtrade.strategy import (
     IStrategy,
     IntParameter
 )
-
-# server_url = 'http://127.0.0.1:8080'
-# username = ''
-# password = "a88923695f80935a17b99e51df8275bc3440b92defa52106c0cea26ca1bf1ce1"
-# client = FtRestClient(server_url, username, password)
 
 class ClusterStrategyV4(IStrategy):
     
@@ -83,14 +82,14 @@ class ClusterStrategyV4(IStrategy):
 
         dataframe.loc[
             (
-                dataframe[f'cluster_{self.cluster_size.value}'].shift(1) < dataframe[f'cluster_{self.cluster_size.value}']
+                (dataframe[f'cluster_{self.cluster_size.value}'].shift(1) < dataframe[f'cluster_{self.cluster_size.value}'])
             ),
             'enter_long'
         ] = 1
 
         dataframe.loc[
             (
-                dataframe[f'cluster_{self.cluster_size.value}'].shift(1) > dataframe[f'cluster_{self.cluster_size.value}']
+                (dataframe[f'cluster_{self.cluster_size.value}'].shift(1) > dataframe[f'cluster_{self.cluster_size.value}'])
             ),
             'enter_short'
         ] = 1
@@ -104,50 +103,19 @@ class ClusterStrategyV4(IStrategy):
     # def custom_exit(self, pair: str, trade: 'Trade', current_time: 'datetime', current_rate: float,
     #                 current_profit: float, **kwargs):
         
-    #     max_t = max(int(key) for  key in self.minimal_roi)
-    #     if (current_time > trade.open_date + timedelta(minutes=max_t)) and current_profit < 0:
+    #     if (current_time > trade.open_date + timedelta(hours=3)) and current_profit < 0:
     #         return "Trade expired!"
 
     #     return None
-    
-    # def position_size(self, max_stake, risk, min_stake):
-    #     return max(max_stake - max_stake * risk * 100 / abs(self.custom_info["total_risk"] * 100), min_stake)
 
-    # def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
-    #                         proposed_stake: float, min_stake: Optional[float], max_stake: float,
-    #                         leverage: float, entry_tag: Optional[str], side: str,
-    #                         **kwargs) -> float:
-
-
-    #     stake = self.position_size(max_stake, abs(self.stoploss), min_stake)
-
-    #     return stake
-
-    # def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
-    #                         time_in_force: str, current_time: datetime, entry_tag: Optional[str],
-    #                         side: str, **kwargs) -> bool:
-
-    #     trades = Trade.get_trades_proxy(pair=pair, is_open=False)
-    #     if trades:
-    #         return trades[-1].is_short != (side == 'short')
-    #     return True
 
     # def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
     #                     current_rate: float, current_profit: float, after_fill: bool, 
     #                     **kwargs) -> Optional[float]:
 
-    #     # if self.dp.runmode.value in ('live'):
-    #     #     api.update_task(trade, current_time)
+    #     if self.dp.runmode.value in ('live'):
+    #         api.update_task(trade, current_time)
 
-    #     side = -1 if trade.is_short else 1
-        
-    #     if current_profit > 0.01:
-    #         return stoploss_from_absolute(
-    #             trade.open_rate * (1 + side * (trade.fee_open + trade.fee_close)),
-    #             current_rate,
-    #             is_short=trade.is_short,
-    #             leverage=trade.leverage
-    #         )
 
     # def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
 

@@ -32,9 +32,9 @@ class FreqaiExampleHybridStrategy(IStrategy):
         "identifier": "uniqe-id",
         "feature_parameters": {
             "include_timeframes": [
-                "3m",
                 "15m",
-                "1h"
+                "1h",
+                "1d",
             ],
             "include_corr_pairlist": [
                 "BTC/USDT",
@@ -98,29 +98,6 @@ class FreqaiExampleHybridStrategy(IStrategy):
 
     def feature_engineering_expand_all(self, dataframe: DataFrame, period: int,
                                        metadata: Dict, **kwargs) -> DataFrame:
-        """
-        *Only functional with FreqAI enabled strategies*
-        This function will automatically expand the defined features on the config defined
-        `indicator_periods_candles`, `include_timeframes`, `include_shifted_candles`, and
-        `include_corr_pairs`. In other words, a single feature defined in this function
-        will automatically expand to a total of
-        `indicator_periods_candles` * `include_timeframes` * `include_shifted_candles` *
-        `include_corr_pairs` numbers of features added to the model.
-
-        All features must be prepended with `%` to be recognized by FreqAI internals.
-
-        More details on how these config defined parameters accelerate feature engineering
-        in the documentation at:
-
-        https://www.freqtrade.io/en/latest/freqai-parameter-table/#feature-parameters
-
-        https://www.freqtrade.io/en/latest/freqai-feature-engineering/#defining-the-features
-
-        :param dataframe: strategy dataframe which will receive the features
-        :param period: period of the indicator - usage example:
-        :param metadata: metadata of current pair
-        dataframe["%-ema-period"] = ta.EMA(dataframe, timeperiod=period)
-        """
 
         dataframe["%-rsi-period"] = ta.RSI(dataframe, timeperiod=period)
         dataframe["%-mfi-period"] = ta.MFI(dataframe, timeperiod=period)
@@ -151,98 +128,33 @@ class FreqaiExampleHybridStrategy(IStrategy):
 
         return dataframe
 
-    def feature_engineering_expand_basic(
-            self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
-        """
-        *Only functional with FreqAI enabled strategies*
-        This function will automatically expand the defined features on the config defined
-        `include_timeframes`, `include_shifted_candles`, and `include_corr_pairs`.
-        In other words, a single feature defined in this function
-        will automatically expand to a total of
-        `include_timeframes` * `include_shifted_candles` * `include_corr_pairs`
-        numbers of features added to the model.
+    def feature_engineering_expand_basic(self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
 
-        Features defined here will *not* be automatically duplicated on user defined
-        `indicator_periods_candles`
-
-        All features must be prepended with `%` to be recognized by FreqAI internals.
-
-        More details on how these config defined parameters accelerate feature engineering
-        in the documentation at:
-
-        https://www.freqtrade.io/en/latest/freqai-parameter-table/#feature-parameters
-
-        https://www.freqtrade.io/en/latest/freqai-feature-engineering/#defining-the-features
-
-        :param dataframe: strategy dataframe which will receive the features
-        :param metadata: metadata of current pair
-        dataframe["%-pct-change"] = dataframe["close"].pct_change()
-        dataframe["%-ema-200"] = ta.EMA(dataframe, timeperiod=200)
-        """
         dataframe["%-pct-change"] = dataframe["close"].pct_change()
         dataframe["%-raw_volume"] = dataframe["volume"]
         dataframe["%-raw_price"] = dataframe["close"]
+
         return dataframe
 
-    def feature_engineering_standard(
-            self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
-        """
-        *Only functional with FreqAI enabled strategies*
-        This optional function will be called once with the dataframe of the base timeframe.
-        This is the final function to be called, which means that the dataframe entering this
-        function will contain all the features and columns created by all other
-        freqai_feature_engineering_* functions.
+    def feature_engineering_standard(self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
 
-        This function is a good place to do custom exotic feature extractions (e.g. tsfresh).
-        This function is a good place for any feature that should not be auto-expanded upon
-        (e.g. day of the week).
-
-        All features must be prepended with `%` to be recognized by FreqAI internals.
-
-        More details about feature engineering available:
-
-        https://www.freqtrade.io/en/latest/freqai-feature-engineering
-
-        :param dataframe: strategy dataframe which will receive the features
-        :param metadata: metadata of current pair
-        usage example: dataframe["%-day_of_week"] = (dataframe["date"].dt.dayofweek + 1) / 7
-        """
         dataframe["%-day_of_week"] = dataframe["date"].dt.dayofweek
         dataframe["%-hour_of_day"] = dataframe["date"].dt.hour
         return dataframe
 
     def set_freqai_targets(self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
-        """
-        *Only functional with FreqAI enabled strategies*
-        Required function to set the targets for the model.
-        All targets must be prepended with `&` to be recognized by the FreqAI internals.
 
-        More details about feature engineering available:
-
-        https://www.freqtrade.io/en/latest/freqai-feature-engineering
-
-        :param dataframe: strategy dataframe which will receive the targets
-        :param metadata: metadata of current pair
-        usage example: dataframe["&-target"] = dataframe["close"].shift(-1) / dataframe["close"]
-        """
         self.freqai.class_names = ["down", "up"]
-        dataframe['&s-up_or_down'] = np.where(dataframe["close"].shift(-50) >
-                                              dataframe["close"], 'up', 'down')
+        dataframe['&s-up_or_down'] = np.where(dataframe["close"].shift(-5) > dataframe["close"], 'up', 'down')
 
         return dataframe
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:  # noqa: C901
 
-        # User creates their own custom strat here. Present example is a supertrend
-        # based strategy.
-
         dataframe = self.freqai.start(dataframe, metadata, self)
 
-        # TA indicators to combine with the Freqai targets
-        # RSI
         dataframe['rsi'] = ta.RSI(dataframe)
 
-        # Bollinger Bands
         bollinger = qtpylib.bollinger_bands(qtpylib.typical_price(dataframe), window=20, stds=2)
         dataframe['bb_lowerband'] = bollinger['lower']
         dataframe['bb_middleband'] = bollinger['mid']
@@ -255,7 +167,6 @@ class FreqaiExampleHybridStrategy(IStrategy):
             (dataframe["bb_upperband"] - dataframe["bb_lowerband"]) / dataframe["bb_middleband"]
         )
 
-        # TEMA - Triple Exponential Moving Average
         dataframe['tema'] = ta.TEMA(dataframe, timeperiod=9)
 
         return dataframe
