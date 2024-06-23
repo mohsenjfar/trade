@@ -32,7 +32,7 @@ class ClusterStrategyV5(IStrategy):
 
     stoploss = -0.02
 
-    timeframe = '15m'
+    timeframe = '1h'
 
     use_exit_signal = True
 
@@ -88,6 +88,7 @@ class ClusterStrategyV5(IStrategy):
             ),
             'enter_short'
         ] = 1
+        Trade.calculate_profit()
 
         return dataframe
 
@@ -111,14 +112,17 @@ class ClusterStrategyV5(IStrategy):
                             time_in_force: str, current_time: datetime, entry_tag: Optional[str],
                             side: str, **kwargs) -> bool:
 
+        total_stake = self.wallets.get_total_stake_amount()
         today_trades = Trade.get_trades_proxy(open_date = date.today())
-        today_profit = sum(trade.close_profit * (trade.stake_amount / trade.get_custom_data(key='max_stake'))  for trade in today_trades)
+        today_close_profit_abs = sum(trade.close_profit_abs for trade in today_trades)
+        today_profit = today_close_profit_abs / total_stake
 
         week_day = date.weekday(date.today())
         this_week_trades = Trade.get_trades_proxy(open_date = date.today() - timedelta(days=week_day))
-        this_week_profit = sum(trade.close_profit * (trade.stake_amount / trade.get_custom_data(key='max_stake'))  for trade in this_week_trades)
+        this_close_profit_abs= sum(trade.close_profit_abs  for trade in this_week_trades)
+        this_week_profit = this_close_profit_abs / total_stake
 
-        if (today_profit <= self.custom_info['total_daily_risk']):
+        if today_profit <= self.custom_info['total_daily_risk']:
             if self.custom_info.get('max_day_not_notified'):
                 self.dp.send_msg(f"Max day's loss ({today_profit:.2f}) is reached, stop trade entry ...")
                 self.custom_info['max_day_not_notified'] = False
@@ -178,5 +182,5 @@ class ClusterStrategyV5(IStrategy):
     
     def bot_start(self, **kwargs) -> None:
         if self.dp.runmode.value in ('live'):
-            res = api.create_parent(__class__.__name__)
-            self.dp.send_msg(f"Parent {res.get('title')} created")
+            total_stake = self.wallets.get_total_stake_amount()
+            self.dp.send_msg(api.create_parent(__class__.__name__, total_stake))

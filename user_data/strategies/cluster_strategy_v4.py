@@ -14,15 +14,6 @@ from freqtrade.strategy import (
 )
 
 class ClusterStrategyV4(IStrategy):
-    
-    ''' Specs:
-    - Use 4h timeframe as cluster timeframe using 3m candles
-    - Use 1m timeframe as main timeframe
-    - Split cluster timeframe into 6 clusters
-    - Enter long when price crosses above max price (the highest cluster border)
-    - Enter short when price crosses below min price (the lowest cluster border)
-    - Trail from second custer border 
-    '''
 
     INTERFACE_VERSION = 3
 

@@ -1,5 +1,5 @@
 {
-  "strategy_name": "ClusterStrategyV4",
+  "strategy_name": "ClusterStrategyV6",
   "params": {
     "trailing": {
       "trailing_stop": false,
@@ -11,20 +11,24 @@
       "max_open_trades": 1
     },
     "buy": {
-      "cluster_size": 28
+      "buy_params_long": 37,
+      "buy_params_short": 51
     },
-    "sell": {},
+    "sell": {
+      "sell_params_long": 99,
+      "sell_params_short": 3
+    },
     "protection": {},
     "roi": {
-      "0": 0.178,
-      "69": 0.056,
-      "215": 0.037,
-      "462": 0
+      "0": 0.5169999999999999,
+      "201": 0.235,
+      "616": 0.078,
+      "1475": 0
     },
     "stoploss": {
-      "stoploss": -0.302
+      "stoploss": -0.202
     }
   },
   "ft_stratparam_v": 1,
-  "export_time": "2024-06-22 19:08:49.745967+00:00"
+  "export_time": "2024-06-19 22:48:54.613913+00:00"
 }

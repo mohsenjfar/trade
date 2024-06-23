@@ -3,15 +3,29 @@ from datetime import datetime
 
 base_url = "http://localhost:8000"
 
-def create_parent(title):
+def create_parent(title, initial_stake):
     url = f"{base_url}/parent"
     data = {
         'title': title
     }
-    res = requests.post(url=f"{url}/filter/", data=data)
-    if res.status_code == 400:
-        return requests.post(url=f"{url}/", data=data).json()
-    return res.json()[0]
+    parent = requests.post(url=f"{url}/filter/", data=data)
+    if parent.status_code == 400:
+        parent = requests.post(url=f"{url}/", data=data).json()
+        data = {
+            "parent": parent.get('url'),
+            "summary": f"{parent.get('title')}",
+            "start": datetime.now(),
+            "due": datetime.now()
+        }
+        task = requests.post(f"{base_url}/tasks/", data=data).json()
+        url = f'{base_url}/tasks/{task.get('id')}/log_update/'
+        data = {
+            "due": datetime.now(),
+            "profit": initial_stake
+        }
+        requests.post(url, data=data)
+        return f"{parent.get('title')} was created with total stake amount of {initial_stake}"
+    return f"{title} already exists"
 
 def complete(trade):
     url = f'{base_url}/tasks/{trade.get_custom_data(key="task_id")}/complete/'
