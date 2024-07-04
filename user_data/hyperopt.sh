@@ -3,7 +3,7 @@
 config="user_data/cluster_strategy_v4_config.json"
 log_file="user_data/hyperopt.log"
 strat="ClusterStrategyV4"
-range="20240313-"
+range="20240413-"
 loss="ShortTradeDurHyperOptLoss"
 spaces="buy roi stoploss"
 timeframes="15m 1h"
