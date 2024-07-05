@@ -6,7 +6,7 @@ strat="ClusterStrategyV4"
 range="20240413-"
 loss="ShortTradeDurHyperOptLoss"
 spaces="buy roi stoploss"
-timeframes="15m 1h"
+timeframes="15m 1h 5m"
 
 freqtrade download-data -c $config -t $timeframes
 
