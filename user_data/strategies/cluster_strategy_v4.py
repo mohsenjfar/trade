@@ -7,7 +7,8 @@ from typing import Optional
 from datetime import datetime, timedelta
 from freqtrade.strategy import (
     IStrategy,
-    stoploss_from_open
+    stoploss_from_open,
+    stoploss_from_absolute
 )
 
 class ClusterStrategyV4(IStrategy):
@@ -16,9 +17,9 @@ class ClusterStrategyV4(IStrategy):
 
     can_short: bool = True
 
-    stoploss = -0.01
+    stoploss = -0.05
 
-    timeframe = '15m'
+    timeframe = '5m'
 
     use_exit_signal = True
 
@@ -38,9 +39,19 @@ class ClusterStrategyV4(IStrategy):
         'exit': 'GTC'
     }
 
-    custom_info = {
-        'max_consecutive_loss_notified': False
-    }
+    @property
+    def protections(self):
+        return [
+            {
+                "method": "StoplossGuard",
+                "lookback_period_candles": 288,
+                "trade_limit": 1,
+                "stop_duration_candles": 288,
+                "required_profit": 0.0,
+                "only_per_pair": True,
+                "only_per_side": False
+            }
+        ]
 
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
@@ -81,46 +92,58 @@ class ClusterStrategyV4(IStrategy):
 
     def custom_exit(self, pair: str, trade: Trade, current_time: datetime, current_rate: float, current_profit: float, **kwargs) -> str | bool | None:
         
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        last_candle = dataframe.iloc[-1].squeeze()
+        # dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        # last_candle = dataframe.iloc[-1].squeeze()
 
-        conditions_1 = (
-            (last_candle['close'] > last_candle['sma_300']),
-            trade.is_short,
-            current_profit > 0.02
-        )
+        # conditions_1 = (
+        #     (last_candle['close'] > last_candle['sma_300']),
+        #     trade.is_short,
+        #     current_profit > 2 * abs(self.stoploss)
+        # )
 
-        conditions_2 = (
-            (last_candle['close'] < last_candle['sma_300']),
-            not trade.is_short,
-            current_profit > 0.02
-        )
+        # conditions_2 = (
+        #     (last_candle['close'] < last_candle['sma_300']),
+        #     not trade.is_short,
+        #     current_profit > 2 * abs(self.stoploss)
+        # )
 
-        if all(conditions_1) or all(conditions_2):
-            return "Opposite direction target hit!"
+        # if all(conditions_1) or all(conditions_2):
+        #     return "Opposite direction target hit!"
+
+        if current_profit > 0.01:
+            return "Target hit!"
 
         return None
 
 
-    def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
-                        current_rate: float, current_profit: float, after_fill: bool, 
-                        **kwargs) -> Optional[float]:
+    # def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
+    #                     current_rate: float, current_profit: float, after_fill: bool, 
+    #                     **kwargs) -> Optional[float]:
         
-        if current_profit > 0.1:
-            return 0.05
+    #     # if current_profit > 10 * abs(self.stoploss):
+    #     #     return 5 * abs(self.stoploss)
         
-        if current_profit > 0.05:
-            return stoploss_from_open(
-                0.02,
-                current_profit,
-                is_short=trade.is_short,
-                leverage=trade.leverage
-            )
+    #     # if current_profit > 5 * abs(self.stoploss):
+    #     #     return stoploss_from_open(
+    #     #         2 * abs(self.stoploss),
+    #     #         current_profit,
+    #     #         is_short=trade.is_short,
+    #     #         leverage=trade.leverage
+    #     #     )
 
+    #     # if current_profit > 2 * abs(self.stoploss):
+    #     #     return stoploss_from_absolute(
+    #     #         trade.open_rate,
+    #     #         current_rate,
+    #     #         is_short=trade.is_short,
+    #     #         leverage=trade.leverage
+    #     #     )
 
-    def bot_loop_start(self, **kwargs) -> None:
-        
-        pairs = self.dp.current_whitelist()
-        for pair in pairs:
-            if self.is_pair_locked(pair):
-                self.unlock_pair(pair)
+    #     if current_profit > 2 * abs(self.stoploss):
+    #         return stoploss_from_open(
+    #             2 * abs(self.stoploss),
+    #             current_profit,
+    #             is_short=trade.is_short,
+    #             leverage=trade.leverage
+    #         )
+    #     return -0.01
