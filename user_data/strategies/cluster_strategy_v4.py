@@ -17,7 +17,7 @@ class ClusterStrategyV4(IStrategy):
 
     can_short: bool = True
 
-    stoploss = -0.05
+    stoploss = -0.04
 
     timeframe = '5m'
 
@@ -44,9 +44,9 @@ class ClusterStrategyV4(IStrategy):
         return [
             {
                 "method": "StoplossGuard",
-                "lookback_period_candles": 288,
+                "lookback_period_candles": 2,
                 "trade_limit": 1,
-                "stop_duration_candles": 288,
+                "stop_duration_candles": 50,
                 "required_profit": 0.0,
                 "only_per_pair": True,
                 "only_per_side": False
@@ -88,62 +88,12 @@ class ClusterStrategyV4(IStrategy):
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         return dataframe
-    
 
-    def custom_exit(self, pair: str, trade: Trade, current_time: datetime, current_rate: float, current_profit: float, **kwargs) -> str | bool | None:
-        
-        # dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        # last_candle = dataframe.iloc[-1].squeeze()
 
-        # conditions_1 = (
-        #     (last_candle['close'] > last_candle['sma_300']),
-        #     trade.is_short,
-        #     current_profit > 2 * abs(self.stoploss)
-        # )
-
-        # conditions_2 = (
-        #     (last_candle['close'] < last_candle['sma_300']),
-        #     not trade.is_short,
-        #     current_profit > 2 * abs(self.stoploss)
-        # )
-
-        # if all(conditions_1) or all(conditions_2):
-        #     return "Opposite direction target hit!"
+    def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
+                        current_rate: float, current_profit: float, after_fill: bool, 
+                        **kwargs) -> Optional[float]:
 
         if current_profit > 0.01:
-            return "Target hit!"
-
-        return None
-
-
-    # def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
-    #                     current_rate: float, current_profit: float, after_fill: bool, 
-    #                     **kwargs) -> Optional[float]:
-        
-    #     # if current_profit > 10 * abs(self.stoploss):
-    #     #     return 5 * abs(self.stoploss)
-        
-    #     # if current_profit > 5 * abs(self.stoploss):
-    #     #     return stoploss_from_open(
-    #     #         2 * abs(self.stoploss),
-    #     #         current_profit,
-    #     #         is_short=trade.is_short,
-    #     #         leverage=trade.leverage
-    #     #     )
-
-    #     # if current_profit > 2 * abs(self.stoploss):
-    #     #     return stoploss_from_absolute(
-    #     #         trade.open_rate,
-    #     #         current_rate,
-    #     #         is_short=trade.is_short,
-    #     #         leverage=trade.leverage
-    #     #     )
-
-    #     if current_profit > 2 * abs(self.stoploss):
-    #         return stoploss_from_open(
-    #             2 * abs(self.stoploss),
-    #             current_profit,
-    #             is_short=trade.is_short,
-    #             leverage=trade.leverage
-    #         )
-    #     return -0.01
+            return -0.005
+        return -1
