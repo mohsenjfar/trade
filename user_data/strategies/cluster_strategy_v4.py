@@ -17,7 +17,7 @@ class ClusterStrategyV4(IStrategy):
 
     can_short: bool = True
 
-    stoploss = -0.04
+    stoploss = -0.05
 
     timeframe = '5m'
 
@@ -38,20 +38,6 @@ class ClusterStrategyV4(IStrategy):
         'entry': 'GTC',
         'exit': 'GTC'
     }
-
-    @property
-    def protections(self):
-        return [
-            {
-                "method": "StoplossGuard",
-                "lookback_period_candles": 2,
-                "trade_limit": 1,
-                "stop_duration_candles": 50,
-                "required_profit": 0.0,
-                "only_per_pair": True,
-                "only_per_side": False
-            }
-        ]
 
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
@@ -89,11 +75,24 @@ class ClusterStrategyV4(IStrategy):
 
         return dataframe
 
+    # def custom_exit(self, pair: str, trade: Trade, current_time: datetime, current_rate: float, current_profit: float, **kwargs) -> str:
+        
+    #     if current_profit > 2 * abs(self.stoploss):
+    #         return 'Target Hit'
 
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
+        
+        if current_profit > 0.1:
+            return 0.03
 
-        if current_profit > 0.01:
-            return -0.005
-        return -1
+        return None
+
+
+    def bot_loop_start(self, current_time: datetime, **kwargs) -> None:
+
+        pairs = self.dp.current_whitelist()
+        for pair in pairs:
+            if self.is_pair_locked(pair):
+                self.unlock_pair(pair)
