@@ -1,40 +1,40 @@
 ---
 version: '3'
 services:
-  ClusterStrategyV4:
+  AgileStrategy:
       image: freqtradeorg/freqtrade:develop_freqai
       restart: unless-stopped
-      container_name: ClusterStrategyV4
+      container_name: AgileStrategy
       volumes:
         - "./user_data:/freqtrade/user_data"
       command: >
         trade
-        --logfile /freqtrade/user_data/logs/ClusterStrategyV4.log
-        --db-url sqlite:////freqtrade/user_data/tradesv3_ClusterStrategyV4.sqlite
-        --config /freqtrade/user_data/cluster_strategy_v4_config.json
-        --strategy ClusterStrategyV4
-  ClusterStrategyV5:
-      image: freqtradeorg/freqtrade:develop_freqai
-      restart: unless-stopped
-      container_name: ClusterStrategyV5
-      volumes:
-        - "./user_data:/freqtrade/user_data"
-      command: >
-        trade
-        --logfile /freqtrade/user_data/logs/ClusterStrategyV5.log
-        --db-url sqlite:////freqtrade/user_data/tradesv3_ClusterStrategyV5.sqlite
-        --config /freqtrade/user_data/cluster_strategy_v5_config.json
-        --strategy ClusterStrategyV5
-  RLStrategy:
-      image: freqtradeorg/freqtrade:develop_freqairl
-      restart: unless-stopped
-      container_name: RLStrategy
-      volumes:
-        - "./user_data:/freqtrade/user_data"
-      command: >
-        trade
-        --logfile /freqtrade/user_data/logs/RLStrategy.log
-        --db-url sqlite:////freqtrade/user_data/tradesv3_RLStrategy.sqlite
+        --logfile /freqtrade/user_data/logs/AgileStrategy.log
+        --db-url sqlite:////freqtrade/user_data/tradesv3_AgileStrategy.sqlite
         --config /freqtrade/user_data/config.json
-        --strategy RLStrategy
-        --freqaimodel MyReinforcementLearner
+        --strategy AgileStrategy
+  # ClusterStrategyV5:
+  #     image: freqtradeorg/freqtrade:develop_freqai
+  #     restart: unless-stopped
+  #     container_name: ClusterStrategyV5
+  #     volumes:
+  #       - "./user_data:/freqtrade/user_data"
+  #     command: >
+  #       trade
+  #       --logfile /freqtrade/user_data/logs/ClusterStrategyV5.log
+  #       --db-url sqlite:////freqtrade/user_data/tradesv3_ClusterStrategyV5.sqlite
+  #       --config /freqtrade/user_data/cluster_strategy_v5_config.json
+  #       --strategy ClusterStrategyV5
+  # RLStrategy:
+  #     image: freqtradeorg/freqtrade:develop_freqairl
+  #     restart: unless-stopped
+  #     container_name: RLStrategy
+  #     volumes:
+  #       - "./user_data:/freqtrade/user_data"
+  #     command: >
+  #       trade
+  #       --logfile /freqtrade/user_data/logs/RLStrategy.log
+  #       --db-url sqlite:////freqtrade/user_data/tradesv3_RLStrategy.sqlite
+  #       --config /freqtrade/user_data/config.json
+  #       --strategy RLStrategy
+  #       --freqaimodel MyReinforcementLearner

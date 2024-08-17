@@ -11,7 +11,7 @@ from freqtrade.strategy import (
     stoploss_from_absolute
 )
 
-class ClusterStrategyV4(IStrategy):
+class AgileStrategy(IStrategy):
 
     INTERFACE_VERSION = 3
 
