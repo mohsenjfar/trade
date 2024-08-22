@@ -1,18 +1,19 @@
 ---
 version: '3'
 services:
-  AgileStrategy:
+  MainStrategy:
       image: freqtradeorg/freqtrade:develop_freqai
       restart: unless-stopped
-      container_name: AgileStrategy
+      container_name: MainStrategy
       volumes:
         - "./user_data:/freqtrade/user_data"
       command: >
         trade
-        --logfile /freqtrade/user_data/logs/AgileStrategy.log
-        --db-url sqlite:////freqtrade/user_data/tradesv3_AgileStrategy.sqlite
+        --logfile /freqtrade/user_data/logs/MainStrategy.log
+        --db-url sqlite:////freqtrade/user_data/tradesv3_MainStrategy.sqlite
         --config /freqtrade/user_data/config.json
-        --strategy AgileStrategy
+        --strategy MainStrategy
+        --freqaimodel XGBoostClassifier
   # ClusterStrategyV5:
   #     image: freqtradeorg/freqtrade:develop_freqai
   #     restart: unless-stopped

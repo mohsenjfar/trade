@@ -1,12 +1,10 @@
 from datetime import datetime
 from pandas import DataFrame
 from freqtrade.persistence import Trade
-from freqtrade.data.btanalysis import load_trades_from_db
 # import api
 import talib.abstract as ta
 from typing import Optional
 from datetime import datetime, timedelta
-import pandas as pd
 from freqtrade.strategy import (
     IStrategy,
     stoploss_from_open,
@@ -53,22 +51,22 @@ class AgileStrategy(IStrategy):
 
         trades = Trade.get_trades_proxy(pair=metadata['pair'],is_open=False)
 
-        # if trades:
-        #     enter_long = 1 if (trades and trades[-1].is_short) else 0
-        #     enter_short = 0 if (trades and trades[-1].is_short) else 1
-        #     dataframe['enter_long'] = enter_long
-        #     dataframe['enter_short'] = enter_short
-        #     return dataframe
+        if trades:
+            enter_long = 1 if (trades and trades[-1].is_short) else 0
+            enter_short = 0 if (trades and trades[-1].is_short) else 1
+            dataframe['enter_long'] = enter_long
+            dataframe['enter_short'] = enter_short
+            return dataframe
 
         dataframe.loc[
             (dataframe['close'] > dataframe['sma_300']),
             'enter_long'
-        ] = 0
+        ] = 1
 
         dataframe.loc[
             (dataframe['close'] < dataframe['sma_300']),
             'enter_short'
-        ] = 0
+        ] = 1
 
         return dataframe
 
@@ -94,8 +92,7 @@ class AgileStrategy(IStrategy):
 
     def bot_loop_start(self, current_time: datetime, **kwargs) -> None:
 
-        trades = pd.DataFrame(Trade.get_trades_proxy())
-
-        values = [value for value in trades.head(1).values]
-
-        self.dp.send_msg(str(values))
+        pairs = self.dp.current_whitelist()
+        for pair in pairs:
+            if self.is_pair_locked(pair):
+                self.unlock_pair(pair)
