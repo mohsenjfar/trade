@@ -1,5 +1,5 @@
 {
-  "max_open_trades": 1,
+  "max_open_trades": 2,
   "stake_currency": "USDT",
   "stake_amount": "unlimited",
   "tradable_balance_ratio": 0.99,
@@ -10,8 +10,8 @@
   "trading_mode": "futures",
   "margin_mode": "isolated",
   "unfilledtimeout": {
-    "entry": 1,
-    "exit": 1,
+    "entry": 10,
+    "exit": 10,
     "exit_timeout_count": 0,
     "unit": "minutes"
   },
@@ -37,10 +37,8 @@
     "key": "",
     "secret": "",
     "pair_whitelist": [
-      "WIF/USDT:USDT"
-      // "RSR/USDT:USDT",
-      // "GMT/USDT:USDT",
-      // "XAI/USDT:USDT"
+      "WIF/USDT:USDT",
+      "GMT/USDT:USDT"
     ],
     "pair_blacklist": []
   },
@@ -54,10 +52,9 @@
     "token": "",
     "chat_id": "",
     "keyboard": [
-        ["/daily","/stop","/balance","/profit"],
-        ["/forcelong","/forceshort"],
-        ["/status table","/performance"],
-        ["/reload_config","/logs"]
+        ["/status table","/status","/reload_config"],
+        ["/forcelong","/forceshort", "/forceexit"],
+        ["/stop", "/start", "/help" ]
     ]
   },
   "freqai": {

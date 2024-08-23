@@ -8,6 +8,7 @@ import talib.abstract as ta
 import pandas as pd
 import numpy as np
 from typing import Dict
+from freqtrade.exchange import timeframe_to_prev_date
 
 from freqtrade.strategy import (
     IStrategy,
@@ -47,6 +48,20 @@ class MainStrategy(IStrategy):
         'max_day_not_notified': True,
         'max_week_not_notified': True
     }
+
+    @property
+    def protections(self):
+        return [
+            {
+                "method": "StoplossGuard",
+                "lookback_period_candles": 96,
+                "trade_limit": 2,
+                "stop_duration_candles": 96,
+                "required_profit": 0.0,
+                "only_per_pair": False,
+                "only_per_side": False
+            }
+        ]
 
     buy_rsi = IntParameter(low=1, high=50, default=30, space='buy', optimize=True, load=True)
     short_rsi = IntParameter(low=51, high=100, default=70, space='sell', optimize=True, load=True)
@@ -132,6 +147,7 @@ class MainStrategy(IStrategy):
 
         # TEMA - Triple Exponential Moving Average
         dataframe['tema'] = ta.TEMA(dataframe, timeperiod=9)
+        dataframe['atr'] = ta.ATR(dataframe, timeperiod=14)
 
         return dataframe
 
@@ -173,7 +189,7 @@ class MainStrategy(IStrategy):
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         current_candle = dataframe.iloc[-1].squeeze()
-        risk = current_candle.atr / current_rate
+        risk = current_candle['atr'] / current_rate
         return max(max_stake - max_stake * risk / abs(self.stoploss), min_stake)
     
     # def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
@@ -212,6 +228,15 @@ class MainStrategy(IStrategy):
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
+        dataframe, _ = self.dp.get_analyzed_dataframe(
+            pair=pair, timeframe=self.timeframe)
+
+        trade_date = timeframe_to_prev_date(
+            self.timeframe, (trade.open_date_utc -
+                             timedelta(minutes=int(self.timeframe[:-1])))
+        )
+        trade_candle = dataframe.loc[(dataframe["date"] == trade_date)]
+
         if self.dp.runmode.value in ('live'):
             api.update_task(trade, current_time)
 
@@ -225,6 +250,8 @@ class MainStrategy(IStrategy):
                 is_short=trade.is_short,
                 leverage=trade.leverage
             )
+        
+        return trade_candle['atr'] / trade.open_rate
 
 
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
