@@ -237,6 +237,11 @@ class MainStrategy(IStrategy):
         )
         trade_candle = dataframe.loc[(dataframe["date"] == trade_date)]
 
+        if trade_candle.empty:
+            return None
+
+        trade_candle = trade_candle.squeeze()
+
         if self.dp.runmode.value in ('live'):
             api.update_task(trade, current_time)
 
@@ -250,8 +255,10 @@ class MainStrategy(IStrategy):
                 is_short=trade.is_short,
                 leverage=trade.leverage
             )
-        
-        return trade_candle['atr'] / trade.open_rate
+
+        risk = trade_candle['atr'] / trade.open_rate
+        if risk >= abs(self.stoploss):
+            return risk
 
 
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
