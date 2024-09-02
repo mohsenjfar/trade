@@ -22,7 +22,7 @@ class MainStrategy(IStrategy):
 
     can_short: bool = True
 
-    stoploss = -0.02
+    stoploss = -0.05
 
     timeframe = '15m'
 
@@ -245,20 +245,20 @@ class MainStrategy(IStrategy):
         if self.dp.runmode.value in ('live'):
             api.update_task(trade, current_time)
 
-        if current_profit > 0.05:
-            return 0.02
+        if current_profit > 0.1:
+            return 0.03
 
-        if current_profit > 0.02:
-            return stoploss_from_absolute(
-                trade.open_rate,
-                current_rate,
-                is_short=trade.is_short,
-                leverage=trade.leverage
-            )
+        # if current_profit > 0.02:
+        #     return stoploss_from_absolute(
+        #         trade.open_rate,
+        #         current_rate,
+        #         is_short=trade.is_short,
+        #         leverage=trade.leverage
+        #     )
 
-        risk = trade_candle['atr'] / trade.open_rate
-        if risk >= abs(self.stoploss):
-            return risk
+        # risk = trade_candle['atr'] / trade.open_rate
+        # if risk >= abs(self.stoploss):
+        #     return risk
 
 
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
