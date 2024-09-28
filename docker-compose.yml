@@ -1,19 +1,19 @@
 ---
 version: '3'
 services:
-  QuickAdapterV35:
-      image: freqtradeorg/freqtrade:develop_freqai
-      restart: unless-stopped
-      container_name: QuickAdapterV35
-      volumes:
-        - "./user_data:/freqtrade/user_data"
-      command: >
-        trade
-        --logfile /freqtrade/user_data/logs/QuickAdapterV35.log
-        --db-url sqlite:////freqtrade/user_data/tradesv3_QuickAdapterV35.sqlite
-        --config /freqtrade/user_data/config_xgboost.json
-        --strategy QuickAdapterV35
-        --freqaimodel XGBoostRegressorQuickAdapterV35
+  # QuickAdapterV35:
+  #     image: freqtradeorg/freqtrade:develop_freqai
+  #     restart: unless-stopped
+  #     container_name: QuickAdapterV35
+  #     volumes:
+  #       - "./user_data:/freqtrade/user_data"
+  #     command: >
+  #       trade
+  #       --logfile /freqtrade/user_data/logs/QuickAdapterV35.log
+  #       --db-url sqlite:////freqtrade/user_data/tradesv3_QuickAdapterV35.sqlite
+  #       --config /freqtrade/user_data/config_xgboost.json
+  #       --strategy QuickAdapterV35
+  #       --freqaimodel XGBoostRegressorQuickAdapterV35
   # ClusterStrategyV5:
   #     image: freqtradeorg/freqtrade:develop_freqai
   #     restart: unless-stopped
@@ -26,16 +26,17 @@ services:
   #       --db-url sqlite:////freqtrade/user_data/tradesv3_ClusterStrategyV5.sqlite
   #       --config /freqtrade/user_data/cluster_strategy_v5_config.json
   #       --strategy ClusterStrategyV5
-  # RLStrategy:
-  #     image: freqtradeorg/freqtrade:develop_freqairl
-  #     restart: unless-stopped
-  #     container_name: RLStrategy
-  #     volumes:
-  #       - "./user_data:/freqtrade/user_data"
-  #     command: >
-  #       trade
-  #       --logfile /freqtrade/user_data/logs/RLStrategy.log
-  #       --db-url sqlite:////freqtrade/user_data/tradesv3_RLStrategy.sqlite
-  #       --config /freqtrade/user_data/config.json
-  #       --strategy RLStrategy
-  #       --freqaimodel MyReinforcementLearner
+  MainStrategy:
+      # image: freqtradeorg/freqtrade:develop_freqairl
+      image: freqtradeorg/freqtrade:develop_freqai
+      restart: unless-stopped
+      container_name: MainStrategy
+      volumes:
+        - "./user_data:/freqtrade/user_data"
+      command: >
+        trade
+        --logfile /freqtrade/user_data/logs/MainStrategy.log
+        --db-url sqlite:////freqtrade/user_data/MainStrategy.sqlite
+        --config /freqtrade/user_data/config.json
+        --strategy MainStrategy
+        --freqaimodel XGBoostClassifier

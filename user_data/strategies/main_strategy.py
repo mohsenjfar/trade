@@ -55,7 +55,7 @@ class MainStrategy(IStrategy):
             {
                 "method": "StoplossGuard",
                 "lookback_period_candles": 96,
-                "trade_limit": 2,
+                "trade_limit": 1,
                 "stop_duration_candles": 96,
                 "required_profit": 0.0,
                 "only_per_pair": False,
@@ -182,15 +182,15 @@ class MainStrategy(IStrategy):
         return dataframe
 
 
-    def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
-                            proposed_stake: float, min_stake: Optional[float], max_stake: float,
-                            leverage: float, entry_tag: Optional[str], side: str,
-                            **kwargs) -> float:
+    # def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
+    #                         proposed_stake: float, min_stake: Optional[float], max_stake: float,
+    #                         leverage: float, entry_tag: Optional[str], side: str,
+    #                         **kwargs) -> float:
 
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        current_candle = dataframe.iloc[-1].squeeze()
-        risk = current_candle['atr'] / current_rate
-        return max(max_stake - max_stake * risk / abs(self.stoploss), min_stake)
+    #     dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+    #     current_candle = dataframe.iloc[-1].squeeze()
+    #     risk = current_candle['atr'] / current_rate
+    #     return max(max_stake - max_stake * risk / abs(self.stoploss), min_stake)
     
     # def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
     #                         time_in_force: str, current_time: datetime, entry_tag: Optional[str],
@@ -228,33 +228,33 @@ class MainStrategy(IStrategy):
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
-        dataframe, _ = self.dp.get_analyzed_dataframe(
-            pair=pair, timeframe=self.timeframe)
+        # dataframe, _ = self.dp.get_analyzed_dataframe(
+        #     pair=pair, timeframe=self.timeframe)
 
-        trade_date = timeframe_to_prev_date(
-            self.timeframe, (trade.open_date_utc -
-                             timedelta(minutes=int(self.timeframe[:-1])))
-        )
-        trade_candle = dataframe.loc[(dataframe["date"] == trade_date)]
+        # trade_date = timeframe_to_prev_date(
+        #     self.timeframe, (trade.open_date_utc -
+        #                      timedelta(minutes=int(self.timeframe[:-1])))
+        # )
+        # trade_candle = dataframe.loc[(dataframe["date"] == trade_date)]
 
-        if trade_candle.empty:
-            return None
+        # if trade_candle.empty:
+        #     return None
 
-        trade_candle = trade_candle.squeeze()
+        # trade_candle = trade_candle.squeeze()
 
-        if self.dp.runmode.value in ('live'):
-            api.update_task(trade, current_time)
+        # if self.dp.runmode.value in ('live'):
+        #     api.update_task(trade, current_time)
 
-        if current_profit > 0.1:
-            return 0.03
+        if current_profit > 0.08:
+            return 0.04
 
-        # if current_profit > 0.02:
-        #     return stoploss_from_absolute(
-        #         trade.open_rate,
-        #         current_rate,
-        #         is_short=trade.is_short,
-        #         leverage=trade.leverage
-        #     )
+        if current_profit > 0.02:
+            return stoploss_from_absolute(
+                trade.open_rate,
+                current_rate,
+                is_short=trade.is_short,
+                leverage=trade.leverage
+            )
 
         # risk = trade_candle['atr'] / trade.open_rate
         # if risk >= abs(self.stoploss):
@@ -274,18 +274,18 @@ class MainStrategy(IStrategy):
             # trade.set_custom_data(key='reward', value=reward)
             trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
             
-            if self.dp.runmode.value in ('live'):
-                task = api.create_task(trade, __class__.__name__)
-                trade.set_custom_data(key='task_id', value=task.get('id'))
-                self.dp.send_msg(f"Task {task.get('summary')} created")
+            # if self.dp.runmode.value in ('live'):
+            #     task = api.create_task(trade, __class__.__name__)
+            #     trade.set_custom_data(key='task_id', value=task.get('id'))
+            #     self.dp.send_msg(f"Task {task.get('summary')} created")
 
-        if trade.nr_of_successful_entries == 2 and self.dp.runmode.value in ('live'):
-            task = api.complete(trade)
-            self.dp.send_msg(f"Task {task.get('summary')} completed")
+        # if trade.nr_of_successful_entries == 2 and self.dp.runmode.value in ('live'):
+        #     task = api.complete(trade)
+        #     self.dp.send_msg(f"Task {task.get('summary')} completed")
 
         return None
     
-    def bot_start(self, **kwargs) -> None:
-        if self.dp.runmode.value in ('live'):
-            res = api.create_parent(__class__.__name__)
-            self.dp.send_msg(f"Parent {res.get('title')} created")
+    # def bot_start(self, **kwargs) -> None:
+    #     if self.dp.runmode.value in ('live'):
+    #         res = api.create_parent(__class__.__name__)
+    #         self.dp.send_msg(f"Parent {res.get('title')} created")
