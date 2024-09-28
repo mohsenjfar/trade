@@ -22,7 +22,7 @@ class MainStrategy(IStrategy):
 
     can_short: bool = True
 
-    stoploss = -0.05
+    stoploss = -0.02
 
     timeframe = '15m'
 
@@ -168,7 +168,7 @@ class MainStrategy(IStrategy):
             (
                 (df['tema'] > df['bb_middleband']) &  # Guard (tema above middle band)
                 (df['tema'] < df['tema'].shift(1)) &  # Guard (tema falling)
-                (qtpylib.crossed_below(df['rsi'], self.short_rsi.value)) & # Trigger
+                (qtpylib.crossed_above(df['rsi'], self.short_rsi.value)) & # Trigger
                 (df['volume'] > 0) &
                 (df['do_predict'] == 1) &
                 (df['&s-up_or_down'] == 'down')
