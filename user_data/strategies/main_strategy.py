@@ -248,14 +248,15 @@ class MainStrategy(IStrategy):
         if current_profit > 0.08:
             return 0.04
 
-        if current_profit > 0.02:
-            return stoploss_from_absolute(
-                trade.open_rate,
-                current_rate,
-                is_short=trade.is_short,
-                leverage=trade.leverage
-            )
+        # if current_profit > 0.02:
+        #     return stoploss_from_absolute(
+        #         trade.open_rate,
+        #         current_rate,
+        #         is_short=trade.is_short,
+        #         leverage=trade.leverage
+        #     )
 
+        return None
         # risk = trade_candle['atr'] / trade.open_rate
         # if risk >= abs(self.stoploss):
         #     return risk
