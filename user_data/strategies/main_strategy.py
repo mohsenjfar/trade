@@ -24,7 +24,7 @@ class MainStrategy(IStrategy):
 
     stoploss = -0.02
 
-    timeframe = '15m'
+    timeframe = '5m'
 
     use_exit_signal = False
 
@@ -62,9 +62,6 @@ class MainStrategy(IStrategy):
                 "only_per_side": False
             }
         ]
-
-    buy_rsi = IntParameter(low=1, high=50, default=30, space='buy', optimize=True, load=True)
-    short_rsi = IntParameter(low=51, high=100, default=70, space='sell', optimize=True, load=True)
 
     def feature_engineering_expand_all(self, dataframe: DataFrame, period: int,
                                        metadata: Dict, **kwargs) -> DataFrame:
@@ -157,7 +154,6 @@ class MainStrategy(IStrategy):
             (
                 (df['tema'] <= df['bb_middleband']) &  # Guard (tema below middle band)
                 (df['tema'] > df['tema'].shift(1)) &  # Guard (tema rising)
-                (qtpylib.crossed_above(df['rsi'], self.buy_rsi.value)) & # Trigger
                 (df['volume'] > 0) &
                 (df['do_predict'] == 1) &
                 (df['&s-up_or_down'] == 'up')
@@ -168,7 +164,6 @@ class MainStrategy(IStrategy):
             (
                 (df['tema'] > df['bb_middleband']) &  # Guard (tema above middle band)
                 (df['tema'] < df['tema'].shift(1)) &  # Guard (tema falling)
-                (qtpylib.crossed_above(df['rsi'], self.short_rsi.value)) & # Trigger
                 (df['volume'] > 0) &
                 (df['do_predict'] == 1) &
                 (df['&s-up_or_down'] == 'down')
@@ -248,13 +243,13 @@ class MainStrategy(IStrategy):
         if current_profit > 0.08:
             return 0.04
 
-        # if current_profit > 0.02:
-        #     return stoploss_from_absolute(
-        #         trade.open_rate,
-        #         current_rate,
-        #         is_short=trade.is_short,
-        #         leverage=trade.leverage
-        #     )
+        if current_profit > 0.04:
+            return stoploss_from_absolute(
+                trade.open_rate,
+                current_rate,
+                is_short=trade.is_short,
+                leverage=trade.leverage
+            )
 
         return None
         # risk = trade_candle['atr'] / trade.open_rate
