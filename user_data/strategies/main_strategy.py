@@ -54,10 +54,10 @@ class MainStrategy(IStrategy):
         return [
             {
                 "method": "StoplossGuard",
-                "lookback_period_candles": 96,
+                "lookback_period_candles": 288,
                 "trade_limit": 1,
-                "stop_duration_candles": 96,
-                "required_profit": 0.0,
+                "stop_duration_candles": 288,
+                "required_profit": -0.015,
                 "only_per_pair": False,
                 "only_per_side": False
             }
@@ -145,6 +145,8 @@ class MainStrategy(IStrategy):
         # TEMA - Triple Exponential Moving Average
         dataframe['tema'] = ta.TEMA(dataframe, timeperiod=9)
         dataframe['atr'] = ta.ATR(dataframe, timeperiod=14)
+
+        dataframe.to_csv('user_data/notebooks/out.csv', index=False)
 
         return dataframe
 
@@ -285,3 +287,11 @@ class MainStrategy(IStrategy):
     #     if self.dp.runmode.value in ('live'):
     #         res = api.create_parent(__class__.__name__)
     #         self.dp.send_msg(f"Parent {res.get('title')} created")
+
+    # def bot_loop_start(self, **kwargs) -> None:
+
+    #     pairs = self.dp.current_whitelist()
+    #     for pair in pairs:
+    #         df = self.dp.get_analyzed_dataframe(pair=pair,timeframe=self.timeframe)
+    #         print(df)
+    #         # df.to_csv(f"{pair}.csv")
