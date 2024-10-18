@@ -52,6 +52,7 @@ class MainStrategy(IStrategy):
     @property
     def protections(self):
         return [
+            {"method": "CooldownPeriod", "stop_duration_candles": 48},
             {
                 "method": "StoplossGuard",
                 "lookback_period_candles": 288,
@@ -244,10 +245,11 @@ class MainStrategy(IStrategy):
 
         if current_profit > 0.08:
             return 0.04
-
-        if current_profit > 0.04:
+        
+        side = -1 if trade.is_short else 1
+        if current_profit > 0.02:
             return stoploss_from_absolute(
-                trade.open_rate,
+                trade.open_rate * (1 + 0.001 * side),
                 current_rate,
                 is_short=trade.is_short,
                 leverage=trade.leverage
