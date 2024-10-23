@@ -59,7 +59,7 @@
   "freqai": {
     "enabled": true,
     "purge_old_models": 2,
-    "train_period_days": 14,
+    "train_period_days": 2,
     "identifier": "MainStrategy",
     "live_retrain_hours": 0.07,
     "feature_parameters": {

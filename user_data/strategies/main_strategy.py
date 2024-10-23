@@ -52,7 +52,7 @@ class MainStrategy(IStrategy):
     @property
     def protections(self):
         return [
-            {"method": "CooldownPeriod", "stop_duration_candles": 48},
+            {"method": "CooldownPeriod", "stop_duration_candles": 12},
             {
                 "method": "StoplossGuard",
                 "lookback_period_candles": 288,
@@ -128,24 +128,24 @@ class MainStrategy(IStrategy):
 
         # TA indicators to combine with the Freqai targets
         # RSI
-        dataframe['rsi'] = ta.RSI(dataframe)
+        # dataframe['rsi'] = ta.RSI(dataframe)
 
         # Bollinger Bands
         bollinger = qtpylib.bollinger_bands(qtpylib.typical_price(dataframe), window=20, stds=2)
-        dataframe['bb_lowerband'] = bollinger['lower']
+        # dataframe['bb_lowerband'] = bollinger['lower']
         dataframe['bb_middleband'] = bollinger['mid']
-        dataframe['bb_upperband'] = bollinger['upper']
-        dataframe["bb_percent"] = (
-            (dataframe["close"] - dataframe["bb_lowerband"]) /
-            (dataframe["bb_upperband"] - dataframe["bb_lowerband"])
-        )
-        dataframe["bb_width"] = (
-            (dataframe["bb_upperband"] - dataframe["bb_lowerband"]) / dataframe["bb_middleband"]
-        )
+        # dataframe['bb_upperband'] = bollinger['upper']
+        # dataframe["bb_percent"] = (
+        #     (dataframe["close"] - dataframe["bb_lowerband"]) /
+        #     (dataframe["bb_upperband"] - dataframe["bb_lowerband"])
+        # )
+        # dataframe["bb_width"] = (
+        #     (dataframe["bb_upperband"] - dataframe["bb_lowerband"]) / dataframe["bb_middleband"]
+        # )
 
         # TEMA - Triple Exponential Moving Average
         dataframe['tema'] = ta.TEMA(dataframe, timeperiod=9)
-        dataframe['atr'] = ta.ATR(dataframe, timeperiod=14)
+        # dataframe['atr'] = ta.ATR(dataframe, timeperiod=14)
 
         dataframe.to_csv('user_data/notebooks/out.csv', index=False)
 
@@ -220,6 +220,13 @@ class MainStrategy(IStrategy):
     #     self.custom_info['max_day_not_notified'] = True
 
     #     return True
+
+
+    def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
+                        current_rate: float, current_profit: float,
+                        **kwargs):
+        if current_profit < 0.01 and (current_time - trade.open_date_utc).hours >= 1:
+            return "Trade expired!"
 
     
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
