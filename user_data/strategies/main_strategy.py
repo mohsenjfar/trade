@@ -225,7 +225,7 @@ class MainStrategy(IStrategy):
     def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
                         current_rate: float, current_profit: float,
                         **kwargs):
-        if current_profit < 0.01 and (current_time - trade.open_date_utc).hours >= 1:
+        if (0 < current_profit <= 0.02) and (current_time - trade.open_date_utc).hours >= 1:
             return "Trade expired!"
 
     
