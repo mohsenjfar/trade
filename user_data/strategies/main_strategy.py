@@ -22,11 +22,11 @@ class MainStrategy(IStrategy):
 
     can_short: bool = True
 
-    stoploss = -0.02
+    stoploss = -0.01
 
-    timeframe = '1h'
+    timeframe = '15m'
 
-    use_exit_signal = False
+    use_exit_signal = True
 
     use_custom_stoploss = True
 
@@ -52,13 +52,13 @@ class MainStrategy(IStrategy):
     @property
     def protections(self):
         return [
-            {"method": "CooldownPeriod", "stop_duration_candles": 12},
+            {"method": "CooldownPeriod", "stop_duration_candles": 4},
             {
                 "method": "StoplossGuard",
-                "lookback_period_candles": 288,
+                "lookback_period_candles": 96,
                 "trade_limit": 1,
-                "stop_duration_candles": 288,
-                "required_profit": -0.015,
+                "stop_duration_candles": 96,
+                "required_profit": -0.01,
                 "only_per_pair": False,
                 "only_per_side": False
             }
@@ -114,8 +114,7 @@ class MainStrategy(IStrategy):
     def set_freqai_targets(self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
 
         self.freqai.class_names = ["down", "up"]
-        dataframe['&s-up_or_down'] = np.where(dataframe["close"].shift(-50) >
-                                              dataframe["close"], 'up', 'down')
+        dataframe['&s-up_or_down'] = np.where(dataframe["close"].shift(-1) > dataframe["close"], 'up', 'down')
 
         return dataframe
 
@@ -147,8 +146,6 @@ class MainStrategy(IStrategy):
         dataframe['tema'] = ta.TEMA(dataframe, timeperiod=9)
         # dataframe['atr'] = ta.ATR(dataframe, timeperiod=14)
 
-        dataframe.to_csv('user_data/notebooks/out.csv', index=False)
-
         return dataframe
 
     def populate_entry_trend(self, df: DataFrame, metadata: dict) -> DataFrame:
@@ -172,6 +169,8 @@ class MainStrategy(IStrategy):
                 (df['&s-up_or_down'] == 'down')
             ),
             'enter_short'] = 1
+
+        df.to_csv('user_data/notebooks/out.csv', index=False)
 
         return df
 
@@ -225,7 +224,7 @@ class MainStrategy(IStrategy):
     def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
                         current_rate: float, current_profit: float,
                         **kwargs):
-        if (0 < current_profit <= 0.02) and (current_time - trade.open_date_utc).seconds >= 3600:
+        if (0 < current_profit <= 0.01) and (current_time - trade.open_date_utc).seconds >= 900:
             return "Trade expired!"
 
     
@@ -250,17 +249,17 @@ class MainStrategy(IStrategy):
         # if self.dp.runmode.value in ('live'):
         #     api.update_task(trade, current_time)
 
-        if current_profit > 0.08:
-            return 0.04
+        if current_profit > 0.04:
+            return 0.02
         
-        side = -1 if trade.is_short else 1
-        if current_profit > 0.02:
-            return stoploss_from_absolute(
-                trade.open_rate * (1 + 0.001 * side),
-                current_rate,
-                is_short=trade.is_short,
-                leverage=trade.leverage
-            )
+        # side = -1 if trade.is_short else 1
+        # if current_profit > 0.02:
+        #     return stoploss_from_absolute(
+        #         trade.open_rate * (1 + 0.001 * side),
+        #         current_rate,
+        #         is_short=trade.is_short,
+        #         leverage=trade.leverage
+        #     )
 
         return None
         # risk = trade_candle['atr'] / trade.open_rate
