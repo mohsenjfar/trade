@@ -24,7 +24,7 @@ class MainStrategy(IStrategy):
 
     stoploss = -0.02
 
-    timeframe = '5m'
+    timeframe = '1h'
 
     use_exit_signal = False
 
@@ -225,7 +225,7 @@ class MainStrategy(IStrategy):
     def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
                         current_rate: float, current_profit: float,
                         **kwargs):
-        if (0 < current_profit <= 0.02) and (current_time - trade.open_date_utc).hours >= 1:
+        if (0 < current_profit <= 0.02) and (current_time - trade.open_date_utc).seconds >= 3600:
             return "Trade expired!"
 
     

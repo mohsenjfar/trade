@@ -224,8 +224,7 @@ class QuickAdapterV35(IStrategy):
             dataframe.at[mp, "&s-extrema"] = -1
         for mp in max_peaks[0]:
             dataframe.at[mp, "&s-extrema"] = 1
-        dataframe["minima-exit"] = np.where(
-            dataframe["&s-extrema"] == -1, 1, 0)
+        dataframe["minima-exit"] = np.where(dataframe["&s-extrema"] == -1, 1, 0)
         dataframe["maxima-exit"] = np.where(dataframe["&s-extrema"] == 1, 1, 0)
         dataframe['&s-extrema'] = dataframe['&s-extrema'].rolling(
             window=5, win_type='gaussian', center=True).mean(std=0.5)
@@ -270,6 +269,8 @@ class QuickAdapterV35(IStrategy):
                 reduce(lambda x, y: x & y, enter_short_conditions), [
                     "enter_short", "enter_tag"]
             ] = (1, "short")
+
+        dataframe.to_csv('user_data/notebooks/out.csv', index=False)
 
         return dataframe
 
