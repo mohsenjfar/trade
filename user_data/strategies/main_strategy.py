@@ -44,11 +44,6 @@ class MainStrategy(IStrategy):
         'exit': 'GTC'
     }
 
-    custom_info = {
-        'max_day_not_notified': True,
-        'max_week_not_notified': True
-    }
-
     @property
     def protections(self):
         return [
@@ -58,7 +53,7 @@ class MainStrategy(IStrategy):
                 "lookback_period_candles": 96,
                 "trade_limit": 1,
                 "stop_duration_candles": 96,
-                "required_profit": -0.01,
+                "required_profit": -0.02,
                 "only_per_pair": False,
                 "only_per_side": False
             }
@@ -120,16 +115,9 @@ class MainStrategy(IStrategy):
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:  # noqa: C901
 
-        # User creates their own custom strat here. Present example is a supertrend
-        # based strategy.
 
         dataframe = self.freqai.start(dataframe, metadata, self)
 
-        # TA indicators to combine with the Freqai targets
-        # RSI
-        # dataframe['rsi'] = ta.RSI(dataframe)
-
-        # Bollinger Bands
         bollinger = qtpylib.bollinger_bands(qtpylib.typical_price(dataframe), window=20, stds=2)
         # dataframe['bb_lowerband'] = bollinger['lower']
         dataframe['bb_middleband'] = bollinger['mid']
@@ -142,9 +130,7 @@ class MainStrategy(IStrategy):
         #     (dataframe["bb_upperband"] - dataframe["bb_lowerband"]) / dataframe["bb_middleband"]
         # )
 
-        # TEMA - Triple Exponential Moving Average
         dataframe['tema'] = ta.TEMA(dataframe, timeperiod=9)
-        # dataframe['atr'] = ta.ATR(dataframe, timeperiod=14)
 
         return dataframe
 
@@ -152,7 +138,7 @@ class MainStrategy(IStrategy):
 
         df.loc[
             (
-                (df['tema'] <= df['bb_middleband']) &  # Guard (tema below middle band)
+                (df['tema'] < df['bb_middleband']) &  # Guard (tema below middle band)
                 (df['tema'] > df['tema'].shift(1)) &  # Guard (tema rising)
                 (df['volume'] > 0) &
                 (df['do_predict'] == 1) &
@@ -179,44 +165,35 @@ class MainStrategy(IStrategy):
         return dataframe
 
 
-    # def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
-    #                         proposed_stake: float, min_stake: Optional[float], max_stake: float,
-    #                         leverage: float, entry_tag: Optional[str], side: str,
-    #                         **kwargs) -> float:
+    def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
+                            proposed_stake: float, min_stake: Optional[float], max_stake: float,
+                            leverage: float, entry_tag: Optional[str], side: str,
+                            **kwargs) -> float:
 
-    #     dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-    #     current_candle = dataframe.iloc[-1].squeeze()
-    #     risk = current_candle['atr'] / current_rate
-    #     return max(max_stake - max_stake * risk / abs(self.stoploss), min_stake)
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        prev_candle = dataframe.iloc[-2].squeeze()
+
+        candle = prev_candle['high'] if side == "short" else prev_candle['low']
+        risk = abs(1 - current_rate / candle)
+
+        return max(max_stake - max_stake * risk / abs(self.stoploss), min_stake)
     
     # def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
     #                         time_in_force: str, current_time: datetime, entry_tag: Optional[str],
     #                         side: str, **kwargs) -> bool:
 
-    #     trades = pd.DataFrame(Trade.get_trades_proxy())
-
+    #     today_trades = Trade.get_trades_proxy(open_date = date.today())
     #     today_loss = sum(trade.close_profit_abs for trade in today_trades if trade.close_profit_abs < 0)
-    #     today_gain = sum(trade.close_profit_abs for trade in today_trades if trade.close_profit_abs > 0)
-    #     today_profit = sum(trade.close_profit_abs for trade in today_trades)
+    #     if (today_loss <= abs(self.stoploss)):
+    #         self.dp.send_msg(f"Max day's loss ({today_loss:.2f}) is reached, stop trade entry ...")
+    #         return False
 
     #     week_day = date.weekday(date.today())
     #     this_week_trades = Trade.get_trades_proxy(open_date = date.today() - timedelta(days=week_day))
-    #     this_week_profit = sum(trade.close_profit_abs for trade in this_week_trades)
-
-    #     if (today_profit <= self.custom_info['total_daily_risk']):
-    #         if self.custom_info.get('max_day_not_notified'):
-    #             self.dp.send_msg(f"Max day's loss ({today_profit:.2f}) is reached, stop trade entry ...")
-    #             self.custom_info['max_day_not_notified'] = False
+    #     this_week_loss = sum(trade.close_profit_abs for trade in this_week_trades if trade.close_profit_abs < 0)
+    #     if this_week_loss <= abs(self.stoploss) * 3:
+    #         self.dp.send_msg(f"Max week's loss ({this_week_loss:.2f}) is reached, stop trade entry ...")
     #         return False
-        
-    #     if this_week_profit <= self.custom_info['total_daily_risk'] * 3:
-    #         if self.custom_info.get('max_week_not_notified'):
-    #             self.dp.send_msg(f"Max week's loss ({this_week_profit:.2f}) is reached, stop trade entry ...")
-    #             self.custom_info['max_week_not_notified'] = False
-    #         return False
-        
-    #     self.custom_info['max_week_not_notified'] = True
-    #     self.custom_info['max_day_not_notified'] = True
 
     #     return True
 
@@ -224,7 +201,7 @@ class MainStrategy(IStrategy):
     def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
                         current_rate: float, current_profit: float,
                         **kwargs):
-        if (0 < current_profit <= 0.01) and (current_time - trade.open_date_utc).seconds >= 900:
+        if (0 < current_profit <= 0.005) and (current_time - trade.open_date_utc).seconds >= 900:
             return "Trade expired!"
 
     
@@ -232,39 +209,23 @@ class MainStrategy(IStrategy):
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
-        # dataframe, _ = self.dp.get_analyzed_dataframe(
-        #     pair=pair, timeframe=self.timeframe)
-
-        # trade_date = timeframe_to_prev_date(
-        #     self.timeframe, (trade.open_date_utc -
-        #                      timedelta(minutes=int(self.timeframe[:-1])))
-        # )
-        # trade_candle = dataframe.loc[(dataframe["date"] == trade_date)]
-
-        # if trade_candle.empty:
-        #     return None
-
-        # trade_candle = trade_candle.squeeze()
-
         # if self.dp.runmode.value in ('live'):
         #     api.update_task(trade, current_time)
 
         if current_profit > 0.04:
             return 0.02
-        
-        # side = -1 if trade.is_short else 1
-        # if current_profit > 0.02:
-        #     return stoploss_from_absolute(
-        #         trade.open_rate * (1 + 0.001 * side),
-        #         current_rate,
-        #         is_short=trade.is_short,
-        #         leverage=trade.leverage
-        #     )
 
-        return None
-        # risk = trade_candle['atr'] / trade.open_rate
-        # if risk >= abs(self.stoploss):
-        #     return risk
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        pre_trade_dataframe = dataframe[(dataframe["date"] < trade.open_date_utc)]
+        pre_trade_candle = pre_trade_dataframe.iloc[-1].squeeze()
+
+        stop = pre_trade_candle['high'] if trade.is_short else pre_trade_candle['low']
+        return stoploss_from_absolute(
+            stop,
+            current_rate,
+            is_short=trade.is_short,
+            leverage=trade.leverage
+        )
 
 
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
@@ -295,11 +256,3 @@ class MainStrategy(IStrategy):
     #     if self.dp.runmode.value in ('live'):
     #         res = api.create_parent(__class__.__name__)
     #         self.dp.send_msg(f"Parent {res.get('title')} created")
-
-    # def bot_loop_start(self, **kwargs) -> None:
-
-    #     pairs = self.dp.current_whitelist()
-    #     for pair in pairs:
-    #         df = self.dp.get_analyzed_dataframe(pair=pair,timeframe=self.timeframe)
-    #         print(df)
-    #         # df.to_csv(f"{pair}.csv")
