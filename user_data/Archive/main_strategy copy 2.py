@@ -24,9 +24,9 @@ class MainStrategy(IStrategy):
 
     can_short: bool = True
 
-    stoploss = -0.005
+    stoploss = -0.01
 
-    timeframe = '5m'
+    timeframe = '15m'
 
     use_exit_signal = True
 
@@ -49,9 +49,16 @@ class MainStrategy(IStrategy):
     @property
     def protections(self):
         return [
-            {"method": "CooldownPeriod", "stop_duration_candles": 6}
+            {
+                "method": "StoplossGuard",
+                "lookback_period_candles": 4,
+                "trade_limit": 1,
+                "required_profit": 0,
+                "only_per_pair": False,
+                "only_per_side": False,
+                "unlock_at":"00:00"
+            }
         ]
-
 
     def feature_engineering_expand_all(self, dataframe: DataFrame, period: int,
                                        metadata: Dict, **kwargs) -> DataFrame:
@@ -85,7 +92,6 @@ class MainStrategy(IStrategy):
 
         return dataframe
 
-
     def feature_engineering_expand_basic(
             self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
 
@@ -94,7 +100,6 @@ class MainStrategy(IStrategy):
         dataframe["%-raw_price"] = dataframe["close"]
 
         return dataframe
-
 
     def feature_engineering_standard(
             self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
@@ -113,14 +118,12 @@ class MainStrategy(IStrategy):
 
         return dataframe
 
-
     def set_freqai_targets(self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
 
         self.freqai.class_names = ["down", "up"]
         dataframe['&s-up_or_down'] = np.where(dataframe["close"].shift(-1) > dataframe["close"], 'up', 'down')
 
         return dataframe
-
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:  # noqa: C901
 
@@ -133,7 +136,6 @@ class MainStrategy(IStrategy):
         dataframe['tema'] = ta.TEMA(dataframe, timeperiod=9)
 
         return dataframe
-
 
     def populate_entry_trend(self, df: DataFrame, metadata: dict) -> DataFrame:
 
@@ -161,42 +163,27 @@ class MainStrategy(IStrategy):
 
         return df
 
-
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         return dataframe
 
-
-    def leverage(self, pair: str, current_time: datetime, current_rate: float,
-                 proposed_leverage: float, max_leverage: float, entry_tag: Optional[str], side: str,
-                 **kwargs) -> float:
-        
-        return 10
-
-
-    def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
-
-        if (trade.nr_of_successful_entries == 1) and (order.ft_order_side == trade.entry_side):
-            trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
-
-        return None
     
-
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
-        if current_profit > 0.03:
-            return 0.02    
 
         if current_profit > 0.02:
-            return stoploss_from_open(
-                0.02, 
-                current_profit, 
-                is_short=trade.is_short, 
-                leverage=trade.leverage
-            )
-
+            return 0.02
+        
+        # if current_profit > 0.02:
+        #     return stoploss_from_open(
+        #         0.02, 
+        #         current_profit, 
+        #         is_short=trade.is_short, 
+        #         leverage=trade.leverage
+        #     )
+        
         if current_profit > 0.01:
             side = -1 if trade.is_short else 1
             return stoploss_from_absolute(
@@ -207,11 +194,17 @@ class MainStrategy(IStrategy):
             )
         
         return None
-    
+
+
+    def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
+
+        if (trade.nr_of_successful_entries == 1) and (order.ft_order_side == trade.entry_side):
+            trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
+
+        return None
 
     def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
                         current_rate: float, current_profit: float,
                         **kwargs):
-
-        if current_profit < 0.02 and (current_time - trade.open_date_utc).seconds >= 3600:
-            return "Trade expired"
+        if (0 < current_profit <= 0.01) and (current_time - trade.open_date_utc).seconds >= 3600:
+            return "Trade expired!"
