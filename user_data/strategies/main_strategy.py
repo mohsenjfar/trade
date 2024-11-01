@@ -37,7 +37,7 @@ class MainStrategy(IStrategy):
     order_types = {
         'entry': 'limit',
         'exit': 'limit',
-        'stoploss': 'limit',
+        'stoploss': 'market',
         'stoploss_on_exchange': False
     }
 
@@ -49,7 +49,16 @@ class MainStrategy(IStrategy):
     @property
     def protections(self):
         return [
-            {"method": "CooldownPeriod", "stop_duration_candles": 6}
+            {"method": "CooldownPeriod", "stop_duration_candles": 6},
+            {
+                "method": "StoplossGuard",
+                "lookback_period_candles": 4,
+                "trade_limit": 1,
+                "required_profit": 0,
+                "only_per_pair": False,
+                "only_per_side": False,
+                "unlock_at":"00:00"
+            }
         ]
 
 
@@ -171,7 +180,7 @@ class MainStrategy(IStrategy):
                  proposed_leverage: float, max_leverage: float, entry_tag: Optional[str], side: str,
                  **kwargs) -> float:
         
-        return 10
+        return 1
 
 
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
@@ -186,32 +195,15 @@ class MainStrategy(IStrategy):
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
-        if current_profit > 0.03:
-            return 0.02    
-
         if current_profit > 0.02:
+            return 0.01    
+
+        if current_profit > 0.01:
             return stoploss_from_open(
-                0.02, 
+                0.01, 
                 current_profit, 
                 is_short=trade.is_short, 
                 leverage=trade.leverage
             )
-
-        if current_profit > 0.01:
-            side = -1 if trade.is_short else 1
-            return stoploss_from_absolute(
-                trade.open_rate * (1 + side * 0.001),
-                current_rate,
-                is_short=trade.is_short,
-                leverage=trade.leverage
-            )
         
         return None
-    
-
-    def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
-                        current_rate: float, current_profit: float,
-                        **kwargs):
-
-        if current_profit < 0.02 and (current_time - trade.open_date_utc).seconds >= 3600:
-            return "Trade expired"
