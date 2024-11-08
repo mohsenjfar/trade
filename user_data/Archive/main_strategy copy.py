@@ -53,7 +53,7 @@ class MainStrategy(IStrategy):
                 "method": "StoplossGuard",
                 "lookback_period_candles": 96,
                 "trade_limit": 1,
-                "stop_duration_candles": 96,
+                "unlock_at":"00:00",
                 "required_profit": -0.02,
                 "only_per_pair": False,
                 "only_per_side": False

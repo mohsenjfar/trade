@@ -18,13 +18,13 @@ from freqtrade.strategy import (
     stoploss_from_open
 )
 
-class MainStrategy(IStrategy):
+class Strategy(IStrategy):
 
     INTERFACE_VERSION = 3
 
     can_short: bool = True
 
-    stoploss = -0.005
+    stoploss = -0.01
 
     timeframe = '5m'
 
@@ -37,7 +37,7 @@ class MainStrategy(IStrategy):
     order_types = {
         'entry': 'limit',
         'exit': 'limit',
-        'stoploss': 'market',
+        'stoploss': 'limit',
         'stoploss_on_exchange': False
     }
 
@@ -126,7 +126,7 @@ class MainStrategy(IStrategy):
     def set_freqai_targets(self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
 
         self.freqai.class_names = ["down", "up"]
-        dataframe['&s-up_or_down'] = np.where(dataframe["close"].shift(-1) > dataframe["close"], 'up', 'down')
+        dataframe['&s-up_or_down'] = np.where(dataframe["close"].shift(-6) > dataframe["close"], 'up', 'down')
 
         return dataframe
 
@@ -148,8 +148,8 @@ class MainStrategy(IStrategy):
 
         df.loc[
             (
-                (df['tema'] < df['bb_middleband']) &  # Guard (tema below middle band)
-                (df['tema'] > df['tema'].shift(1)) &  # Guard (tema rising)
+                (df['tema'] > df['tema'].shift(1)) &
+                qtpylib.crossed_above(df['tema'], df['bb_middleband']) &
                 (df['volume'] > 0) &
                 (df['do_predict'] == 1) &
                 (df['&s-up_or_down'] == 'up')
@@ -158,8 +158,8 @@ class MainStrategy(IStrategy):
 
         df.loc[
             (
-                (df['tema'] > df['bb_middleband']) &  # Guard (tema above middle band)
-                (df['tema'] < df['tema'].shift(1)) &  # Guard (tema falling)
+                (df['tema'] < df['tema'].shift(1)) &
+                qtpylib.crossed_below(df['tema'], df['bb_middleband']) &
                 (df['volume'] > 0) &
                 (df['do_predict'] == 1) &
                 (df['&s-up_or_down'] == 'down')
@@ -180,7 +180,7 @@ class MainStrategy(IStrategy):
                  proposed_leverage: float, max_leverage: float, entry_tag: Optional[str], side: str,
                  **kwargs) -> float:
         
-        return 1
+        return 5
 
 
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
@@ -191,19 +191,25 @@ class MainStrategy(IStrategy):
         return None
     
 
-    def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
-                        current_rate: float, current_profit: float, after_fill: bool, 
-                        **kwargs) -> Optional[float]:
+    # def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
+    #                     current_rate: float, current_profit: float, after_fill: bool, 
+    #                     **kwargs) -> Optional[float]:
 
-        if current_profit > 0.02:
-            return 0.01    
+    #     if current_profit > 0.02:
+    #         return 0.01    
 
-        if current_profit > 0.01:
-            return stoploss_from_open(
-                0.01, 
-                current_profit, 
-                is_short=trade.is_short, 
-                leverage=trade.leverage
-            )
+    #     if current_profit > 0.01:
+    #         return stoploss_from_open(
+    #             0.01, 
+    #             current_profit, 
+    #             is_short=trade.is_short, 
+    #             leverage=trade.leverage
+    #         )
         
-        return None
+    #     return None
+
+    def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
+                        current_rate: float, current_profit: float,
+                        **kwargs):
+        if current_profit >= 0.02:
+            return "Target Hit!"

@@ -19,7 +19,7 @@ class AgileStrategy(IStrategy):
 
     can_short: bool = True
 
-    stoploss = -0.05
+    stoploss = -0.005
 
     timeframe = '5m'
 
@@ -41,10 +41,21 @@ class AgileStrategy(IStrategy):
         'exit': 'GTC'
     }
 
+    @property
+    def protections(self):
+        return [
+            {
+                "method": "StoplossGuard",
+                "lookback_period_candles": 48,
+                "trade_limit": 2,
+                "required_profit": 0,
+                "only_per_pair": False,
+                "only_per_side": False,
+                "stop_duration_candles": 48,
+            }
+        ]
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-
-        dataframe['sma_300'] = ta.SMA(dataframe, 300)
 
         return dataframe
 
@@ -53,22 +64,12 @@ class AgileStrategy(IStrategy):
 
         trades = Trade.get_trades_proxy(pair=metadata['pair'],is_open=False)
 
-        # if trades:
-        #     enter_long = 1 if (trades and trades[-1].is_short) else 0
-        #     enter_short = 0 if (trades and trades[-1].is_short) else 1
-        #     dataframe['enter_long'] = enter_long
-        #     dataframe['enter_short'] = enter_short
-        #     return dataframe
+        if trades:
+            dataframe['enter_long'] = 1 if  trades[-1].is_short else 0
+            dataframe['enter_short'] = 0 if  trades[-1].is_short else 1
+            return dataframe
 
-        dataframe.loc[
-            (dataframe['close'] > dataframe['sma_300']),
-            'enter_long'
-        ] = 0
-
-        dataframe.loc[
-            (dataframe['close'] < dataframe['sma_300']),
-            'enter_short'
-        ] = 0
+        dataframe['enter_long'] = 1
 
         return dataframe
 
@@ -76,26 +77,17 @@ class AgileStrategy(IStrategy):
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         return dataframe
+    
 
-    # def custom_exit(self, pair: str, trade: Trade, current_time: datetime, current_rate: float, current_profit: float, **kwargs) -> str:
+    # def leverage(self, pair: str, current_time: datetime, current_rate: float,
+    #              proposed_leverage: float, max_leverage: float, entry_tag: Optional[str], side: str,
+    #              **kwargs) -> float:
         
-    #     if current_profit > 2 * abs(self.stoploss):
-    #         return 'Target Hit'
+    #     return abs(self.stoploss) * 200
+    
 
-    def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
-                        current_rate: float, current_profit: float, after_fill: bool, 
-                        **kwargs) -> Optional[float]:
-        
-        if current_profit > 0.1:
-            return 0.03
-
-        return None
-
-
-    def bot_loop_start(self, current_time: datetime, **kwargs) -> None:
-
-        trades = pd.DataFrame(Trade.get_trades_proxy())
-
-        values = [value for value in trades.head(1).values]
-
-        self.dp.send_msg(str(values))
+    # def bot_loop_start(self, **kwargs) -> None:
+    #     pairs = self.dp.current_whitelist()
+    #     for pair in pairs:
+    #         if self.is_pair_locked(pair):
+    #             self.unlock_pair(pair)

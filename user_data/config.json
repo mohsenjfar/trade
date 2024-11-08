@@ -60,9 +60,10 @@
   "freqai": {
     "enabled": true,
     "purge_old_models": 2,
-    "train_period_days": 2,
-    "identifier": "test",
+    "train_period_days": 15,
+    "identifier": "v1",
     "live_retrain_hours": 0.08,
+    "backtest_period_days":2,
     "feature_parameters": {
         "include_timeframes": [
             "5m",
@@ -70,8 +71,9 @@
             "1h"
         ],
         "include_corr_pairlist": [
-            "BNB/USDT",
-            "ETH/USDT"
+            "ETH/USDT",
+            "LINK/USDT",
+            "BNB/USDT"
         ],
         "label_period_candles": 20,
         "include_shifted_candles": 2,
@@ -82,7 +84,7 @@
         "indicator_periods_candles": [10, 20]
     },
     "data_split_parameters": {
-        "test_size": 0,
+        "test_size": 0.25,
         "random_state": 1
     },
     "model_training_parameters": {
@@ -94,8 +96,17 @@
   "force_entry_enable": true,
   "internals": {
     "process_throttle_secs": 5
+  },
+  "api_server": {
+    "enabled": true,
+    "listen_ip_address": "0.0.0.0",
+    "listen_port": 8080,
+    "verbosity": "error",
+    "enable_openapi": false,
+    "jwt_secret_key": "",
+    "CORS_origins": [],
+    "username": "",
+    "password": "",
+    "ws_token": ""
   }
-  // "add_config_files": [
-  //     "secret.json"
-  // ]
 }
