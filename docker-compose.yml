@@ -5,8 +5,8 @@ services:
       image: freqtradeorg/freqtrade:develop_freqai
       restart: unless-stopped
       container_name: TradeStrategy
-      # ports:
-      #   - "127.0.0.1:8080:8080"
+      ports:
+        - "127.0.0.1:8080:8080"
       volumes:
         - "./user_data:/freqtrade/user_data"
       command: >

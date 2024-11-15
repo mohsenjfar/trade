@@ -27,7 +27,7 @@ class Strategy(IStrategy):
 
     stoploss = -0.005
 
-    timeframe = '5m'
+    timeframe = '1m'
 
     use_exit_signal = True
 
@@ -35,7 +35,7 @@ class Strategy(IStrategy):
 
     startup_candle_count: int = 240
 
-    process_only_new_candles = False
+    process_only_new_candles = True
 
     order_types = {
         'entry': 'limit',
@@ -49,18 +49,6 @@ class Strategy(IStrategy):
         'exit': 'GTC'
     }
 
-    @property
-    def protections(self):
-        return [
-            {
-                "method": "StoplossGuard",
-                "lookback_period": 1440,
-                "required_profit": -0.005,
-                "only_per_pair": False,
-                "only_per_side": False,
-                "unlock_at":"00:00"
-            }
-        ]
 
     def ob_dataframe(self, pair):
         ob = self.dp.orderbook(pair, maximum=200)
@@ -78,8 +66,21 @@ class Strategy(IStrategy):
         ask_dataframe = pd.DataFrame(ask_values)
         return pd.concat((bid_dataframe,ask_dataframe))
 
-    def calculate_extrema(self, dataframe, kernel=24):
 
+    def caculate_regression(self, dataframe):
+        x = dataframe.index.values.reshape(-1, 1)
+        y = dataframe.close.values
+        model = LinearRegression()
+        model.fit(x, y)
+        dataframe['y'] = model.predict(x)
+        dataframe['coef'] = float(model.coef_[0])
+        dataframe['upper_band'] = dataframe['y'] + dataframe.close.std()
+        dataframe['lower_band'] = dataframe['y'] - dataframe.close.std()
+        dataframe['band_dist'] = dataframe['upper_band'] - dataframe['lower_band']
+        return dataframe
+    
+
+    def calculate_extrema(self, dataframe, kernel=12):
         dataframe["extrema"] = 0
         min_peaks = argrelextrema(dataframe["low"].values, np.less_equal, order=kernel)
         max_peaks = argrelextrema(dataframe["high"].values, np.greater_equal, order=kernel)
@@ -87,12 +88,21 @@ class Strategy(IStrategy):
             dataframe.at[mp, "extrema"] = -1
         for mp in max_peaks[0]:
             dataframe.at[mp, "extrema"] = 1
-
+        dataframe['last_min_peak'] = dataframe.at[min_peaks[0][-1], "low"]
+        dataframe['last_max_peak'] = dataframe.at[max_peaks[0][-1], "high"]
+        dataframe['h_dist'] = np.where(dataframe.extrema == 1, (dataframe.high - dataframe.upper_band), 0)
+        dataframe['l_dist'] = np.where(dataframe.extrema == -1, (dataframe.lower_band - dataframe.low), 0)
+        dataframe['h_ratio'] = dataframe['h_dist'] / dataframe['band_dist']
+        dataframe['l_ratio'] = dataframe['l_dist'] / dataframe['band_dist']
+        dataframe['l_h_ratio'] = dataframe.at[max_peaks[0][-1], "h_ratio"]
+        dataframe['l_l_ratio'] = dataframe.at[min_peaks[0][-1], "l_ratio"]
         return dataframe
 
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
+        dataframe = dataframe.loc[-240:]
+        dataframe = self.caculate_regression(dataframe)
         dataframe = self.calculate_extrema(dataframe)
 
         return dataframe
@@ -100,42 +110,33 @@ class Strategy(IStrategy):
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        max_peak = dataframe[dataframe['extrema']==1].iloc[-1].squeeze()['high']
-        min_peak = dataframe[dataframe['extrema']==-1].iloc[-1].squeeze()['low']
+        dataframe.loc[
+            (
+                (dataframe['coef'] > 0) & # Guard
+                (dataframe['l_l_ratio'] < 0.3) & # Guard
+                (dataframe['l_l_ratio'] > 0) & # Guard
+                qtpylib.crossed_above(dataframe['close'], dataframe['lower_band']) # Trigger
+            ),
+            'enter_long'
+        ] = 1
 
-        dataframe['enter_long'] = 0
-        dataframe['enter_short'] = 0
-        
-        ob_dataframe = self.ob_dataframe(metadata['pair'])
-        ob_max_price = ob_dataframe.price.max()
-        ob_min_price = ob_dataframe.price.min()
+        dataframe.loc[
+            (
+                (dataframe['coef'] < 0) & # Guard
+                (dataframe['l_h_ratio'] < 0.3) & # Guard
+                (dataframe['l_h_ratio'] > 0) & # Guard
+                qtpylib.crossed_below(dataframe['close'], dataframe['upper_band']) # Trigger
+            ),
+            'enter_short'
+        ] = 1
 
-        if (ob_min_price < min_peak < ob_max_price):
-            dataframe['enter_long'] = 1
-        
-        if (ob_min_price < max_peak < ob_max_price):
-            dataframe['enter_short'] = 1
+        dataframe.to_csv('user_data/notebooks/out.csv', index=False)
 
         return dataframe
 
 
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        max_peak = dataframe[dataframe['extrema']==1].iloc[-1].squeeze()['high']
-        min_peak = dataframe[dataframe['extrema']==-1].iloc[-1].squeeze()['low']
-
-        dataframe['exit_short'] = 0
-        dataframe['exit_long'] = 0
-        
-        ob_dataframe = self.ob_dataframe(metadata['pair'])
-        ob_max_price = ob_dataframe.price.max()
-        ob_min_price = ob_dataframe.price.min()
-
-        if (ob_min_price < min_peak < ob_max_price):
-            dataframe['exit_short'] = 1
-        
-        if (ob_min_price < max_peak < ob_max_price):
-            dataframe['exit_long'] = 1
 
         return dataframe
 
@@ -151,16 +152,6 @@ class Strategy(IStrategy):
 
         if (trade.nr_of_successful_entries == 1) and (order.ft_order_side == trade.entry_side):
             trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
-            ob = self.ob_dataframe(pair)
-            if trade.is_short:
-                ob = ob[ob.side == 'ask']
-                max_volume_row = ob[ob.volume == ob.volume.max()].squeeze()
-                stop = (max_volume_row['price'] + 0.1) 
-            else:
-                ob = ob[ob.side == 'bid']
-                max_volume_row = ob[ob.volume == ob.volume.max()].squeeze()
-                stop = (max_volume_row['price'] - 0.1) 
-            trade.set_custom_data(key='stop', value=stop)
 
         return None
     
@@ -169,8 +160,21 @@ class Strategy(IStrategy):
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        current_candle = dataframe.iloc[-1].squeeze()
+
+        if trade.is_short:
+            if current_candle['close'] < current_candle['lower_band']:
+                stop = current_candle['lower_band']
+            else:
+                stop = current_candle['last_max_peak']
+        else:
+            if current_candle['close'] > current_candle['upper_band']:
+                stop = current_candle['upper_band']
+            else:
+                stop = current_candle['last_min_peak']
         return stoploss_from_absolute(
-            trade.get_custom_data(key='stop'),
+            stop,
             current_rate,
             is_short=trade.is_short,
             leverage=trade.leverage
