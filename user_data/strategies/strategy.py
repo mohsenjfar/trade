@@ -25,7 +25,7 @@ class Strategy(IStrategy):
 
     can_short: bool = True
 
-    stoploss = -0.005
+    stoploss = -0.02
 
     timeframe = '1m'
 
@@ -33,7 +33,7 @@ class Strategy(IStrategy):
 
     use_custom_stoploss = True
 
-    startup_candle_count: int = 240
+    startup_candle_count: int = 1440
 
     process_only_new_candles = True
 
@@ -67,20 +67,22 @@ class Strategy(IStrategy):
         return pd.concat((bid_dataframe,ask_dataframe))
 
 
-    def caculate_regression(self, dataframe):
-        x = dataframe.index.values.reshape(-1, 1)
-        y = dataframe.close.values
+    def caculate_regression(self, dataframe, kernel=1440):
+        dataframe_ = dataframe.copy()[-kernel:]
+        x = dataframe_.index.values.reshape(-1, 1)
+        y = dataframe_.close.values
         model = LinearRegression()
         model.fit(x, y)
+        x = dataframe.index.values.reshape(-1, 1)
         dataframe['y'] = model.predict(x)
         dataframe['coef'] = float(model.coef_[0])
-        dataframe['upper_band'] = dataframe['y'] + dataframe.close.std()
-        dataframe['lower_band'] = dataframe['y'] - dataframe.close.std()
+        dataframe['upper_band'] = dataframe['y'] + dataframe.close.std() * 0.8
+        dataframe['lower_band'] = dataframe['y'] - dataframe.close.std() * 0.8
         dataframe['band_dist'] = dataframe['upper_band'] - dataframe['lower_band']
         return dataframe
     
 
-    def calculate_extrema(self, dataframe, kernel=12):
+    def calculate_extrema(self, dataframe, kernel=6):
         dataframe["extrema"] = 0
         min_peaks = argrelextrema(dataframe["low"].values, np.less_equal, order=kernel)
         max_peaks = argrelextrema(dataframe["high"].values, np.greater_equal, order=kernel)
@@ -96,12 +98,13 @@ class Strategy(IStrategy):
         dataframe['l_ratio'] = dataframe['l_dist'] / dataframe['band_dist']
         dataframe['l_h_ratio'] = dataframe.at[max_peaks[0][-1], "h_ratio"]
         dataframe['l_l_ratio'] = dataframe.at[min_peaks[0][-1], "l_ratio"]
+        dataframe['last_max'] = dataframe.at[max_peaks[0][-1], "close"]
+        dataframe['last_min'] = dataframe.at[min_peaks[0][-1], "close"]
         return dataframe
 
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe = dataframe.loc[-240:]
         dataframe = self.caculate_regression(dataframe)
         dataframe = self.calculate_extrema(dataframe)
 
@@ -112,20 +115,18 @@ class Strategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['coef'] > 0) & # Guard
-                (dataframe['l_l_ratio'] < 0.3) & # Guard
-                (dataframe['l_l_ratio'] > 0) & # Guard
-                qtpylib.crossed_above(dataframe['close'], dataframe['lower_band']) # Trigger
+                (dataframe['close'] > dataframe['last_max']) & # Guard
+                (dataframe['close'] > dataframe['last_min']) & # Guard
+                qtpylib.crossed_above(dataframe['close'], dataframe['y']) # Trigger
             ),
             'enter_long'
         ] = 1
 
         dataframe.loc[
             (
-                (dataframe['coef'] < 0) & # Guard
-                (dataframe['l_h_ratio'] < 0.3) & # Guard
-                (dataframe['l_h_ratio'] > 0) & # Guard
-                qtpylib.crossed_below(dataframe['close'], dataframe['upper_band']) # Trigger
+                (dataframe['close'] < dataframe['last_max']) & # Guard
+                (dataframe['close'] < dataframe['last_min']) & # Guard
+                qtpylib.crossed_below(dataframe['close'], dataframe['y']) # Trigger
             ),
             'enter_short'
         ] = 1
@@ -167,12 +168,13 @@ class Strategy(IStrategy):
             if current_candle['close'] < current_candle['lower_band']:
                 stop = current_candle['lower_band']
             else:
-                stop = current_candle['last_max_peak']
+                stop = current_candle['upper_band']
         else:
             if current_candle['close'] > current_candle['upper_band']:
                 stop = current_candle['upper_band']
             else:
-                stop = current_candle['last_min_peak']
+                stop = current_candle['lower_band']
+        
         return stoploss_from_absolute(
             stop,
             current_rate,
