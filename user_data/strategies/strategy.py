@@ -1,22 +1,16 @@
 from pandas import DataFrame
 from freqtrade.persistence import Trade
-from datetime import datetime, date, time
-# import api
+from datetime import datetime
 from typing import Optional
 from technical import qtpylib
-import talib.abstract as ta
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 import numpy as np
-from typing import Dict
-from freqtrade.exchange import timeframe_to_prev_date
 from scipy.signal import argrelextrema
 
 from freqtrade.strategy import (
     IStrategy,
-    IntParameter,
     stoploss_from_absolute,
-    stoploss_from_open
 )
 
 class Strategy(IStrategy):
@@ -76,8 +70,8 @@ class Strategy(IStrategy):
         x = dataframe.index.values.reshape(-1, 1)
         dataframe['y'] = model.predict(x)
         dataframe['coef'] = float(model.coef_[0])
-        dataframe['upper_band'] = dataframe['y'] + dataframe.close.std() * 0.8
-        dataframe['lower_band'] = dataframe['y'] - dataframe.close.std() * 0.8
+        dataframe['upper_band'] = dataframe['y'] + dataframe.high.std()
+        dataframe['lower_band'] = dataframe['y'] - dataframe.low.std()
         dataframe['band_dist'] = dataframe['upper_band'] - dataframe['lower_band']
         return dataframe
     
@@ -115,7 +109,6 @@ class Strategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['close'] > dataframe['last_max']) & # Guard
                 (dataframe['close'] > dataframe['last_min']) & # Guard
                 qtpylib.crossed_above(dataframe['close'], dataframe['y']) # Trigger
             ),
@@ -125,13 +118,12 @@ class Strategy(IStrategy):
         dataframe.loc[
             (
                 (dataframe['close'] < dataframe['last_max']) & # Guard
-                (dataframe['close'] < dataframe['last_min']) & # Guard
                 qtpylib.crossed_below(dataframe['close'], dataframe['y']) # Trigger
             ),
             'enter_short'
         ] = 1
 
-        dataframe.to_csv('user_data/notebooks/out.csv', index=False)
+        dataframe.to_csv('user_data/notebooks/df.csv', index=False)
 
         return dataframe
 
@@ -153,34 +145,50 @@ class Strategy(IStrategy):
 
         if (trade.nr_of_successful_entries == 1) and (order.ft_order_side == trade.entry_side):
             trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
+            self.ob_dataframe(pair).to_csv(f'user_data/notebooks/{trade.id}_ob.csv', index=False)
+            pd.DataFrame(vars(trade)).to_csv('user_data/notebooks/trades.csv', index=False, mode='a')
 
         return None
     
 
-    def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
-                        current_rate: float, current_profit: float, after_fill: bool, 
-                        **kwargs) -> Optional[float]:
+    # def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
+    #                     current_rate: float, current_profit: float, after_fill: bool, 
+    #                     **kwargs) -> Optional[float]:
 
+    #     dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+    #     current_candle = dataframe.iloc[-1].squeeze()
+
+    #     if trade.is_short:
+    #         if current_candle['close'] < current_candle['lower_band']:
+    #             stop = current_candle['lower_band']
+    #         else:
+    #             stop = current_candle['upper_band']
+    #     else:
+    #         if current_candle['close'] > current_candle['upper_band']:
+    #             stop = current_candle['upper_band']
+    #         else:
+    #             stop = current_candle['lower_band']
+        
+    #     return stoploss_from_absolute(
+    #         stop,
+    #         current_rate,
+    #         is_short=trade.is_short,
+    #         leverage=trade.leverage
+    #     )
+
+    def custom_exit(self, pair: str, trade: 'Trade', current_time: 'datetime', current_rate: float,
+                    current_profit: float, **kwargs):
+        
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         current_candle = dataframe.iloc[-1].squeeze()
 
         if trade.is_short:
             if current_candle['close'] < current_candle['lower_band']:
-                stop = current_candle['lower_band']
-            else:
-                stop = current_candle['upper_band']
+                return "Target Hit!"
+            elif current_candle['close'] > current_candle['upper_band']:
+                return "Target Loss!"
         else:
             if current_candle['close'] > current_candle['upper_band']:
-                stop = current_candle['upper_band']
-            else:
-                stop = current_candle['lower_band']
-        
-        return stoploss_from_absolute(
-            stop,
-            current_rate,
-            is_short=trade.is_short,
-            leverage=trade.leverage
-        )
-
-
-
+                return "Target Hit!"
+            elif current_candle['close'] < current_candle['lower_band']:
+                return "Target Loss!"
