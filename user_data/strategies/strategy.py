@@ -110,7 +110,7 @@ class Strategy(IStrategy):
         dataframe.loc[
             (
                 (dataframe['close'] > dataframe['last_min']) & # Guard
-                qtpylib.crossed_above(dataframe['close'], dataframe['y']) # Trigger
+                qtpylib.crossed_above(dataframe['close'], dataframe['lower_band']) # Trigger
             ),
             'enter_long'
         ] = 1
@@ -118,7 +118,7 @@ class Strategy(IStrategy):
         dataframe.loc[
             (
                 (dataframe['close'] < dataframe['last_max']) & # Guard
-                qtpylib.crossed_below(dataframe['close'], dataframe['y']) # Trigger
+                qtpylib.crossed_below(dataframe['close'], dataframe['upper_band']) # Trigger
             ),
             'enter_short'
         ] = 1
@@ -146,49 +146,31 @@ class Strategy(IStrategy):
         if (trade.nr_of_successful_entries == 1) and (order.ft_order_side == trade.entry_side):
             trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
             self.ob_dataframe(pair).to_csv(f'user_data/notebooks/{trade.id}_ob.csv', index=False)
-            pd.DataFrame(vars(trade)).to_csv('user_data/notebooks/trades.csv', index=False, mode='a')
 
         return None
     
 
-    # def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
-    #                     current_rate: float, current_profit: float, after_fill: bool, 
-    #                     **kwargs) -> Optional[float]:
+    def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
+                        current_rate: float, current_profit: float, after_fill: bool, 
+                        **kwargs) -> Optional[float]:
 
-    #     dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-    #     current_candle = dataframe.iloc[-1].squeeze()
-
-    #     if trade.is_short:
-    #         if current_candle['close'] < current_candle['lower_band']:
-    #             stop = current_candle['lower_band']
-    #         else:
-    #             stop = current_candle['upper_band']
-    #     else:
-    #         if current_candle['close'] > current_candle['upper_band']:
-    #             stop = current_candle['upper_band']
-    #         else:
-    #             stop = current_candle['lower_band']
-        
-    #     return stoploss_from_absolute(
-    #         stop,
-    #         current_rate,
-    #         is_short=trade.is_short,
-    #         leverage=trade.leverage
-    #     )
-
-    def custom_exit(self, pair: str, trade: 'Trade', current_time: 'datetime', current_rate: float,
-                    current_profit: float, **kwargs):
-        
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         current_candle = dataframe.iloc[-1].squeeze()
 
         if trade.is_short:
-            if current_candle['close'] < current_candle['lower_band']:
-                return "Target Hit!"
-            elif current_candle['close'] > current_candle['upper_band']:
-                return "Target Loss!"
-        else:
-            if current_candle['close'] > current_candle['upper_band']:
-                return "Target Hit!"
+            if current_candle['last_max'] > current_candle['upper_band']:
+                stop = current_candle['last_max']
             elif current_candle['close'] < current_candle['lower_band']:
-                return "Target Loss!"
+                stop = current_candle['last_max']
+        else:
+            if current_candle['last_min'] < current_candle['lower_band']:
+                stop = current_candle['last_min']
+            elif current_candle['close'] > current_candle['upper_band']:
+                stop = current_candle['last_min']
+        
+        return stoploss_from_absolute(
+            stop,
+            current_rate,
+            is_short=trade.is_short,
+            leverage=trade.leverage
+        )
