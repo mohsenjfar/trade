@@ -240,7 +240,7 @@ class Strategy(IStrategy):
                     is_short=trade.is_short,
                     leverage=trade.leverage
                 )
-            if current_candle['close'] < current_candle['middle_band']:
+            if current_candle['close'] < current_candle['y']:
                 return stoploss_from_absolute(
                     trade.open_rate * (1 - 0.001),
                     current_rate,
