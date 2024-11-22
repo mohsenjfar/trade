@@ -98,6 +98,8 @@ class Strategy(IStrategy):
         dataframe['l_l_ratio'] = dataframe.at[min_peaks[0][-1], "l_ratio"]
         dataframe['last_max'] = dataframe.at[max_peaks[0][-1], "close"]
         dataframe['last_min'] = dataframe.at[min_peaks[0][-1], "close"]
+        dataframe['second_last_max'] = dataframe.at[max_peaks[0][-2], "close"]
+        dataframe['second_last_min'] = dataframe.at[min_peaks[0][-2], "close"]
         return dataframe
 
 
@@ -115,6 +117,7 @@ class Strategy(IStrategy):
             (
                 (dataframe['coef'] > 0) & # Guard
                 (dataframe['close'] > dataframe['last_min']) & # Guard
+                (dataframe['second_last_min'] < dataframe['last_min']) & # Guard
                 qtpylib.crossed_above(dataframe['close'], dataframe['lower_band']) # Trigger
             ),
             'enter_long'
@@ -124,6 +127,7 @@ class Strategy(IStrategy):
             (
                 (dataframe['coef'] < 0) & # Guard
                 (dataframe['close'] < dataframe['last_max']) & # Guard
+                (dataframe['second_last_max'] > dataframe['last_max']) & # Guard
                 qtpylib.crossed_below(dataframe['close'], dataframe['upper_band']) # Trigger
             ),
             'enter_short'
