@@ -131,8 +131,6 @@ class Strategy(IStrategy):
             'enter_short'
         ] = 1
 
-        dataframe.to_csv(f'user_data/notebooks/df_{metadata["pair"].replace('/USDT:USDT','')}.csv', index=False)
-
         return dataframe
 
 
@@ -224,6 +222,7 @@ class Strategy(IStrategy):
             trade.set_custom_data(key='stop', value=stop)
             trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
             self.ob_dataframe(pair).to_csv(f'user_data/notebooks/{pair.replace('/USDT:USDT','')}_{trade.id}_ob.csv', index=False)
+            dataframe.to_csv(f'user_data/notebooks/{pair.replace('/USDT:USDT','')}_{trade.id}_df.csv', index=False)
 
         return None
     
