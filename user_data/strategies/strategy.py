@@ -180,7 +180,7 @@ class Strategy(IStrategy):
             ].close_profit_abs.sum().item() / starting_balance
 
             if (today_loss <= self.stoploss):
-                self.dp.send_msg(f"Max day's loss ({today_loss:.2f}) is reached, stop trade entry ...")
+                self.dp.send_msg(f"Max day's loss ({today_loss * 100:.2f} %) is reached, stop trade entry ...")
                 return False
             
             week_day = date.weekday(date.today())
@@ -192,7 +192,7 @@ class Strategy(IStrategy):
             ].close_profit_abs.sum().item() / starting_balance
 
             if this_week_loss <= self.stoploss * 3:
-                self.dp.send_msg(f"Max week's loss ({this_week_loss:.2f}) is reached, stop trade entry ...")
+                self.dp.send_msg(f"Max week's loss ({this_week_loss * 100:.2f} %) is reached, stop trade entry ...")
                 return False
 
             trades = trades.loc[trades.pair == pair]
