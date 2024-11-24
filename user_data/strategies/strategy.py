@@ -173,15 +173,13 @@ class Strategy(IStrategy):
         
         starting_balance = client.daily(1).get('data')[0].get('starting_balance')
         trades = pd.DataFrame(client.trades().get('trades'))
-        if trades:
+        if not trades.empty:
             today_loss = trades[
                 (trades.close_profit_abs < 0) & 
                 (trades.close_date > date.today().strftime('%Y-%m-%d'))
             ].close_profit_abs.sum().item() / starting_balance
 
-            self.dp.send_msg(f"Today loss: {today_loss}")
-
-            if (today_loss <= abs(self.stoploss)):
+            if (today_loss <= self.stoploss):
                 self.dp.send_msg(f"Max day's loss ({today_loss:.2f}) is reached, stop trade entry ...")
                 return False
             
@@ -193,9 +191,7 @@ class Strategy(IStrategy):
                 (trades.close_date > open_date.strftime('%Y-%m-%d'))
             ].close_profit_abs.sum().item() / starting_balance
 
-            self.dp.send_msg(f"This week loss: {this_week_loss}")
-
-            if this_week_loss <= abs(self.stoploss * 3):
+            if this_week_loss <= self.stoploss * 3:
                 self.dp.send_msg(f"Max week's loss ({this_week_loss:.2f}) is reached, stop trade entry ...")
                 return False
 
@@ -239,12 +235,12 @@ class Strategy(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
 
         if trade.is_short:
-            max_peaks = dataframe[dataframe.last_max < trade.get_custom_data(key='stop')].last_max.values()
-            if max_peaks.size != 0 and (1 - max_peaks[0] / trade.open_rate) >= 0.01:
+            max_peaks = dataframe[dataframe.last_max < trade.get_custom_data(key='stop')].last_max.values
+            if max_peaks.size > 0 and (1 - max_peaks[0] / trade.open_rate) >= 0.01:
                 trade.set_custom_data(key='stop', value=max_peaks[0])
         else:
-            min_peaks = dataframe[dataframe.last_min > trade.get_custom_data(key='stop')].last_min.values()
-            if min_peaks.size != 0 and (1 - trade.open_rate / min_peaks[0]) >= 0.01:
+            min_peaks = dataframe[dataframe.last_min > trade.get_custom_data(key='stop')].last_min.values
+            if min_peaks.size > 0 and (1 - trade.open_rate / min_peaks[0]) >= 0.01:
                 trade.set_custom_data(key='stop', value=min_peaks[0])
         
         return stoploss_from_absolute(
