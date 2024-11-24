@@ -96,10 +96,10 @@ class Strategy(IStrategy):
         dataframe['l_ratio'] = dataframe['l_dist'] / dataframe['band_dist']
         dataframe['l_h_ratio'] = dataframe.at[max_peaks[0][-1], "h_ratio"]
         dataframe['l_l_ratio'] = dataframe.at[min_peaks[0][-1], "l_ratio"]
-        dataframe['last_max'] = dataframe.at[max_peaks[0][-1], "close"]
-        dataframe['last_min'] = dataframe.at[min_peaks[0][-1], "close"]
-        dataframe['second_last_max'] = dataframe.at[max_peaks[0][-2], "close"]
-        dataframe['second_last_min'] = dataframe.at[min_peaks[0][-2], "close"]
+        dataframe['last_max'] = dataframe.at[max_peaks[0][-1], "high"]
+        dataframe['last_min'] = dataframe.at[min_peaks[0][-1], "low"]
+        dataframe['second_last_max'] = dataframe.at[max_peaks[0][-2], "high"]
+        dataframe['second_last_min'] = dataframe.at[min_peaks[0][-2], "low"]
         return dataframe
 
 
@@ -115,25 +115,23 @@ class Strategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['coef'] > 0) & # Guard
-                (dataframe['close'] > dataframe['last_min']) & # Guard
+                # (dataframe['coef'] > 0) & # Guard
                 (dataframe['second_last_min'] < dataframe['last_min']) & # Guard
-                qtpylib.crossed_above(dataframe['close'], dataframe['lower_band']) # Trigger
+                qtpylib.crossed_above(dataframe['close'], dataframe['upper_band']) # Trigger
             ),
             'enter_long'
         ] = 1
 
         dataframe.loc[
             (
-                (dataframe['coef'] < 0) & # Guard
-                (dataframe['close'] < dataframe['last_max']) & # Guard
+                # (dataframe['coef'] < 0) & # Guard
                 (dataframe['second_last_max'] > dataframe['last_max']) & # Guard
-                qtpylib.crossed_below(dataframe['close'], dataframe['upper_band']) # Trigger
+                qtpylib.crossed_below(dataframe['close'], dataframe['lower_band']) # Trigger
             ),
             'enter_short'
         ] = 1
 
-        dataframe.to_csv('user_data/notebooks/df.csv', index=False)
+        dataframe.to_csv(f'user_data/notebooks/df_{metadata["pair"].replace('/USDT:USDT','')}.csv', index=False)
 
         return dataframe
 
@@ -158,12 +156,12 @@ class Strategy(IStrategy):
         current_candle = dataframe.iloc[-1].squeeze()
 
         if side == 'short':
-            risk = 1 - current_rate / current_candle.last_max
+            risk = 1 - current_candle.close / current_candle.last_max
         else:
-            risk = 1 - current_candle.last_min / current_rate
+            risk = 1 - current_candle.last_min / current_candle.close
 
         if risk > (abs(self.stoploss) / 2):
-            self.dp.send_msg(f"High risk trade ({risk:.2f}), stop entering {side} position")
+            self.dp.send_msg(f"High risk trade ({risk * 100:.2f} %), stop entering {side} position for {pair}")
             return None
         
         return max_stake
@@ -181,7 +179,9 @@ class Strategy(IStrategy):
                 (trades.close_date > date.today().strftime('%Y-%m-%d'))
             ].close_profit_abs.sum().item() / starting_balance
 
-            if (today_loss <= self.stoploss):
+            self.dp.send_msg(f"Today loss: {today_loss}")
+
+            if (today_loss <= abs(self.stoploss)):
                 self.dp.send_msg(f"Max day's loss ({today_loss:.2f}) is reached, stop trade entry ...")
                 return False
             
@@ -193,10 +193,13 @@ class Strategy(IStrategy):
                 (trades.close_date > open_date.strftime('%Y-%m-%d'))
             ].close_profit_abs.sum().item() / starting_balance
 
-            if this_week_loss <= (self.stoploss * 3):
+            self.dp.send_msg(f"This week loss: {this_week_loss}")
+
+            if this_week_loss <= abs(self.stoploss * 3):
                 self.dp.send_msg(f"Max week's loss ({this_week_loss:.2f}) is reached, stop trade entry ...")
                 return False
 
+            trades = trades.loc[trades.pair == pair]
             last_two_trades = trades.iloc[-2:]
             if all(last_two_trades.close_profit_abs.values < 0):
                 if all(last_two_trades.is_short.values):
@@ -219,8 +222,12 @@ class Strategy(IStrategy):
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
 
         if (trade.nr_of_successful_entries == 1) and (order.ft_order_side == trade.entry_side):
+            dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+            current_candle = dataframe.iloc[-1].squeeze()
+            stop = current_candle.last_max if trade.is_short else current_candle.last_min
+            trade.set_custom_data(key='stop', value=stop)
             trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
-            self.ob_dataframe(pair).to_csv(f'user_data/notebooks/{trade.id}_ob.csv', index=False)
+            self.ob_dataframe(pair).to_csv(f'user_data/notebooks/{pair.replace('/USDT:USDT','')}_{trade.id}_ob.csv', index=False)
 
         return None
     
@@ -230,45 +237,19 @@ class Strategy(IStrategy):
                         **kwargs) -> Optional[float]:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        current_candle = dataframe.iloc[-1].squeeze()
 
         if trade.is_short:
-            conditions = (
-                current_candle['last_max'] > current_candle['upper_band'],
-                current_candle['close'] < current_candle['lower_band']
-            )
-            if any(conditions):
-                return stoploss_from_absolute(
-                    current_candle['last_max'],
-                    current_rate,
-                    is_short=trade.is_short,
-                    leverage=trade.leverage
-                )
-            if current_candle['close'] < current_candle['y']:
-                return stoploss_from_absolute(
-                    trade.open_rate * (1 - 0.001),
-                    current_rate,
-                    is_short=trade.is_short,
-                    leverage=trade.leverage
-                )
+            max_peaks = dataframe[dataframe.last_max < trade.get_custom_data(key='stop')].last_max.values()
+            if max_peaks.size != 0 and (1 - max_peaks[0] / trade.open_rate) >= 0.01:
+                trade.set_custom_data(key='stop', value=max_peaks[0])
         else:
-            conditions = (
-                current_candle['last_min'] < current_candle['lower_band'],
-                current_candle['close'] > current_candle['upper_band']
-            )
-            if any(conditions):
-                return stoploss_from_absolute(
-                    current_candle['last_min'],
-                    current_rate,
-                    is_short=trade.is_short,
-                    leverage=trade.leverage
-                )
-            if current_candle['close'] > current_candle['y']:
-                return stoploss_from_absolute(
-                    trade.open_rate * (1 + 0.001),
-                    current_rate,
-                    is_short=trade.is_short,
-                    leverage=trade.leverage
-                )
-            
-        return None
+            min_peaks = dataframe[dataframe.last_min > trade.get_custom_data(key='stop')].last_min.values()
+            if min_peaks.size != 0 and (1 - trade.open_rate / min_peaks[0]) >= 0.01:
+                trade.set_custom_data(key='stop', value=min_peaks[0])
+        
+        return stoploss_from_absolute(
+            trade.get_custom_data(key='stop'),
+            current_rate,
+            is_short=trade.is_short,
+            leverage=trade.leverage
+        )

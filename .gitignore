@@ -10,3 +10,4 @@ models
 *.log
 *.log.*
 hyperopt_results
+*.csv
