@@ -115,18 +115,18 @@ class Strategy(IStrategy):
 
         dataframe.loc[
             (
-                # (dataframe['coef'] > 0) & # Guard
+                (dataframe['coef'] > 0) & # Guard
                 (dataframe['second_last_min'] < dataframe['last_min']) & # Guard
-                qtpylib.crossed_above(dataframe['close'], dataframe['upper_band']) # Trigger
+                qtpylib.crossed_above(dataframe['close'], dataframe['y']) # Trigger
             ),
             'enter_long'
         ] = 1
 
         dataframe.loc[
             (
-                # (dataframe['coef'] < 0) & # Guard
+                (dataframe['coef'] < 0) & # Guard
                 (dataframe['second_last_max'] > dataframe['last_max']) & # Guard
-                qtpylib.crossed_below(dataframe['close'], dataframe['lower_band']) # Trigger
+                qtpylib.crossed_below(dataframe['close'], dataframe['y']) # Trigger
             ),
             'enter_short'
         ] = 1
@@ -149,68 +149,72 @@ class Strategy(IStrategy):
                             proposed_stake: float, min_stake: Optional[float], max_stake: float,
                             leverage: float, entry_tag: Optional[str], side: str,
                             **kwargs) -> float:
-
+        
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         current_candle = dataframe.iloc[-1].squeeze()
 
-        if side == 'short':
-            risk = 1 - current_candle.close / current_candle.last_max
-        else:
-            risk = 1 - current_candle.last_min / current_candle.close
+        if side == 'short': risk = 1 - current_rate / current_candle.last_max
+        else: risk = 1 - current_candle.last_min / current_rate
 
-        if risk > (abs(self.stoploss) / 2):
-            self.dp.send_msg(f"High risk trade ({risk * 100:.2f} %), stop entering {side} position for {pair}")
-            return None
-        
-        return max_stake
+        return max(min(abs(self.stoploss) / 2 * max_stake / risk, max_stake), min_stake)
         
 
     def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
                             time_in_force: str, current_time: datetime, entry_tag: Optional[str],
                             side: str, **kwargs) -> bool:
-        
-        starting_balance = client.daily(1).get('data')[0].get('starting_balance')
-        trades = pd.DataFrame(client.trades().get('trades'))
-        if not trades.empty:
-            today_loss = trades[
-                (trades.close_profit_abs < 0) & 
-                (trades.close_date > date.today().strftime('%Y-%m-%d'))
-            ].close_profit_abs.sum().item() / starting_balance
+        try:
+            starting_balance = client.daily(1).get('data')[0].get('starting_balance')
+            trades = pd.DataFrame(client.trades().get('trades') + client.status())
+            if not trades.empty:
+                today_loss = trades[
+                    (trades.close_profit_abs < 0) & 
+                    (trades.close_date > date.today().strftime('%Y-%m-%d'))
+                ].close_profit_abs.sum().item() / starting_balance
 
-            if (today_loss <= self.stoploss):
-                self.dp.send_msg(f"Max day's loss ({today_loss * 100:.2f} %) is reached, stop trade entry ...")
-                return False
-            
-            week_day = date.weekday(date.today())
-            open_date = (date.today() - timedelta(days=week_day))
-            starting_balance = client.weekly(1).get('data')[0].get('starting_balance')
-            this_week_loss = trades[
-                (trades.close_profit_abs < 0) & 
-                (trades.close_date > open_date.strftime('%Y-%m-%d'))
-            ].close_profit_abs.sum().item() / starting_balance
+                if trades.is_open.any() and (today_loss + self.stoploss / 2 > self.stoploss):
+                    self.dp.send_msg(f"Open trade may result in loss, stop entering trade till close.")
+                    return False
 
-            if this_week_loss <= self.stoploss * 3:
-                self.dp.send_msg(f"Max week's loss ({this_week_loss * 100:.2f} %) is reached, stop trade entry ...")
-                return False
-
-            trades = trades.loc[trades.pair == pair]
-            last_two_trades = trades.iloc[-2:]
-            if all(last_two_trades.close_profit_abs.values < 0):
-                if all(last_two_trades.is_short.values):
-                    if side == 'short':
-                        self.dp.send_msg(f"Two consecutive short position losses, stop entering short.")
-                        return False
-                if not all(last_two_trades.is_short.values):
-                    if side == 'long':
-                        self.dp.send_msg(f"Two consecutive long position losses, stop entering long.")
-                        return False
-                last_trade_close_date_str = last_two_trades.iloc[-1].squeeze().close_date
-                last_trade_close_date = datetime.strptime(last_trade_close_date_str, '%Y-%m-%d %H:%M:%S')
-                if ((datetime.datetime.now() - last_trade_close_date).seconds / 3600) < 12:
-                    self.dp.send_msg(f"Two consecutive losses, stop entering position for 12 hours.")
+                if (today_loss <= self.stoploss):
+                    self.dp.send_msg(f"Max day's loss ({today_loss * 100:.2f} %) is reached, stop trade entry ...")
                     return False
                 
-        return True
+                week_day = date.weekday(date.today())
+                open_date = (date.today() - timedelta(days=week_day))
+                starting_balance = client.weekly(1).get('data')[0].get('starting_balance')
+                this_week_loss = trades[
+                    (trades.close_profit_abs < 0) & 
+                    (trades.close_date > open_date.strftime('%Y-%m-%d'))
+                ].close_profit_abs.sum().item() / starting_balance
+
+                if trades.is_open.any() and (this_week_loss + self.stoploss / 2 > self.stoploss * 3):
+                    self.dp.send_msg(f"Open trade may result in loss, stop entering trade till close.")
+                    return False
+                
+                if this_week_loss <= self.stoploss * 3:
+                    self.dp.send_msg(f"Max week's loss ({this_week_loss * 100:.2f} %) is reached, stop trade entry ...")
+                    return False
+
+                if len(trades) > 1:
+                    last_two_trades = trades.iloc[-2:]
+                    if all(last_two_trades.close_profit_abs.values < 0):
+                        if all(last_two_trades.is_short.values):
+                            if side == 'short':
+                                self.dp.send_msg(f"Two consecutive short position losses, stop entering short.")
+                                return False
+                        if not all(last_two_trades.is_short.values):
+                            if side == 'long':
+                                self.dp.send_msg(f"Two consecutive long position losses, stop entering long.")
+                                return False
+                        last_trade_close_date_str = last_two_trades.iloc[-1].squeeze().close_date
+                        last_trade_close_date = datetime.strptime(last_trade_close_date_str, '%Y-%m-%d %H:%M:%S')
+                        if ((datetime.datetime.now() - last_trade_close_date).seconds / 3600) < 12:
+                            self.dp.send_msg(f"Two consecutive losses, stop entering position for 12 hours.")
+                            return False
+            return True
+        except (TypeError, AttributeError):
+            self.dp.send_msg(f"Error fetching client data")
+            return False
 
 
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
@@ -221,8 +225,9 @@ class Strategy(IStrategy):
             stop = current_candle.last_max if trade.is_short else current_candle.last_min
             trade.set_custom_data(key='stop', value=stop)
             trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
-            self.ob_dataframe(pair).to_csv(f'user_data/notebooks/{pair.replace('/USDT:USDT','')}_{trade.id}_ob.csv', index=False)
-            dataframe.to_csv(f'user_data/notebooks/{pair.replace('/USDT:USDT','')}_{trade.id}_df.csv', index=False)
+            ticker = pair.replace('/USDT:USDT','')
+            self.ob_dataframe(pair).to_csv(f'user_data/notebooks/{ticker}_{trade.id}_ob.csv', index=False)
+            dataframe.to_csv(f'user_data/notebooks/{ticker}_{trade.id}_df.csv', index=False)
 
         return None
     
