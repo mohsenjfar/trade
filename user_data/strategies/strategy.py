@@ -1,6 +1,6 @@
 from pandas import DataFrame
 from freqtrade.persistence import Trade
-from datetime import datetime, date, timedelta
+from datetime import datetime, date, timedelta, timezone
 from typing import Optional
 from technical import qtpylib
 import pandas as pd
@@ -11,11 +11,6 @@ from freqtrade.strategy import (
     IStrategy,
     stoploss_from_absolute,
 )
-from freqtrade_client import FtRestClient
-server_url = 'http://127.0.0.1:8080'
-username = ''
-password = ""
-client = FtRestClient(server_url, username, password)
 
 class Strategy(IStrategy):
 
@@ -25,13 +20,13 @@ class Strategy(IStrategy):
 
     stoploss = -0.01
 
-    timeframe = '1m'
+    timeframe = '5m'
 
     use_exit_signal = False
 
     use_custom_stoploss = True
 
-    startup_candle_count: int = 1440
+    startup_candle_count: int = 288
 
     process_only_new_candles = True
 
@@ -65,7 +60,7 @@ class Strategy(IStrategy):
         return pd.concat((bid_dataframe,ask_dataframe))
 
 
-    def caculate_regression(self, dataframe, kernel=1440):
+    def caculate_regression(self, dataframe, kernel=288):
         dataframe_ = dataframe.copy()[-kernel:]
         x = dataframe_.index.values.reshape(-1, 1)
         y = dataframe_.close.values
@@ -109,10 +104,10 @@ class Strategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['coef'] > 0) & # Guard
+                # (dataframe['coef'] > 0) & # Guard
                 (dataframe['second_last_min'] < dataframe['last_min']) & # Guard
-                (dataframe['close'] > dataframe['last_max']) & # Guard
-                (dataframe['close'] > dataframe['second_last_max']) & # Guard
+                # (dataframe['close'] > dataframe['last_max']) & # Guard
+                # (dataframe['close'] > dataframe['second_last_max']) & # Guard
                 qtpylib.crossed_above(dataframe['close'], dataframe['y']) # Trigger
             ),
             'enter_long'
@@ -120,10 +115,10 @@ class Strategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['coef'] < 0) & # Guard
+                # (dataframe['coef'] < 0) & # Guard
                 (dataframe['second_last_max'] > dataframe['last_max']) & # Guard
-                (dataframe['close'] < dataframe['last_min']) & # Guard
-                (dataframe['close'] < dataframe['second_last_min']) & # Guard
+                # (dataframe['close'] < dataframe['last_min']) & # Guard
+                # (dataframe['close'] < dataframe['second_last_min']) & # Guard
                 qtpylib.crossed_below(dataframe['close'], dataframe['y']) # Trigger
             ),
             'enter_short'
@@ -158,59 +153,54 @@ class Strategy(IStrategy):
     def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
                             time_in_force: str, current_time: datetime, entry_tag: Optional[str],
                             side: str, **kwargs) -> bool:
-        try:
-            starting_balance = client.daily(1).get('data')[0].get('starting_balance')
-            trades = pd.DataFrame(client.trades().get('trades') + client.status())
-            if not trades.empty:
-                today_loss = trades[
-                    (trades.close_profit_abs < 0) & 
-                    (trades.close_date > date.today().strftime('%Y-%m-%d'))
-                ].close_profit_abs.sum().item() / starting_balance
+        
+        total_stake = self.wallets.get_total_stake_amount()
+        today = datetime.now(timezone.utc).date()
+        this_week = today - timedelta(days=today.weekday())
+        this_week_trades = Trade.get_trades_proxy(open_date=this_week, is_open=False)
+        today_trades = [trade for trade in this_week_trades if trade.close_date.date() == today]
+        this_week_loss = sum(trade.close_profit_abs for trade in this_week_trades if trade.close_profit_abs < 0)
+        today_loss = sum(trade.close_profit_abs for trade in today_trades if trade.close_profit_abs < 0)
+        today_profit = sum(trade.close_profit_abs for trade in today_trades)
+        this_week_profit = sum(trade.close_profit_abs for trade in this_week_trades)
+        today_starting_balance = total_stake - today_profit
+        this_week_starting_balance = total_stake - this_week_profit
+        today_loss_ratio = today_loss / today_starting_balance
+        this_week_loss_ratio = this_week_loss / this_week_starting_balance
+        open_trades = Trade.get_open_trade_count()
 
-                if trades.is_open.any() and (today_loss + self.stoploss / 2 > self.stoploss):
-                    self.dp.send_msg(f"Open trade may result in loss, stop entering trade till close.")
-                    return False
-
-                if (today_loss <= self.stoploss):
-                    self.dp.send_msg(f"Max day's loss ({today_loss * 100:.2f} %) is reached, stop trade entry ...")
-                    return False
-                
-                week_day = date.weekday(date.today())
-                open_date = (date.today() - timedelta(days=week_day))
-                starting_balance = client.weekly(1).get('data')[0].get('starting_balance')
-                this_week_loss = trades[
-                    (trades.close_profit_abs < 0) & 
-                    (trades.close_date > open_date.strftime('%Y-%m-%d'))
-                ].close_profit_abs.sum().item() / starting_balance
-
-                if trades.is_open.any() and (this_week_loss + self.stoploss / 2 > self.stoploss * 3):
-                    self.dp.send_msg(f"Open trade may result in loss, stop entering trade till close.")
-                    return False
-                
-                if this_week_loss <= self.stoploss * 3:
-                    self.dp.send_msg(f"Max week's loss ({this_week_loss * 100:.2f} %) is reached, stop trade entry ...")
-                    return False
-
-                if len(trades) > 1:
-                    last_two_trades = trades.iloc[-2:]
-                    if all(last_two_trades.close_profit_abs.values < 0):
-                        if all(last_two_trades.is_short.values):
-                            if side == 'short':
-                                self.dp.send_msg(f"Two consecutive short position losses, stop entering short.")
-                                return False
-                        if not all(last_two_trades.is_short.values):
-                            if side == 'long':
-                                self.dp.send_msg(f"Two consecutive long position losses, stop entering long.")
-                                return False
-                        last_trade_close_date_str = last_two_trades.iloc[-1].squeeze().close_date
-                        last_trade_close_date = datetime.strptime(last_trade_close_date_str, '%Y-%m-%d %H:%M:%S')
-                        if ((datetime.datetime.now() - last_trade_close_date).seconds / 3600) < 12:
-                            self.dp.send_msg(f"Two consecutive losses, stop entering position for 12 hours.")
-                            return False
-            return True
-        except (TypeError, AttributeError):
-            self.dp.send_msg(f"Error fetching client data")
+        if open_trades > 0 and (today_loss_ratio + self.stoploss / 2 > self.stoploss):
+            self.dp.send_msg(f"Open trade may result in loss, stop entering trade till close.")
             return False
+
+        if (today_loss_ratio <= self.stoploss):
+            self.dp.send_msg(f"Max day's loss ({today_loss_ratio * 100:.2f} %) is reached, stop trade entry ...")
+            return False
+
+        if open_trades > 0 and (this_week_loss_ratio + self.stoploss / 2 > self.stoploss * 3):
+            self.dp.send_msg(f"Open trade may result in loss, stop entering trade till close.")
+            return False
+        
+        if this_week_loss_ratio <= self.stoploss * 3:
+            self.dp.send_msg(f"Max week's loss ({this_week_loss_ratio * 100:.2f} %) is reached, stop trade entry ...")
+            return False
+
+        if len(this_week_trades) > 1:
+            last_two_trades = this_week_trades[-2:]
+            if all(trade.close_profit_abs < 0 for trade in last_two_trades):
+                if all(trade.is_short for trade in last_two_trades):
+                    if side == 'short':
+                        self.dp.send_msg(f"Two consecutive short position losses, stop entering short.")
+                        return False
+                if not all(trade.is_short for trade in last_two_trades):
+                    if side == 'long':
+                        self.dp.send_msg(f"Two consecutive long position losses, stop entering long.")
+                        return False
+                last_trade_close_date = last_two_trades[-1].close_date
+                if ((datetime.datetime.now() - last_trade_close_date).seconds / 3600) < 12:
+                    self.dp.send_msg(f"Two consecutive losses, stop entering position for 12 hours.")
+                    return False
+        return True
 
 
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
