@@ -169,16 +169,16 @@ class Strategy(IStrategy):
         this_week_loss_ratio = this_week_loss / this_week_starting_balance
         open_trades = Trade.get_open_trade_count()
 
-        if open_trades > 0 and (today_loss_ratio + self.stoploss / 2 > self.stoploss):
-            self.dp.send_msg(f"Open trade may result in loss, stop entering trade till close.")
+        if open_trades > 0 and (today_loss_ratio + self.stoploss / 2 < self.stoploss):
+            self.dp.send_msg(f"Open trade may result in loss, prevent {side} entry for {pair} till close.")
             return False
 
         if (today_loss_ratio <= self.stoploss):
             self.dp.send_msg(f"Max day's loss ({today_loss_ratio * 100:.2f} %) is reached, stop trade entry ...")
             return False
 
-        if open_trades > 0 and (this_week_loss_ratio + self.stoploss / 2 > self.stoploss * 3):
-            self.dp.send_msg(f"Open trade may result in loss, stop entering trade till close.")
+        if open_trades > 0 and (this_week_loss_ratio + self.stoploss / 2 < self.stoploss * 3):
+            self.dp.send_msg(f"Open trade may result in loss, prevent {side} entry for {pair} till close.")
             return False
         
         if this_week_loss_ratio <= self.stoploss * 3:
@@ -230,19 +230,26 @@ class Strategy(IStrategy):
                         **kwargs) -> Optional[float]:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        current_candle = dataframe.iloc[-1].squeeze()
         risk, stop = trade.get_custom_data(key='risk'), trade.get_custom_data(key='stop')
 
         if trade.is_short:
             max_peaks = dataframe[dataframe.last_max < stop].last_max.values
             if max_peaks.size > 0 and (1 - max_peaks[0] / trade.open_rate) >= risk * 2:
-                trade.set_custom_data(key='stop', value=max_peaks[0])
+                stop = max_peaks[0]
+                trade.set_custom_data(key='stop', value=stop)
+            if current_rate < current_candle.lower_band:
+                stop = trade.open_rate * (1 - 0.001)
         else:
             min_peaks = dataframe[dataframe.last_min > stop].last_min.values
             if min_peaks.size > 0 and (1 - trade.open_rate / min_peaks[0]) >= risk * 2:
-                trade.set_custom_data(key='stop', value=min_peaks[0])
+                stop = min_peaks[0]
+                trade.set_custom_data(key='stop', value=stop)
+            if current_rate > current_candle.upper_band:
+                stop = trade.open_rate * (1 + 0.001)
         
         return stoploss_from_absolute(
-            trade.get_custom_data(key='stop'),
+            stop,
             current_rate,
             is_short=trade.is_short,
             leverage=trade.leverage
