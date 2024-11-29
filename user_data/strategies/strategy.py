@@ -235,18 +235,24 @@ class Strategy(IStrategy):
 
         if trade.is_short:
             max_peaks = dataframe[dataframe.last_max < stop].last_max.values
+            if current_rate < current_candle.lower_band:
+                stop = trade.open_rate * (1 - 0.001)
+            if current_time - timedelta(minutes=240) > trade.open_date_utc:
+                if (1 - current_rate / trade.open_rate) >= risk * 2:
+                    stop = trade.open_rate * (1 - risk * 2)
             if max_peaks.size > 0 and (1 - max_peaks[0] / trade.open_rate) >= risk * 2:
                 stop = max_peaks[0]
                 trade.set_custom_data(key='stop', value=stop)
-            if current_rate < current_candle.lower_band:
-                stop = trade.open_rate * (1 - 0.001)
         else:
             min_peaks = dataframe[dataframe.last_min > stop].last_min.values
+            if current_rate > current_candle.upper_band:
+                stop = trade.open_rate * (1 + 0.001)
+            if current_time - timedelta(minutes=240) > trade.open_date_utc:
+                if (1 - trade.open_rate / min_peaks[0]) >= risk * 2:
+                    stop = trade.open_rate * (1 + risk * 2)
             if min_peaks.size > 0 and (1 - trade.open_rate / min_peaks[0]) >= risk * 2:
                 stop = min_peaks[0]
                 trade.set_custom_data(key='stop', value=stop)
-            if current_rate > current_candle.upper_band:
-                stop = trade.open_rate * (1 + 0.001)
         
         return stoploss_from_absolute(
             stop,
