@@ -1,6 +1,6 @@
 from pandas import DataFrame
 from freqtrade.persistence import Trade
-from datetime import datetime, date, timedelta, timezone
+from datetime import datetime, date, timedelta, timezone, time
 from typing import Optional
 from technical import qtpylib
 import pandas as pd
@@ -11,6 +11,10 @@ from freqtrade.strategy import (
     IStrategy,
     stoploss_from_absolute,
 )
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class Strategy(IStrategy):
 
@@ -87,8 +91,8 @@ class Strategy(IStrategy):
         dataframe['last_min'] = dataframe.at[min_peaks[0][-1], "low"]
         dataframe['second_last_max'] = dataframe.at[max_peaks[0][-2], "high"]
         dataframe['second_last_min'] = dataframe.at[min_peaks[0][-2], "low"]
-        dataframe['short_risk'] = 1 - dataframe['close'] / dataframe['last_max']
-        dataframe['long_risk'] = 1 - dataframe['last_min'] / dataframe['close']
+        dataframe['short_risk'] = 1 - dataframe['close'] / dataframe['upper_band']
+        dataframe['long_risk'] = 1 - dataframe['lower_band'] / dataframe['close']
         return dataframe
 
 
@@ -102,9 +106,10 @@ class Strategy(IStrategy):
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
+
         dataframe.loc[
             (
-                # (dataframe['coef'] > 0) & # Guard
+                (dataframe['coef'] > 0) & # Guard
                 (dataframe['second_last_min'] < dataframe['last_min']) & # Guard
                 # (dataframe['close'] > dataframe['last_max']) & # Guard
                 # (dataframe['close'] > dataframe['second_last_max']) & # Guard
@@ -115,7 +120,7 @@ class Strategy(IStrategy):
 
         dataframe.loc[
             (
-                # (dataframe['coef'] < 0) & # Guard
+                (dataframe['coef'] < 0) & # Guard
                 (dataframe['second_last_max'] > dataframe['last_max']) & # Guard
                 # (dataframe['close'] < dataframe['last_min']) & # Guard
                 # (dataframe['close'] < dataframe['second_last_min']) & # Guard
@@ -146,13 +151,6 @@ class Strategy(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         candle = dataframe.iloc[-1].squeeze()
         risk = candle['short_risk'] if side == 'short' else candle['long_risk']
-
-        return max(min(abs(self.stoploss) / 2 * max_stake / risk, max_stake), min_stake)
-        
-
-    def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
-                            time_in_force: str, current_time: datetime, entry_tag: Optional[str],
-                            side: str, **kwargs) -> bool:
         
         total_stake = self.wallets.get_total_stake_amount()
         today = datetime.now(timezone.utc).date()
@@ -170,37 +168,40 @@ class Strategy(IStrategy):
         open_trades = Trade.get_open_trade_count()
 
         if open_trades > 0 and (today_loss_ratio + self.stoploss / 2 < self.stoploss):
-            self.dp.send_msg(f"Open trade may result in loss, prevent {side} entry for {pair} till close.")
-            return False
+            logger.info(f"Open trade may result in loss, prevent {side} entry for {pair} till close.")
+            return None
 
         if (today_loss_ratio <= self.stoploss):
-            self.dp.send_msg(f"Max day's loss ({today_loss_ratio * 100:.2f} %) is reached, stop trade entry ...")
-            return False
+            logger.info(
+                f"Prevent entering {side} position for {pair} due to max day loss ({today_loss_ratio * 100:.2f} %)")
+            return None
 
         if open_trades > 0 and (this_week_loss_ratio + self.stoploss / 2 < self.stoploss * 3):
-            self.dp.send_msg(f"Open trade may result in loss, prevent {side} entry for {pair} till close.")
-            return False
+            logger.info(f"Open trade may result in loss, prevent {side} entry for {pair} till close.")
+            return None
         
         if this_week_loss_ratio <= self.stoploss * 3:
-            self.dp.send_msg(f"Max week's loss ({this_week_loss_ratio * 100:.2f} %) is reached, stop trade entry ...")
-            return False
+            logger.info(
+                f"Prevent entering {side} position for {pair} due to max week loss ({this_week_loss_ratio * 100:.2f} %)")
+            return None
 
         if len(this_week_trades) > 1:
             last_two_trades = this_week_trades[-2:]
             if all(trade.close_profit_abs < 0 for trade in last_two_trades):
                 if all(trade.is_short for trade in last_two_trades):
                     if side == 'short':
-                        self.dp.send_msg(f"Two consecutive short position losses, stop entering short.")
-                        return False
+                        logger.info(f"Two consecutive short position losses, stop entering short.")
+                        return None
                 if not all(trade.is_short for trade in last_two_trades):
                     if side == 'long':
-                        self.dp.send_msg(f"Two consecutive long position losses, stop entering long.")
-                        return False
+                        logger.info(f"Two consecutive long position losses, stop entering long.")
+                        return None
                 last_trade_close_date = last_two_trades[-1].close_date
                 if ((datetime.datetime.now() - last_trade_close_date).seconds / 3600) < 12:
-                    self.dp.send_msg(f"Two consecutive losses, stop entering position for 12 hours.")
-                    return False
-        return True
+                    logger.info(f"Two consecutive losses, stop entering position for 12 hours.")
+                    return None
+
+        return max(min(abs(self.stoploss) / 2 * max_stake / risk, max_stake), min_stake)
 
 
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
@@ -260,3 +261,10 @@ class Strategy(IStrategy):
             is_short=trade.is_short,
             leverage=trade.leverage
         )
+
+
+    def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
+                    current_rate: float, current_profit: float, **kwargs) -> str:
+        
+        if current_time.time() > time(23,50):
+            return 'Trade expired!'
