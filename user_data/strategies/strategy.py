@@ -5,6 +5,7 @@ from typing import Optional
 from technical import qtpylib
 import pandas as pd
 from sklearn.linear_model import LinearRegression
+from math import ceil
 import numpy as np
 from scipy.signal import argrelextrema
 from freqtrade.strategy import (
@@ -91,8 +92,8 @@ class Strategy(IStrategy):
         dataframe['last_min'] = dataframe.at[min_peaks[0][-1], "low"]
         dataframe['second_last_max'] = dataframe.at[max_peaks[0][-2], "high"]
         dataframe['second_last_min'] = dataframe.at[min_peaks[0][-2], "low"]
-        dataframe['short_risk'] = 1 - dataframe['close'] / dataframe['upper_band']
-        dataframe['long_risk'] = 1 - dataframe['lower_band'] / dataframe['close']
+        dataframe['short_risk'] = 1 - dataframe['close'] / dataframe['last_max']
+        dataframe['long_risk'] = 1 - dataframe['last_min'] / dataframe['close']
         return dataframe
 
 
@@ -106,10 +107,9 @@ class Strategy(IStrategy):
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-
         dataframe.loc[
             (
-                (dataframe['coef'] > 0) & # Guard
+                # (dataframe['coef'] > 0) & # Guard
                 (dataframe['second_last_min'] < dataframe['last_min']) & # Guard
                 # (dataframe['close'] > dataframe['last_max']) & # Guard
                 # (dataframe['close'] > dataframe['second_last_max']) & # Guard
@@ -120,7 +120,7 @@ class Strategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['coef'] < 0) & # Guard
+                # (dataframe['coef'] < 0) & # Guard
                 (dataframe['second_last_max'] > dataframe['last_max']) & # Guard
                 # (dataframe['close'] < dataframe['last_min']) & # Guard
                 # (dataframe['close'] < dataframe['second_last_min']) & # Guard
@@ -141,7 +141,11 @@ class Strategy(IStrategy):
                  proposed_leverage: float, max_leverage: float, entry_tag: Optional[str], side: str,
                  **kwargs) -> float:
         
-        return 1
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        candle = dataframe.iloc[-1].squeeze()
+        risk = candle['short_risk'] if side == 'short' else candle['long_risk']
+        return ceil((self.stoploss / 2) / risk)
+
 
     def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
                             proposed_stake: float, min_stake: Optional[float], max_stake: float,
@@ -151,6 +155,9 @@ class Strategy(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         candle = dataframe.iloc[-1].squeeze()
         risk = candle['short_risk'] if side == 'short' else candle['long_risk']
+        if risk > 0.01:
+            logger.info(f"High risk {risk * 100:.2f}, prevent {side} entry for {pair}.")
+            return None
         
         total_stake = self.wallets.get_total_stake_amount()
         today = datetime.now(timezone.utc).date()
@@ -201,7 +208,7 @@ class Strategy(IStrategy):
                     logger.info(f"Two consecutive losses, stop entering position for 12 hours.")
                     return None
 
-        return max(min(abs(self.stoploss) / 2 * max_stake / risk, max_stake), min_stake)
+        return max(min((((abs(self.stoploss) / 2) * today_starting_balance) / (risk * leverage)), max_stake), min_stake)
 
 
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
@@ -210,15 +217,13 @@ class Strategy(IStrategy):
 
             dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
             current_candle = dataframe.iloc[-1].squeeze()
-
             stop = current_candle.last_max if trade.is_short else current_candle.last_min
             trade.set_custom_data(key='stop', value=stop)
+            risk = current_candle.short_risk if trade.is_short else current_candle.long_risk
+            trade.set_custom_data(key='risk', value=risk)
 
             trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
             
-            risk = current_candle['short_risk'] if trade.is_short else current_candle['long_risk']
-            trade.set_custom_data(key='risk', value=risk)
-
             ticker = pair.replace('/USDT:USDT','')
             self.ob_dataframe(pair).to_csv(f'user_data/notebooks/{ticker}_{trade.id}_ob.csv', index=False)
             dataframe.to_csv(f'user_data/notebooks/{ticker}_{trade.id}_df.csv', index=False)
@@ -232,28 +237,15 @@ class Strategy(IStrategy):
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         current_candle = dataframe.iloc[-1].squeeze()
-        risk, stop = trade.get_custom_data(key='risk'), trade.get_custom_data(key='stop')
+        risk = trade.get_custom_data(key='risk')
+        stop = trade.get_custom_data(key='stop')
 
         if trade.is_short:
-            max_peaks = dataframe[dataframe.last_max < stop].last_max.values
-            if current_rate < current_candle.lower_band:
-                stop = trade.open_rate * (1 - 0.001)
-            if current_time - timedelta(minutes=240) > trade.open_date_utc:
-                if (1 - current_rate / trade.open_rate) >= risk * 2:
-                    stop = trade.open_rate * (1 - risk * 2)
-            if max_peaks.size > 0 and (1 - max_peaks[0] / trade.open_rate) >= risk * 2:
-                stop = max_peaks[0]
-                trade.set_custom_data(key='stop', value=stop)
+            if (1 - trade.open_rate / current_candle.last_max) >= risk * 2:
+                stop = current_candle.last_max; trade.set_custom_data(key='stop', value=stop)
         else:
-            min_peaks = dataframe[dataframe.last_min > stop].last_min.values
-            if current_rate > current_candle.upper_band:
-                stop = trade.open_rate * (1 + 0.001)
-            if current_time - timedelta(minutes=240) > trade.open_date_utc:
-                if (1 - trade.open_rate / min_peaks[0]) >= risk * 2:
-                    stop = trade.open_rate * (1 + risk * 2)
-            if min_peaks.size > 0 and (1 - trade.open_rate / min_peaks[0]) >= risk * 2:
-                stop = min_peaks[0]
-                trade.set_custom_data(key='stop', value=stop)
+            if (current_candle.last_min / trade.open_rate - 1) >= risk * 2:
+                stop = current_candle.last_min; trade.set_custom_data(key='stop', value=stop)
         
         return stoploss_from_absolute(
             stop,
@@ -261,10 +253,3 @@ class Strategy(IStrategy):
             is_short=trade.is_short,
             leverage=trade.leverage
         )
-
-
-    def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
-                    current_rate: float, current_profit: float, **kwargs) -> str:
-        
-        if current_time.time() > time(23,50):
-            return 'Trade expired!'
