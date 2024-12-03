@@ -47,6 +47,7 @@ class Strategy(IStrategy):
         'exit': 'GTC'
     }
 
+    custom_info = {}
 
     def ob_dataframe(self, pair):
         ob = self.dp.orderbook(pair, maximum=200)
@@ -161,8 +162,8 @@ class Strategy(IStrategy):
         
         total_stake = self.wallets.get_total_stake_amount()
 
-        today = datetime.now(timezone.utc).date()
-        this_week = today - timedelta(days=today.weekday())
+        today = datetime.now(timezone.utc).date().strftime("%Y-%m-%d")
+        this_week = today - timedelta(days=today.weekday()).strftime("%Y-%m-%d")
         trades = pd.DataFrame([vars(trade) for trade in Trade.get_trades_proxy()])
 
         if trades.empty:
@@ -207,7 +208,8 @@ class Strategy(IStrategy):
                     if side == 'long':
                         logger.info(f"Two consecutive long position losses, stop entering long.")
                         return None
-                last_two_trades['date_lt_12'] = ((datetime.datetime.now() - last_two_trades.close_date).seconds / 3600) < 12
+                now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                last_two_trades['date_lt_12'] = ((now - last_two_trades.close_date).seconds / 3600) < 12
                 if last_two_trades.iloc[-1].squeeze().date_lt_12:
                     logger.info(f"Two consecutive losses, stop entering position for 12 hours.")
                     return None
@@ -252,6 +254,7 @@ class Strategy(IStrategy):
             ticker = pair.replace('/USDT:USDT','')
             self.ob_dataframe(pair).to_csv(f'user_data/notebooks/{ticker}_{trade.id}_ob.csv', index=False)
             dataframe.to_csv(f'user_data/notebooks/{ticker}_{trade.id}_df.csv', index=False)
+            pd.DataFrame([vars(trade) for trade in Trade.get_trades_proxy()]).to_csv(f'user_data/notebooks/trades.csv', index=False)
 
         return None
     
@@ -275,7 +278,14 @@ class Strategy(IStrategy):
             stop = last_extrema
             trade.set_custom_data(key='stop', value=stop)
 
-        logger.info(f"Risk: ({risk * 100:.2f}%) Thresh: ({thresh * 100:.2f}%) Stop: {stop:.4f}")
+        info = f"Pair: {pair} Risk: ({risk * 100:.2f}%) Thresh: ({thresh * 100:.2f}%) Stop: {stop:.4f}"
+        if pair in self.custom_info:
+            if self.custom_info[pair] != info:
+                self.custom_info[pair] = info
+                logger.info(info)
+        else:
+            self.custom_info[pair] = info
+            logger.info(info)
         
         return stoploss_from_absolute(
             stop,
@@ -283,3 +293,12 @@ class Strategy(IStrategy):
             is_short=trade.is_short,
             leverage=trade.leverage
         )
+
+
+    def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
+                    current_rate: float, current_profit: float, **kwargs) -> str:
+        
+        risk = trade.get_custom_data(key='risk')
+        
+        if current_profit >= risk * 2:
+            return 'Target Hit'
