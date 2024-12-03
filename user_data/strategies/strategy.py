@@ -11,6 +11,7 @@ from scipy.signal import argrelextrema
 from freqtrade.strategy import (
     IStrategy,
     stoploss_from_absolute,
+    stoploss_from_open
 )
 import logging
 
@@ -27,7 +28,7 @@ class Strategy(IStrategy):
 
     timeframe = '5m'
 
-    use_exit_signal = False
+    use_exit_signal = True
 
     use_custom_stoploss = True
 
@@ -162,37 +163,35 @@ class Strategy(IStrategy):
         
         total_stake = self.wallets.get_total_stake_amount()
 
-        today = datetime.now(timezone.utc).date().strftime("%Y-%m-%d")
-        this_week = today - timedelta(days=today.weekday()).strftime("%Y-%m-%d")
+        today = datetime.now(timezone.utc).date()
+        this_week = (today - timedelta(days=today.weekday()))
         trades = pd.DataFrame([vars(trade) for trade in Trade.get_trades_proxy()])
 
         if trades.empty:
             return None
 
-        today_loss = trades[(trades.close_date == today) & (trades.close_profit_abs < 0)].close_profit_abs.sum()
-        today_loss_count = len(trades[(trades.close_date == today) & (trades.close_profit_abs < 0)])
-        today_profit = trades[trades.close_date == today].close_profit_abs.sum()
+        today_loss = trades[(trades.close_date.dt.date == today) & (trades.close_profit_abs < 0)].close_profit_abs.sum()
+        today_profit = trades[trades.close_date.dt.date == today].close_profit_abs.sum()
         today_starting_balance = total_stake - today_profit
         today_loss_ratio = today_loss / today_starting_balance
 
-        this_week_loss = trades[(trades.open_date > this_week) & (trades.close_profit_abs < 0)].close_profit_abs.sum()
-        this_week_loss_count = len(trades[(trades.open_date > this_week) & (trades.close_profit_abs < 0)])
-        this_week_profit = trades[trades.open_date > this_week].close_profit_abs.sum()
+        this_week_loss = trades[(trades.open_date.dt.date > this_week) & (trades.close_profit_abs < 0)].close_profit_abs.sum()
+        this_week_profit = trades[trades.open_date.dt.date > this_week].close_profit_abs.sum()
         this_week_starting_balance = total_stake - this_week_profit
         this_week_loss_ratio = this_week_loss / this_week_starting_balance
 
         open_trades = not trades[trades.is_open == True].empty
 
-        if open_trades and today_loss_count:
+        if open_trades and today_loss_ratio <= self.stoploss / 2:
             logger.info(f"Open trade may result in loss, prevent {side} entry for {pair} till close.")
             return None
 
-        if today_loss_count == 2:
+        if today_loss_ratio <= self.stoploss:
             logger.info(
                 f"Prevent entering {side} position for {pair} due to max day loss ({today_loss_ratio * 100:.2f}%)")
             return None
         
-        if this_week_loss_count == 6:
+        if this_week_loss_ratio <= self.stoploss * 3:
             logger.info(
                 f"Prevent entering {side} position for {pair} due to max week loss ({this_week_loss_ratio * 100:.2f}%)")
             return None
@@ -214,7 +213,6 @@ class Strategy(IStrategy):
                     logger.info(f"Two consecutive losses, stop entering position for 12 hours.")
                     return None
 
-        # return max(min((((abs(self.stoploss) / 2) * today_starting_balance) / (risk * leverage)), max_stake), min_stake)
         stake = ((abs(self.stoploss) / 2) * today_starting_balance) / (risk * leverage)
 
         lines = (
@@ -223,11 +221,9 @@ class Strategy(IStrategy):
             f"Stake: {stake}",
             f"This week starting balance: {this_week_starting_balance}",
             f"Today loss: {today_loss}",
-            f"Today loss count: {today_loss_count}",
             f"Today loss ratio: {today_loss_ratio}",
             f"Today profit: {today_profit}",
             f"This week loss: {this_week_loss}",
-            f"This week loss count: {this_week_loss_count}",
             f"This week profit: {this_week_profit}",
             f"This week loss ratio: {this_week_loss_ratio}",
             f"Open trades: {open_trades}",
@@ -270,6 +266,14 @@ class Strategy(IStrategy):
         last_extrema = current_candle.last_max if trade.is_short else current_candle.last_min
         thresh = abs(last_extrema / trade.open_rate - 1)
 
+        if risk * 2 < current_profit < risk * 3:
+            return stoploss_from_open(
+                risk * 2, 
+                current_profit, 
+                is_short=trade.is_short, 
+                leverage=trade.leverage
+            )
+
         if current_profit >= risk:
             side = -1 if trade.is_short else 1
             stop = trade.open_rate * (1 + 0.001 * side)
@@ -297,8 +301,11 @@ class Strategy(IStrategy):
 
     def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
                     current_rate: float, current_profit: float, **kwargs) -> str:
-        
-        risk = trade.get_custom_data(key='risk')
-        
-        if current_profit >= risk * 2:
-            return 'Target Hit'
+
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        condition_1 = (dataframe.date >= trade.open_date_utc)
+        condition_2 = (dataframe.close < trade.open_rate)
+        negative_ratio = (condition_1 & condition_2).mean()
+
+        if (current_time - timedelta(minutes=30) > trade.open_date_utc) and negative_ratio > 0.8:
+            return 'Trade expired!'
