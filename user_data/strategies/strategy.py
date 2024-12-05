@@ -1,6 +1,6 @@
 from pandas import DataFrame
 from freqtrade.persistence import Trade
-from datetime import datetime, date, timedelta, timezone, time
+from datetime import datetime, timedelta, timezone
 from typing import Optional
 from technical import qtpylib
 import pandas as pd
@@ -103,6 +103,7 @@ class Strategy(IStrategy):
 
         dataframe = self.caculate_regression(dataframe)
         dataframe = self.calculate_extrema(dataframe)
+        dataframe['total_stake'] = self.wallets.get_total_stake_amount()
 
         return dataframe
 
@@ -161,77 +162,85 @@ class Strategy(IStrategy):
             logger.info(f"High risk ({risk * 100:.2f}%), prevent {side} entry for {pair}.")
             return None
         
-        total_stake = self.wallets.get_total_stake_amount()
+        total_stake = candle['total_stake']
 
         today = datetime.now(timezone.utc).date()
         this_week = (today - timedelta(days=today.weekday()))
         trades = pd.DataFrame([vars(trade) for trade in Trade.get_trades_proxy()])
 
-        if trades.empty:
-            return None
+        if not trades.empty and len(trades) > 1:
+            today_loss = trades[
+                (trades.close_date >= today.strftime('%Y-%m-%d')) & 
+                (trades.close_profit_abs < 0)
+            ].close_profit_abs.sum()
+            today_profit = trades[
+                trades.close_date >= today.strftime('%Y-%m-%d')
+            ].close_profit_abs.sum()
+            today_starting_balance = total_stake - today_profit
+            today_loss_ratio = today_loss / today_starting_balance
 
-        today_loss = trades[(trades.close_date.dt.date == today) & (trades.close_profit_abs < 0)].close_profit_abs.sum()
-        today_profit = trades[trades.close_date.dt.date == today].close_profit_abs.sum()
-        today_starting_balance = total_stake - today_profit
-        today_loss_ratio = today_loss / today_starting_balance
+            this_week_loss = trades[
+                (trades.open_date >= this_week.strftime('%Y-%m-%d')) & 
+                (trades.close_profit_abs < 0)
+            ].close_profit_abs.sum()
+            this_week_profit = trades[
+                trades.open_date >= this_week.strftime('%Y-%m-%d')
+            ].close_profit_abs.sum()
+            this_week_starting_balance = total_stake - this_week_profit
+            this_week_loss_ratio = this_week_loss / this_week_starting_balance
 
-        this_week_loss = trades[(trades.open_date.dt.date > this_week) & (trades.close_profit_abs < 0)].close_profit_abs.sum()
-        this_week_profit = trades[trades.open_date.dt.date > this_week].close_profit_abs.sum()
-        this_week_starting_balance = total_stake - this_week_profit
-        this_week_loss_ratio = this_week_loss / this_week_starting_balance
+            open_trades = not trades[trades.is_open == True].empty
 
-        open_trades = not trades[trades.is_open == True].empty
+            if open_trades and today_loss_ratio <= self.stoploss / 2:
+                logger.info(f"Open trade may result in loss, prevent {side} entry for {pair} till close.")
+                return None
 
-        if open_trades and today_loss_ratio <= self.stoploss / 2:
-            logger.info(f"Open trade may result in loss, prevent {side} entry for {pair} till close.")
-            return None
+            if today_loss_ratio <= self.stoploss:
+                logger.info(
+                    f"Prevent entering {side} position for {pair} due to max day loss ({today_loss_ratio * 100:.2f}%)")
+                return None
+            
+            if this_week_loss_ratio <= self.stoploss * 3:
+                logger.info(
+                    f"Prevent entering {side} position for {pair} due to max week loss ({this_week_loss_ratio * 100:.2f}%)")
+                return None
 
-        if today_loss_ratio <= self.stoploss:
-            logger.info(
-                f"Prevent entering {side} position for {pair} due to max day loss ({today_loss_ratio * 100:.2f}%)")
-            return None
-        
-        if this_week_loss_ratio <= self.stoploss * 3:
-            logger.info(
-                f"Prevent entering {side} position for {pair} due to max week loss ({this_week_loss_ratio * 100:.2f}%)")
-            return None
-
-        if len(trades) > 1:
-            last_two_trades = trades.iloc[-2:]
-            if all(last_two_trades.close_profit_abs < 0) :
-                if all(last_two_trades.is_short):
+            if (trades.iloc[-2:].close_profit_abs < 0).all() :
+                if trades.iloc[-2:].is_short.all():
                     if side == 'short':
                         logger.info(f"Two consecutive short position losses, stop entering short.")
                         return None
-                if not all(last_two_trades.is_short):
+                if not trades.iloc[-2:].is_short.all():
                     if side == 'long':
                         logger.info(f"Two consecutive long position losses, stop entering long.")
                         return None
-                now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                last_two_trades['date_lt_12'] = ((now - last_two_trades.close_date).seconds / 3600) < 12
-                if last_two_trades.iloc[-1].squeeze().date_lt_12:
+                last_close_date = datetime.strptime(trades.iloc[-1].close_date, "%Y-%m-%d %H:%M:%S.%f")
+                if (datetime.now() - last_close_date).seconds / 3600 < 12:
                     logger.info(f"Two consecutive losses, stop entering position for 12 hours.")
                     return None
+                    
+            stake = today_starting_balance * ((abs(self.stoploss) / 2) / (risk * leverage))
+            lines = (
+                f"Pair: {pair}",
+                f"Risk: {risk * 100:.2f}%",
+                f"Leverage: {leverage}",
+                f"Stop to risk ratio: {((abs(self.stoploss) / 2) / (risk * leverage)) * 100:.2f}%",
+                f"Today starting balance: {today_starting_balance:.2f}",
+                f"Stake: {stake:.2f}",
+                f"Today loss ratio: {today_loss_ratio * 100:.2f}%",
+                f"Today profit ratio: {(today_profit / today_starting_balance) * 100:.2f}%",
+            )
+            self.dp.send_msg('\n'.join(lines))
+            return stake
+        
+        return proposed_stake
 
-        stake = ((abs(self.stoploss) / 2) * today_starting_balance) / (risk * leverage)
+    def custom_entry_price(self, pair: str, trade: Trade | None, current_time: datetime, proposed_rate: float,
+                           entry_tag: str | None, side: str, **kwargs) -> float:
 
-        lines = (
-            f"Total stake: {total_stake}",
-            f"Today starting balance: {today_starting_balance}",
-            f"Stake: {stake}",
-            f"This week starting balance: {this_week_starting_balance}",
-            f"Today loss: {today_loss}",
-            f"Today loss ratio: {today_loss_ratio}",
-            f"Today profit: {today_profit}",
-            f"This week loss: {this_week_loss}",
-            f"This week profit: {this_week_profit}",
-            f"This week loss ratio: {this_week_loss_ratio}",
-            f"Open trades: {open_trades}",
-        )
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
 
-        self.dp.send_msg('\n'.join(lines))
-
-        return stake
+        return dataframe["close"].iat[-1]
 
 
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
@@ -266,14 +275,6 @@ class Strategy(IStrategy):
         last_extrema = current_candle.last_max if trade.is_short else current_candle.last_min
         thresh = abs(last_extrema / trade.open_rate - 1)
 
-        if risk * 2 < current_profit < risk * 3:
-            return stoploss_from_open(
-                risk * 2, 
-                current_profit, 
-                is_short=trade.is_short, 
-                leverage=trade.leverage
-            )
-
         if current_profit >= risk:
             side = -1 if trade.is_short else 1
             stop = trade.open_rate * (1 + 0.001 * side)
@@ -281,15 +282,6 @@ class Strategy(IStrategy):
         if thresh >= risk * 2:
             stop = last_extrema
             trade.set_custom_data(key='stop', value=stop)
-
-        info = f"Pair: {pair} Risk: ({risk * 100:.2f}%) Thresh: ({thresh * 100:.2f}%) Stop: {stop:.4f}"
-        if pair in self.custom_info:
-            if self.custom_info[pair] != info:
-                self.custom_info[pair] = info
-                logger.info(info)
-        else:
-            self.custom_info[pair] = info
-            logger.info(info)
         
         return stoploss_from_absolute(
             stop,
@@ -303,9 +295,28 @@ class Strategy(IStrategy):
                     current_rate: float, current_profit: float, **kwargs) -> str:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        condition_1 = (dataframe.date >= trade.open_date_utc)
-        condition_2 = (dataframe.close < trade.open_rate)
-        negative_ratio = (condition_1 & condition_2).mean()
+        dataframe = dataframe[dataframe.date >= trade.open_date_utc].reset_index()
+        negative_ratio = (dataframe.close < trade.open_rate).mean()
+        risk = trade.get_custom_data(key='risk')
 
-        if (current_time - timedelta(minutes=30) > trade.open_date_utc) and negative_ratio > 0.8:
+        lines = (
+            f"Negative ratio {pair}: {negative_ratio * 100:.2f}%",
+            f"Candles: {len(dataframe.date >= trade.open_date_utc)}"
+        )
+        info = "    ".join(lines)
+        if pair in self.custom_info:
+            if self.custom_info[pair] != info:
+                self.custom_info[pair] = info
+                logger.info(info)
+        else:
+            self.custom_info[pair] = info
+            logger.info(info)
+
+        if (current_time - timedelta(hours=2) > trade.open_date_utc) and current_profit < risk * 2:
             return 'Trade expired!'
+        
+        if (current_time - timedelta(hours=1) > trade.open_date_utc) and current_profit < risk:
+            return 'High risk trade!'
+
+        if (current_time - timedelta(minutes=30) > trade.open_date_utc) and negative_ratio > 0.5:
+            return 'Too high risk trade!'
