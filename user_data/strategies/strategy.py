@@ -296,11 +296,12 @@ class Strategy(IStrategy):
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         dataframe = dataframe[dataframe.date >= trade.open_date_utc].reset_index()
-        negative_ratio = (dataframe.close < trade.open_rate).mean()
+        mean = (dataframe['high'] - dataframe['low']).mean()
+        mean_to_open_ratio = mean / trade.open_rate
         risk = trade.get_custom_data(key='risk')
 
         lines = (
-            f"Negative ratio {pair}: {negative_ratio * 100:.2f}%",
+            f"Mean to open ratio {pair}: {mean_to_open_ratio:.2f}",
             f"Candles: {len(dataframe.date >= trade.open_date_utc)}"
         )
         info = "    ".join(lines)
@@ -312,11 +313,19 @@ class Strategy(IStrategy):
             self.custom_info[pair] = info
             logger.info(info)
 
-        if (current_time - timedelta(hours=2) > trade.open_date_utc) and current_profit < risk * 2:
-            return 'Trade expired!'
-        
-        if (current_time - timedelta(hours=1) > trade.open_date_utc) and current_profit < risk:
-            return 'High risk trade!'
+        conditions = (
+            (current_time - timedelta(hours=1) > trade.open_date_utc) and current_profit < risk,
+            (current_time - timedelta(hours=2) > trade.open_date_utc) and current_profit < risk * 2
+        )
 
-        if (current_time - timedelta(minutes=30) > trade.open_date_utc) and negative_ratio > 0.5:
-            return 'Too high risk trade!'
+        if any(conditions):
+            return 'Trade expired!'
+
+        conditions = (
+            current_time - timedelta(minutes=30) > trade.open_date_utc,
+            mean_to_open_ratio < 1,
+            abs(current_profit) < risk / 2
+        )
+
+        if all(conditions):
+            return 'High risk trade!'
