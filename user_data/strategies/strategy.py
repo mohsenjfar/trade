@@ -94,8 +94,8 @@ class Strategy(IStrategy):
         dataframe['last_min'] = dataframe.at[min_peaks[0][-1], "low"]
         dataframe['second_last_max'] = dataframe.at[max_peaks[0][-2], "high"]
         dataframe['second_last_min'] = dataframe.at[min_peaks[0][-2], "low"]
-        dataframe['short_risk'] = 1 - dataframe['close'] / dataframe['last_max']
-        dataframe['long_risk'] = 1 - dataframe['last_min'] / dataframe['close']
+        dataframe['short_risk'] = (dataframe['last_max'] - dataframe['close']) / dataframe['last_max']
+        dataframe['long_risk'] = (dataframe['close'] - dataframe['last_min']) / dataframe['last_min']
         return dataframe
 
 
@@ -111,7 +111,7 @@ class Strategy(IStrategy):
 
         dataframe.loc[
             (
-                # (dataframe['coef'] > 0) & # Guard
+                (dataframe['coef'] > 0) & # Guard
                 (dataframe['second_last_min'] < dataframe['last_min']) & # Guard
                 # (dataframe['close'] > dataframe['last_max']) & # Guard
                 # (dataframe['close'] > dataframe['second_last_max']) & # Guard
@@ -122,7 +122,7 @@ class Strategy(IStrategy):
 
         dataframe.loc[
             (
-                # (dataframe['coef'] < 0) & # Guard
+                (dataframe['coef'] < 0) & # Guard
                 (dataframe['second_last_max'] > dataframe['last_max']) & # Guard
                 # (dataframe['close'] < dataframe['last_min']) & # Guard
                 # (dataframe['close'] < dataframe['second_last_min']) & # Guard
@@ -139,14 +139,14 @@ class Strategy(IStrategy):
         return dataframe
 
 
-    def leverage(self, pair: str, current_time: datetime, current_rate: float,
-                 proposed_leverage: float, max_leverage: float, entry_tag: Optional[str], side: str,
-                 **kwargs) -> float:
+    # def leverage(self, pair: str, current_time: datetime, current_rate: float,
+    #              proposed_leverage: float, max_leverage: float, entry_tag: Optional[str], side: str,
+    #              **kwargs) -> float:
         
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        candle = dataframe.iloc[-1].squeeze()
-        risk = candle['short_risk'] if side == 'short' else candle['long_risk']
-        return ceil(abs(self.stoploss) / risk)
+    #     dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+    #     candle = dataframe.iloc[-1].squeeze()
+    #     risk = candle['short_risk'] if side == 'short' else candle['long_risk']
+    #     return ceil(abs(self.stoploss) / risk)
 
 
     def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
