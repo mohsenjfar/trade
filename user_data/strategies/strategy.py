@@ -175,19 +175,19 @@ class Strategy(IStrategy):
                 (trades.close_profit_abs < 0)
             ])
 
+            open_trades = not trades[trades.is_open == True].empty
+            if open_trades and today_loss_count == 1:
+                logger.info(f"Open trade may result in loss, prevent {side} entry for {pair} till close.")
+                return False
+            
             if today_loss_count == 1:
-                trade = trades[trades.is_open == False].iloc[-1]
-                trade_side = trade.side
+                trade = trades[trades.is_open == False].iloc[-1].squeeze()
+                trade_side = 'short' if trade.is_short else 'long'
                 trade_close_date = str(trade.close_date)
                 trade_close_date = datetime.strptime(trade_close_date, "%Y-%m-%d %H:%M:%S.%f")
                 if ((datetime.now() - trade_close_date).seconds / 3600 < 12) and trade_side == side:
                     logger.info(f"Stop entering {side} position for 12 hours.")
                     return None
-                
-            open_trades = not trades[trades.is_open == True].empty
-            if open_trades and today_loss_count == 1:
-                logger.info(f"Open trade may result in loss, prevent {side} entry for {pair} till close.")
-                return False
             
             if today_loss_count == 2:
                 logger.info(
@@ -270,8 +270,8 @@ class Strategy(IStrategy):
         risk = trade.get_custom_data(key='risk')
 
         conditions = (
-            (current_time - timedelta(hours=1) > trade.open_date_utc) and (0 < current_profit < risk),
-            (current_time - timedelta(hours=2) > trade.open_date_utc) and (0 < current_profit < risk * 2)
+            (current_time - timedelta(minutes=30) > trade.open_date_utc) and (0 < current_profit < risk),
+            (current_time - timedelta(hours=1) > trade.open_date_utc) and (0 < current_profit < risk * 2)
         )
 
         if any(conditions):
