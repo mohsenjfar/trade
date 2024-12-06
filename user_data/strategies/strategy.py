@@ -146,7 +146,7 @@ class Strategy(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         candle = dataframe.iloc[-1].squeeze()
         risk = candle['short_risk'] if side == 'short' else candle['long_risk']
-        return ceil((self.stoploss / 2) / risk)
+        return ceil(self.stoploss / risk)
 
 
     def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
@@ -162,7 +162,7 @@ class Strategy(IStrategy):
             logger.info(f"High risk ({risk * 100:.2f}%), prevent {side} entry for {pair}.")
             return None
         
-        return proposed_stake / (risk * leverage)
+        return min(proposed_stake / (risk * leverage), proposed_stake)
 
 
     def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
