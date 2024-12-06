@@ -168,19 +168,14 @@ class Strategy(IStrategy):
     def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
                             time_in_force: str, current_time: datetime, entry_tag: Optional[str],
                             side: str, **kwargs) -> bool:
-    
-        today = datetime.now(timezone.utc).date()
-        this_week = (today - timedelta(days=today.weekday()))
+        
         trades = pd.DataFrame([vars(trade) for trade in Trade.get_trades_proxy()])
 
         if not trades.empty and len(trades) > 1:
 
+            today = datetime.now(timezone.utc).date()
             today_loss_count = len(trades[
                 (trades.close_date >= today.strftime('%Y-%m-%d')) & 
-                (trades.close_profit_abs < 0)
-            ])
-            this_week_loss_count = len(trades[
-                (trades.open_date >= this_week.strftime('%Y-%m-%d')) & 
                 (trades.close_profit_abs < 0)
             ])
 
@@ -190,17 +185,23 @@ class Strategy(IStrategy):
                 if (datetime.now() - close_date).seconds / 3600 < 12:
                     logger.info(f"Last trade loss, stop entering position for 12 hours.")
                     return None
-            
+                
             open_trades = not trades[trades.is_open == True].empty
             if open_trades and today_loss_count == 1:
                 logger.info(f"Open trade may result in loss, prevent {side} entry for {pair} till close.")
                 return False
-
+            
             if today_loss_count == 2:
                 logger.info(
                     f"Prevent entering {side} position for {pair} due to max day loss")
                 return False
             
+            this_week = (today - timedelta(days=today.weekday()))
+            this_week_loss_count = len(trades[
+                (trades.open_date >= this_week.strftime('%Y-%m-%d')) & 
+                (trades.close_profit_abs < 0)
+            ])
+
             if this_week_loss_count == 6:
                 logger.info(
                     f"Prevent entering {side} position for {pair} due to max week loss")
