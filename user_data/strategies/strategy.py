@@ -146,7 +146,7 @@ class Strategy(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         candle = dataframe.iloc[-1].squeeze()
         risk = candle['short_risk'] if side == 'short' else candle['long_risk']
-        return ceil(self.stoploss / risk)
+        return ceil(abs(self.stoploss) / risk)
 
 
     def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
@@ -267,7 +267,7 @@ class Strategy(IStrategy):
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         dataframe = dataframe[dataframe.date >= trade.open_date_utc].reset_index()
-        mean = (dataframe['high'] - dataframe['low']).mean()
+        mean = (dataframe['high'] + dataframe['low']).mean()
         mean_to_open_ratio = mean / trade.open_rate
         risk = trade.get_custom_data(key='risk')
 
@@ -280,7 +280,7 @@ class Strategy(IStrategy):
             return 'Trade expired!'
 
         conditions = (
-            current_time - timedelta(minutes=30) > trade.open_date_utc,
+            current_time - timedelta(minutes=10) > trade.open_date_utc,
             mean_to_open_ratio < 1,
             current_profit > 0
         )
