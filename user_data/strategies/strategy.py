@@ -157,10 +157,6 @@ class Strategy(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         candle = dataframe.iloc[-1].squeeze()
         risk = candle['short_risk'] if side == 'short' else candle['long_risk']
-
-        if risk > 0.02:
-            logger.info(f"High risk ({risk * 100:.2f}%), prevent {side} entry for {pair}.")
-            return None
         
         return min(proposed_stake / (risk * leverage), proposed_stake)
 
@@ -180,10 +176,12 @@ class Strategy(IStrategy):
             ])
 
             if today_loss_count == 1:
-                close_date = trades[trades.is_open == False].iloc[-1].close_date
-                close_date = datetime.strptime(close_date, "%Y-%m-%d %H:%M:%S.%f")
-                if (datetime.now() - close_date).seconds / 3600 < 12:
-                    logger.info(f"Last trade loss, stop entering position for 12 hours.")
+                trade = trades[trades.is_open == False].iloc[-1]
+                trade_side = trade.side
+                trade_close_date = str(trade.close_date)
+                trade_close_date = datetime.strptime(trade_close_date, "%Y-%m-%d %H:%M:%S.%f")
+                if ((datetime.now() - trade_close_date).seconds / 3600 < 12) and trade_side == side:
+                    logger.info(f"Stop entering {side} position for 12 hours.")
                     return None
                 
             open_trades = not trades[trades.is_open == True].empty
