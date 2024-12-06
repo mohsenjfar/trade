@@ -265,6 +265,10 @@ class Strategy(IStrategy):
     def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
                     current_rate: float, current_profit: float, **kwargs) -> str:
 
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        dataframe = dataframe[dataframe.date >= trade.open_date_utc].reset_index()
+        mean = (dataframe['high'] - dataframe['low']).mean()
+        mean_to_open_ratio = mean / trade.open_rate
         risk = trade.get_custom_data(key='risk')
 
         conditions = (
@@ -274,3 +278,12 @@ class Strategy(IStrategy):
 
         if any(conditions):
             return 'Trade expired!'
+
+        conditions = (
+            current_time - timedelta(minutes=30) > trade.open_date_utc,
+            mean_to_open_ratio < 1,
+            current_profit > 0
+        )
+
+        if all(conditions):
+            return 'High risk trade!'
