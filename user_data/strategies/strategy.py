@@ -270,8 +270,8 @@ class Strategy(IStrategy):
         risk = trade.get_custom_data(key='risk')
 
         conditions = (
-            (current_time - timedelta(minutes=30) > trade.open_date_utc) and (0 < current_profit < risk),
-            (current_time - timedelta(hours=1) > trade.open_date_utc) and (0 < current_profit < risk * 2)
+            (current_time - timedelta(minutes=20) > trade.open_date_utc) and (0 < current_profit < risk),
+            (current_time - timedelta(minutes=30) > trade.open_date_utc) and (0 < current_profit < risk * 2)
         )
 
         if any(conditions):
