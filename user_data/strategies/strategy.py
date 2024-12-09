@@ -7,6 +7,7 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression
 from math import ceil
 import numpy as np
+import talib.abstract as ta
 from scipy.signal import argrelextrema
 from freqtrade.strategy import (
     IStrategy,
@@ -35,6 +36,10 @@ class Strategy(IStrategy):
     startup_candle_count: int = 288
 
     process_only_new_candles = True
+
+    price_kernel = 2
+    rsi_kernel = 2
+    coef_kernel = 48
 
     order_types = {
         'entry': 'limit',
@@ -67,42 +72,36 @@ class Strategy(IStrategy):
         return pd.concat((bid_dataframe,ask_dataframe))
 
 
-    def caculate_regression(self, dataframe, kernel=288):
-        dataframe_ = dataframe.copy()[-kernel:]
+    def close_price_coef(self, dataframe):
+        dataframe_ = dataframe.copy()[-self.coef_kernel:]
         x = dataframe_.index.values.reshape(-1, 1)
         y = dataframe_.close.values
         model = LinearRegression()
         model.fit(x, y)
-        x = dataframe.index.values.reshape(-1, 1)
-        dataframe['y'] = model.predict(x)
-        dataframe['coef'] = float(model.coef_[0])
-        dataframe['upper_band'] = dataframe['y'] + dataframe.high.std()
-        dataframe['lower_band'] = dataframe['y'] - dataframe.low.std()
-        dataframe['band_dist'] = dataframe['upper_band'] - dataframe['lower_band']
-        return dataframe
-    
-
-    def calculate_extrema(self, dataframe, kernel=2):
-        dataframe["extrema"] = 0
-        min_peaks = argrelextrema(dataframe["low"].values, np.less_equal, order=kernel)
-        max_peaks = argrelextrema(dataframe["high"].values, np.greater_equal, order=kernel)
-        for mp in min_peaks[0]:
-            dataframe.at[mp, "extrema"] = -1
-        for mp in max_peaks[0]:
-            dataframe.at[mp, "extrema"] = 1
-        dataframe['last_max'] = dataframe.at[max_peaks[0][-1], "high"]
-        dataframe['last_min'] = dataframe.at[min_peaks[0][-1], "low"]
-        dataframe['second_last_max'] = dataframe.at[max_peaks[0][-2], "high"]
-        dataframe['second_last_min'] = dataframe.at[min_peaks[0][-2], "low"]
-        dataframe['short_risk'] = (dataframe['last_max'] - dataframe['close']) / dataframe['last_max']
-        dataframe['long_risk'] = (dataframe['close'] - dataframe['last_min']) / dataframe['last_min']
-        return dataframe
+        return model.coef_[0]
 
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe = self.caculate_regression(dataframe)
-        dataframe = self.calculate_extrema(dataframe)
+        dataframe['coef'] = self.close_price_coef(dataframe)
+        dataframe["price_extrema"] = 0
+        min_peaks = argrelextrema(dataframe["low"].values, np.less_equal, order=self.price_kernel)
+        max_peaks = argrelextrema(dataframe["high"].values, np.greater_equal, order=self.price_kernel)
+        dataframe['price_second_last_max'] = dataframe.at[max_peaks[0][-2], "high"]
+        dataframe['price_last_max'] = dataframe.at[max_peaks[0][-1], "high"]
+        dataframe['price_second_last_min'] = dataframe.at[min_peaks[0][-2], "low"]
+        dataframe['price_last_min'] = dataframe.at[min_peaks[0][-1], "low"]
+        dataframe['short_risk'] = (dataframe['price_last_max'] - dataframe['close']) / dataframe['price_last_max']
+        dataframe['long_risk'] = (dataframe['close'] - dataframe['price_last_min']) / dataframe['price_last_min']
+        
+        dataframe["rsi"] = ta.RSI(dataframe, timeperiod=14)
+        dataframe["rsi_extrema"] = 0
+        min_peaks = argrelextrema(dataframe["rsi"].values, np.less_equal, order=self.rsi_kernel)
+        max_peaks = argrelextrema(dataframe["rsi"].values, np.greater_equal, order=self.rsi_kernel)
+        dataframe['rsi_second_last_max'] = dataframe.at[max_peaks[0][-2], "rsi"]
+        dataframe['rsi_last_max'] = dataframe.at[max_peaks[0][-1], "rsi"]
+        dataframe['rsi_second_last_min'] = dataframe.at[min_peaks[0][-2], "rsi"]
+        dataframe['rsi_last_min'] = dataframe.at[min_peaks[0][-1], "rsi"]
 
         return dataframe
 
@@ -112,10 +111,11 @@ class Strategy(IStrategy):
         dataframe.loc[
             (
                 (dataframe['coef'] > 0) & # Guard
-                (dataframe['second_last_min'] < dataframe['last_min']) & # Guard
-                # (dataframe['close'] > dataframe['last_max']) & # Guard
-                # (dataframe['close'] > dataframe['second_last_max']) & # Guard
-                qtpylib.crossed_above(dataframe['close'], dataframe['y']) # Trigger
+                (dataframe['price_second_last_min'] < dataframe['price_last_min']) & # Guard
+                (dataframe['rsi_second_last_min'] < dataframe['rsi_last_min']) & # Guard
+                (dataframe['rsi_second_last_min'] < 50) & # Guard
+                (dataframe['rsi_last_min'] < 50) & # Guard
+                (dataframe['close'] > dataframe['close'].shift(1)) # Trigger
             ),
             'enter_long'
         ] = 1
@@ -123,13 +123,17 @@ class Strategy(IStrategy):
         dataframe.loc[
             (
                 (dataframe['coef'] < 0) & # Guard
-                (dataframe['second_last_max'] > dataframe['last_max']) & # Guard
-                # (dataframe['close'] < dataframe['last_min']) & # Guard
-                # (dataframe['close'] < dataframe['second_last_min']) & # Guard
-                qtpylib.crossed_below(dataframe['close'], dataframe['y']) # Trigger
+                (dataframe['price_second_last_max'] > dataframe['price_last_max']) & # Guard
+                (dataframe['rsi_second_last_max'] > dataframe['rsi_last_max']) & # Guard
+                (dataframe['rsi_second_last_max'] > 50) & # Guard
+                (dataframe['rsi_last_max'] > 50) & # Guard
+                (dataframe['close'] < dataframe['close'].shift(1)) # Trigger
             ),
             'enter_short'
         ] = 1
+
+        ticker = metadata['pair'].replace('/USDT:USDT','')
+        dataframe.to_csv(f'user_data/notebooks/{ticker}_df.csv', index=False)
 
         return dataframe
 
@@ -158,7 +162,15 @@ class Strategy(IStrategy):
         candle = dataframe.iloc[-1].squeeze()
         risk = candle['short_risk'] if side == 'short' else candle['long_risk']
         
-        return min(proposed_stake / (risk * leverage), proposed_stake)
+        lines = (
+            f"Pair: {pair}",
+            f"Risk: {risk}",
+            f"Proposed stake: {proposed_stake}",
+            f"Stake: {proposed_stake / (risk * leverage * abs(self.stoploss))}"
+        )
+        self.dp.send_msg("\n".join(lines))
+        
+        return min(proposed_stake / (risk * leverage * abs(self.stoploss)), proposed_stake)
 
 
     def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
@@ -222,7 +234,7 @@ class Strategy(IStrategy):
 
             dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
             current_candle = dataframe.iloc[-1].squeeze()
-            stop = current_candle.last_max if trade.is_short else current_candle.last_min
+            stop = current_candle.price_last_max if trade.is_short else current_candle.price_last_min
             trade.set_custom_data(key='stop', value=stop)
             risk = current_candle.short_risk if trade.is_short else current_candle.long_risk
             trade.set_custom_data(key='risk', value=risk)
@@ -245,7 +257,7 @@ class Strategy(IStrategy):
         current_candle = dataframe.iloc[-1].squeeze()
         risk = trade.get_custom_data(key='risk')
         stop = trade.get_custom_data(key='stop')
-        last_extrema = current_candle.last_max if trade.is_short else current_candle.last_min
+        last_extrema = current_candle.price_last_max if trade.is_short else current_candle.price_last_min
         thresh = abs(last_extrema / trade.open_rate - 1)
 
         if thresh >= risk * 2:
@@ -270,7 +282,7 @@ class Strategy(IStrategy):
         risk = trade.get_custom_data(key='risk')
 
         conditions = (
-            current_time - timedelta(minutes=10) > trade.open_date_utc,
+            current_time - timedelta(minutes=30) > trade.open_date_utc,
             mean_to_open_ratio < 1,
             current_profit > 0.002
         )
@@ -279,7 +291,7 @@ class Strategy(IStrategy):
             return 'High risk trade!'
         
         conditions = (
-            current_time - timedelta(hours=2) > trade.open_date_utc, 
+            current_time - timedelta(minutes=30) > trade.open_date_utc, 
             risk * 2 < current_profit < risk * 3
         )
 
