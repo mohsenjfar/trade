@@ -83,18 +83,22 @@ class Strategy(IStrategy):
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         
+        dataframe['coef'] = self.close_price_coef(dataframe)
         dataframe["rsi"] = ta.RSI(dataframe, timeperiod=14)
-        dataframe["rsi_extrema"] = 0
+
         min_peaks = argrelextrema(dataframe["rsi"].values, np.less_equal, order=self.rsi_kernel)
         max_peaks = argrelextrema(dataframe["rsi"].values, np.greater_equal, order=self.rsi_kernel)
+
         dataframe['rsi_second_last_max'] = dataframe.at[max_peaks[0][-2], "rsi"]
         dataframe['rsi_last_max'] = dataframe.at[max_peaks[0][-1], "rsi"]
         dataframe['rsi_second_last_min'] = dataframe.at[min_peaks[0][-2], "rsi"]
         dataframe['rsi_last_min'] = dataframe.at[min_peaks[0][-1], "rsi"]
-        dataframe['price_second_last_max'] = dataframe.at['rsi_second_last_max', "high"]
-        dataframe['price_last_max'] = dataframe.at['rsi_last_max', "high"]
-        dataframe['price_second_last_min'] = dataframe.at['rsi_second_last_min', "low"]
-        dataframe['price_last_min'] = dataframe.at['rsi_last_min', "low"]
+
+        dataframe['price_second_last_max'] = dataframe.at[max_peaks[0][-2], "high"]
+        dataframe['price_last_max'] = dataframe.at[max_peaks[0][-1], "high"]
+        dataframe['price_second_last_min'] = dataframe.at[min_peaks[0][-2], "low"]
+        dataframe['price_last_min'] = dataframe.at[min_peaks[0][-1], "low"]
+
         dataframe['short_risk'] = abs(1 - dataframe['close'] / dataframe['price_second_last_max'])
         dataframe['long_risk'] = abs(1 - dataframe['close'] / dataframe['price_second_last_min'])
 
