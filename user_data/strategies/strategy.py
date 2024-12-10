@@ -232,7 +232,7 @@ class Strategy(IStrategy):
             side == 'long'
         )
 
-        if any(all(condition_1), all(condition_2)):
+        if any((all(condition_1), all(condition_2))):
             logger.info(f"Late {side} entry for {pair}")
             return False
 

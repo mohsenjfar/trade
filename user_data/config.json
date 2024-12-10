@@ -37,9 +37,11 @@
     "key": "",
     "secret": "",
     "pair_whitelist": [
-      "BTC/USDT:USDT"
+      
     ],
-    "pair_blacklist": []
+    "pair_blacklist": [
+      "BTC/USDT:USDT"
+    ]
   },
   "pairlists": [
     // {
