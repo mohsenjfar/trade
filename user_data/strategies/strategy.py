@@ -82,17 +82,6 @@ class Strategy(IStrategy):
 
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-
-        dataframe['coef'] = self.close_price_coef(dataframe)
-        dataframe["price_extrema"] = 0
-        min_peaks = argrelextrema(dataframe["low"].values, np.less_equal, order=self.price_kernel)
-        max_peaks = argrelextrema(dataframe["high"].values, np.greater_equal, order=self.price_kernel)
-        dataframe['price_second_last_max'] = dataframe.at[max_peaks[0][-2], "high"]
-        dataframe['price_last_max'] = dataframe.at[max_peaks[0][-1], "high"]
-        dataframe['price_second_last_min'] = dataframe.at[min_peaks[0][-2], "low"]
-        dataframe['price_last_min'] = dataframe.at[min_peaks[0][-1], "low"]
-        dataframe['short_risk'] = (dataframe['price_last_max'] - dataframe['close']) / dataframe['price_last_max']
-        dataframe['long_risk'] = (dataframe['close'] - dataframe['price_last_min']) / dataframe['price_last_min']
         
         dataframe["rsi"] = ta.RSI(dataframe, timeperiod=14)
         dataframe["rsi_extrema"] = 0
@@ -102,6 +91,12 @@ class Strategy(IStrategy):
         dataframe['rsi_last_max'] = dataframe.at[max_peaks[0][-1], "rsi"]
         dataframe['rsi_second_last_min'] = dataframe.at[min_peaks[0][-2], "rsi"]
         dataframe['rsi_last_min'] = dataframe.at[min_peaks[0][-1], "rsi"]
+        dataframe['price_second_last_max'] = dataframe.at['rsi_second_last_max', "high"]
+        dataframe['price_last_max'] = dataframe.at['rsi_last_max', "high"]
+        dataframe['price_second_last_min'] = dataframe.at['rsi_second_last_min', "low"]
+        dataframe['price_last_min'] = dataframe.at['rsi_last_min', "low"]
+        dataframe['short_risk'] = abs(1 - dataframe['close'] / dataframe['price_second_last_max'])
+        dataframe['long_risk'] = abs(1 - dataframe['close'] / dataframe['price_second_last_min'])
 
         return dataframe
 
@@ -167,10 +162,10 @@ class Strategy(IStrategy):
         if not trades.empty and len(trades) > 1:
 
             today = datetime.now(timezone.utc).date()
-            today_loss = len(trades[
+            today_loss = trades[
                 (trades.close_date >= today.strftime('%Y-%m-%d')) & 
                 (trades.close_profit_abs < 0)
-            ]).close_profit_abs.sum()
+            ].close_profit_abs.sum()
 
             open_trades = not trades[trades.is_open == True].empty
             if open_trades and today_loss < (self.stoploss / 2):
@@ -192,10 +187,10 @@ class Strategy(IStrategy):
                 return None
             
             this_week = (today - timedelta(days=today.weekday()))
-            this_week_loss = len(trades[
+            this_week_loss = trades[
                 (trades.open_date >= this_week.strftime('%Y-%m-%d')) & 
                 (trades.close_profit_abs < 0)
-            ]).close_profit_abs.sum()
+            ].close_profit_abs.sum()
 
             if this_week_loss < (self.stoploss * 3):
                 logger.info(
@@ -282,7 +277,12 @@ class Strategy(IStrategy):
         if thresh >= risk * 2:
             stop = last_extrema
             trade.set_custom_data(key='stop', value=stop)
-        
+
+        if current_profit >= risk:
+            side = -1 if trade.is_short else 1
+            stop = trade.open_rate * (1 + side * 0.001)
+            trade.set_custom_data(key='stop', value=stop)
+
         return stoploss_from_absolute(
             stop,
             current_rate,
