@@ -161,38 +161,23 @@ class Strategy(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         candle = dataframe.iloc[-1].squeeze()
         risk = candle['short_risk'] if side == 'short' else candle['long_risk']
-        
-        lines = (
-            f"Pair: {pair}",
-            f"Risk: {risk}",
-            f"Proposed stake: {proposed_stake}",
-            f"Stake: {proposed_stake / (risk * leverage * abs(self.stoploss))}"
-        )
-        self.dp.send_msg("\n".join(lines))
-        
-        return min(proposed_stake / (risk * leverage * abs(self.stoploss)), proposed_stake)
 
-
-    def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
-                            time_in_force: str, current_time: datetime, entry_tag: Optional[str],
-                            side: str, **kwargs) -> bool:
-        
         trades = pd.DataFrame([vars(trade) for trade in Trade.get_trades_proxy()])
 
         if not trades.empty and len(trades) > 1:
 
             today = datetime.now(timezone.utc).date()
-            today_loss_count = len(trades[
+            today_loss = len(trades[
                 (trades.close_date >= today.strftime('%Y-%m-%d')) & 
                 (trades.close_profit_abs < 0)
-            ])
+            ]).close_profit_abs.sum()
 
             open_trades = not trades[trades.is_open == True].empty
-            if open_trades and today_loss_count == 1:
+            if open_trades and today_loss < (self.stoploss / 2):
                 logger.info(f"Open trade may result in loss, prevent {side} entry for {pair} till close.")
-                return False
+                return None
             
-            if today_loss_count == 1:
+            if today_loss < (self.stoploss / 2):
                 trade = trades[trades.is_open == False].iloc[-1].squeeze()
                 trade_side = 'short' if trade.is_short else 'long'
                 trade_close_date = str(trade.close_date)
@@ -201,21 +186,55 @@ class Strategy(IStrategy):
                     logger.info(f"Stop entering {side} position for 12 hours.")
                     return None
             
-            if today_loss_count == 2:
+            if today_loss < self.stoploss:
                 logger.info(
-                    f"Prevent entering {side} position for {pair} due to max day loss")
-                return False
+                    f"Prevent entering {side} position for {pair} due to max day loss ({today_loss * 100:.2f}%)")
+                return None
             
             this_week = (today - timedelta(days=today.weekday()))
-            this_week_loss_count = len(trades[
+            this_week_loss = len(trades[
                 (trades.open_date >= this_week.strftime('%Y-%m-%d')) & 
                 (trades.close_profit_abs < 0)
-            ])
+            ]).close_profit_abs.sum()
 
-            if this_week_loss_count == 6:
+            if this_week_loss < (self.stoploss * 3):
                 logger.info(
-                    f"Prevent entering {side} position for {pair} due to max week loss")
-                return False
+                    f"Prevent entering {side} position for {pair} due to max week loss ({this_week_loss * 100:.2f}%)")
+                return None
+        lines = (
+            f"Pair: {pair}",
+            f"Side: {side}",
+            f"Risk: {risk}",
+            f"Proposed stake: {proposed_stake}",
+            f"Stake: {(proposed_stake * abs(self.stoploss)) / (risk * leverage)}"
+        )
+        self.dp.send_msg("\n".join(lines))
+        
+        return min((proposed_stake * abs(self.stoploss)) / (risk * leverage), proposed_stake)
+
+
+    def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
+                            time_in_force: str, current_time: datetime, entry_tag: Optional[str],
+                            side: str, **kwargs) -> bool:
+
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        first_close = dataframe['close'].iat[-1]
+        second_close = dataframe['close'].iat[-2]
+        third_close = dataframe['close'].iat[-3]
+
+        condition_1 = (
+            first_close < second_close < third_close,
+            side == 'short'
+        )
+
+        condition_2 = (
+            first_close > second_close > third_close,
+            side == 'long'
+        )
+
+        if any(all(condition_1), all(condition_2)):
+            logger.info(f"Late {side} entry for {pair}")
+            return False
 
         return True
     
