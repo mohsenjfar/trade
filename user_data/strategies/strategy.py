@@ -162,6 +162,7 @@ class Strategy(IStrategy):
         risk = candle['short_risk'] if side == 'short' else candle['long_risk']
 
         trades = pd.DataFrame([vars(trade) for trade in Trade.get_trades_proxy()])
+        total_stake = Trade.total_open_trades_stakes() + max_stake
 
         if not trades.empty and len(trades) > 1:
 
@@ -169,21 +170,12 @@ class Strategy(IStrategy):
             today_loss = trades[
                 (trades.close_date >= today.strftime('%Y-%m-%d')) & 
                 (trades.close_profit_abs < 0)
-            ].close_profit_abs.sum()
+            ].close_profit_abs.sum() / total_stake
 
             open_trades = not trades[trades.is_open == True].empty
             if open_trades and today_loss < (self.stoploss / 2):
                 logger.info(f"Open trade may result in loss, prevent {side} entry for {pair} till close.")
                 return None
-            
-            if today_loss < (self.stoploss / 2):
-                trade = trades[trades.is_open == False].iloc[-1].squeeze()
-                trade_side = 'short' if trade.is_short else 'long'
-                trade_close_date = str(trade.close_date)
-                trade_close_date = datetime.strptime(trade_close_date, "%Y-%m-%d %H:%M:%S.%f")
-                if ((datetime.now() - trade_close_date).seconds / 3600 < 12) and trade_side == side:
-                    logger.info(f"Stop entering {side} position for 12 hours.")
-                    return None
             
             if today_loss < self.stoploss:
                 logger.info(
@@ -194,7 +186,7 @@ class Strategy(IStrategy):
             this_week_loss = trades[
                 (trades.open_date >= this_week.strftime('%Y-%m-%d')) & 
                 (trades.close_profit_abs < 0)
-            ].close_profit_abs.sum()
+            ].close_profit_abs.sum() / total_stake
 
             if this_week_loss < (self.stoploss * 3):
                 logger.info(
@@ -203,9 +195,12 @@ class Strategy(IStrategy):
         lines = (
             f"Pair: {pair}",
             f"Side: {side}",
-            f"Risk: {risk}",
-            f"Proposed stake: {proposed_stake}",
-            f"Stake: {(proposed_stake * abs(self.stoploss)) / (risk * leverage)}"
+            f"Risk: {risk * 100:.2f}%",
+            f"Today loss: {today_loss * 100:.2f}%",
+            f"This week loss: {this_week_loss * 100:.2f}%",
+            f"Total stake: {total_stake:.2f}$",
+            f"Proposed stake: {proposed_stake:.2f}$",
+            f"Stake: {(proposed_stake * abs(self.stoploss)) / (risk * leverage):.2f}$"
         )
         self.dp.send_msg("\n".join(lines))
         
@@ -252,7 +247,7 @@ class Strategy(IStrategy):
 
             dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
             current_candle = dataframe.iloc[-1].squeeze()
-            stop = current_candle.price_last_max if trade.is_short else current_candle.price_last_min
+            stop = current_candle.price_second_last_max if trade.is_short else current_candle.price_second_last_min
             trade.set_custom_data(key='stop', value=stop)
             risk = current_candle.short_risk if trade.is_short else current_candle.long_risk
             trade.set_custom_data(key='risk', value=risk)
