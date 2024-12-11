@@ -15,6 +15,6 @@ services:
         --db-url sqlite:////freqtrade/user_data/db.sqlite
         --config /freqtrade/user_data/config.json
         --strategy Strategy
-#         --freqaimodel XGBoostClassifier
+        --freqaimodel XGBoostClassifier
 
   

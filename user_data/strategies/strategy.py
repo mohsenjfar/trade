@@ -6,6 +6,7 @@ from technical import qtpylib
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 from math import ceil
+from typing import Dict
 import numpy as np
 import talib.abstract as ta
 from scipy.signal import argrelextrema
@@ -70,20 +71,70 @@ class Strategy(IStrategy):
         bid_dataframe = pd.DataFrame(bid_values)
         ask_dataframe = pd.DataFrame(ask_values)
         return pd.concat((bid_dataframe,ask_dataframe))
+    
+
+    def feature_engineering_expand_all(self, dataframe: DataFrame, period: int,
+                                       metadata: Dict, **kwargs) -> DataFrame:
+
+        dataframe["%-rsi-period"] = ta.RSI(dataframe, timeperiod=period)
+        dataframe["%-mfi-period"] = ta.MFI(dataframe, timeperiod=period)
+        dataframe["%-adx-period"] = ta.ADX(dataframe, timeperiod=period)
+        dataframe["%-sma-period"] = ta.SMA(dataframe, timeperiod=period)
+        dataframe["%-ema-period"] = ta.EMA(dataframe, timeperiod=period)
+
+        bollinger = qtpylib.bollinger_bands(
+            qtpylib.typical_price(dataframe), window=period, stds=2.2
+        )
+        dataframe["bb_lowerband-period"] = bollinger["lower"]
+        dataframe["bb_middleband-period"] = bollinger["mid"]
+        dataframe["bb_upperband-period"] = bollinger["upper"]
+
+        dataframe["%-bb_width-period"] = (
+            dataframe["bb_upperband-period"]
+            - dataframe["bb_lowerband-period"]
+        ) / dataframe["bb_middleband-period"]
+        dataframe["%-close-bb_lower-period"] = (
+            dataframe["close"] / dataframe["bb_lowerband-period"]
+        )
+
+        dataframe["%-roc-period"] = ta.ROC(dataframe, timeperiod=period)
+
+        dataframe["%-relative_volume-period"] = (
+            dataframe["volume"] / dataframe["volume"].rolling(period).mean()
+        )
+
+        return dataframe
 
 
-    def close_price_coef(self, dataframe):
-        dataframe_ = dataframe.copy()[-self.coef_kernel:]
-        x = dataframe_.index.values.reshape(-1, 1)
-        y = dataframe_.close.values
-        model = LinearRegression()
-        model.fit(x, y)
-        return model.coef_[0]
+    def feature_engineering_expand_basic(
+            self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
+        
+        dataframe["%-pct-change"] = dataframe["close"].pct_change()
+        dataframe["%-raw_volume"] = dataframe["volume"]
+        dataframe["%-raw_price"] = dataframe["close"]
+        return dataframe
+
+
+    def feature_engineering_standard(
+            self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
+
+        dataframe["%-day_of_week"] = dataframe["date"].dt.dayofweek
+        dataframe["%-hour_of_day"] = dataframe["date"].dt.hour
+        return dataframe
+
+
+    def set_freqai_targets(self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
+
+        self.freqai.class_names = ["down", "up"]
+        dataframe['&s-up_or_down'] = np.where(dataframe["close"].shift(-50) >
+                                              dataframe["close"], 'up', 'down')
+
+        return dataframe
 
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         
-        dataframe['coef'] = self.close_price_coef(dataframe)
+        dataframe = self.freqai.start(dataframe, metadata, self)
         dataframe["rsi"] = ta.RSI(dataframe, timeperiod=14)
 
         min_peaks = argrelextrema(dataframe["rsi"].values, np.less_equal, order=self.rsi_kernel)
@@ -109,7 +160,8 @@ class Strategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['coef'] > 0) & # Guard
+                (dataframe['do_predict'] == 1) & # Guard
+                (dataframe['&s-up_or_down'] == 'up') & # Guard
                 (dataframe['price_second_last_min'] < dataframe['price_last_min']) & # Guard
                 (dataframe['rsi_second_last_min'] < dataframe['rsi_last_min']) & # Guard
                 (dataframe['rsi_second_last_min'] < 50) & # Guard
@@ -121,7 +173,8 @@ class Strategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['coef'] < 0) & # Guard
+                (dataframe['do_predict'] == 1) & # Guard
+                (dataframe['&s-up_or_down'] == 'down') & # Guard
                 (dataframe['price_second_last_max'] > dataframe['price_last_max']) & # Guard
                 (dataframe['rsi_second_last_max'] > dataframe['rsi_last_max']) & # Guard
                 (dataframe['rsi_second_last_max'] > 50) & # Guard
@@ -173,18 +226,6 @@ class Strategy(IStrategy):
             ].close_profit_abs.sum() / total_stake
 
             open_trades = not trades[trades.is_open == True].empty
-            if open_trades:
-                trade = Trade.get_trades_proxy(is_open=True)[0]
-                open_trade_risk = trade.get_custom_data(key='risk')
-                conditions = (
-                    current_time - timedelta(minutes=50) > trade.open_date_utc,
-                    0 < trade.current_profit < open_trade_risk / 2,
-                    trade.is_short != (side == 'short')
-                )
-                if all(conditions):
-                    logger.info(f"Reverse trade, enter {side} position for {pair}")
-                    return True
-
             if open_trades and today_loss < 0:
                 logger.info(f"Open trade may result in loss, prevent {side} entry for {pair} till close.")
                 return None
@@ -306,14 +347,6 @@ class Strategy(IStrategy):
                     current_rate: float, current_profit: float, **kwargs) -> str:
 
         risk = trade.get_custom_data(key='risk')
-
-        conditions = (
-            current_time - timedelta(minutes=60) > trade.open_date_utc,
-            0 < current_profit < risk / 2
-        )
-
-        if all(conditions):
-            return 'High risk trade!'
         
         conditions = (
             current_time - timedelta(minutes=30) > trade.open_date_utc, 
