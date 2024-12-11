@@ -173,11 +173,23 @@ class Strategy(IStrategy):
             ].close_profit_abs.sum() / total_stake
 
             open_trades = not trades[trades.is_open == True].empty
-            if open_trades and today_loss < (self.stoploss / 2):
+            if open_trades:
+                trade = Trade.get_trades_proxy(is_open=True)[0]
+                open_trade_risk = trade.get_custom_data(key='risk')
+                conditions = (
+                    current_time - timedelta(minutes=50) > trade.open_date_utc,
+                    trade.current_profit < open_trade_risk,
+                    trade.is_short != (side == 'short')
+                )
+                if all(conditions):
+                    logger.info(f"Reverse trade, enter {side} position for {pair}")
+                    return True
+
+            if open_trades and today_loss < 0:
                 logger.info(f"Open trade may result in loss, prevent {side} entry for {pair} till close.")
                 return None
             
-            if today_loss < self.stoploss:
+            if today_loss < self.stoploss * 0.7:
                 logger.info(
                     f"Prevent entering {side} position for {pair} due to max day loss ({today_loss * 100:.2f}%)")
                 return None
@@ -293,16 +305,11 @@ class Strategy(IStrategy):
     def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
                     current_rate: float, current_profit: float, **kwargs) -> str:
 
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        dataframe = dataframe[dataframe.date >= trade.open_date_utc].reset_index()
-        mean = (dataframe['high'] + dataframe['low']).mean()
-        mean_to_open_ratio = mean / trade.open_rate
         risk = trade.get_custom_data(key='risk')
 
         conditions = (
-            current_time - timedelta(minutes=30) > trade.open_date_utc,
-            mean_to_open_ratio < 1,
-            current_profit > 0.002
+            current_time - timedelta(minutes=60) > trade.open_date_utc,
+            current_profit > 0
         )
 
         if all(conditions):
