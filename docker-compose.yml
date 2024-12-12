@@ -4,7 +4,7 @@ services:
   freqtrade:
       image: freqtradeorg/freqtrade:develop_freqai
       restart: unless-stopped
-      container_name: TradeStrategy
+      container_name: Strategy
       ports:
         - "127.0.0.1:8080:8080"
       volumes:
@@ -15,6 +15,6 @@ services:
         --db-url sqlite:////freqtrade/user_data/db.sqlite
         --config /freqtrade/user_data/config.json
         --strategy Strategy
-        --freqaimodel XGBoostClassifier
+        --freqaimodel XGBoostRegressor
 
   

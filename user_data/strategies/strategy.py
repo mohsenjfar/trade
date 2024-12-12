@@ -4,16 +4,14 @@ from datetime import datetime, timedelta, timezone
 from typing import Optional
 from technical import qtpylib
 import pandas as pd
-from sklearn.linear_model import LinearRegression
-from math import ceil
+import math
 from typing import Dict
 import numpy as np
 import talib.abstract as ta
 from scipy.signal import argrelextrema
 from freqtrade.strategy import (
     IStrategy,
-    stoploss_from_absolute,
-    stoploss_from_open
+    stoploss_from_absolute
 )
 import logging
 
@@ -112,22 +110,55 @@ class Strategy(IStrategy):
         dataframe["%-pct-change"] = dataframe["close"].pct_change()
         dataframe["%-raw_volume"] = dataframe["volume"]
         dataframe["%-raw_price"] = dataframe["close"]
+        
         return dataframe
 
 
     def feature_engineering_standard(
             self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
 
-        dataframe["%-day_of_week"] = dataframe["date"].dt.dayofweek
-        dataframe["%-hour_of_day"] = dataframe["date"].dt.hour
+        dataframe["day_of_week"] = (dataframe["date"].dt.dayofweek)
+        dataframe["hour_of_day"] = (dataframe["date"].dt.hour)
+        dataframe['day_of_week_norm'] = 2 * math.pi * \
+            dataframe['day_of_week'] / dataframe['day_of_week'].max()
+        dataframe['hour_of_day_norm'] = 2 * math.pi * \
+            dataframe['hour_of_day'] / dataframe['hour_of_day'].max()
+
+        dataframe['%%-day_of_week_cos'] = np.cos(dataframe['day_of_week_norm'])
+        dataframe['%%-hour_of_day_cos'] = np.cos(dataframe['hour_of_day_norm'])
+        dataframe['%%-day_of_week_sin'] = np.sin(dataframe['day_of_week_norm'])
+        dataframe['%%-hour_of_day_sin'] = np.sin(dataframe['hour_of_day_norm'])
+        
         return dataframe
 
 
     def set_freqai_targets(self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
 
-        self.freqai.class_names = ["down", "up"]
-        dataframe['&s-up_or_down'] = np.where(dataframe["close"].shift(-50) >
-                                              dataframe["close"], 'up', 'down')
+        dataframe["&s-extrema"] = 0
+        kernel = self.freqai_info["feature_parameters"]["label_period_candles"]
+        min_peaks = argrelextrema(
+            dataframe["low"].values, np.less,
+            order=kernel
+        )
+        max_peaks = argrelextrema(
+            dataframe["high"].values, np.greater,
+            order=kernel
+        )
+        for mp in min_peaks[0]:
+            dataframe.at[mp, "&s-extrema"] = -1
+        for mp in max_peaks[0]:
+            dataframe.at[mp, "&s-extrema"] = 1
+        dataframe["minima-exit"] = np.where(
+            dataframe["&s-extrema"] == -1, 1, 0)
+        dataframe["maxima-exit"] = np.where(dataframe["&s-extrema"] == 1, 1, 0)
+        dataframe['&s-extrema'] = dataframe['&s-extrema'].rolling(
+            window=5, win_type='gaussian', center=True).mean(std=0.5)
+
+        # predict the expected range
+        dataframe['&-s_max'] = dataframe["close"].shift(-kernel).rolling(
+            kernel).max()/dataframe["close"] - 1
+        dataframe['&-s_min'] = dataframe["close"].shift(-kernel).rolling(
+            kernel).min()/dataframe["close"] - 1
 
         return dataframe
 
@@ -150,8 +181,8 @@ class Strategy(IStrategy):
         dataframe['price_second_last_min'] = dataframe.at[min_peaks[0][-2], "low"]
         dataframe['price_last_min'] = dataframe.at[min_peaks[0][-1], "low"]
 
-        dataframe['short_risk'] = abs(1 - dataframe['close'] / dataframe['price_second_last_max'])
         dataframe['long_risk'] = abs(1 - dataframe['close'] / dataframe['price_second_last_min'])
+        dataframe['short_risk'] = abs(1 - dataframe['close'] / dataframe['price_second_last_max'])
 
         return dataframe
 
@@ -161,7 +192,7 @@ class Strategy(IStrategy):
         dataframe.loc[
             (
                 (dataframe['do_predict'] == 1) & # Guard
-                (dataframe['&s-up_or_down'] == 'up') & # Guard
+                (dataframe['&-s_max'] >= dataframe['long_risk'] * 2) & # Guard
                 (dataframe['price_second_last_min'] < dataframe['price_last_min']) & # Guard
                 (dataframe['rsi_second_last_min'] < dataframe['rsi_last_min']) & # Guard
                 (dataframe['rsi_second_last_min'] < 50) & # Guard
@@ -174,7 +205,7 @@ class Strategy(IStrategy):
         dataframe.loc[
             (
                 (dataframe['do_predict'] == 1) & # Guard
-                (dataframe['&s-up_or_down'] == 'down') & # Guard
+                (dataframe['&-s_min'] <= dataframe['short_risk'] * 2) & # Guard
                 (dataframe['price_second_last_max'] > dataframe['price_last_max']) & # Guard
                 (dataframe['rsi_second_last_max'] > dataframe['rsi_last_max']) & # Guard
                 (dataframe['rsi_second_last_max'] > 50) & # Guard
@@ -183,9 +214,6 @@ class Strategy(IStrategy):
             ),
             'enter_short'
         ] = 1
-
-        ticker = metadata['pair'].replace('/USDT:USDT','')
-        dataframe.to_csv(f'user_data/notebooks/{ticker}_df.csv', index=False)
 
         return dataframe
 
@@ -307,9 +335,8 @@ class Strategy(IStrategy):
 
             trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
             
-            ticker = pair.replace('/USDT:USDT','')
-            self.ob_dataframe(pair).to_csv(f'user_data/notebooks/{ticker}_{trade.id}_ob.csv', index=False)
-            dataframe.to_csv(f'user_data/notebooks/{ticker}_{trade.id}_df.csv', index=False)
+            self.ob_dataframe(pair).to_csv(f'user_data/notebooks/{pair[:-10]}_{trade.id}_ob.csv', index=False)
+            dataframe.to_csv(f'user_data/notebooks/{pair[:-10]}_{trade.id}_df.csv', index=False)
             pd.DataFrame([vars(trade) for trade in Trade.get_trades_proxy()]).to_csv(f'user_data/notebooks/trades.csv', index=False)
 
         return None
