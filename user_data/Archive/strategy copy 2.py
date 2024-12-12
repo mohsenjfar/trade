@@ -127,7 +127,7 @@ class Strategy(IStrategy):
                 (dataframe['second_last_max'] > dataframe['last_max']) & # Guard
                 # (dataframe['close'] < dataframe['last_min']) & # Guard
                 # (dataframe['close'] < dataframe['second_last_min']) & # Guard
-                qtpylib.crossed_below(dataframe['close'], dataframe['y']) # Trigger
+                 # Trigger
             ),
             'enter_short'
         ] = 1

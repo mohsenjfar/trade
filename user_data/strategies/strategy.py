@@ -26,7 +26,7 @@ class Strategy(IStrategy):
 
     stoploss = -0.01
 
-    timeframe = '5m'
+    timeframe = '15m'
 
     use_exit_signal = True
 
@@ -167,6 +167,7 @@ class Strategy(IStrategy):
         
         dataframe = self.freqai.start(dataframe, metadata, self)
         dataframe["rsi"] = ta.RSI(dataframe, timeperiod=14)
+        dataframe['tema'] = ta.TEMA(dataframe, timeperiod=9)
 
         min_peaks = argrelextrema(dataframe["rsi"].values, np.less_equal, order=self.rsi_kernel)
         max_peaks = argrelextrema(dataframe["rsi"].values, np.greater_equal, order=self.rsi_kernel)
@@ -197,7 +198,7 @@ class Strategy(IStrategy):
                 (dataframe['rsi_second_last_min'] < dataframe['rsi_last_min']) & # Guard
                 (dataframe['rsi_second_last_min'] < 50) & # Guard
                 (dataframe['rsi_last_min'] < 50) & # Guard
-                (dataframe['close'] > dataframe['close'].shift(1)) # Trigger
+                (qtpylib.crossed_above(dataframe['close'], dataframe['tema'])) # Trigger
             ),
             'enter_long'
         ] = 1
@@ -210,7 +211,7 @@ class Strategy(IStrategy):
                 (dataframe['rsi_second_last_max'] > dataframe['rsi_last_max']) & # Guard
                 (dataframe['rsi_second_last_max'] > 50) & # Guard
                 (dataframe['rsi_last_max'] > 50) & # Guard
-                (dataframe['close'] < dataframe['close'].shift(1)) # Trigger
+                (qtpylib.crossed_below(dataframe['close'], dataframe['tema'])) # Trigger
             ),
             'enter_short'
         ] = 1
@@ -288,30 +289,30 @@ class Strategy(IStrategy):
         return min((proposed_stake * abs(self.stoploss)) / (risk * leverage), proposed_stake)
 
 
-    def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
-                            time_in_force: str, current_time: datetime, entry_tag: Optional[str],
-                            side: str, **kwargs) -> bool:
+    # def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
+    #                         time_in_force: str, current_time: datetime, entry_tag: Optional[str],
+    #                         side: str, **kwargs) -> bool:
 
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        first_close = dataframe['close'].iat[-1]
-        second_close = dataframe['close'].iat[-2]
-        third_close = dataframe['close'].iat[-3]
+    #     dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+    #     first_close = dataframe['close'].iat[-1]
+    #     second_close = dataframe['close'].iat[-2]
+    #     third_close = dataframe['close'].iat[-3]
 
-        condition_1 = (
-            first_close < second_close < third_close,
-            side == 'short'
-        )
+    #     condition_1 = (
+    #         first_close < second_close < third_close,
+    #         side == 'short'
+    #     )
 
-        condition_2 = (
-            first_close > second_close > third_close,
-            side == 'long'
-        )
+    #     condition_2 = (
+    #         first_close > second_close > third_close,
+    #         side == 'long'
+    #     )
 
-        if any((all(condition_1), all(condition_2))):
-            logger.info(f"Late {side} entry for {pair}")
-            return False
+    #     if any((all(condition_1), all(condition_2))):
+    #         logger.info(f"Late {side} entry for {pair}")
+    #         return False
 
-        return True
+    #     return True
     
 
     def custom_entry_price(self, pair: str, trade: Trade | None, current_time: datetime, proposed_rate: float,
@@ -376,7 +377,7 @@ class Strategy(IStrategy):
         risk = trade.get_custom_data(key='risk')
         
         conditions = (
-            current_time - timedelta(minutes=30) > trade.open_date_utc, 
+            current_time - timedelta(hours = 2) > trade.open_date_utc, 
             risk * 2 < current_profit < risk * 3
         )
 
