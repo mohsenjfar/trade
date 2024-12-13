@@ -73,7 +73,7 @@ class Strategy(IStrategy):
 
 
     def correlated_ticker(self, ticker, thresh=0.9):
-        path = "../data/bybit/futures"
+        path = "user_data/data/bybit/futures"
         all_files = os.listdir(path)
         files = [file for file in all_files if '_USDT_USDT-15m-futures' in file]
         tickers = {file[:-30]:pd.read_feather(path + "/" + file).close for file in files}
