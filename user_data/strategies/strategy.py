@@ -76,7 +76,6 @@ class Strategy(IStrategy):
         pairs = self.dp.current_whitelist()
         tickers = {p:self.dp.get_pair_dataframe(pair=p, timeframe=self.timeframe).close for p in pairs}
         dataframe = pd.DataFrame(tickers).ffill()
-        dataframe.to_csv(f'user_data/notebooks/corr_df.csv', index=False)
         series = dataframe.corr()[pair].drop(pair)
         series = series[(series == series.max()) & (series > thresh)]
         return series.index[0] if series.size > 0 else np.nan
