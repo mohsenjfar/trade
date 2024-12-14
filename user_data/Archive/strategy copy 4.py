@@ -72,17 +72,18 @@ class Strategy(IStrategy):
         return pd.concat((bid_dataframe,ask_dataframe))
 
 
-    def correlated_pairs(self):
+    def correlated_pair(self, pair, thresh=0.9):
         pairs = self.dp.current_whitelist()
         tickers = {p:self.dp.get_pair_dataframe(pair=p, timeframe=self.timeframe).close for p in pairs}
         dataframe = pd.DataFrame(tickers).ffill()
-        corr_df = dataframe.corr()
-        max_corrs = corr_df[(corr_df != 1)].max()
-        return corr_df[max_corrs == max_corrs.max()].index.to_list()
+        series = dataframe.corr()[pair].drop(pair)
+        series = series[(series == series.max()) & (series > thresh)]
+        return series.index[0] if series.size > 0 else np.nan
 
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
+        dataframe["corr_pair"] = self.correlated_pair(metadata['pair'], thresh=0.8)
         dataframe["rsi"] = ta.RSI(dataframe, timeperiod=14)
         dataframe['tema'] = ta.TEMA(dataframe, timeperiod=9)
 
@@ -107,11 +108,46 @@ class Strategy(IStrategy):
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        pairs = self.correlated_pairs()
+        open_trade = Trade.get_trades_proxy(is_open=True)
+        if open_trade:
+            trade = open_trade[-1]
+            if trade.get_custom_data(key='corr_pair') == metadata['pair']:
+                if trade.is_short:
+                    dataframe['enter_long'] = 1
+                    dataframe['enter_short'] = 0
+                    return dataframe
+                dataframe['enter_short'] = 1
+                dataframe['enter_long'] = 0
+                return dataframe
+            dataframe['enter_short'] = 0
+            dataframe['enter_long'] = 0
+            return dataframe
 
-        dataframe['enter_long'] = 1 if metadata['pair'] == pairs[0] else 0
+        dataframe.loc[
+            (
+                (dataframe['price_second_last_min'] < dataframe['price_last_min']) & # Guard
+                (dataframe['rsi_second_last_min'] < dataframe['rsi_last_min']) & # Guard
+                (dataframe['rsi_second_last_min'] < 50) & # Guard
+                (dataframe['rsi_last_min'] < 50) & # Guard
+                (dataframe["corr_pair"].notna()) & # Guard
+                (qtpylib.crossed_above(dataframe['close'], dataframe['tema'])) # Trigger
+            ),
+            'enter_long'
+        ] = 1
 
-        dataframe['enter_short'] = 1 if metadata['pair'] == pairs[1] else 0
+        dataframe.loc[
+            (
+                (dataframe['price_second_last_max'] > dataframe['price_last_max']) & # Guard
+                (dataframe['rsi_second_last_max'] > dataframe['rsi_last_max']) & # Guard
+                (dataframe['rsi_second_last_max'] > 50) & # Guard
+                (dataframe['rsi_last_max'] > 50) & # Guard
+                (dataframe["corr_pair"].notna()) & # Guard
+                (qtpylib.crossed_below(dataframe['close'], dataframe['tema'])) # Trigger
+            ),
+            'enter_short'
+        ] = 1
+
+        dataframe.to_csv(f'user_data/notebooks/{metadata['pair'][:-10]}_df.csv', index=False)
 
         return dataframe
 
@@ -136,8 +172,7 @@ class Strategy(IStrategy):
             Trade.close_date >= today,
             Trade.close_profit_abs < 0
         ]
-        today_loss = Trade.get_trades(trade_filter=filters, include_orders=False).all()
-
+        today_loss = Trade.get_trades(trade_filter=filters, include_orders=False)
         if today_loss:
             f"Prevent entering {side} position for {pair} due to max day loss"
             return None
@@ -170,6 +205,7 @@ class Strategy(IStrategy):
             current_candle = dataframe.iloc[-1].squeeze()
             risk = current_candle.short_risk if trade.is_short else current_candle.long_risk
             trade.set_custom_data(key='risk', value=risk)
+            trade.set_custom_data(key='corr_pair', value=current_candle.corr_pair)
 
             trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
             
