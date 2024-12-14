@@ -139,7 +139,7 @@ class Strategy(IStrategy):
         today_loss = Trade.get_trades(trade_filter=filters, include_orders=False).all()
 
         if today_loss:
-            f"Prevent entering {side} position for {pair} due to max day loss"
+            logger.info(f"Prevent entering {side} position for {pair} due to max day loss")
             return None
 
         lines = (
