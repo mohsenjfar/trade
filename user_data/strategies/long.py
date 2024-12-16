@@ -68,7 +68,7 @@ class Long(IStrategy):
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         side = 1 if side == 'short' else -1
-        return dataframe["close"].iat[-1] * (1 + side * 0.0014)
+        return dataframe["close"].iat[-1] * (1 + side * 0.0007)
 
 
     def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
