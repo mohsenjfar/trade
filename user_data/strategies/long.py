@@ -3,13 +3,19 @@ from freqtrade.persistence import Trade
 from datetime import datetime, timezone
 from typing import Optional
 import pandas as pd
+from freqtrade_client import FtRestClient
 from freqtrade.strategy import (
     IStrategy,
     stoploss_from_open
 )
 
+server_url = 'http://127.0.0.1:8081'
+username = ''
+password = ""
+client = FtRestClient(server_url, username, password)
 
-class Strategy(IStrategy):
+
+class Long(IStrategy):
 
     INTERFACE_VERSION = 3
 
@@ -17,7 +23,7 @@ class Strategy(IStrategy):
 
     stoploss = -0.01
 
-    timeframe = '1m'
+    timeframe = '15m'
 
     use_exit_signal = True
 
@@ -38,16 +44,6 @@ class Strategy(IStrategy):
         'entry': 'GTC',
         'exit': 'GTC'
     }
-    
-
-    def correlated_pairs(self):
-        pairs = self.dp.current_whitelist()
-        tickers = {p:self.dp.get_pair_dataframe(pair=p, timeframe=self.timeframe).close for p in pairs}
-        dataframe = pd.DataFrame(tickers).ffill()
-        corr_df = dataframe.corr()
-        max_corrs = corr_df[(corr_df != 1)].max()
-        return corr_df[max_corrs == max_corrs.max()].index.to_list()
-
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
@@ -56,9 +52,8 @@ class Strategy(IStrategy):
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        pairs = self.correlated_pairs()
-        dataframe['enter_long'] = 1 if metadata['pair'] == pairs[0] else 0
-        dataframe['enter_short'] = 1 if metadata['pair'] == pairs[1] else 0
+        dataframe['enter_long'] = 1
+        dataframe['enter_short'] = 0
 
         return dataframe
 
@@ -68,12 +63,19 @@ class Strategy(IStrategy):
         return dataframe
 
 
+    def custom_entry_price(self, pair: str, trade: Trade | None, current_time: datetime, proposed_rate: float,
+                           entry_tag: str | None, side: str, **kwargs) -> float:
+
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        return dataframe["close"].iat[-1]
+
+
     def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
                             time_in_force: str, current_time: datetime, entry_tag: Optional[str],
                             side: str, **kwargs) -> bool:
 
-        trades_count = len(Trade.get_trades_proxy())
-        open_trades = Trade.get_open_trade_count()
+        trades_count = len(Trade.get_trades_proxy()) + len(client.trades())
+        open_trades = Trade.get_open_trade_count() + len(client.status())
 
         if (trades_count % 2 == 0) and open_trades > 0:
             return False
