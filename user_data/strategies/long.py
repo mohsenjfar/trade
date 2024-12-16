@@ -9,7 +9,7 @@ from freqtrade.strategy import (
     timeframe_to_prev_date
 )
 
-server_url = 'http://127.0.0.1:8081'
+server_url = 'http://short:8081'
 username = ''
 password = ""
 client = FtRestClient(server_url, username, password)
@@ -23,7 +23,7 @@ class Long(IStrategy):
 
     stoploss = -0.01
 
-    timeframe = '15m'
+    timeframe = '1m'
 
     use_exit_signal = True
 
@@ -67,7 +67,8 @@ class Long(IStrategy):
                            entry_tag: str | None, side: str, **kwargs) -> float:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        return dataframe["close"].iat[-1]
+        side = 1 if side == 'short' else -1
+        return dataframe["close"].iat[-1] * (1 + side * 0.0014)
 
 
     def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
@@ -78,13 +79,10 @@ class Long(IStrategy):
         if current_time - timedelta(seconds=5) > trade_date:
             return False
         
-        client_status, client_trades = client.status(), client.trades()
-        client_trades = len(client_trades) if client_trades and not client_trades.empty else 0
-        client_open_trades = len(client_status) if client_status and not client_status.empty else 0
-        trades_count = len(Trade.get_trades_proxy()) + client_trades
-        open_trades = Trade.get_open_trade_count() + client_open_trades
+        closed_trades_count = len(Trade.get_trades_proxy()) + client.count().get('current')
+        open_trades_count = Trade.get_open_trade_count() + client.trades().get('total_trades')
 
-        if (trades_count % 2 == 0) and open_trades > 0:
+        if (closed_trades_count % 2 == 0) and open_trades_count > 0:
             return False
         
         return True
