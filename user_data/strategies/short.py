@@ -11,7 +11,7 @@ from freqtrade.strategy import (
 
 server_url = 'http://long:8080'
 username = ''
-password = "a88923695f80935a17b99e51df8275bc3440b92defa52106c0cea26ca1bf1ce1"
+password = ""
 client = FtRestClient(server_url, username, password)
 
 class Short(IStrategy):

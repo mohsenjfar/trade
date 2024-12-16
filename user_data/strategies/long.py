@@ -14,10 +14,6 @@ username = ''
 password = ""
 client = FtRestClient(server_url, username, password)
 
-import logging
-logger = logging.getLogger(__name__)
-
-
 class Long(IStrategy):
 
     INTERFACE_VERSION = 3
