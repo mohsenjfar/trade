@@ -24,7 +24,7 @@ class Short(IStrategy):
 
     timeframe = '1m'
 
-    use_exit_signal = True
+    use_exit_signal = False
 
     use_custom_stoploss = True
 
@@ -66,8 +66,7 @@ class Short(IStrategy):
                            entry_tag: str | None, side: str, **kwargs) -> float:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        side = 1 if side == 'short' else -1
-        return dataframe["close"].iat[-1] * (1 + side * 0.0007)
+        return dataframe["close"].iat[-1]
     
 
     def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
@@ -91,17 +90,9 @@ class Short(IStrategy):
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
-        if current_profit >= 0.005:
-            return stoploss_from_open(
-                0,
-                current_profit, 
-                is_short=trade.is_short, 
-                leverage=trade.leverage
-            )
-
         return stoploss_from_open(
-            -0.005,
-            current_profit, 
+            0.005 * (abs(current_profit) // 0.005 - 1),
+            current_profit,
             is_short=trade.is_short, 
             leverage=trade.leverage
         )
