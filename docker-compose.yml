@@ -12,22 +12,22 @@ services:
       command: >
         trade
         --logfile /freqtrade/user_data/logs/long.log
-        --db-url sqlite:////freqtrade/user_data/long_db.sqlite
-        --config /freqtrade/user_data/long_config.json
+        --db-url sqlite:////freqtrade/user_data/db_long.sqlite
+        --config /freqtrade/user_data/config_long.json
         --strategy Long
   short:
       image: freqtradeorg/freqtrade:develop_freqai
       restart: unless-stopped
       container_name: Short
       ports:
-        - "127.0.0.1:8081:8080"
+        - "127.0.0.1:8081:8081"
       volumes:
         - "./user_data:/freqtrade/user_data"
       command: >
         trade
         --logfile /freqtrade/user_data/logs/short.log
-        --db-url sqlite:////freqtrade/user_data/short_db.sqlite
-        --config /freqtrade/user_data/short_config.json
+        --db-url sqlite:////freqtrade/user_data/db_short.sqlite
+        --config /freqtrade/user_data/config_short.json
         --strategy Short
 
   

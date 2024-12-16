@@ -1,12 +1,12 @@
 from pandas import DataFrame
 from freqtrade.persistence import Trade
-from datetime import datetime, timezone
+from datetime import datetime, timedelta
 from typing import Optional
-import pandas as pd
 from freqtrade_client import FtRestClient
 from freqtrade.strategy import (
     IStrategy,
-    stoploss_from_open
+    stoploss_from_open,
+    timeframe_to_prev_date
 )
 
 server_url = 'http://127.0.0.1:8080'
@@ -73,8 +73,15 @@ class Short(IStrategy):
                             time_in_force: str, current_time: datetime, entry_tag: Optional[str],
                             side: str, **kwargs) -> bool:
 
-        trades_count = len(Trade.get_trades_proxy()) + len(client.trades())
-        open_trades = Trade.get_open_trade_count() + len(client.status())
+        trade_date = timeframe_to_prev_date(self.timeframe, current_time)
+        if current_time - timedelta(seconds=5) > trade_date:
+            return False
+
+        client_status, client_trades = client.status(), client.trades()
+        client_trades = len(client_trades) if client_trades and not client_trades.empty else 0
+        client_open_trades = len(client_status) if client_status and not client_status.empty else 0
+        trades_count = len(Trade.get_trades_proxy()) + client_trades
+        open_trades = Trade.get_open_trade_count() + client_open_trades
 
         if (trades_count % 2 == 0) and open_trades > 0:
             return False
