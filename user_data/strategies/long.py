@@ -107,8 +107,3 @@ class Long(IStrategy):
 
         if current_profit >= 0.01:
             return 'Target Hit!'
-
-    
-    def bot_loop_start(self, **kwargs) -> None:
-        logger.info(f"Open trades: {len(Trade.get_trades_proxy()) + client.count().get('current', 0)}")
-        logger.info(f"All trades: {Trade.get_open_trade_count() + client.trades().get('total_trades', 0)}")
