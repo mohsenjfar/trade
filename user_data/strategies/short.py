@@ -77,10 +77,10 @@ class Short(IStrategy):
         if current_time - timedelta(seconds=5) > trade_date:
             return False
 
-        closed_trades_count = len(Trade.get_trades_proxy()) + client.count().get('current', 0)
-        open_trades_count = Trade.get_open_trade_count() + client.trades().get('total_trades', 0)
+        closed_trades = len(Trade.get_trades_proxy(is_open=False)) + client.trades().get('total_trades', 0)
+        open_trades = Trade.get_open_trade_count() + client.count().get('current', 0)
 
-        if (closed_trades_count % 2 == 0) and open_trades_count > 0:
+        if (closed_trades % 2 == 0) and open_trades > 0:
             return False
         
         return True
