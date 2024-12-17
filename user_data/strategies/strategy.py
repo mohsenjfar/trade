@@ -173,6 +173,20 @@ class Strategy(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         return dataframe["close"].iat[-1]
 
+    
+    def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
+                            time_in_force: str, current_time: datetime, entry_tag: Optional[str],
+                            side: str, **kwargs) -> bool:
+        
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        current_candle = dataframe.iloc[-1].squeeze()
+        risk = current_candle.short_risk if side == 'short' else current_candle.long_risk
+        if risk > 0.02:
+            logger.info(f"High risk stop entering {side} position for {pair}")
+            return False
+        
+        return True
+
 
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
 
@@ -191,9 +205,19 @@ class Strategy(IStrategy):
                         **kwargs) -> Optional[float]:
 
         risk = trade.get_custom_data(key='risk')
-        return stoploss_from_open(
-            risk * (abs(current_profit) // risk - 1),
-            current_profit, 
-            is_short=trade.is_short, 
-            leverage=trade.leverage
-        )
+
+        if current_profit > 4 * risk:
+            return stoploss_from_open(
+                risk * (abs(current_profit) // risk - 1),
+                current_profit, 
+                is_short=trade.is_short, 
+                leverage=trade.leverage
+            )
+        
+        if abs(current_profit) < risk:
+            return stoploss_from_open(
+                risk * (abs(current_profit) // risk - 1),
+                current_profit, 
+                is_short=trade.is_short, 
+                leverage=trade.leverage
+            )
