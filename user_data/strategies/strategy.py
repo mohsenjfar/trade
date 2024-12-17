@@ -12,8 +12,8 @@ import talib.abstract as ta
 from scipy.signal import argrelextrema
 from freqtrade.strategy import (
     IStrategy,
-    stoploss_from_absolute,
-    stoploss_from_open
+    stoploss_from_open,
+    timeframe_to_prev_date
 )
 import logging
 
@@ -38,8 +38,7 @@ class Strategy(IStrategy):
 
     process_only_new_candles = True
 
-    price_kernel = 2
-    rsi_kernel = 2
+    rsi_kernel = 4
 
     order_types = {
         'entry': 'limit',
@@ -129,17 +128,16 @@ class Strategy(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         candle = dataframe.iloc[-1].squeeze()
         risk = candle['short_risk'] if side == 'short' else candle['long_risk']
-
         today = datetime.now(timezone.utc).date()
-        filters = [
-            Trade.is_open.is_(False),
-            Trade.close_date >= today,
-            Trade.close_profit_abs < 0
-        ]
-        today_loss = Trade.get_trades(trade_filter=filters, include_orders=False).all()
-        open_trades = Trade.get_open_trade_count()
+        closed_trades = Trade.get_trades_proxy(close_date=today)
+        open_trades =  Trade.get_trades_proxy(is_open=True)
+        today_loss = sum(trade.close_profit_abs for trade in closed_trades + open_trades if trade.close_profit_abs < 0)
+        stake_in_use = Trade.total_open_trades_stakes()
+        total_stake = stake_in_use + max_stake
+        today_loss_ratio = today_loss / total_stake
 
-        if today_loss and open_trades > 0:
+        if today_loss_ratio < self.stoploss:
+            logger.info(f"Max day loss ({today_loss_ratio * 100:.2f}%), stop entering {side} position for {pair}")
             return None
 
         lines = (
@@ -158,10 +156,23 @@ class Strategy(IStrategy):
                            entry_tag: str | None, side: str, **kwargs) -> float:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-
         return dataframe["close"].iat[-1]
 
 
+    def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
+                            time_in_force: str, current_time: datetime, entry_tag: Optional[str],
+                            side: str, **kwargs) -> bool:
+        
+        trade_date = timeframe_to_prev_date(self.timeframe, current_time)
+        if current_time - timedelta(seconds=5) > trade_date:
+            return False
+
+        closed_trades = len(Trade.get_trades_proxy(is_open=False))
+        open_trades = Trade.get_open_trade_count()
+        if (closed_trades % 2 == 0) and open_trades > 0:
+            return False
+
+    
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
 
         if (trade.nr_of_successful_entries == 1) and (order.ft_order_side == trade.entry_side):

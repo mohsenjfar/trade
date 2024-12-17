@@ -9,8 +9,7 @@ from datetime import datetime, timedelta
 import pandas as pd
 from freqtrade.strategy import (
     IStrategy,
-    stoploss_from_open,
-    stoploss_from_absolute
+    stoploss_from_open
 )
 
 class AgileStrategy(IStrategy):
@@ -19,9 +18,9 @@ class AgileStrategy(IStrategy):
 
     can_short: bool = True
 
-    stoploss = -0.005
+    stoploss = -0.02
 
-    timeframe = '5m'
+    timeframe = '15m'
 
     use_exit_signal = True
 
@@ -40,20 +39,6 @@ class AgileStrategy(IStrategy):
         'entry': 'GTC',
         'exit': 'GTC'
     }
-
-    @property
-    def protections(self):
-        return [
-            {
-                "method": "StoplossGuard",
-                "lookback_period_candles": 48,
-                "trade_limit": 2,
-                "required_profit": 0,
-                "only_per_pair": False,
-                "only_per_side": False,
-                "stop_duration_candles": 48,
-            }
-        ]
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
@@ -79,15 +64,21 @@ class AgileStrategy(IStrategy):
         return dataframe
     
 
-    # def leverage(self, pair: str, current_time: datetime, current_rate: float,
-    #              proposed_leverage: float, max_leverage: float, entry_tag: Optional[str], side: str,
-    #              **kwargs) -> float:
-        
-    #     return abs(self.stoploss) * 200
-    
+    def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
+                        current_rate: float, current_profit: float, after_fill: bool, 
+                        **kwargs) -> Optional[float]:
 
-    # def bot_loop_start(self, **kwargs) -> None:
-    #     pairs = self.dp.current_whitelist()
-    #     for pair in pairs:
-    #         if self.is_pair_locked(pair):
-    #             self.unlock_pair(pair)
+        stop = abs(self.stoploss)
+        return stoploss_from_open(
+            stop * (abs(current_profit) // stop - 1),
+            current_profit, 
+            is_short=trade.is_short, 
+            leverage=trade.leverage
+        )
+
+
+    def bot_loop_start(self, **kwargs) -> None:
+        pairs = self.dp.current_whitelist()
+        for pair in pairs:
+            if self.is_pair_locked(pair):
+                self.unlock_pair(pair)

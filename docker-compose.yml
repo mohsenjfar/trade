@@ -1,33 +1,18 @@
 ---
 version: '3'
 services:
-  long:
+  strategy:
       image: freqtradeorg/freqtrade:develop_freqai
       restart: unless-stopped
-      container_name: long
+      container_name: strategy
       ports:
         - "127.0.0.1:8080:8080"
       volumes:
         - "./user_data:/freqtrade/user_data"
       command: >
         trade
-        --logfile /freqtrade/user_data/logs/long.log
-        --db-url sqlite:////freqtrade/user_data/db_long.sqlite
-        --config /freqtrade/user_data/config_long.json
-        --strategy Long
-  short:
-      image: freqtradeorg/freqtrade:develop_freqai
-      restart: unless-stopped
-      container_name: short
-      ports:
-        - "127.0.0.1:8081:8081"
-      volumes:
-        - "./user_data:/freqtrade/user_data"
-      command: >
-        trade
-        --logfile /freqtrade/user_data/logs/short.log
-        --db-url sqlite:////freqtrade/user_data/db_short.sqlite
-        --config /freqtrade/user_data/config_short.json
-        --strategy Short
-
+        --logfile /freqtrade/user_data/logs/strategy.log
+        --db-url sqlite:////freqtrade/user_data/db_strategy.sqlite
+        --config /freqtrade/user_data/config_strategy.json
+        --strategy Strategy
   
