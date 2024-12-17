@@ -101,16 +101,34 @@ class Strategy(IStrategy):
         dataframe['long_risk'] = abs(1 - dataframe['close'] / dataframe['price_second_last_min'])
         dataframe['short_risk'] = abs(1 - dataframe['close'] / dataframe['price_second_last_max'])
 
+        dataframe.to_csv(f"user_data/notebooks/{metadata['pair'][:-10]}_in_df.csv", index=False)
+
         return dataframe
 
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        pairs = self.correlated_pairs()
+        dataframe.loc[
+            (
+                (dataframe['price_second_last_min'] < dataframe['price_last_min']) & # Guard
+                (dataframe['rsi_second_last_min'] < dataframe['rsi_last_min']) & # Guard
+                (dataframe['rsi_second_last_min'] < 50) & # Guard
+                (dataframe['rsi_last_min'] < 50) & # Guard
+                (qtpylib.crossed_above(dataframe['close'], dataframe['tema'])) # Trigger
+            ),
+            'enter_long'
+        ] = 1
 
-        dataframe['enter_long'] = 1 if metadata['pair'] == pairs[0] else 0
-
-        dataframe['enter_short'] = 1 if metadata['pair'] == pairs[1] else 0
+        dataframe.loc[
+            (
+                (dataframe['price_second_last_max'] > dataframe['price_last_max']) & # Guard
+                (dataframe['rsi_second_last_max'] > dataframe['rsi_last_max']) & # Guard
+                (dataframe['rsi_second_last_max'] > 50) & # Guard
+                (dataframe['rsi_last_max'] > 50) & # Guard
+                (qtpylib.crossed_below(dataframe['close'], dataframe['tema'])) # Trigger
+            ),
+            'enter_short'
+        ] = 1
 
         return dataframe
 
@@ -130,8 +148,7 @@ class Strategy(IStrategy):
         risk = candle['short_risk'] if side == 'short' else candle['long_risk']
         today = datetime.now(timezone.utc).date()
         closed_trades = Trade.get_trades_proxy(close_date=today)
-        open_trades =  Trade.get_trades_proxy(is_open=True)
-        today_loss = sum(trade.close_profit_abs for trade in closed_trades + open_trades if trade.close_profit_abs < 0)
+        today_loss = sum(trade.close_profit_abs for trade in closed_trades if trade.close_profit_abs < 0)
         stake_in_use = Trade.total_open_trades_stakes()
         total_stake = stake_in_use + max_stake
         today_loss_ratio = today_loss / total_stake
@@ -171,6 +188,8 @@ class Strategy(IStrategy):
         open_trades = Trade.get_open_trade_count()
         if (closed_trades % 2 == 0) and open_trades > 0:
             return False
+        
+        return True
 
     
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
