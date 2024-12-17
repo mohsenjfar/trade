@@ -101,8 +101,6 @@ class Strategy(IStrategy):
         dataframe['long_risk'] = abs(1 - dataframe['close'] / dataframe['price_second_last_min'])
         dataframe['short_risk'] = abs(1 - dataframe['close'] / dataframe['price_second_last_max'])
 
-        dataframe.to_csv(f"user_data/notebooks/{metadata['pair'][:-10]}_in_df.csv", index=False)
-
         return dataframe
 
 
@@ -176,36 +174,14 @@ class Strategy(IStrategy):
         return dataframe["close"].iat[-1]
 
 
-    def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
-                            time_in_force: str, current_time: datetime, entry_tag: Optional[str],
-                            side: str, **kwargs) -> bool:
-        
-        trade_date = timeframe_to_prev_date(self.timeframe, current_time)
-        if current_time - timedelta(seconds=5) > trade_date:
-            return False
-
-        closed_trades = len(Trade.get_trades_proxy(is_open=False))
-        open_trades = Trade.get_open_trade_count()
-        if (closed_trades % 2 == 0) and open_trades > 0:
-            return False
-        
-        return True
-
-    
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
 
         if (trade.nr_of_successful_entries == 1) and (order.ft_order_side == trade.entry_side):
-
             dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
             current_candle = dataframe.iloc[-1].squeeze()
             risk = current_candle.short_risk if trade.is_short else current_candle.long_risk
             trade.set_custom_data(key='risk', value=risk)
-
             trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
-            
-            self.ob_dataframe(pair).to_csv(f'user_data/notebooks/{pair[:-10]}_{trade.id}_ob.csv', index=False)
-            dataframe.to_csv(f'user_data/notebooks/{pair[:-10]}_{trade.id}_df.csv', index=False)
-            pd.DataFrame([vars(trade) for trade in Trade.get_trades_proxy()]).to_csv(f'user_data/notebooks/trades.csv', index=False)
 
         return None
     
@@ -215,24 +191,9 @@ class Strategy(IStrategy):
                         **kwargs) -> Optional[float]:
 
         risk = trade.get_custom_data(key='risk')
-
         return stoploss_from_open(
             risk * (abs(current_profit) // risk - 1),
             current_profit, 
             is_short=trade.is_short, 
             leverage=trade.leverage
         )
-
-
-    # def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
-    #                 current_rate: float, current_profit: float, **kwargs) -> str:
-
-    #     risk = trade.get_custom_data(key='risk')
-        
-    #     conditions = (
-    #         current_time - timedelta(hours = 2) > trade.open_date_utc, 
-    #         risk * 2 < current_profit < risk * 3
-    #     )
-
-    #     if all(conditions):
-    #         return 'Trade expired!'
