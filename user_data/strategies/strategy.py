@@ -140,31 +140,35 @@ class Strategy(IStrategy):
                             proposed_stake: float, min_stake: Optional[float], max_stake: float,
                             leverage: float, entry_tag: Optional[str], side: str,
                             **kwargs) -> float:
-        
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        candle = dataframe.iloc[-1].squeeze()
-        risk = candle['short_risk'] if side == 'short' else candle['long_risk']
-        today = datetime.now(timezone.utc).date()
-        closed_trades = Trade.get_trades_proxy(close_date=today)
-        today_loss = sum(trade.close_profit_abs for trade in closed_trades if trade.close_profit_abs < 0)
-        stake_in_use = Trade.total_open_trades_stakes()
-        total_stake = stake_in_use + max_stake
-        today_loss_ratio = today_loss / total_stake
+        try:
+            dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+            candle = dataframe.iloc[-1].squeeze()
+            risk = candle['short_risk'] if side == 'short' else candle['long_risk']
+            today = datetime.now(timezone.utc).date()
+            closed_trades = Trade.get_trades_proxy(close_date=today)
+            today_loss = sum(trade.close_profit_abs for trade in closed_trades if trade.close_profit_abs < 0)
+            stake_in_use = Trade.total_open_trades_stakes()
+            total_stake = stake_in_use + max_stake
+            today_loss_ratio = today_loss / total_stake
 
-        if today_loss_ratio < self.stoploss:
-            logger.info(f"Max day loss ({today_loss_ratio * 100:.2f}%), stop entering {side} position for {pair}")
+            if today_loss_ratio < self.stoploss:
+                logger.info(f"Max day loss ({today_loss_ratio * 100:.2f}%), stop entering {side} position for {pair}")
+                return None
+
+            lines = (
+                f"Pair: {pair}",
+                f"Side: {side}",
+                f"Risk: {risk * 100:.2f}%",
+                f"Proposed stake: {proposed_stake:.2f}$",
+                f"Stake: {(proposed_stake * abs(self.stoploss)) / (risk * leverage):.2f}$"
+            )
+            self.dp.send_msg("\n".join(lines))
+            
+            return min((proposed_stake * abs(self.stoploss)) / (risk * leverage), proposed_stake)
+        
+        except Exception as e:
+            logger.info(e)
             return None
-
-        lines = (
-            f"Pair: {pair}",
-            f"Side: {side}",
-            f"Risk: {risk * 100:.2f}%",
-            f"Proposed stake: {proposed_stake:.2f}$",
-            f"Stake: {(proposed_stake * abs(self.stoploss)) / (risk * leverage):.2f}$"
-        )
-        self.dp.send_msg("\n".join(lines))
-        
-        return min((proposed_stake * abs(self.stoploss)) / (risk * leverage), proposed_stake)
     
 
     def custom_entry_price(self, pair: str, trade: Trade | None, current_time: datetime, proposed_rate: float,
@@ -206,7 +210,7 @@ class Strategy(IStrategy):
 
         risk = trade.get_custom_data(key='risk')
 
-        if current_profit > 4 * risk:
+        if current_profit > 3 * risk:
             return stoploss_from_open(
                 risk * (abs(current_profit) // risk - 1),
                 current_profit, 
