@@ -106,6 +106,16 @@ class Strategy(IStrategy):
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
+        last_trade = Trade.get_trades_proxy(pair=metadata['pair'], is_open=False)
+        if last_trade and last_trade[-1].close_profit_abs < 0:
+            if last_trade[-1].is_short:
+                dataframe['enter_long'] = 1
+                dataframe['enter_short'] = 0
+            else:
+                dataframe['enter_long'] = 0
+                dataframe['enter_short'] = 1
+            return dataframe
+
         dataframe.loc[
             (
                 (dataframe['price_second_last_min'] < dataframe['price_last_min']) & # Guard
@@ -225,3 +235,9 @@ class Strategy(IStrategy):
                 is_short=trade.is_short, 
                 leverage=trade.leverage
             )
+
+    def bot_loop_start(self, **kwargs) -> None:
+        pairs = self.dp.current_whitelist()
+        for pair in pairs:
+            if self.is_pair_locked(pair):
+                self.unlock_pair(pair)
