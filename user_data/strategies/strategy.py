@@ -106,14 +106,17 @@ class Strategy(IStrategy):
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        last_trade = Trade.get_trades_proxy(pair=metadata['pair'], is_open=False)
+        last_trade = Trade.get_trades_proxy(is_open=False)
         if last_trade and last_trade[-1].close_profit_abs < 0:
-            if last_trade[-1].is_short:
-                dataframe['enter_long'] = 1
-                dataframe['enter_short'] = 0
-            else:
+            
+            if last_trade[-1].pair == metadata['pair']:
+                dataframe['enter_long'] = int(last_trade[-1].is_short)
+                dataframe['enter_short'] = int(not last_trade[-1].is_short)
+            
+            if last_trade[-1].pair != metadata['pair']:
                 dataframe['enter_long'] = 0
-                dataframe['enter_short'] = 1
+                dataframe['enter_short'] = 0
+            
             return dataframe
 
         dataframe.loc[
@@ -190,20 +193,6 @@ class Strategy(IStrategy):
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         return dataframe["close"].iat[-1]
-
-    
-    # def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
-    #                         time_in_force: str, current_time: datetime, entry_tag: Optional[str],
-    #                         side: str, **kwargs) -> bool:
-        
-    #     dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-    #     current_candle = dataframe.iloc[-1].squeeze()
-    #     risk = current_candle.short_risk if side == 'short' else current_candle.long_risk
-    #     if risk > 0.02:
-    #         logger.info(f"High risk stop entering {side} position for {pair}")
-    #         return False
-        
-    #     return True
 
 
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
