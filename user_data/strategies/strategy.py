@@ -26,7 +26,7 @@ class Strategy(IStrategy):
 
     can_short: bool = True
 
-    stoploss = -0.01
+    stoploss = -0.02
 
     timeframe = '15m'
 
@@ -183,6 +183,10 @@ class Strategy(IStrategy):
 
     def custom_entry_price(self, pair: str, trade: Trade | None, current_time: datetime, proposed_rate: float,
                            entry_tag: str | None, side: str, **kwargs) -> float:
+
+        last_trade = Trade.get_trades_proxy(pair=pair, is_open=False)
+        if last_trade and last_trade[-1].close_profit_abs < 0:
+            return proposed_rate
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         return dataframe["close"].iat[-1]
