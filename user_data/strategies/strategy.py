@@ -26,9 +26,9 @@ class Strategy(IStrategy):
 
     can_short: bool = True
 
-    stoploss = -0.02
+    stoploss = -0.01
 
-    timeframe = '15m'
+    timeframe = '1h'
 
     use_exit_signal = True
 
@@ -174,7 +174,7 @@ class Strategy(IStrategy):
             )
             self.dp.send_msg("\n".join(lines))
             
-            return min((proposed_stake * abs(self.stoploss)) / (risk * leverage), proposed_stake)
+            return min((proposed_stake * (abs(self.stoploss)) / 2) / (risk * leverage), proposed_stake)
         
         except Exception as e:
             logger.info(e)
@@ -192,18 +192,18 @@ class Strategy(IStrategy):
         return dataframe["close"].iat[-1]
 
     
-    def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
-                            time_in_force: str, current_time: datetime, entry_tag: Optional[str],
-                            side: str, **kwargs) -> bool:
+    # def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
+    #                         time_in_force: str, current_time: datetime, entry_tag: Optional[str],
+    #                         side: str, **kwargs) -> bool:
         
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        current_candle = dataframe.iloc[-1].squeeze()
-        risk = current_candle.short_risk if side == 'short' else current_candle.long_risk
-        if risk > 0.02:
-            logger.info(f"High risk stop entering {side} position for {pair}")
-            return False
+    #     dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+    #     current_candle = dataframe.iloc[-1].squeeze()
+    #     risk = current_candle.short_risk if side == 'short' else current_candle.long_risk
+    #     if risk > 0.02:
+    #         logger.info(f"High risk stop entering {side} position for {pair}")
+    #         return False
         
-        return True
+    #     return True
 
 
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
@@ -239,9 +239,3 @@ class Strategy(IStrategy):
                 is_short=trade.is_short, 
                 leverage=trade.leverage
             )
-
-    def bot_loop_start(self, **kwargs) -> None:
-        pairs = self.dp.current_whitelist()
-        for pair in pairs:
-            if self.is_pair_locked(pair):
-                self.unlock_pair(pair)
