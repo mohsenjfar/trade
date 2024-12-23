@@ -1,7 +1,7 @@
 ---
 version: '3'
 services:
-  strategy:
+  freqtrade:
       image: freqtradeorg/freqtrade:develop_freqai
       restart: unless-stopped
       container_name: strategy

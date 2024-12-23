@@ -7,6 +7,7 @@ import pandas as pd
 import math
 import os
 from typing import Dict
+from sklearn.cluster import HDBSCAN
 import numpy as np
 import talib.abstract as ta
 from scipy.signal import argrelextrema
@@ -69,6 +70,17 @@ class Strategy(IStrategy):
         bid_dataframe = pd.DataFrame(bid_values)
         ask_dataframe = pd.DataFrame(ask_values)
         return pd.concat((bid_dataframe,ask_dataframe))
+
+    def calculate_boundries(self, df, kernel=1, size=4):
+        min_peaks = argrelextrema(df["low"].values, np.less_equal, order=kernel)
+        max_peaks = argrelextrema(df["high"].values, np.greater_equal, order=kernel)
+        df.loc[(df.index.isin(min_peaks[0])),'extrema'] = df.low
+        df.loc[(df.index.isin(max_peaks[0])),'extrema'] = df.high
+        X = df.extrema.values.reshape(-1,1)
+        hdb = HDBSCAN(min_cluster_size=size).fit(X)
+        df[['label','prob']] = tuple(zip(hdb.labels_, hdb.probabilities_))
+        group = df[df.prob == 1].groupby(by=['label'])
+        return pd.DataFrame({"hb":group.max().extrema,"lb":group.min().extrema})
 
 
     def correlated_pairs(self):
