@@ -7,12 +7,12 @@ import pandas as pd
 import math
 import os
 from typing import Dict
-from sklearn.cluster import HDBSCAN
 import numpy as np
 import talib.abstract as ta
 from scipy.signal import argrelextrema
 from freqtrade.strategy import (
     IStrategy,
+    informative,
     stoploss_from_open,
     timeframe_to_prev_date
 )
@@ -29,17 +29,17 @@ class Strategy(IStrategy):
 
     stoploss = -0.01
 
-    timeframe = '1h'
+    timeframe = '15m'
 
     use_exit_signal = True
 
     use_custom_stoploss = True
 
-    startup_candle_count: int = 288
+    startup_candle_count: int = 48
 
     process_only_new_candles = True
 
-    rsi_kernel = 4
+    kernel = 1
 
     order_types = {
         'entry': 'limit',
@@ -53,102 +53,37 @@ class Strategy(IStrategy):
         'exit': 'GTC'
     }
 
-    custom_info = {}
 
-    def ob_dataframe(self, pair):
-        ob = self.dp.orderbook(pair, maximum=200)
-        bid_values = {
-            'price': np.array(ob['bids'])[:,0],
-            'volume': np.array(ob['bids'])[:,1],
-            'side':'bid'
-        }
-        ask_values = {
-            'price': np.array(ob['asks'])[:,0],
-            'volume': np.array(ob['asks'])[:,1],
-            'side':'ask'
-        }
-        bid_dataframe = pd.DataFrame(bid_values)
-        ask_dataframe = pd.DataFrame(ask_values)
-        return pd.concat((bid_dataframe,ask_dataframe))
-
-    def calculate_boundries(self, df, kernel=1, size=4):
-        min_peaks = argrelextrema(df["low"].values, np.less_equal, order=kernel)
-        max_peaks = argrelextrema(df["high"].values, np.greater_equal, order=kernel)
-        df.loc[(df.index.isin(min_peaks[0])),'extrema'] = df.low
-        df.loc[(df.index.isin(max_peaks[0])),'extrema'] = df.high
-        X = df.extrema.values.reshape(-1,1)
-        hdb = HDBSCAN(min_cluster_size=size).fit(X)
-        df[['label','prob']] = tuple(zip(hdb.labels_, hdb.probabilities_))
-        group = df[df.prob == 1].groupby(by=['label'])
-        return pd.DataFrame({"hb":group.max().extrema,"lb":group.min().extrema})
-
-
-    def correlated_pairs(self):
-        pairs = self.dp.current_whitelist()
-        tickers = {p:self.dp.get_pair_dataframe(pair=p, timeframe=self.timeframe).close for p in pairs}
-        dataframe = pd.DataFrame(tickers).ffill()
-        corr_df = dataframe.corr()
-        max_corrs = corr_df[(corr_df != 1)].max()
-        return corr_df[max_corrs == max_corrs.max()].index.to_list()
+    @informative('1w')
+    def populate_indicators_1h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+        min_peaks = argrelextrema(dataframe["low"].values, np.less_equal, order=self.kernel)
+        max_peaks = argrelextrema(dataframe["high"].values, np.greater_equal, order=self.kernel)
+        dataframe.loc[(dataframe.index.isin(min_peaks[0])),'extrema'] = dataframe.low
+        dataframe.loc[(dataframe.index.isin(max_peaks[0])),'extrema'] = dataframe.high
+        return dataframe.ffill()
 
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe["rsi"] = ta.RSI(dataframe, timeperiod=14)
-        dataframe['tema'] = ta.TEMA(dataframe, timeperiod=9)
-
-        min_peaks = argrelextrema(dataframe["rsi"].values, np.less_equal, order=self.rsi_kernel)
-        max_peaks = argrelextrema(dataframe["rsi"].values, np.greater_equal, order=self.rsi_kernel)
-
-        dataframe['rsi_second_last_max'] = dataframe.at[max_peaks[0][-2], "rsi"]
-        dataframe['rsi_last_max'] = dataframe.at[max_peaks[0][-1], "rsi"]
-        dataframe['rsi_second_last_min'] = dataframe.at[min_peaks[0][-2], "rsi"]
-        dataframe['rsi_last_min'] = dataframe.at[min_peaks[0][-1], "rsi"]
-
-        dataframe['price_second_last_max'] = dataframe.at[max_peaks[0][-2], "high"]
-        dataframe['price_last_max'] = dataframe.at[max_peaks[0][-1], "high"]
-        dataframe['price_second_last_min'] = dataframe.at[min_peaks[0][-2], "low"]
-        dataframe['price_last_min'] = dataframe.at[min_peaks[0][-1], "low"]
-
-        dataframe['long_risk'] = abs(1 - dataframe['close'] / dataframe['price_second_last_min'])
-        dataframe['short_risk'] = abs(1 - dataframe['close'] / dataframe['price_second_last_max'])
+        dataframe.to_csv(f'user_data/notebooks/{metadata["pair"][:-10]}.csv', index=False)
 
         return dataframe
 
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        last_trade = Trade.get_trades_proxy(is_open=False)
-        if last_trade and last_trade[-1].close_profit_abs < 0:
-            
-            if last_trade[-1].pair == metadata['pair']:
-                dataframe['enter_long'] = int(last_trade[-1].is_short)
-                dataframe['enter_short'] = int(not last_trade[-1].is_short)
-            
-            if last_trade[-1].pair != metadata['pair']:
-                dataframe['enter_long'] = 0
-                dataframe['enter_short'] = 0
-            
-            return dataframe
-
         dataframe.loc[
             (
-                (dataframe['price_second_last_min'] < dataframe['price_last_min']) & # Guard
-                (dataframe['rsi_second_last_min'] < dataframe['rsi_last_min']) & # Guard
-                (dataframe['rsi_second_last_min'] < 50) & # Guard
-                (dataframe['rsi_last_min'] < 50) & # Guard
-                (qtpylib.crossed_above(dataframe['close'], dataframe['tema'])) # Trigger
+                dataframe['change_1w'] != dataframe['change_1w'].shift(1) &
+                dataframe['change_1w'] < 0
             ),
             'enter_long'
         ] = 1
 
         dataframe.loc[
             (
-                (dataframe['price_second_last_max'] > dataframe['price_last_max']) & # Guard
-                (dataframe['rsi_second_last_max'] > dataframe['rsi_last_max']) & # Guard
-                (dataframe['rsi_second_last_max'] > 50) & # Guard
-                (dataframe['rsi_last_max'] > 50) & # Guard
-                (qtpylib.crossed_below(dataframe['close'], dataframe['tema'])) # Trigger
+                dataframe['change_1w'] != dataframe['change_1w'].shift(1) &
+                dataframe['change_1w'] > 0
             ),
             'enter_short'
         ] = 1
@@ -158,6 +93,22 @@ class Strategy(IStrategy):
 
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
+        dataframe.loc[
+            (
+                dataframe['change_1w'] != dataframe['change_1w'].shift(1) &
+                dataframe['change_1w'] > 0
+            ),
+            'exit_long'
+        ] = 1
+
+        dataframe.loc[
+            (
+                dataframe['change_1w'] != dataframe['change_1w'].shift(1) &
+                dataframe['change_1w'] < 0
+            ),
+            'exit_short'
+        ] = 1
+
         return dataframe
 
 
@@ -166,9 +117,7 @@ class Strategy(IStrategy):
                             leverage: float, entry_tag: Optional[str], side: str,
                             **kwargs) -> float:
         try:
-            dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-            candle = dataframe.iloc[-1].squeeze()
-            risk = candle['short_risk'] if side == 'short' else candle['long_risk']
+            risk = 0.005
             today = datetime.now(timezone.utc).date()
             closed_trades = Trade.get_trades_proxy(close_date=today)
             today_loss = sum(trade.close_profit_abs for trade in closed_trades if trade.close_profit_abs < 0)
@@ -179,15 +128,6 @@ class Strategy(IStrategy):
             if today_loss_ratio < self.stoploss:
                 logger.info(f"Max day loss ({today_loss_ratio * 100:.2f}%), stop entering {side} position for {pair}")
                 return None
-
-            lines = (
-                f"Pair: {pair}",
-                f"Side: {side}",
-                f"Risk: {risk * 100:.2f}%",
-                f"Proposed stake: {proposed_stake:.2f}$",
-                f"Stake: {(proposed_stake * abs(self.stoploss)) / (risk * leverage):.2f}$"
-            )
-            self.dp.send_msg("\n".join(lines))
             
             return min((proposed_stake * (abs(self.stoploss)) / 2) / (risk * leverage), proposed_stake)
         
@@ -199,44 +139,6 @@ class Strategy(IStrategy):
     def custom_entry_price(self, pair: str, trade: Trade | None, current_time: datetime, proposed_rate: float,
                            entry_tag: str | None, side: str, **kwargs) -> float:
 
-        last_trade = Trade.get_trades_proxy(pair=pair, is_open=False)
-        if last_trade and last_trade[-1].close_profit_abs < 0:
-            return proposed_rate
-
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        return dataframe["close"].iat[-1]
 
-
-    def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
-
-        if (trade.nr_of_successful_entries == 1) and (order.ft_order_side == trade.entry_side):
-            dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-            current_candle = dataframe.iloc[-1].squeeze()
-            risk = current_candle.short_risk if trade.is_short else current_candle.long_risk
-            trade.set_custom_data(key='risk', value=risk)
-            trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
-
-        return None
-    
-
-    def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
-                        current_rate: float, current_profit: float, after_fill: bool, 
-                        **kwargs) -> Optional[float]:
-
-        risk = trade.get_custom_data(key='risk')
-
-        if current_profit > 3 * risk:
-            return stoploss_from_open(
-                risk * (abs(current_profit) // risk - 1),
-                current_profit, 
-                is_short=trade.is_short, 
-                leverage=trade.leverage
-            )
-        
-        if abs(current_profit) < risk:
-            return stoploss_from_open(
-                risk * (abs(current_profit) // risk - 1),
-                current_profit, 
-                is_short=trade.is_short, 
-                leverage=trade.leverage
-            )
+        return dataframe["close_1w"].iat[-1]
