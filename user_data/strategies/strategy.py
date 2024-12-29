@@ -53,6 +53,23 @@ class Strategy(IStrategy):
     }
 
 
+    def ob_dataframe(self, pair):
+        ob = self.dp.orderbook(pair, maximum=200)
+        bid_values = {
+            'price': np.array(ob['bids'])[:,0],
+            'volume': np.array(ob['bids'])[:,1],
+            'side':'bid'
+        }
+        ask_values = {
+            'price': np.array(ob['asks'])[:,0],
+            'volume': np.array(ob['asks'])[:,1],
+            'side':'ask'
+        }
+        bid_dataframe = pd.DataFrame(bid_values)
+        ask_dataframe = pd.DataFrame(ask_values)
+        return pd.concat((bid_dataframe,ask_dataframe))
+    
+
     def informative_pairs(self):
         pairs = self.dp.current_whitelist()
         return [(pair, '1w') for pair in pairs]
@@ -178,6 +195,7 @@ class Strategy(IStrategy):
             limit = last_candle.boundries.left if trade.is_short else last_candle.boundries.right
             risk = abs(1 - last_candle.close / limit)
             trade.set_custom_data(key='risk', value=risk)
+            trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
 
         return None
     
