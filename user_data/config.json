@@ -1,5 +1,5 @@
 {
-  "max_open_trades": 1,
+  "max_open_trades": 2,
   "stake_currency": "USDT",
   "stake_amount": "unlimited",
   "tradable_balance_ratio": 0.99,
@@ -32,7 +32,6 @@
   },
   "exchange": {
     "name": "bybit",
-    "use_public_trades": true,
     "ccxt_config": {},
     "ccxt_async_config": {},
     "key": "",
@@ -43,14 +42,6 @@
       "WIF/USDT:USDT"
     ],
     "pair_blacklist": []
-  },
-  "orderflow": {
-    "cache_size": 1000, 
-    "max_candles": 1500, 
-    "scale": 0.5, 
-    "stacked_imbalance_range": 3, //  needs at least this amount of imbalance next to each other
-    "imbalance_volume": 1, //  filters out below
-    "imbalance_ratio": 3 //  filters out ratio lower than
   },
   "pairlists": [
     {
