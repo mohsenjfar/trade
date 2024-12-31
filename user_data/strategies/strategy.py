@@ -114,22 +114,6 @@ class Strategy(IStrategy):
 
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        # dataframe.loc[
-        #     (
-        #         (dataframe['change_1w'] != dataframe['change_1w'].shift(1)) &
-        #         (dataframe['change_1w'] > 0)
-        #     ),
-        #     'exit_long'
-        # ] = 1
-
-        # dataframe.loc[
-        #     (
-        #         (dataframe['change_1w'] != dataframe['change_1w'].shift(1)) &
-        #         (dataframe['change_1w'] < 0)
-        #     ),
-        #     'exit_short'
-        # ] = 1
-
         return dataframe
 
 
@@ -145,7 +129,7 @@ class Strategy(IStrategy):
         try:
             dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
             last_candle = dataframe.iloc[-1].squeeze()
-            limit = last_candle.boundries.left if side == 'short' else last_candle.boundries.right
+            limit = last_candle.boundries.right if side == 'short' else last_candle.boundries.left
             risk = abs(1 - last_candle.close / limit)
             today = datetime.now(timezone.utc).date()
             closed_trades = Trade.get_trades_proxy(close_date=today)
@@ -157,15 +141,6 @@ class Strategy(IStrategy):
             if today_loss_ratio < self.stoploss:
                 logger.info(f"Max day loss ({today_loss_ratio * 100:.2f}%), stop entering {side} position for {pair}")
                 return None
-            
-            lines = (
-                f"Pair: {pair}",
-                f"Side: {side}",
-                f"Risk: {risk * 100:.2f}%",
-                f"Proposed stake: {proposed_stake:.2f}$",
-                f"Stake: {(proposed_stake * (abs(self.stoploss)) / 2) / (risk * leverage):.2f}$"
-            )
-            self.dp.send_msg("\n".join(lines))
             
             return min((proposed_stake * (abs(self.stoploss)) / 2) / (risk * leverage), proposed_stake)
         
@@ -184,12 +159,7 @@ class Strategy(IStrategy):
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
 
         if (trade.nr_of_successful_entries == 1) and (order.ft_order_side == trade.entry_side):
-            dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-            last_candle = dataframe.iloc[-1].squeeze()
-            limit = last_candle.boundries.left if trade.is_short else last_candle.boundries.right
-            risk = abs(1 - last_candle.close / limit)
-            trade.set_custom_data(key='risk', value=risk)
-            trade.set_custom_data(key='OB', value=self.dp.orderbook(pair=pair, maximum=200))
+            trade.set_custom_data(key='OB', value=self.ob_dataframe(pair).to_dict())
 
         return None
     
@@ -201,15 +171,6 @@ class Strategy(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
         limit = last_candle.boundries.right if trade.is_short else last_candle.boundries.left
-    
-        risk = trade.get_custom_data(key='risk')
-        if risk <= current_profit <= 2 * risk:
-            return stoploss_from_open(
-                0.002,
-                current_profit, 
-                is_short=trade.is_short, 
-                leverage=trade.leverage
-            )
 
         return stoploss_from_absolute(
                 limit,
