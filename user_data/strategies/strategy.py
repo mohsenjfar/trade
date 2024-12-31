@@ -13,6 +13,7 @@ from scipy.signal import argrelextrema
 from freqtrade.strategy import (
     IStrategy,
     stoploss_from_open,
+    stoploss_from_absolute,
     timeframe_to_prev_date
 )
 import logging
@@ -28,7 +29,7 @@ class Strategy(IStrategy):
 
     stoploss = -0.01
 
-    timeframe = '15m'
+    timeframe = '1m'
 
     use_exit_signal = True
 
@@ -137,10 +138,13 @@ class Strategy(IStrategy):
                             leverage: float, entry_tag: Optional[str], side: str,
                             **kwargs) -> float:
 
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        last_candle = dataframe.iloc[-1].squeeze()
+        candle_open_date = timeframe_to_prev_date(self.timeframe, current_time)
+        if candle_open_date + timedelta(seconds=5) < current_time:
+            return None
         
         try:
+            dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+            last_candle = dataframe.iloc[-1].squeeze()
             limit = last_candle.boundries.left if side == 'short' else last_candle.boundries.right
             risk = abs(1 - last_candle.close / limit)
             today = datetime.now(timezone.utc).date()
@@ -177,16 +181,6 @@ class Strategy(IStrategy):
         return dataframe["close"].iat[-1]
 
 
-    def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
-                            time_in_force: str, current_time: datetime, entry_tag: Optional[str],
-                            side: str, **kwargs) -> bool:
-
-        candle_open_date = timeframe_to_prev_date(self.timeframe, current_time)
-        if current_time + timedelta(seconds=5) > candle_open_date:
-            return False
-        return True
-
-
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
 
         if (trade.nr_of_successful_entries == 1) and (order.ft_order_side == trade.entry_side):
@@ -204,13 +198,22 @@ class Strategy(IStrategy):
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        last_candle = dataframe.iloc[-1].squeeze()
+        limit = last_candle.boundries.right if trade.is_short else last_candle.boundries.left
+    
         risk = trade.get_custom_data(key='risk')
-        if current_profit >= risk:
+        if risk <= current_profit <= 2 * risk:
             return stoploss_from_open(
                 0.002,
                 current_profit, 
                 is_short=trade.is_short, 
                 leverage=trade.leverage
             )
-        
-        return risk
+
+        return stoploss_from_absolute(
+                limit,
+                current_rate,
+                is_short=trade.is_short,
+                leverage=trade.leverage
+            )
