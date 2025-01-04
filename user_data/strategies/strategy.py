@@ -84,8 +84,8 @@ class Strategy(IStrategy):
         informative.loc[(informative.index.isin(max_peaks[0])),'extrema'] = informative.high
         bins = informative.extrema.dropna().sort_values().values
         dataframe['boundaries'] = pd.cut(dataframe.close, bins=bins)
-        dataframe['left'] = dataframe.boundaries.apply(lambda x: x.left)
-        dataframe['right'] = dataframe.boundaries.apply(lambda x: x.right)
+        dataframe['left'] = dataframe.boundaries.apply(lambda x: x.left).astype(float)
+        dataframe['right'] = dataframe.boundaries.apply(lambda x: x.right).astype(float)
     
         bids = pd.DataFrame(np.array(ob['bids']), columns=['price','volume'])
         short_price = bids[abs(stats.zscore(bids.volume)) > self.score].price.values[-1]
