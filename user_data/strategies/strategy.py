@@ -34,8 +34,6 @@ class Strategy(IStrategy):
 
     process_only_new_candles = False
 
-    kernel, score = 1, 4
-
     order_types = {
         'entry': 'limit',
         'exit': 'limit',
@@ -79,30 +77,18 @@ class Strategy(IStrategy):
         informative = self.dp.get_pair_dataframe(pair=metadata['pair'], timeframe='1w')
         ob = self.dp.orderbook(metadata['pair'], maximum=200)
 
-        min_peaks = argrelextrema(informative["low"].values, np.less_equal, order=self.kernel)
-        max_peaks = argrelextrema(informative["high"].values, np.greater_equal, order=self.kernel)
+        min_peaks = argrelextrema(informative["low"].values, np.less_equal, order=1)
+        max_peaks = argrelextrema(informative["high"].values, np.greater_equal, order=1)
         informative.loc[(informative.index.isin(min_peaks[0])),'extrema'] = informative.low
         informative.loc[(informative.index.isin(max_peaks[0])),'extrema'] = informative.high
         bins = informative.extrema.dropna().sort_values().values
         dataframe['boundaries'] = pd.cut(dataframe.close, bins=bins)
         dataframe['left'] = dataframe.boundaries.apply(lambda x: x.left).astype(float)
         dataframe['right'] = dataframe.boundaries.apply(lambda x: x.right).astype(float)
-    
-        bids = pd.DataFrame(np.array(ob['bids']), columns=['price','volume'])
-        short_price = bids[abs(stats.zscore(bids.volume)) > self.score].price.values[-1]
-        dataframe['short_price'] = self.add_fraction(short_price, add=False)
-        dataframe['short_stop'] = self.add_fraction(short_price)
-        dataframe['short_risk'] = abs(1 - dataframe['short_stop'] / dataframe['short_price'])
-        dataframe['bids_max'] = bids.price.max()
-        dataframe['bids_min'] = bids.price.min()
-        
-        asks = pd.DataFrame(np.array(ob['asks']), columns=['price','volume'])
-        long_price = asks[abs(stats.zscore(asks.volume)) > self.score].price.values[-1]
-        dataframe['long_price'] = self.add_fraction(long_price)
-        dataframe['long_stop'] = self.add_fraction(long_price, add=False)
-        dataframe['long_risk'] = abs(1 - dataframe['long_price'] / dataframe['long_stop'])
-        dataframe['asks_max'] = asks.price.max()
-        dataframe['asks_min'] = asks.price.min()
+        dataframe['bids_max'] = np.array(ob.get('asks'))[:,0].max()
+        dataframe['bids_min'] = np.array(ob.get('asks'))[:,0].min()
+        dataframe['asks_max'] = np.array(ob.get('bids'))[:,0].max()
+        dataframe['asks_min'] = np.array(ob.get('bids'))[:,0].min()
 
         return dataframe
 
@@ -155,9 +141,6 @@ class Strategy(IStrategy):
                             **kwargs) -> float:
         
         try:
-            dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-            current_candle = dataframe.iloc[-1].squeeze()
-            risk = current_candle.short_risk if side == 'short' else current_candle.long_risk
             today = datetime.now(timezone.utc).date()
             closed_trades = Trade.get_trades_proxy(close_date=today)
             today_loss = sum(trade.close_profit_abs for trade in closed_trades if trade.close_profit_abs < 0)
@@ -168,8 +151,6 @@ class Strategy(IStrategy):
             if today_loss_ratio < self.stoploss:
                 logger.info(f"Max day loss ({today_loss_ratio * 100:.2f}%), stop entering {side} position for {pair}")
                 return None
-            
-            return min((proposed_stake * (abs(self.stoploss)) / 2) / (risk * leverage), proposed_stake)
         
         except Exception as e:
             self.dp.send_msg(e)
@@ -179,18 +160,24 @@ class Strategy(IStrategy):
     def custom_entry_price(self, pair: str, trade: Trade | None, current_time: datetime, proposed_rate: float,
                            entry_tag: str | None, side: str, **kwargs) -> float:
 
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        current_candle = dataframe.iloc[-1].squeeze()
-        return current_candle.short_price if side == "short" else current_candle.long_price
+        ob = self.dp.orderbook(pair, maximum=200)
+        if side == 'short':
+            bids = pd.DataFrame(np.array(ob['bids']), columns=['price','volume'])
+            for score in [5,4,3]:
+                outliers = bids[abs(stats.zscore(bids.volume)) > score].price.values
+                if len(outliers) > 0:
+                    return self.add_fraction(outliers[-1], add=False)
+        else:
+            asks = pd.DataFrame(np.array(ob['asks']), columns=['price','volume'])
+            for score in [5,4,3]:
+                outliers = asks[abs(stats.zscore(asks.volume)) > score].price.values
+                if len(outliers) > 0:
+                    return self.add_fraction(outliers[-1])
 
 
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
 
         if (trade.nr_of_successful_entries == 1) and (order.ft_order_side == trade.entry_side):
-            dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-            current_candle = dataframe.iloc[-1].squeeze()
-            stop = current_candle.short_stop if trade.is_short else current_candle.long_stop
-            trade.set_custom_data(key='stop', value=stop)
             trade.set_custom_data(key='OB', value=self.dp.orderbook(pair, maximum=200))
     
 
@@ -198,7 +185,11 @@ class Strategy(IStrategy):
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
-        stop = trade.get_custom_data(key='stop')
+        if trade.is_short:
+            stop = self.add_fraction(trade.open_rate, step=2)
+        else:
+            stop = self.add_fraction(trade.open_rate, add=False, step=2)
+
         return stoploss_from_absolute(
                 stop,
                 current_rate,
