@@ -68,9 +68,10 @@ class Strategy(IStrategy):
         return [(pair, '1w') for pair in pairs]
 
 
-    def add_min_one(self, num, add=True):
-        side = 1 if add else -1
-        return float(str(num)[:-1] + str(int(str(num)[-1]) + 1 * side))
+    def add_fraction(self, num, add=True, step=1):
+        decimal_places = len(str(float(num)).split('.')[1])
+        fraction = float(f"1e-{decimal_places}") * step
+        return num + fraction * (1 if add else -1)
 
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
@@ -89,16 +90,16 @@ class Strategy(IStrategy):
     
         bids = pd.DataFrame(np.array(ob['bids']), columns=['price','volume'])
         short_price = bids[abs(stats.zscore(bids.volume)) > self.score].price.values[-1]
-        dataframe['short_price'] = self.add_min_one(short_price, add=False)
-        dataframe['short_stop'] = self.add_min_one(short_price)
+        dataframe['short_price'] = self.add_fraction(short_price, add=False)
+        dataframe['short_stop'] = self.add_fraction(short_price)
         dataframe['short_risk'] = abs(1 - dataframe['short_stop'] / dataframe['short_price'])
         dataframe['bids_max'] = bids.price.max()
         dataframe['bids_min'] = bids.price.min()
         
         asks = pd.DataFrame(np.array(ob['asks']), columns=['price','volume'])
         long_price = asks[abs(stats.zscore(asks.volume)) > self.score].price.values[-1]
-        dataframe['long_price'] = self.add_min_one(long_price)
-        dataframe['long_stop'] = self.add_min_one(long_price, add=False)
+        dataframe['long_price'] = self.add_fraction(long_price)
+        dataframe['long_stop'] = self.add_fraction(long_price, add=False)
         dataframe['long_risk'] = abs(1 - dataframe['long_price'] / dataframe['long_stop'])
         dataframe['asks_max'] = asks.price.max()
         dataframe['asks_min'] = asks.price.min()
