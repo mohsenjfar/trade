@@ -1,5 +1,5 @@
 # importing freqtrade modules
-from freqtrade.persistence import Trade
+from freqtrade.persistence import Trade, Order
 from freqtrade.strategy import IStrategy, stoploss_from_absolute
 
 # importing calculation modules
@@ -32,7 +32,7 @@ class Strategy(IStrategy):
 
     startup_candle_count: int = 48
 
-    process_only_new_candles = False
+    process_only_new_candles = True
 
     order_types = {
         'entry': 'limit',
@@ -151,9 +151,11 @@ class Strategy(IStrategy):
             if today_loss_ratio < self.stoploss:
                 logger.info(f"Max day loss ({today_loss_ratio * 100:.2f}%), stop entering {side} position for {pair}")
                 return None
+            
+            return proposed_stake
         
         except Exception as e:
-            self.dp.send_msg(e)
+            logger.warning(e)
             return None
     
 
@@ -161,7 +163,26 @@ class Strategy(IStrategy):
                            entry_tag: str | None, side: str, **kwargs) -> float:
 
         ob = self.dp.orderbook(pair, maximum=200)
-        if side == 'short':
+        if side == 'long':
+            bids = pd.DataFrame(np.array(ob['bids']), columns=['price','volume'])
+            for score in [5,4,3]:
+                outliers = bids[abs(stats.zscore(bids.volume)) > score].price.values
+                if len(outliers) > 0:
+                    return self.add_fraction(outliers[-1], add=False)
+        else:
+            asks = pd.DataFrame(np.array(ob['asks']), columns=['price','volume'])
+            for score in [5,4,3]:
+                outliers = asks[abs(stats.zscore(asks.volume)) > score].price.values
+                if len(outliers) > 0:
+                    return self.add_fraction(outliers[-1])
+
+
+    def adjust_entry_price(self, trade: Trade, order: Order | None, pair: str,
+                           current_time: datetime, proposed_rate: float, current_order_rate: float,
+                           entry_tag: str | None, side: str, **kwargs) -> float:
+
+        ob = self.dp.orderbook(pair, maximum=200)
+        if side == 'long':
             bids = pd.DataFrame(np.array(ob['bids']), columns=['price','volume'])
             for score in [5,4,3]:
                 outliers = bids[abs(stats.zscore(bids.volume)) > score].price.values
