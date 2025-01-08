@@ -162,19 +162,8 @@ class Strategy(IStrategy):
     def custom_entry_price(self, pair: str, trade: Trade | None, current_time: datetime, proposed_rate: float,
                            entry_tag: str | None, side: str, **kwargs) -> float:
 
-        ob = self.dp.orderbook(pair, maximum=200)
-        if side == 'long':
-            bids = pd.DataFrame(np.array(ob['bids']), columns=['price','volume'])
-            for score in [5,4,3]:
-                outliers = bids[abs(stats.zscore(bids.volume)) > score].price.values
-                if len(outliers) > 0:
-                    return self.add_fraction(outliers[-1], add=False)
-        else:
-            asks = pd.DataFrame(np.array(ob['asks']), columns=['price','volume'])
-            for score in [5,4,3]:
-                outliers = asks[abs(stats.zscore(asks.volume)) > score].price.values
-                if len(outliers) > 0:
-                    return self.add_fraction(outliers[-1])
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        return dataframe.bids_min.iat[-1] if side == 'long' else dataframe.asks_max.iat[-1]
 
 
     def adjust_entry_price(self, trade: Trade, order: Order | None, pair: str,
@@ -182,18 +171,15 @@ class Strategy(IStrategy):
                            entry_tag: str | None, side: str, **kwargs) -> float:
 
         ob = self.dp.orderbook(pair, maximum=200)
+        
         if side == 'long':
             bids = pd.DataFrame(np.array(ob['bids']), columns=['price','volume'])
-            for score in [5,4,3]:
-                outliers = bids[abs(stats.zscore(bids.volume)) > score].price.values
-                if len(outliers) > 0:
-                    return self.add_fraction(outliers[-1], add=False)
-        else:
-            asks = pd.DataFrame(np.array(ob['asks']), columns=['price','volume'])
-            for score in [5,4,3]:
-                outliers = asks[abs(stats.zscore(asks.volume)) > score].price.values
-                if len(outliers) > 0:
-                    return self.add_fraction(outliers[-1])
+            outliers = bids[abs(stats.zscore(bids.volume)) > 4].price.values
+            return self.add_fraction(outliers[0], add=False)
+        
+        asks = pd.DataFrame(np.array(ob['asks']), columns=['price','volume'])
+        outliers = asks[abs(stats.zscore(asks.volume)) > 4].price.values
+        return self.add_fraction(outliers[0])
 
 
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
