@@ -22,7 +22,8 @@ class Strategy(IStrategy):
 
     can_short: bool = True
 
-    stoploss = -0.01
+    stoploss = -0.002
+    total_daily_loss_allowed = -0.01
 
     timeframe = '1m'
 
@@ -85,10 +86,10 @@ class Strategy(IStrategy):
         dataframe['boundaries'] = pd.cut(dataframe.close, bins=bins)
         dataframe['left'] = dataframe.boundaries.apply(lambda x: x.left).astype(float)
         dataframe['right'] = dataframe.boundaries.apply(lambda x: x.right).astype(float)
-        dataframe['bids_max'] = np.array(ob.get('asks'))[:,0].max()
-        dataframe['bids_min'] = np.array(ob.get('asks'))[:,0].min()
-        dataframe['asks_max'] = np.array(ob.get('bids'))[:,0].max()
-        dataframe['asks_min'] = np.array(ob.get('bids'))[:,0].min()
+        dataframe['bids_max'] = np.array(ob.get('bids'))[:,0].max()
+        dataframe['bids_min'] = np.array(ob.get('bids'))[:,0].min()
+        dataframe['asks_max'] = np.array(ob.get('asks'))[:,0].max()
+        dataframe['asks_min'] = np.array(ob.get('asks'))[:,0].min()
 
         return dataframe
 
@@ -148,7 +149,7 @@ class Strategy(IStrategy):
             total_stake = stake_in_use + max_stake
             today_loss_ratio = today_loss / total_stake
 
-            if today_loss_ratio < self.stoploss:
+            if today_loss_ratio < self.total_daily_loss_allowed:
                 logger.info(f"Max day loss ({today_loss_ratio * 100:.2f}%), stop entering {side} position for {pair}")
                 return None
             
@@ -163,23 +164,23 @@ class Strategy(IStrategy):
                            entry_tag: str | None, side: str, **kwargs) -> float:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        return dataframe.bids_min.iat[-1] if side == 'long' else dataframe.asks_max.iat[-1]
+        return dataframe.left.iat[-1] if side == 'long' else dataframe.right.iat[-1]
 
 
-    def adjust_entry_price(self, trade: Trade, order: Order | None, pair: str,
-                           current_time: datetime, proposed_rate: float, current_order_rate: float,
-                           entry_tag: str | None, side: str, **kwargs) -> float:
+    # def adjust_entry_price(self, trade: Trade, order: Order | None, pair: str,
+    #                        current_time: datetime, proposed_rate: float, current_order_rate: float,
+    #                        entry_tag: str | None, side: str, **kwargs) -> float:
 
-        ob = self.dp.orderbook(pair, maximum=200)
+    #     ob = self.dp.orderbook(pair, maximum=200)
         
-        if side == 'long':
-            bids = pd.DataFrame(np.array(ob['bids']), columns=['price','volume'])
-            outliers = bids[abs(stats.zscore(bids.volume)) > 4].price.values
-            return self.add_fraction(outliers[0], add=False)
+    #     if side == 'long':
+    #         bids = pd.DataFrame(np.array(ob['bids']), columns=['price','volume'])
+    #         bid = bids[abs(stats.zscore(bids.volume)) > 4].price.values.max()
+    #         return self.add_fraction(bid, add=False)
         
-        asks = pd.DataFrame(np.array(ob['asks']), columns=['price','volume'])
-        outliers = asks[abs(stats.zscore(asks.volume)) > 4].price.values
-        return self.add_fraction(outliers[0])
+    #     asks = pd.DataFrame(np.array(ob['asks']), columns=['price','volume'])
+    #     ask = asks[abs(stats.zscore(asks.volume)) > 4].price.values.min()
+    #     return self.add_fraction(ask)
 
 
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
@@ -192,10 +193,8 @@ class Strategy(IStrategy):
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
-        if trade.is_short:
-            stop = self.add_fraction(trade.open_rate, step=2)
-        else:
-            stop = self.add_fraction(trade.open_rate, add=False, step=2)
+        if trade.is_short: stop = self.add_fraction(trade.open_rate, step=2)
+        else: stop = self.add_fraction(trade.open_rate, add=False, step=2)
 
         return stoploss_from_absolute(
                 stop,
