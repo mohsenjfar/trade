@@ -39,7 +39,7 @@ class Strategy(IStrategy):
         'entry': 'limit',
         'exit': 'limit',
         'stoploss': 'limit',
-        'stoploss_on_exchange': False
+        'stoploss_on_exchange': True
     }
 
     order_time_in_force = {
@@ -64,7 +64,7 @@ class Strategy(IStrategy):
 
     def informative_pairs(self):
         pairs = self.dp.current_whitelist()
-        return [(pair, '1w') for pair in pairs]
+        return [(pair, '4h') for pair in pairs]
 
 
     def add_fraction(self, num, add=True, step=1):
@@ -75,7 +75,7 @@ class Strategy(IStrategy):
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        informative = self.dp.get_pair_dataframe(pair=metadata['pair'], timeframe='1w')
+        informative = self.dp.get_pair_dataframe(pair=metadata['pair'], timeframe='4h')[-6:].reset_index()
         ob = self.dp.orderbook(metadata['pair'], maximum=200)
 
         min_peaks = argrelextrema(informative["low"].values, np.less_equal, order=1)
@@ -117,21 +117,6 @@ class Strategy(IStrategy):
 
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe.loc[
-            (
-                (dataframe['right'] > dataframe['asks_min']) &
-                (dataframe['right'] < dataframe['asks_max'])
-            ),
-            'exit_long'
-        ] = 1
-
-        dataframe.loc[
-            (
-                (dataframe['left'] > dataframe['bids_min']) &
-                (dataframe['left'] < dataframe['bids_max'])
-            ),
-            'exit_short'
-        ] = 1
 
         return dataframe
 
@@ -164,7 +149,8 @@ class Strategy(IStrategy):
                            entry_tag: str | None, side: str, **kwargs) -> float:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        return dataframe.left.iat[-1] if side == 'long' else dataframe.right.iat[-1]
+        if side == 'long': return self.add_fraction(dataframe.left.iat[-1])
+        else: return self.add_fraction(dataframe.right.iat[-1], add=False)
 
 
     # def adjust_entry_price(self, trade: Trade, order: Order | None, pair: str,
@@ -202,3 +188,28 @@ class Strategy(IStrategy):
                 is_short=trade.is_short,
                 leverage=trade.leverage
             )
+
+
+    def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
+                    current_rate: float, current_profit: float, **kwargs) -> str:
+
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        current_candle = dataframe.iloc[-1].squeeze()
+
+        short_conditions = (
+            trade.is_short,
+            current_candle.left > current_candle.bids_min,
+            current_candle.left < current_candle.bids_max,
+            current_profit > 0.02
+        )
+
+        long_conditions = (
+            not trade.is_short,
+            current_candle.right > current_candle.asks_min,
+            current_candle.right < current_candle.asks_max,
+            current_profit > 0.02
+        )
+
+        if all(short_conditions) or all(long_conditions):
+            return "Target hit!"
+
