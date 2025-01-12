@@ -6,8 +6,7 @@ from freqtrade.strategy import IStrategy, stoploss_from_absolute
 import pandas as pd
 from pandas import DataFrame
 import numpy as np
-from technical import qtpylib
-import talib.abstract as ta
+from scipy import stats
 from scipy.signal import argrelextrema
 
 # importing other modules
@@ -23,7 +22,8 @@ class Strategy(IStrategy):
 
     can_short: bool = True
 
-    stoploss = -0.01
+    stoploss = -0.002
+    total_daily_loss_allowed = -0.01
 
     timeframe = '1m'
 
@@ -46,6 +46,20 @@ class Strategy(IStrategy):
         'entry': 'GTC',
         'exit': 'GTC'
     }
+
+
+    def ob_dataframe(self, pair):
+        ob = self.dp.orderbook(pair, maximum=200)
+        return {
+            'bids' : {
+                'price': np.array(ob['bids'])[:,0],
+                'volume': np.array(ob['bids'])[:,1],
+            },
+            'asks': {
+                'price': np.array(ob['asks'])[:,0],
+                'volume': np.array(ob['asks'])[:,1],
+            }
+        }
     
 
     def informative_pairs(self):
@@ -53,20 +67,29 @@ class Strategy(IStrategy):
         return [(pair, '1w') for pair in pairs]
 
 
+    def add_fraction(self, num, add=True, step=1):
+        decimal_places = len(str(float(num)).split('.')[1])
+        fraction = float(f"1e-{decimal_places}") * step
+        return num + fraction * (1 if add else -1)
+
+
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         informative = self.dp.get_pair_dataframe(pair=metadata['pair'], timeframe='1w')
+        ob = self.dp.orderbook(metadata['pair'], maximum=200)
+
         min_peaks = argrelextrema(informative["low"].values, np.less_equal, order=1)
         max_peaks = argrelextrema(informative["high"].values, np.greater_equal, order=1)
         informative.loc[(informative.index.isin(min_peaks[0])),'extrema'] = informative.low
         informative.loc[(informative.index.isin(max_peaks[0])),'extrema'] = informative.high
         bins = informative.extrema.dropna().drop_duplicates().sort_values().values
-        
         dataframe['boundaries'] = pd.cut(dataframe.close, bins=bins)
         dataframe['left'] = dataframe.boundaries.apply(lambda x: x.left).astype(float)
         dataframe['right'] = dataframe.boundaries.apply(lambda x: x.right).astype(float)
-        dataframe['change'] = (dataframe.right - dataframe.left)
-        dataframe['change'] = dataframe['change'] / dataframe['change'].shift(1)
+        dataframe['bids_max'] = np.array(ob.get('bids'))[:,0].max()
+        dataframe['bids_min'] = np.array(ob.get('bids'))[:,0].min()
+        dataframe['asks_max'] = np.array(ob.get('asks'))[:,0].max()
+        dataframe['asks_min'] = np.array(ob.get('asks'))[:,0].min()
 
         return dataframe
 
@@ -75,16 +98,16 @@ class Strategy(IStrategy):
 
         dataframe.loc[
             (
-                (qtpylib.crossed_above(dataframe['close'], dataframe['right'])) &
-                (dataframe['change'] > 2)
+                (dataframe['left'] > dataframe['bids_min']) &
+                (dataframe['left'] < dataframe['bids_max'])
             ),
             'enter_long'
         ] = 1
 
         dataframe.loc[
             (
-                (qtpylib.crossed_below(dataframe['close'], dataframe['left'])) &
-                (dataframe['change'] > 2)
+                (dataframe['right'] > dataframe['asks_min']) &
+                (dataframe['right'] < dataframe['asks_max'])
             ),
             'enter_short'
         ] = 1
@@ -104,9 +127,6 @@ class Strategy(IStrategy):
                             **kwargs) -> float:
         
         try:
-            dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-            lc = dataframe.iloc[-1].squeeze()
-            risk = lc.change / lc.left if side == 'long' else lc.change / lc.right
             today = datetime.now(timezone.utc).date()
             closed_trades = Trade.get_trades_proxy(close_date=today)
             today_loss = sum(trade.close_profit_abs for trade in closed_trades if trade.close_profit_abs < 0)
@@ -114,31 +134,43 @@ class Strategy(IStrategy):
             total_stake = stake_in_use + max_stake
             today_loss_ratio = today_loss / total_stake
 
-            if today_loss_ratio < self.stoploss:
+            if today_loss_ratio < self.total_daily_loss_allowed:
                 logger.info(f"Max day loss ({today_loss_ratio * 100:.2f}%), stop entering {side} position for {pair}")
                 return None
             
-            return min((proposed_stake * abs(self.stoploss)) / (risk * leverage), proposed_stake)
+            return proposed_stake
         
         except Exception as e:
             logger.warning(e)
             return None
-
+    
 
     def custom_entry_price(self, pair: str, trade: Trade | None, current_time: datetime, proposed_rate: float,
                            entry_tag: str | None, side: str, **kwargs) -> float:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        return dataframe.right.iat[-1] if side == 'long' else dataframe.left.iat[-1]
-    
+        return dataframe.left.iat[-1] if side == 'long' else dataframe.right.iat[-1]
+
+
+    # def adjust_entry_price(self, trade: Trade, order: Order | None, pair: str,
+    #                        current_time: datetime, proposed_rate: float, current_order_rate: float,
+    #                        entry_tag: str | None, side: str, **kwargs) -> float:
+
+    #     ob = self.dp.orderbook(pair, maximum=200)
+        
+    #     if side == 'long':
+    #         bids = pd.DataFrame(np.array(ob['bids']), columns=['price','volume'])
+    #         bid = bids[abs(stats.zscore(bids.volume)) > 4].price.values.max()
+    #         return self.add_fraction(bid, add=False)
+        
+    #     asks = pd.DataFrame(np.array(ob['asks']), columns=['price','volume'])
+    #     ask = asks[abs(stats.zscore(asks.volume)) > 4].price.values.min()
+    #     return self.add_fraction(ask)
+
 
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
 
         if (trade.nr_of_successful_entries == 1) and (order.ft_order_side == trade.entry_side):
-            dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-            last_candle = dataframe.iloc[-1].squeeze()
-            stop = last_candle.right if trade.is_short else last_candle.left
-            trade.set_custom_data(key='stop', value=stop)
             trade.set_custom_data(key='OB', value=self.dp.orderbook(pair, maximum=200))
     
 
@@ -146,21 +178,8 @@ class Strategy(IStrategy):
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        last_candle = dataframe.iloc[-1].squeeze()
-        stop = trade.get_custom_data(key='stop')
-        risk = abs(1 - trade.open_rate / stop)
-        
-        if trade.is_short:
-            reward = abs(1 - trade.open_rate / last_candle.right)
-            if reward > 2 * risk:
-                stop = last_candle.right
-                trade.set_custom_data(key='stop', value=stop)
-        else:
-            reward = abs(1 - trade.open_rate / last_candle.left)
-            if reward > 2 * risk:
-                stop = last_candle.left
-                trade.set_custom_data(key='stop', value=stop)
+        if trade.is_short: stop = self.add_fraction(trade.open_rate, step=2)
+        else: stop = self.add_fraction(trade.open_rate, add=False, step=2)
 
         return stoploss_from_absolute(
                 stop,
@@ -168,3 +187,36 @@ class Strategy(IStrategy):
                 is_short=trade.is_short,
                 leverage=trade.leverage
             )
+
+
+    def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
+                    current_rate: float, current_profit: float, **kwargs) -> str:
+
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        current_candle = dataframe.iloc[-1].squeeze()
+
+        expiry_conditions = (
+            current_time - timedelta(hours=1) > trade.open_date_utc, 
+            current_profit < 0.02
+        )
+
+        if all(expiry_conditions):
+            return "Trade expired!"
+
+        short_conditions = (
+            trade.is_short,
+            current_candle.left > current_candle.bids_min,
+            current_candle.left < current_candle.bids_max,
+            current_profit > 0.02
+        )
+
+        long_conditions = (
+            not trade.is_short,
+            current_candle.right > current_candle.asks_min,
+            current_candle.right < current_candle.asks_max,
+            current_profit > 0.02
+        )
+
+        if all(short_conditions) or all(long_conditions):
+            return "Target hit!"
+
