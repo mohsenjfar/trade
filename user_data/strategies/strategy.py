@@ -14,6 +14,7 @@ from scipy.signal import argrelextrema
 from datetime import datetime, timezone, timedelta
 from typing import Optional
 import logging
+from collections import defaultdict
 
 logger = logging.getLogger(__name__)
 
@@ -34,6 +35,8 @@ class Strategy(IStrategy):
     startup_candle_count: int = 48
 
     process_only_new_candles = True
+
+    notifications = defaultdict(None)
 
     order_types = {
         'entry': 'limit',
@@ -56,6 +59,7 @@ class Strategy(IStrategy):
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         informative = self.dp.get_pair_dataframe(pair=metadata['pair'], timeframe='1w')
+
         min_peaks = argrelextrema(informative["low"].values, np.less_equal, order=1)
         max_peaks = argrelextrema(informative["high"].values, np.greater_equal, order=1)
         informative.loc[(informative.index.isin(min_peaks[0])),'extrema'] = informative.low
@@ -65,8 +69,8 @@ class Strategy(IStrategy):
         dataframe['boundaries'] = pd.cut(dataframe.close, bins=bins)
         dataframe['left'] = dataframe.boundaries.apply(lambda x: x.left).astype(float)
         dataframe['right'] = dataframe.boundaries.apply(lambda x: x.right).astype(float)
-        dataframe['change'] = (dataframe.right - dataframe.left)
-        dataframe['change'] = dataframe['change'] / dataframe['change'].shift(1)
+        dataframe['distance'] = (dataframe.right - dataframe.left)
+        dataframe['change'] = dataframe['distance'] / dataframe['distance'].shift(1)
 
         return dataframe
 
@@ -75,20 +79,34 @@ class Strategy(IStrategy):
 
         dataframe.loc[
             (
-                (qtpylib.crossed_above(dataframe['close'], dataframe['right'])) &
-                (dataframe['change'] > 2)
+                (qtpylib.crossed_above(dataframe['close'], dataframe['right'].shift(1))) &
+                (dataframe['change'] > 5)
             ),
             'enter_long'
         ] = 1
 
         dataframe.loc[
             (
-                (qtpylib.crossed_below(dataframe['close'], dataframe['left'])) &
-                (dataframe['change'] > 2)
+                (qtpylib.crossed_below(dataframe['close'], dataframe['left'].shift(1))) &
+                (dataframe['change'] > 5)
             ),
             'enter_short'
         ] = 1
 
+        last_candle = dataframe.iloc[-1].squeeze()
+        if last_candle.change > 2:
+            lines = (
+                f"Pair: {metadata['pair']}",
+                f"Left: {last_candle.left}",
+                f"Right: {last_candle.right}",
+                f"Change: {last_candle.change}",
+                f"Close: {last_candle.close}"
+            )
+            message = f"{'\n'.join(lines)}"
+            if self.notifications.get(metadata['pair']) != message:
+                self.dp.send_msg(message)
+                self.notifications[metadata['pair']] = message
+                
         return dataframe
 
 
@@ -106,7 +124,7 @@ class Strategy(IStrategy):
         try:
             dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
             lc = dataframe.iloc[-1].squeeze()
-            risk = lc.change / lc.left if side == 'long' else lc.change / lc.right
+            risk = lc.distance / lc.left if side == 'long' else lc.distance / lc.right
             today = datetime.now(timezone.utc).date()
             closed_trades = Trade.get_trades_proxy(close_date=today)
             today_loss = sum(trade.close_profit_abs for trade in closed_trades if trade.close_profit_abs < 0)
