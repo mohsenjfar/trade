@@ -80,7 +80,7 @@ class Strategy(IStrategy):
         dataframe.loc[
             (
                 (qtpylib.crossed_above(dataframe['close'], dataframe['right'].shift(1))) &
-                (dataframe['change'] > 5)
+                (dataframe['change'] > 2)
             ),
             'enter_long'
         ] = 1
@@ -88,7 +88,7 @@ class Strategy(IStrategy):
         dataframe.loc[
             (
                 (qtpylib.crossed_below(dataframe['close'], dataframe['left'].shift(1))) &
-                (dataframe['change'] > 5)
+                (dataframe['change'] > 2)
             ),
             'enter_short'
         ] = 1
@@ -123,7 +123,7 @@ class Strategy(IStrategy):
         
         try:
             dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-            lc = dataframe.iloc[-1].squeeze()
+            lc = dataframe.iloc[-2].squeeze()
             risk = lc.distance / lc.left if side == 'long' else lc.distance / lc.right
             today = datetime.now(timezone.utc).date()
             closed_trades = Trade.get_trades_proxy(close_date=today)
@@ -147,14 +147,14 @@ class Strategy(IStrategy):
                            entry_tag: str | None, side: str, **kwargs) -> float:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        return dataframe.right.iat[-1] if side == 'long' else dataframe.left.iat[-1]
+        return dataframe.left.iat[-1] if side == 'long' else dataframe.right.iat[-1]
     
 
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
 
         if (trade.nr_of_successful_entries == 1) and (order.ft_order_side == trade.entry_side):
             dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-            last_candle = dataframe.iloc[-1].squeeze()
+            last_candle = dataframe.iloc[-2].squeeze()
             stop = last_candle.right if trade.is_short else last_candle.left
             trade.set_custom_data(key='stop', value=stop)
             trade.set_custom_data(key='OB', value=self.dp.orderbook(pair, maximum=200))
@@ -165,7 +165,7 @@ class Strategy(IStrategy):
                         **kwargs) -> Optional[float]:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        last_candle = dataframe.iloc[-1].squeeze()
+        last_candle = dataframe.iloc[-2].squeeze()
         stop = trade.get_custom_data(key='stop')
         risk = abs(1 - trade.open_rate / stop)
         
