@@ -1,0 +1,188 @@
+# importing freqtrade modules
+from freqtrade.persistence import Trade, Order
+from freqtrade.strategy import IStrategy, stoploss_from_absolute
+
+# importing calculation modules
+import pandas as pd
+from pandas import DataFrame
+import numpy as np
+from technical import qtpylib
+import talib.abstract as ta
+from scipy.signal import argrelextrema
+
+# importing other modules
+from datetime import datetime, timezone, timedelta
+from typing import Optional
+import logging
+from collections import defaultdict
+
+logger = logging.getLogger(__name__)
+
+class Strategy(IStrategy):
+
+    INTERFACE_VERSION = 3
+
+    can_short: bool = True
+
+    stoploss = -0.01
+
+    timeframe = '1m'
+
+    use_exit_signal = True
+
+    use_custom_stoploss = True
+
+    startup_candle_count: int = 48
+
+    process_only_new_candles = True
+
+    notifications = defaultdict(None)
+
+    order_types = {
+        'entry': 'limit',
+        'exit': 'limit',
+        'stoploss': 'limit',
+        'stoploss_on_exchange': False
+    }
+
+    order_time_in_force = {
+        'entry': 'GTC',
+        'exit': 'GTC'
+    }
+    
+
+    def informative_pairs(self):
+        pairs = self.dp.current_whitelist()
+        return [(pair, '1w') for pair in pairs]
+
+
+    def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+
+        informative = self.dp.get_pair_dataframe(pair=metadata['pair'], timeframe='1w')
+
+        min_peaks = argrelextrema(informative["low"].values, np.less_equal, order=1)
+        max_peaks = argrelextrema(informative["high"].values, np.greater_equal, order=1)
+        informative.loc[(informative.index.isin(min_peaks[0])),'extrema'] = informative.low
+        informative.loc[(informative.index.isin(max_peaks[0])),'extrema'] = informative.high
+        bins = informative.extrema.dropna().drop_duplicates().sort_values().values
+        
+        dataframe['boundaries'] = pd.cut(dataframe.close, bins=bins)
+        dataframe['left'] = dataframe.boundaries.apply(lambda x: x.left).astype(float)
+        dataframe['right'] = dataframe.boundaries.apply(lambda x: x.right).astype(float)
+        dataframe['distance'] = (dataframe.right - dataframe.left)
+        dataframe['change'] = dataframe['distance'] / dataframe['distance'].shift(1)
+
+        return dataframe
+
+
+    def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+
+        dataframe.loc[
+            (
+                (qtpylib.crossed_above(dataframe['close'], dataframe['right'].shift(1))) &
+                (dataframe['change'] > 2)
+            ),
+            'enter_long'
+        ] = 1
+
+        dataframe.loc[
+            (
+                (qtpylib.crossed_below(dataframe['close'], dataframe['left'].shift(1))) &
+                (dataframe['change'] > 2)
+            ),
+            'enter_short'
+        ] = 1
+
+        last_candle = dataframe.iloc[-1].squeeze()
+        if last_candle.change > 2:
+            lines = (
+                f"Pair: {metadata['pair']}",
+                f"Left: {last_candle.left}",
+                f"Right: {last_candle.right}",
+                f"Change: {last_candle.change}",
+                f"Close: {last_candle.close}"
+            )
+            message = f"{'\n'.join(lines)}"
+            if self.notifications.get(metadata['pair']) != message:
+                self.dp.send_msg(message)
+                self.notifications[metadata['pair']] = message
+                
+        return dataframe
+
+
+    def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+
+
+        return dataframe
+
+
+    def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
+                            proposed_stake: float, min_stake: Optional[float], max_stake: float,
+                            leverage: float, entry_tag: Optional[str], side: str,
+                            **kwargs) -> float:
+        
+        try:
+            dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+            lc = dataframe.iloc[-2].squeeze()
+            risk = lc.distance / lc.left if side == 'long' else lc.distance / lc.right
+            today = datetime.now(timezone.utc).date()
+            closed_trades = Trade.get_trades_proxy(close_date=today)
+            today_loss = sum(trade.close_profit_abs for trade in closed_trades if trade.close_profit_abs < 0)
+            stake_in_use = Trade.total_open_trades_stakes()
+            total_stake = stake_in_use + max_stake
+            today_loss_ratio = today_loss / total_stake
+
+            if today_loss_ratio < self.stoploss:
+                logger.info(f"Max day loss ({today_loss_ratio * 100:.2f}%), stop entering {side} position for {pair}")
+                return None
+            
+            return min((proposed_stake * abs(self.stoploss)) / (risk * leverage), proposed_stake)
+        
+        except Exception as e:
+            logger.warning(e)
+            return None
+
+
+    def custom_entry_price(self, pair: str, trade: Trade | None, current_time: datetime, proposed_rate: float,
+                           entry_tag: str | None, side: str, **kwargs) -> float:
+
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        return dataframe.left.iat[-1] if side == 'long' else dataframe.right.iat[-1]
+    
+
+    def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
+
+        if (trade.nr_of_successful_entries == 1) and (order.ft_order_side == trade.entry_side):
+            dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+            last_candle = dataframe.iloc[-2].squeeze()
+            stop = last_candle.right if trade.is_short else last_candle.left
+            trade.set_custom_data(key='stop', value=stop)
+            trade.set_custom_data(key='OB', value=self.dp.orderbook(pair, maximum=200))
+    
+
+    def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
+                        current_rate: float, current_profit: float, after_fill: bool, 
+                        **kwargs) -> Optional[float]:
+
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        last_candle = dataframe.iloc[-2].squeeze()
+        stop = trade.get_custom_data(key='stop')
+        risk = abs(1 - trade.open_rate / stop)
+        
+        if trade.is_short:
+            reward = abs(1 - trade.open_rate / last_candle.right)
+            if reward > 2 * risk:
+                stop = last_candle.right
+                trade.set_custom_data(key='stop', value=stop)
+        else:
+            reward = abs(1 - trade.open_rate / last_candle.left)
+            if reward > 2 * risk:
+                stop = last_candle.left
+                trade.set_custom_data(key='stop', value=stop)
+
+        return stoploss_from_absolute(
+                stop,
+                current_rate,
+                is_short=trade.is_short,
+                leverage=trade.leverage
+            )
