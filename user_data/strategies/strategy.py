@@ -58,7 +58,21 @@ class Strategy(IStrategy):
                 dataframe['enter_long'] = 1
             else:
                 dataframe['enter_short'] = 1
-            return dataframe
+    
+            conditions = (
+                all(trade.close_profit_abs < 0 for trade in trades[-2:]),
+                (datetime.now() - trades[-2].close_date).seconds / 3600 < 4
+            )
+            if all(conditions):
+                dataframe['enter_long'] = 0
+                dataframe['enter_short'] = 0
+                message = f"Two consecutive losses for {metadata['pair']}, stop entering position for 4 hours."
+                if self.notifications.get(metadata['pair']) != message:
+                    self.dp.send_msg(message)
+                    self.notifications[metadata['pair']] = message
+                return dataframe
+        
+        self.notifications[metadata['pair']] = None
         
         dataframe['enter_long'] = 1
 
@@ -68,27 +82,6 @@ class Strategy(IStrategy):
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         return dataframe
-
-
-    def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
-                            time_in_force: str, current_time: datetime, entry_tag: Optional[str],
-                            side: str, **kwargs) -> bool:
-
-        trades = Trade.get_trades_proxy()
-        if trades:
-            conditions = (
-                all(trade.close_profit_abs < 0 for trade in trades[-2:]),
-                (datetime.now() - trades[-2].close_date).seconds / 3600 < 1
-            )
-            if all(conditions):
-                if (datetime.now() - trades[-1].close_date).seconds / 3600 < 4:
-                    message = f"Two consecutive losses for {pair}, stop entering position for 4 hours."
-                    if self.notifications.get(pair) != message:
-                        self.dp.send_msg(message)
-                        self.notifications[pair] = message
-                    return False
-
-        return True
 
 
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
@@ -107,4 +100,9 @@ class Strategy(IStrategy):
                 leverage=trade.leverage
             )
 
-        return -1
+        return stoploss_from_open(
+                -0.005,
+                current_profit, 
+                is_short=trade.is_short, 
+                leverage=trade.leverage
+            )
