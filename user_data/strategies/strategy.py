@@ -1,22 +1,9 @@
-# importing freqtrade modules
-from freqtrade.persistence import Trade, Order
+from freqtrade.persistence import Trade
 from freqtrade.strategy import IStrategy, stoploss_from_open
-
-# importing calculation modules
-import pandas as pd
 from pandas import DataFrame
-import numpy as np
-from technical import qtpylib
-import talib.abstract as ta
-from scipy.signal import argrelextrema
-
-# importing other modules
-from datetime import datetime, timezone, timedelta
+from datetime import datetime
 from typing import Optional
-import logging
 from collections import defaultdict
-
-logger = logging.getLogger(__name__)
 
 class Strategy(IStrategy):
 
@@ -26,7 +13,7 @@ class Strategy(IStrategy):
 
     stoploss = -0.005
 
-    timeframe = '1m'
+    timeframe = '1h'
 
     use_exit_signal = True
 
@@ -35,6 +22,8 @@ class Strategy(IStrategy):
     startup_candle_count: int = 48
 
     process_only_new_candles = False
+
+    notifications = defaultdict(None)
 
     order_types = {
         'entry': 'market',
@@ -81,17 +70,38 @@ class Strategy(IStrategy):
         return dataframe
 
 
+    def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
+                            time_in_force: str, current_time: datetime, entry_tag: Optional[str],
+                            side: str, **kwargs) -> bool:
+
+        trades = Trade.get_trades_proxy()
+        if trades:
+            conditions = (
+                all(trade.close_profit_abs < 0 for trade in trades[-2:]),
+                (datetime.now() - trades[-2].close_date).seconds / 3600 < 1
+            )
+            if all(conditions):
+                if (datetime.now() - trades[-1].close_date).seconds / 3600 < 4:
+                    message = f"Two consecutive losses for {pair}, stop entering position for 4 hours."
+                    if self.notifications.get(pair) != message:
+                        self.dp.send_msg(message)
+                        self.notifications[pair] = message
+                    return False
+
+        return True
+
+
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
 
-        if current_profit > 0.1:
+        if current_profit > 0.05:
             return 0.03
 
-        if current_profit > 0.005:
+        if current_profit > 0.01:
             return stoploss_from_open(
-                0,
+                0.005,
                 current_profit, 
                 is_short=trade.is_short, 
                 leverage=trade.leverage
