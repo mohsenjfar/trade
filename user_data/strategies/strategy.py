@@ -79,16 +79,14 @@ class Strategy(IStrategy):
 
         dataframe.loc[
             (
-                (qtpylib.crossed_above(dataframe['close'], dataframe['right'].shift(1))) &
-                (dataframe['change'] > 2)
+                (qtpylib.crossed_above(dataframe['close'], dataframe['right'].shift(1)))
             ),
             'enter_long'
         ] = 1
 
         dataframe.loc[
             (
-                (qtpylib.crossed_below(dataframe['close'], dataframe['left'].shift(1))) &
-                (dataframe['change'] > 2)
+                (qtpylib.crossed_below(dataframe['close'], dataframe['left'].shift(1)))
             ),
             'enter_short'
         ] = 1
