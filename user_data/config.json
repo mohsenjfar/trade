@@ -37,13 +37,36 @@
     "key": "",
     "secret": "",
     "pair_whitelist": [
-      "WIF/USDT:USDT"
+      "WIF/USDT:USDT",
+      "SOL/USDT:USDT",
+      "XRP/USDT:USDT",
+      "ADA/USDT:USDT"
     ],
-    "pair_blacklist": []
+    "pair_blacklist": [
+      "TRUMP/USDT:USDT",
+      "MELANIA/USDT:USDT",
+      "ETH/USDT:USDT",
+      "BTC/USDT:USDT"
+    ]
   },
   "pairlists": [
+    // {
+    //     "method": "StaticPairList"
+    // }
+    // {
+    //     "method": "PercentChangePairList",
+    //     "number_assets": 20,
+    //     "min_value": 0,
+    //     "refresh_period": 86400,
+    //     "lookback_days": 1
+    // }
     {
-        "method": "StaticPairList"
+        "method": "VolumePairList",
+        "number_assets": 20,
+        "sort_key": "quoteVolume",
+        // "min_value": 0,
+        // "max_value": 8000000,
+        "refresh_period": 1800
     }
   ],
   "telegram": {
