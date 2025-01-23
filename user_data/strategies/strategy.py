@@ -56,6 +56,12 @@ class Strategy(IStrategy):
         return [(pair, '1w') for pair in pairs]
 
 
+    def add_fraction(self, num, add=True, step=1):
+        decimal_places = len(str(float(num)).split('.')[1])
+        fraction = float(f"1e-{decimal_places}") * step
+        return num + fraction * (1 if add else -1)
+
+
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         informative = self.dp.get_pair_dataframe(pair=metadata['pair'], timeframe='1w')[-10:].reset_index()
@@ -65,12 +71,19 @@ class Strategy(IStrategy):
         informative.loc[(informative.index.isin(min_peaks[0])),'extrema'] = informative.low
         informative.loc[(informative.index.isin(max_peaks[0])),'extrema'] = informative.high
         bins = informative.extrema.dropna().drop_duplicates().sort_values().values
-        
         dataframe['boundaries'] = pd.cut(dataframe.close, bins=bins)
+
         dataframe['left'] = dataframe.boundaries.apply(lambda x: x.left).astype(float)
+        dataframe['long_stop'] = self.add_fraction(dataframe['left'], add=False)
+        dataframe['long_trigger'] = dataframe['long_stop'] * (1 + abs(self.stoploss)/2)
+        dataframe['long_distance'] = dataframe['long_trigger'] - dataframe['long_stop']
+        dataframe['long_risk'] = dataframe['long_distance'] / dataframe['long_stop']
+        
         dataframe['right'] = dataframe.boundaries.apply(lambda x: x.right).astype(float)
-        dataframe['distance'] = (dataframe.right - dataframe.left)
-        dataframe['change'] = dataframe['distance'] / dataframe['distance'].shift(1)
+        dataframe['short_stop'] = self.add_fraction(dataframe['right'])
+        dataframe['short_trigger'] = dataframe['short_stop'] * (1 - abs(self.stoploss)/2)
+        dataframe['short_distance'] = dataframe['short_trigger'] - dataframe['short_stop']
+        dataframe['short_risk'] = dataframe['short_distance'] / dataframe['short_stop']
 
         return dataframe
 
@@ -79,31 +92,17 @@ class Strategy(IStrategy):
 
         dataframe.loc[
             (
-                (qtpylib.crossed_above(dataframe['close'], dataframe['right'].shift(1)))
+                (qtpylib.crossed_above(dataframe['close'], dataframe['long_trigger']))
             ),
             'enter_long'
         ] = 1
 
         dataframe.loc[
             (
-                (qtpylib.crossed_below(dataframe['close'], dataframe['left'].shift(1)))
+                (qtpylib.crossed_below(dataframe['close'], dataframe['short_trigger']))
             ),
             'enter_short'
         ] = 1
-
-        last_candle = dataframe.iloc[-1].squeeze()
-        if last_candle.change > 2:
-            lines = (
-                f"Pair: {metadata['pair']}",
-                f"Left: {last_candle.left}",
-                f"Right: {last_candle.right}",
-                f"Change: {last_candle.change}",
-                f"Close: {last_candle.close}"
-            )
-            message = f"{'\n'.join(lines)}"
-            if self.notifications.get(metadata['pair']) != message:
-                self.dp.send_msg(message)
-                self.notifications[metadata['pair']] = message
                 
         return dataframe
 
@@ -121,8 +120,8 @@ class Strategy(IStrategy):
         
         try:
             dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-            lc = dataframe.iloc[-2].squeeze()
-            risk = lc.distance / lc.left if side == 'long' else lc.distance / lc.right
+            last_candle = dataframe.iloc[-1].squeeze()
+            risk = last_candle.short_risk if side == 'short' else last_candle.long_risk
             today = datetime.now(timezone.utc).date()
             closed_trades = Trade.get_trades_proxy(close_date=today)
             today_loss = sum(trade.close_profit_abs for trade in closed_trades if trade.close_profit_abs < 0)
@@ -145,17 +144,18 @@ class Strategy(IStrategy):
                            entry_tag: str | None, side: str, **kwargs) -> float:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        return dataframe.left.iat[-1] if side == 'long' else dataframe.right.iat[-1]
+        return dataframe.short_trigger.iat[-1] if side == 'short' else dataframe.long_trigger.iat[-1]
     
 
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
 
         if (trade.nr_of_successful_entries == 1) and (order.ft_order_side == trade.entry_side):
             dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-            last_candle = dataframe.iloc[-2].squeeze()
-            stop = last_candle.right if trade.is_short else last_candle.left
-            risk = abs(1 - trade.open_rate / stop)
+            last_candle = dataframe.iloc[-1].squeeze()
+            risk = last_candle.short_risk if trade.is_short else last_candle.long_risk
             trade.set_custom_data(key='risk', value=risk)
+            stop = last_candle.short_stop if trade.is_short else last_candle.long_stop
+            trade.set_custom_data(key='stop', value=stop)
             trade.set_custom_data(key='OB', value=self.dp.orderbook(pair, maximum=200))
     
 
@@ -166,7 +166,7 @@ class Strategy(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-2].squeeze()
         risk = trade.get_custom_data(key='risk')
-        stop = last_candle.right if trade.is_short else last_candle.left
+        stop = last_candle.short_stop if trade.is_short else last_candle.long_stop
         reward = abs(1 - trade.open_rate / stop)
         if reward > 5 * risk:
             return stoploss_from_absolute(
@@ -184,9 +184,9 @@ class Strategy(IStrategy):
                 leverage=trade.leverage
         )
 
-        return stoploss_from_open(
-                - risk, 
-                current_profit, 
-                is_short=trade.is_short, 
+        return stoploss_from_absolute(
+                trade.get_custom_data(key='stop'),
+                current_rate,
+                is_short=trade.is_short,
                 leverage=trade.leverage
-        )
+            )
