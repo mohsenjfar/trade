@@ -74,13 +74,13 @@ class Strategy(IStrategy):
         dataframe['boundaries'] = pd.cut(dataframe.close, bins=bins)
 
         dataframe['left'] = dataframe.boundaries.apply(lambda x: x.left).astype(float)
-        dataframe['long_stop'] = self.add_fraction(dataframe['left'], add=False)
+        dataframe['long_stop'] = dataframe.left.apply(lambda x: self.add_fraction(x, add=False)) 
         dataframe['long_trigger'] = dataframe['long_stop'] * (1 + abs(self.stoploss)/2)
         dataframe['long_distance'] = dataframe['long_trigger'] - dataframe['long_stop']
         dataframe['long_risk'] = dataframe['long_distance'] / dataframe['long_stop']
         
         dataframe['right'] = dataframe.boundaries.apply(lambda x: x.right).astype(float)
-        dataframe['short_stop'] = self.add_fraction(dataframe['right'])
+        dataframe['short_stop'] = dataframe.right.apply(lambda x: self.add_fraction(x))
         dataframe['short_trigger'] = dataframe['short_stop'] * (1 - abs(self.stoploss)/2)
         dataframe['short_distance'] = dataframe['short_trigger'] - dataframe['short_stop']
         dataframe['short_risk'] = dataframe['short_distance'] / dataframe['short_stop']
