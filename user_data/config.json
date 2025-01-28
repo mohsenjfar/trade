@@ -45,7 +45,7 @@
     {
         "method": "PercentChangePairList",
         "number_assets": 20,
-        "refresh_period": 86400,
+        "lookback_timeframe": "1h",
         "lookback_days": 1
     }
   ],
