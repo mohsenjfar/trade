@@ -1,20 +1,16 @@
 # importing freqtrade modules
 from freqtrade.persistence import Trade
-from freqtrade.strategy import IStrategy, stoploss_from_absolute, stoploss_from_open
+from freqtrade.strategy import IStrategy
 
 # importing calculation modules
-import pandas as pd
 from pandas import DataFrame
-import numpy as np
 from technical import qtpylib
 import talib.abstract as ta
-from scipy.signal import argrelextrema
 
 # importing other modules
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Optional
 import logging
-from collections import defaultdict
 
 logger = logging.getLogger(__name__)
 
@@ -30,9 +26,9 @@ class ManualStrat(IStrategy):
 
     use_exit_signal = True
 
-    use_custom_stoploss = True
+    use_custom_stoploss = False
 
-    startup_candle_count: int = 7
+    startup_candle_count: int = 240
 
     process_only_new_candles = True
 
