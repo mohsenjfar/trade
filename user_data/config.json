@@ -37,20 +37,16 @@
     "key": "",
     "secret": "",
     "pair_whitelist": [
-      "MAJOR/USDT:USDT"
     ],
     "pair_blacklist": [
     ]
   },
   "pairlists": [
     {
-      "method": "StaticPairList"
+        "method": "PercentChangePairList",
+        "number_assets": 20,
+        "lookback_timeframe": "1h"
     }
-    // {
-    //     "method": "PercentChangePairList",
-    //     "number_assets": 20,
-    //     "lookback_timeframe": "1h"
-    // }
   ],
   "telegram": {
     "enabled": true,
