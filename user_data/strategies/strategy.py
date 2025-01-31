@@ -67,19 +67,22 @@ class Strategy(IStrategy):
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        informative = self.dp.get_pair_dataframe(pair=metadata['pair'], 
-                                                 timeframe=self.informative_timeframe)[-6:].reset_index()
-
+        informative = self.dp.get_pair_dataframe(pair=metadata['pair'], timeframe=self.informative_timeframe)
         min_peaks = argrelextrema(informative["low"].values, np.less_equal, order=1)
         max_peaks = argrelextrema(informative["high"].values, np.greater_equal, order=1)
         informative.loc[(informative.index.isin(min_peaks[0])),'extrema'] = informative.low
         informative.loc[(informative.index.isin(max_peaks[0])),'extrema'] = informative.high
-        bins = informative.extrema.dropna().drop_duplicates().sort_values().values
-        dataframe['boundaries'] = pd.cut(dataframe.close, bins=bins)
-        dataframe['left'] = dataframe.boundaries.apply(lambda x: x.left).astype(float)
-        dataframe['long_trigger'] = dataframe['left'] * (1 + abs(self.stoploss)/2)
-        dataframe['right'] = dataframe.boundaries.apply(lambda x: x.right).astype(float)
-        dataframe['short_trigger'] = dataframe['right'] * (1 - abs(self.stoploss)/2)
+        dataframe['boundary'] = informative.extrema.dropna().drop_duplicates().sort_values().values[-1]
+        
+        dataframe['long_stop'] = dataframe.boundary.apply(self.add_fraction, add=False)
+        dataframe['long_trigger'] = dataframe['boundary'] * (1 + abs(self.stoploss)/2)
+        dataframe['long_distance'] = dataframe['long_trigger'] - dataframe['long_stop']
+        dataframe['long_risk'] = dataframe['long_distance'] / dataframe['long_stop']
+        
+        dataframe['short_stop'] = dataframe.boundary.apply(self.add_fraction)
+        dataframe['short_trigger'] = dataframe['boundary'] * (1 - abs(self.stoploss)/2)
+        dataframe['short_distance'] = dataframe['short_stop'] - dataframe['short_trigger']
+        dataframe['short_risk'] = dataframe['short_distance'] / dataframe['short_stop']
 
         return dataframe
 
@@ -116,13 +119,7 @@ class Strategy(IStrategy):
         try:
             dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
             last_candle = dataframe.iloc[-1].squeeze()
-            if side == 'short':
-                trigger = last_candle.short_trigger
-                stop = self.add_fraction(last_candle.right)
-            else:
-                trigger = last_candle.long_trigger
-                stop = self.add_fraction(last_candle.left, add=False)
-            risk = abs(1 - trigger / stop)
+            risk = last_candle.short_risk if side == 'short' else last_candle.long_risk
             today = datetime.now(timezone.utc).date()
             closed_trades = Trade.get_trades_proxy(close_date=today)
             today_loss = sum(trade.close_profit_abs for trade in closed_trades if trade.close_profit_abs < 0)
@@ -153,14 +150,9 @@ class Strategy(IStrategy):
         if (trade.nr_of_successful_entries == 1) and (order.ft_order_side == trade.entry_side):
             dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
             last_candle = dataframe.iloc[-1].squeeze()
-            if trade.is_short:
-                trigger = last_candle.short_trigger
-                stop = self.add_fraction(last_candle.right)
-            else:
-                trigger = last_candle.long_trigger
-                stop = self.add_fraction(last_candle.left, add=False)
-            trade.set_custom_data(key='risk', value=abs(1 - trigger / stop))
-            trade.set_custom_data(key='stop', value=stop)
+            risk = last_candle.short_risk if trade.is_short else last_candle.long_risk
+            trade.set_custom_data(key='risk', value=risk)
+            
             trade.set_custom_data(key='OB', value=self.dp.orderbook(pair, maximum=200))
     
 
@@ -182,21 +174,19 @@ class Strategy(IStrategy):
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
+        stop = last_candle.short_stop if trade.is_short else last_candle.long_stop
+        trigger = last_candle.short_trigger if trade.is_short else last_candle.long_trigger
         risk = trade.get_custom_data(key='risk')
-        if trade.is_short:
-            trigger = last_candle.right
-            stop = self.add_fraction(trigger)
-        else:
-            trigger = last_candle.left
-            stop = self.add_fraction(trigger, add=False)
-        reward = abs(1 - trade.open_rate / stop)
-        if reward > 5 * risk:
-            return stoploss_from_absolute(
-                    stop,
-                    current_rate,
-                    is_short=trade.is_short,
-                    leverage=trade.leverage
-                )
+
+        if current_rate > trigger:
+            reward = abs(1 - trade.open_rate / stop)
+            if reward > 5 * risk:
+                return stoploss_from_absolute(
+                        stop,
+                        current_rate,
+                        is_short=trade.is_short,
+                        leverage=trade.leverage
+                    )
         
         return stoploss_from_open(
             -risk, 
