@@ -1,7 +1,7 @@
 {
-  "max_open_trades": -1,
+  "max_open_trades": 1,
   "stake_currency": "USDT",
-  "stake_amount": 20,
+  "stake_amount": "unlimited",
   "tradable_balance_ratio": 0.99,
   "fiat_display_currency": "USD",
   "dry_run": true,
@@ -37,26 +37,29 @@
     "key": "",
     "secret": "",
     "pair_whitelist": [
+      "MAJOR/USDT:USDT"
     ],
     "pair_blacklist": [
     ]
   },
   "pairlists": [
     {
-        "method": "PercentChangePairList",
-        "number_assets": 20,
-        "lookback_timeframe": "1h",
-        "lookback_days": 1
+      "method": "StaticPairList"
     }
+    // {
+    //     "method": "PercentChangePairList",
+    //     "number_assets": 20,
+    //     "lookback_timeframe": "1h"
+    // }
   ],
   "telegram": {
     "enabled": true,
     "token": "",
     "chat_id": "",
     "keyboard": [
-        ["/status table","/status","/reload_config"],
+        ["/status table","/reload_config"],
         ["/forcelong","/forceshort", "/forceexit"],
-        ["/stop", "/start", "/help", "/logs"]
+        ["/stop", "/start", "/profit", "/logs"]
     ]
   },
   "bot_name": "freqtrade",
