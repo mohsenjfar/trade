@@ -28,6 +28,7 @@ class Strategy(IStrategy):
 
     timeframe = '1m'
     informative_timeframe = '4h'
+    window = 4
 
     use_exit_signal = True
 
@@ -59,7 +60,7 @@ class Strategy(IStrategy):
         return [(pair, self.informative_timeframe) for pair in pairs]
 
 
-    def add_fraction(self, num, add=True, step=1):
+    def shift_fraction(self, num, add=True, step=1):
         decimal_places = len(str(float(num)).split('.')[1])
         fraction = float(f"1e-{decimal_places}") * step
         return num + fraction * (1 if add else -1)
@@ -72,15 +73,20 @@ class Strategy(IStrategy):
         max_peaks = argrelextrema(informative["high"].values, np.greater_equal, order=1)
         informative.loc[(informative.index.isin(min_peaks[0])),'extrema'] = informative.low
         informative.loc[(informative.index.isin(max_peaks[0])),'extrema'] = informative.high
-        dataframe['boundary'] = informative.extrema.dropna().drop_duplicates().sort_values().values[-1]
+        bins = informative.extrema.dropna().drop_duplicates().values[-self.window:]
+        bins = np.sort(np.append(bins, [-np.inf,np.inf]))
         
-        dataframe['long_stop'] = dataframe.boundary.apply(self.add_fraction, add=False)
-        dataframe['long_trigger'] = dataframe['boundary'] * (1 + abs(self.stoploss)/2)
+        dataframe['boundaries'] = pd.cut(dataframe.close, bins=bins, precision=4)
+    
+        dataframe['left'] = dataframe.boundaries.apply(lambda x: x.left).astype(float)
+        dataframe['long_stop'] = dataframe.left.apply(self.shift_fraction, add=False)
+        dataframe['long_trigger'] = dataframe['left'] * (1 + abs(self.stoploss)/2)
         dataframe['long_distance'] = dataframe['long_trigger'] - dataframe['long_stop']
         dataframe['long_risk'] = dataframe['long_distance'] / dataframe['long_stop']
-        
-        dataframe['short_stop'] = dataframe.boundary.apply(self.add_fraction)
-        dataframe['short_trigger'] = dataframe['boundary'] * (1 - abs(self.stoploss)/2)
+
+        dataframe['right'] = dataframe.boundaries.apply(lambda x: x.right).astype(float)
+        dataframe['short_stop'] = dataframe.right.apply(self.shift_fraction)
+        dataframe['short_trigger'] = dataframe['right'] * (1 - abs(self.stoploss)/2)
         dataframe['short_distance'] = dataframe['short_stop'] - dataframe['short_trigger']
         dataframe['short_risk'] = dataframe['short_distance'] / dataframe['short_stop']
 
@@ -102,6 +108,8 @@ class Strategy(IStrategy):
             ),
             'enter_short'
         ] = 1
+
+        dataframe.to_csv('user_data/notebooks/out.csv', index=False)
                 
         return dataframe
 
