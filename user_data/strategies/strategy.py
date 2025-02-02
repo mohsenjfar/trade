@@ -160,6 +160,7 @@ class Strategy(IStrategy):
             last_candle = dataframe.iloc[-1].squeeze()
             risk = last_candle.short_risk if trade.is_short else last_candle.long_risk
             trade.set_custom_data(key='risk', value=risk)
+            self.unlock_pair(pair)
             
             trade.set_custom_data(key='OB', value=self.dp.orderbook(pair, maximum=200))
     
@@ -172,8 +173,19 @@ class Strategy(IStrategy):
                               **kwargs
                               ) -> float | None | tuple[float | None, str | None]:
 
-        if (current_profit > abs(self.stoploss)/2) and (trade.nr_of_successful_exits == 0):
+        risk = trade.get_custom_data(key='risk')
+        if (current_profit > risk) and (trade.nr_of_successful_exits == 0):
             return - trade.stake_amount / 2
+
+
+    def custom_exit_price(self, pair: str, trade: Trade,
+                          current_time: datetime, proposed_rate: float,
+                          current_profit: float, exit_tag: str | None, **kwargs) -> float:
+
+        risk = trade.get_custom_data(key='risk')
+        if (current_profit > risk) and (trade.nr_of_successful_exits == 0):
+            side = -1 if trade.is_short else 1
+            return trade.open_rate * (1 + side * risk)
 
 
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
@@ -202,3 +214,10 @@ class Strategy(IStrategy):
             is_short=trade.is_short, 
             leverage=trade.leverage
         )
+
+
+    def bot_loop_start(self, **kwargs) -> None:
+        pairs = self.dp.current_whitelist()
+        for pair in pairs:
+            if self.is_pair_locked(pair):
+                self.unlock_pair(pair)
