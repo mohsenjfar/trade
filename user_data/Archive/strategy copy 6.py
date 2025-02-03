@@ -27,6 +27,8 @@ class Strategy(IStrategy):
     stoploss = -0.01
 
     timeframe = '1m'
+    informative_timeframe = '4h'
+    window = 4
 
     use_exit_signal = True
 
@@ -51,32 +53,40 @@ class Strategy(IStrategy):
         'entry': 'GTC',
         'exit': 'GTC'
     }
+    
+
+    def informative_pairs(self):
+        pairs = self.dp.current_whitelist()
+        return [(pair, self.informative_timeframe) for pair in pairs]
 
 
-    def bins_increment(self, Min, Max, precision):
-        bins = [Min]
-        while True:
-            Min = round(Min * 1.01, precision)
-            bins.append(Min)
-            if Min > Max:
-                break
-        return bins
+    def shift_fraction(self, num, add=True, step=1):
+        decimal_places = len(str(float(num)).split('.')[1])
+        fraction = float(f"1e-{decimal_places}") * step
+        return num + fraction * (1 if add else -1)
 
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        min_peak, max_peak = dataframe["low"].min(), dataframe["high"].max()
-        bins = self.bins_increment(min_peak, max_peak, 4)
+        informative = self.dp.get_pair_dataframe(pair=metadata['pair'], timeframe=self.informative_timeframe)
+        min_peaks = argrelextrema(informative["low"].values, np.less_equal, order=1)
+        max_peaks = argrelextrema(informative["high"].values, np.greater_equal, order=1)
+        informative.loc[(informative.index.isin(min_peaks[0])),'extrema'] = informative.low
+        informative.loc[(informative.index.isin(max_peaks[0])),'extrema'] = informative.high
+        bins = informative.extrema.dropna().drop_duplicates().values[-self.window:]
+        bins = np.sort(np.append(bins, [-np.inf,np.inf]))
         
         dataframe['boundaries'] = pd.cut(dataframe.close, bins=bins, precision=4)
     
-        dataframe['long_stop'] = dataframe.boundaries.apply(lambda x: x.left).astype(float)
-        dataframe['long_trigger'] = dataframe['long_stop'] * (1 + abs(self.stoploss)/2)
+        dataframe['left'] = dataframe.boundaries.apply(lambda x: x.left).astype(float)
+        dataframe['long_stop'] = dataframe.left.apply(self.shift_fraction, add=False)
+        dataframe['long_trigger'] = dataframe['left'] * (1 + abs(self.stoploss)/2)
         dataframe['long_distance'] = dataframe['long_trigger'] - dataframe['long_stop']
         dataframe['long_risk'] = dataframe['long_distance'] / dataframe['long_stop']
 
-        dataframe['short_stop'] = dataframe.boundaries.apply(lambda x: x.right).astype(float)
-        dataframe['short_trigger'] = dataframe['short_stop'] * (1 - abs(self.stoploss)/2)
+        dataframe['right'] = dataframe.boundaries.apply(lambda x: x.right).astype(float)
+        dataframe['short_stop'] = dataframe.right.apply(self.shift_fraction)
+        dataframe['short_trigger'] = dataframe['right'] * (1 - abs(self.stoploss)/2)
         dataframe['short_distance'] = dataframe['short_stop'] - dataframe['short_trigger']
         dataframe['short_risk'] = dataframe['short_distance'] / dataframe['short_stop']
 
@@ -178,40 +188,32 @@ class Strategy(IStrategy):
             return trade.open_rate * (1 + side * risk)
 
 
-    def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
-                        current_rate: float, current_profit: float,
-                        **kwargs):
+    def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
+                        current_rate: float, current_profit: float, after_fill: bool, 
+                        **kwargs) -> Optional[float]:
+
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        last_candle = dataframe.iloc[-1].squeeze()
+        stop = last_candle.short_stop if trade.is_short else last_candle.long_stop
+        trigger = last_candle.short_trigger if trade.is_short else last_candle.long_trigger
         risk = trade.get_custom_data(key='risk')
-        if current_profit > 4 * risk :
-            return "Target Hit!"
+
+        if current_rate > trigger:
+            reward = abs(1 - trade.open_rate / stop)
+            if reward > 5 * risk:
+                return stoploss_from_absolute(
+                        stop,
+                        current_rate,
+                        is_short=trade.is_short,
+                        leverage=trade.leverage
+                    )
         
-
-    # def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
-    #                     current_rate: float, current_profit: float, after_fill: bool, 
-    #                     **kwargs) -> Optional[float]:
-
-    #     dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-    #     last_candle = dataframe.iloc[-1].squeeze()
-    #     stop = last_candle.short_stop if trade.is_short else last_candle.long_stop
-    #     trigger = last_candle.short_trigger if trade.is_short else last_candle.long_trigger
-    #     risk = trade.get_custom_data(key='risk')
-
-    #     if current_rate > trigger:
-    #         reward = abs(1 - trade.open_rate / stop)
-    #         if reward > 5 * risk:
-    #             return stoploss_from_absolute(
-    #                     stop,
-    #                     current_rate,
-    #                     is_short=trade.is_short,
-    #                     leverage=trade.leverage
-    #                 )
-        
-    #     return stoploss_from_open(
-    #         -risk, 
-    #         current_profit, 
-    #         is_short=trade.is_short, 
-    #         leverage=trade.leverage
-    #     )
+        return stoploss_from_open(
+            -risk, 
+            current_profit, 
+            is_short=trade.is_short, 
+            leverage=trade.leverage
+        )
 
 
     def bot_loop_start(self, **kwargs) -> None:
