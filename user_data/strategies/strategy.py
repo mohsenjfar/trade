@@ -29,6 +29,7 @@ class Strategy(IStrategy):
     timeframe = '1m'
     informative_timeframes = ['15m','4h']
     window = 4
+    order = 6
 
     use_exit_signal = True
 
@@ -73,8 +74,8 @@ class Strategy(IStrategy):
         dataframe = merge_informative_pair(dataframe, informative_15m, self.timeframe, '15m', ffill=True)
 
         informative_4h = self.dp.get_pair_dataframe(pair=metadata['pair'], timeframe='4h')
-        min_peaks = argrelextrema(informative_4h["low"].values, np.less_equal, order=1)
-        max_peaks = argrelextrema(informative_4h["high"].values, np.greater_equal, order=1)
+        min_peaks = argrelextrema(informative_4h["low"].values, np.less_equal, order=self.order)
+        max_peaks = argrelextrema(informative_4h["high"].values, np.greater_equal, order=self.order)
         informative_4h.loc[(informative_4h.index.isin(min_peaks[0])),'extrema'] = informative_4h.low
         informative_4h.loc[(informative_4h.index.isin(max_peaks[0])),'extrema'] = informative_4h.high
         bins = informative_4h.extrema.dropna().drop_duplicates().values[-self.window:]
@@ -97,6 +98,8 @@ class Strategy(IStrategy):
 
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+
+        ob = self.dp.orderbook(metadata['pair'], maximum=200)
 
         dataframe.loc[
             (
@@ -202,7 +205,7 @@ class Strategy(IStrategy):
 
         if current_rate > trigger:
             reward = abs(1 - trade.open_rate / stop)
-            if reward > 5 * risk:
+            if reward > 3 * risk:
                 return stoploss_from_absolute(
                         stop,
                         current_rate,
