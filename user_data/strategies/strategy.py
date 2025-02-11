@@ -28,7 +28,6 @@ class Strategy(IStrategy):
 
     timeframe = '1m'
     informative_timeframes = ['15m','4h']
-    window = 4
     order = 6
 
     use_exit_signal = True
@@ -59,12 +58,6 @@ class Strategy(IStrategy):
     def informative_pairs(self):
         pairs = self.dp.current_whitelist()
         return [(pair, informative) for pair in pairs for informative in self.informative_timeframes]
-
-
-    def shift_fraction(self, num, add=True, step=1):
-        decimal_places = len(str(float(num)).split('.')[1])
-        fraction = float(f"1e-{decimal_places}") * step
-        return num + fraction * (1 if add else -1)
     
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
@@ -78,19 +71,17 @@ class Strategy(IStrategy):
         max_peaks = argrelextrema(informative_4h["high"].values, np.greater_equal, order=self.order)
         informative_4h.loc[(informative_4h.index.isin(min_peaks[0])),'extrema'] = informative_4h.low
         informative_4h.loc[(informative_4h.index.isin(max_peaks[0])),'extrema'] = informative_4h.high
-        bins = informative_4h.extrema.dropna().drop_duplicates().values[-self.window:]
+        bins = informative_4h.extrema.dropna().drop_duplicates().values[-2:]
         bins = np.sort(np.append(bins, [-np.inf,np.inf]))
         dataframe['boundaries'] = pd.cut(dataframe.close, bins=bins, precision=4)
     
-        dataframe['left'] = dataframe.boundaries.apply(lambda x: x.left).astype(float)
-        dataframe['long_stop'] = dataframe.left.apply(self.shift_fraction, add=False)
-        dataframe['long_trigger'] = dataframe['left'] + dataframe['atr_15m']
+        dataframe['long_stop'] = dataframe.boundaries.apply(lambda x: x.left).astype(float)
+        dataframe['long_trigger'] = dataframe['long_stop'] + dataframe['atr_15m']
         dataframe['long_distance'] = dataframe['long_trigger'] - dataframe['long_stop']
         dataframe['long_risk'] = dataframe['long_distance'] / dataframe['long_stop']
 
-        dataframe['right'] = dataframe.boundaries.apply(lambda x: x.right).astype(float)
-        dataframe['short_stop'] = dataframe.right.apply(self.shift_fraction)
-        dataframe['short_trigger'] = dataframe['right'] - dataframe['atr_15m']
+        dataframe['short_stop'] = dataframe.boundaries.apply(lambda x: x.right).astype(float)
+        dataframe['short_trigger'] = dataframe['short_stop'] - dataframe['atr_15m']
         dataframe['short_distance'] = dataframe['short_stop'] - dataframe['short_trigger']
         dataframe['short_risk'] = dataframe['short_distance'] / dataframe['short_stop']
 
@@ -98,8 +89,6 @@ class Strategy(IStrategy):
 
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-
-        ob = self.dp.orderbook(metadata['pair'], maximum=200)
 
         dataframe.loc[
             (
@@ -145,7 +134,7 @@ class Strategy(IStrategy):
                 logger.info(f"Max day loss ({today_loss_ratio * 100:.2f}%), stop entering {side} position for {pair}")
                 return None
             
-            return min((proposed_stake * abs(self.stoploss)) / (risk * leverage), proposed_stake)
+            return min((proposed_stake * abs(self.stoploss) / 2) / (risk * leverage), proposed_stake)
         
         except Exception as e:
             logger.warning(e)
@@ -219,10 +208,3 @@ class Strategy(IStrategy):
             is_short=trade.is_short, 
             leverage=trade.leverage
         )
-
-
-    def bot_loop_start(self, **kwargs) -> None:
-        pairs = self.dp.current_whitelist()
-        for pair in pairs:
-            if self.is_pair_locked(pair):
-                self.unlock_pair(pair)
