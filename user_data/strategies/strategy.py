@@ -28,7 +28,7 @@ class Strategy(IStrategy):
 
     timeframe = '1m'
     informative_timeframes = ['15m','4h']
-    order = 6
+    order = 16
 
     use_exit_signal = True
 
@@ -62,26 +62,25 @@ class Strategy(IStrategy):
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        informative_15m = self.dp.get_pair_dataframe(pair=metadata['pair'], timeframe='15m')
-        informative_15m['atr'] = ta.ATR(informative_15m, timeperiod=3)
-        dataframe = merge_informative_pair(dataframe, informative_15m, self.timeframe, '15m', ffill=True)
-
-        informative_4h = self.dp.get_pair_dataframe(pair=metadata['pair'], timeframe='4h')
-        min_peaks = argrelextrema(informative_4h["low"].values, np.less_equal, order=self.order)
-        max_peaks = argrelextrema(informative_4h["high"].values, np.greater_equal, order=self.order)
-        informative_4h.loc[(informative_4h.index.isin(min_peaks[0])),'extrema'] = informative_4h.low
-        informative_4h.loc[(informative_4h.index.isin(max_peaks[0])),'extrema'] = informative_4h.high
-        bins = informative_4h.extrema.dropna().drop_duplicates().values[-2:]
+        informative = self.dp.get_pair_dataframe(pair=metadata['pair'], timeframe='15m')
+        min_peaks = argrelextrema(informative["low"].values, np.less_equal, order=self.order)
+        max_peaks = argrelextrema(informative["high"].values, np.greater_equal, order=self.order)
+        informative.loc[(informative.index.isin(min_peaks[0])),'extrema'] = informative.low
+        informative.loc[(informative.index.isin(max_peaks[0])),'extrema'] = informative.high
+        bins = informative.extrema.dropna().drop_duplicates().values[-3:-1]
         bins = np.sort(np.append(bins, [-np.inf,np.inf]))
+        informative['atr'] = ta.ATR(informative, timeperiod=3)
+        dataframe = merge_informative_pair(dataframe, informative, self.timeframe, '15m', ffill=True)
+        
         dataframe['boundaries'] = pd.cut(dataframe.close, bins=bins, precision=4)
     
         dataframe['long_stop'] = dataframe.boundaries.apply(lambda x: x.left).astype(float)
-        dataframe['long_trigger'] = dataframe['long_stop'] + dataframe['atr_15m']
+        dataframe['long_trigger'] = dataframe['long_stop'] + (dataframe['atr_15m'] * 2)
         dataframe['long_distance'] = dataframe['long_trigger'] - dataframe['long_stop']
         dataframe['long_risk'] = dataframe['long_distance'] / dataframe['long_stop']
 
         dataframe['short_stop'] = dataframe.boundaries.apply(lambda x: x.right).astype(float)
-        dataframe['short_trigger'] = dataframe['short_stop'] - dataframe['atr_15m']
+        dataframe['short_trigger'] = dataframe['short_stop'] - (dataframe['atr_15m'] * 2)
         dataframe['short_distance'] = dataframe['short_stop'] - dataframe['short_trigger']
         dataframe['short_risk'] = dataframe['short_distance'] / dataframe['short_stop']
 
