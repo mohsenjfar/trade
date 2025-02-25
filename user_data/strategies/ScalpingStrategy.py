@@ -12,7 +12,8 @@ class ScalpingStrategy(IStrategy):
     }
     use_custom_stoploss = False
     startup_candle_count: int = 30
-
+    can_short: bool = True
+    
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         dataframe['ema_short'] = ta.EMA(dataframe, timeperiod=10)
         dataframe['ema_long'] = ta.EMA(dataframe, timeperiod=30)
@@ -37,16 +38,5 @@ class ScalpingStrategy(IStrategy):
         return dataframe
 
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        dataframe.loc[
-            (
-                (dataframe['rsi'] > 70)  # خروج از پوزیشن خرید زمانی که RSI بالای 70 است
-            ),
-            'exit_long'] = 1
-
-        dataframe.loc[
-            (
-                (dataframe['rsi'] < 30)  # خروج از پوزیشن فروش زمانی که RSI زیر 30 است
-            ),
-            'exit_short'] = 1
 
         return dataframe
