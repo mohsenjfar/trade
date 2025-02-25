@@ -18,7 +18,7 @@ from collections import defaultdict
 
 logger = logging.getLogger(__name__)
 
-class Strategy(IStrategy):
+class Strategy_(IStrategy):
 
     INTERFACE_VERSION = 3
 
@@ -138,13 +138,6 @@ class Strategy(IStrategy):
         except Exception as e:
             logger.warning(e)
             return None
-
-
-    def custom_entry_price(self, pair: str, trade: Trade | None, current_time: datetime, proposed_rate: float,
-                           entry_tag: str | None, side: str, **kwargs) -> float:
-
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        return dataframe.short_trigger.iat[-1] if side == 'short' else dataframe.long_trigger.iat[-1]
     
 
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
