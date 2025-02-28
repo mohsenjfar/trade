@@ -19,14 +19,14 @@ services:
   freqtrade:
       image: freqtradeorg/freqtrade:stable
       restart: unless-stopped
-      container_name: ScalpingStrategy
+      container_name: ScalpingStrategyATR
       ports:
         - "127.0.0.1:8080:8080"
       volumes:
         - "./user_data:/freqtrade/user_data"
       command: >
         trade
-        --logfile /freqtrade/user_data/logs/ScalpingStrategy.log
-        --db-url sqlite:////freqtrade/user_data/db_ScalpingStrategy.sqlite
+        --logfile /freqtrade/user_data/logs/ScalpingStrategyATR.log
+        --db-url sqlite:////freqtrade/user_data/db_ScalpingStrategyATR.sqlite
         --config /freqtrade/user_data/config_ScalpingStrategy.json
-        --strategy ScalpingStrategy
+        --strategy ScalpingStrategyATR

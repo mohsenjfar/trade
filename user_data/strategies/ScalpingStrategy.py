@@ -4,11 +4,10 @@ from freqtrade.strategy.interface import IStrategy
 import talib.abstract as ta
 
 class ScalpingStrategy(IStrategy):
-    timeframe = '1m'  # تایم‌فریم 1 دقیقه‌ای برای اسکالپینگ
-    stoploss = -0.01  # حد ضرر 1%
-    take_profit = 0.02  # حد سود 2%
+    timeframe = '1m'
+    stoploss = -0.01
     minimal_roi = {
-        "0": 0.02
+        "0": 0.03
     }
     use_custom_stoploss = False
     startup_candle_count: int = 30
@@ -23,15 +22,15 @@ class ScalpingStrategy(IStrategy):
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         dataframe.loc[
             (
-                (dataframe['ema_short'] > dataframe['ema_long']) &  # سیگنال خرید زمانی که EMA کوتاه‌تر بالای EMA بلندتر باشد
-                (dataframe['rsi'] < 70)  # RSI کمتر از 70 برای جلوگیری از خرید در حالت اشباع خرید
+                qtpylib.crossed_above(dataframe['ema_short'], dataframe['ema_long']) &
+                (dataframe['rsi'] < 70)
             ),
             'enter_long'] = 1
         
         dataframe.loc[
             (
-                (dataframe['ema_short'] < dataframe['ema_long']) &  # سیگنال فروش زمانی که EMA کوتاه‌تر پایین EMA بلندتر باشد
-                (dataframe['rsi'] > 30)  # RSI بیشتر از 30 برای جلوگیری از فروش در حالت اشباع فروش
+                qtpylib.crossed_below(dataframe['ema_short'], dataframe['ema_long']) &
+                (dataframe['rsi'] > 30)
             ),
             'enter_short'] = 1
 
