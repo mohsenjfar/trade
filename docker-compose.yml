@@ -1,7 +1,7 @@
 ---
 version: '3'
 services:
-  # freqtrade:
+  # freqtrade1:
   #     image: freqtradeorg/freqtrade:develop_freqai
   #     restart: unless-stopped
   #     container_name: FreqaiHybridStrategy
@@ -19,14 +19,14 @@ services:
   freqtrade:
       image: freqtradeorg/freqtrade:stable
       restart: unless-stopped
-      container_name: ScalpingStrategyATR
+      container_name: ScalpingStrategy
       ports:
         - "127.0.0.1:8080:8080"
       volumes:
         - "./user_data:/freqtrade/user_data"
       command: >
         trade
-        --logfile /freqtrade/user_data/logs/ScalpingStrategyATR.log
-        --db-url sqlite:////freqtrade/user_data/db_ScalpingStrategyATR.sqlite
-        --config /freqtrade/user_data/config_ScalpingStrategy.json
-        --strategy ScalpingStrategyATR
+        --logfile /freqtrade/user_data/logs/Terminal.log
+        --db-url sqlite:////freqtrade/user_data/db.sqlite
+        --config /freqtrade/user_data/config.json
+        --strategy ScalpingStrategy
