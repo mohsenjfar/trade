@@ -2,7 +2,8 @@
   "strategy_name": "ScalpingStrategy",
   "params": {
     "roi": {
-      "0": 0.04
+      "0": 0.04,
+      "1440": 0
     },
     "stoploss": {
       "stoploss": -0.02
@@ -20,7 +21,7 @@
     "sell": {},
     "protection": {},
     "trailing": {
-      "trailing_stop": true,
+      "trailing_stop": false,
       "trailing_stop_positive": 0.282,
       "trailing_stop_positive_offset": 0.369,
       "trailing_only_offset_is_reached": true
