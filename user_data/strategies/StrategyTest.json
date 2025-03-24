@@ -1,0 +1,34 @@
+{
+  "strategy_name": "StrategyTest",
+  "params": {
+    "stoploss": {
+      "stoploss": -0.02
+    },
+    "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": 0.01,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+    },
+    "max_open_trades": {
+      "max_open_trades": 1
+    },
+    "buy": {
+      "ema_long_timeperiod": 40,
+      "ema_short_timeperiod": 11,
+      "rsi_overbought": 63,
+      "rsi_oversold": 22,
+      "rsi_timeperiod": 15
+    },
+    "sell": {},
+    "protection": {},
+    "roi": {
+      "0": 0.394,
+      "105": 0.161,
+      "198": 0.061,
+      "525": 0
+    }
+  },
+  "ft_stratparam_v": 1,
+  "export_time": "2025-03-23 13:48:16.998085+00:00"
+}
