@@ -9,25 +9,25 @@
     "stoploss": {
       "stoploss": -0.02
     },
+    "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": 0.01,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+    },
     "max_open_trades": {
       "max_open_trades": 1
     },
     "buy": {
-      "ema_long_timeperiod": 25,
-      "ema_short_timeperiod": 5,
-      "rsi_overbought": 69,
-      "rsi_oversold": 32,
-      "rsi_timeperiod": 10
+      "ema_long_timeperiod": 38,
+      "ema_short_timeperiod": 6,
+      "rsi_overbought": 67,
+      "rsi_oversold": 22,
+      "rsi_timeperiod": 11
     },
     "sell": {},
-    "protection": {},
-    "trailing": {
-      "trailing_stop": false,
-      "trailing_stop_positive": 0.282,
-      "trailing_stop_positive_offset": 0.369,
-      "trailing_only_offset_is_reached": true
-    }
+    "protection": {}
   },
   "ft_stratparam_v": 1,
-  "export_time": "2025-03-10 11:48:26.423216+00:00"
+  "export_time": "2025-04-02 13:37:16.796441+00:00"
 }

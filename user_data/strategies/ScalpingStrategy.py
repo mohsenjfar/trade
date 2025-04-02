@@ -6,18 +6,16 @@ from freqtrade.strategy import (
     IntParameter
 )
 import talib.abstract as ta
+from freqtrade.persistence import Trade
+from datetime import datetime
+from typing import Optional
 
 class ScalpingStrategy(IStrategy):
 
     startup_candle_count: int = 30
     can_short: bool = True
-    minimal_roi = {
-        "0": 0.04
-    }
     stoploss = -0.02
     timeframe = '15m'
-    trailing_stop = False
-    trailing_stop_positive = 0.01
 
     ema_short_timeperiod = IntParameter(5, 15, default=10, space='buy')
     ema_long_timeperiod = IntParameter(20, 40, default=30, space='buy')

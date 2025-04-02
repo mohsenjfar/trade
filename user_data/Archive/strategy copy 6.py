@@ -1,6 +1,6 @@
 # importing freqtrade modules
 from freqtrade.persistence import Trade
-from freqtrade.strategy import IStrategy, stoploss_from_absolute, stoploss_from_open
+from freqtrade.strategy import IStrategy, stoploss_from_absolute, stoploss_from_open, 
 
 # importing calculation modules
 import pandas as pd
