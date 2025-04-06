@@ -8,6 +8,9 @@ import talib.abstract as ta
 from freqtrade.persistence import Trade
 from datetime import datetime
 from typing import Optional
+import logging
+
+logger = logging.getLogger(__name__)
 
 class ScalpingStrategyV2(IStrategy):
 
@@ -39,8 +42,8 @@ class ScalpingStrategyV2(IStrategy):
         dataframe['short_risk'] = self.calculate_risk(dataframe.close, dataframe.max_15m)
         dataframe['long_risk'] = self.calculate_risk(dataframe.close, dataframe.min_15m)
 
-        if (dataframe.max_15m > 70) or (dataframe.min_15m < 30):
-            self.dp.send_msg(f"{metadata['pair']} just got hot!")
+        if (dataframe.iloc[-1].rsi_15m > 70) or (dataframe.iloc[-1].rsi_15m < 30):
+            logger.info(f"{metadata['pair']} just got hot!")
 
         return dataframe
 
