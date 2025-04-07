@@ -39,8 +39,11 @@ class ScalpingStrategyV2(IStrategy):
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe['rsi'] = ta.RSI(dataframe, 14)
-        dataframe['short_risk'] = self.calculate_risk(dataframe.close, dataframe.max_15m)
-        dataframe['long_risk'] = self.calculate_risk(dataframe.close, dataframe.min_15m)
+        dataframe['atr'] = ta.ATR(dataframe, timeperiod=14)
+        dataframe['short_distance'] = dataframe['close'] + dataframe['atr']
+        dataframe['long_distance'] = dataframe['close'] - dataframe['atr']
+        dataframe['short_risk'] = self.calculate_risk(dataframe.close, dataframe.short_distance)
+        dataframe['long_risk'] = self.calculate_risk(dataframe.close, dataframe.long_distance)
 
         if (dataframe.iloc[-1].rsi_15m > 70) or (dataframe.iloc[-1].rsi_15m < 30):
             logger.info(f"{metadata['pair']} just got hot!")
