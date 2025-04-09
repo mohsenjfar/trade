@@ -20,6 +20,7 @@ class ScalpingStrategyV2(IStrategy):
     can_short: bool = True
     stoploss = -0.01
     timeframe = '1m'
+    long_timeframe = "15m"
     use_exit_signal = False
     use_custom_stoploss = True
 
@@ -29,7 +30,7 @@ class ScalpingStrategyV2(IStrategy):
     rsi_1m_enter_long = IntParameter(60, 90, default=70, space='buy')
 
 
-    @informative('15m')
+    @informative(long_timeframe)
     def populate_indicators_inf1(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         
         dataframe['rsi'] = ta.RSI(dataframe, 14)
@@ -59,7 +60,7 @@ class ScalpingStrategyV2(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe[f'rsi_15m'] < self.rsi_15m_enter_long.value) &
+                (dataframe[f'rsi_{self.long_timeframe}'] < self.rsi_15m_enter_long.value) &
                 (dataframe[f'rsi'] > self.rsi_1m_enter_short.value)
             ),
             'enter_long'
@@ -67,7 +68,7 @@ class ScalpingStrategyV2(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe[f'rsi_15m'] > self.rsi_15m_enter_short.value) &
+                (dataframe[f'rsi_{self.long_timeframe}'] > self.rsi_15m_enter_short.value) &
                 (dataframe[f'rsi'] < self.rsi_1m_enter_short.value)
             ),
             'enter_short'
@@ -115,7 +116,7 @@ class ScalpingStrategyV2(IStrategy):
         candle = dataframe.iloc[-1].squeeze()
         
         absolute_value = candle.short_distance if trade.is_short else candle.long_distance
-        if (candle['rsi_15m'] < 30) or (candle['rsi_15m'] > 70):
+        if (candle[f'rsi_{self.long_timeframe}'] < 30) or (candle[f'rsi_{self.long_timeframe}'] > 70):
             return stoploss_from_absolute(
                 absolute_value,
                 current_rate, 
