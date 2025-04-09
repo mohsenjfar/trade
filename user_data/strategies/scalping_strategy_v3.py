@@ -3,8 +3,7 @@ from freqtrade.strategy import (
     IStrategy,
     informative,
     stoploss_from_open,
-    IntParameter,
-    stoploss_from_absolute
+    IntParameter
 )
 import talib.abstract as ta
 from freqtrade.persistence import Trade
@@ -14,24 +13,27 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-class ScalpingStrategyV2(IStrategy):
+class ScalpingStrategyV3(IStrategy):
 
     startup_candle_count: int = 30
     can_short: bool = True
-    stoploss = -0.01
-    timeframe = '1m'
-    use_exit_signal = False
+    stoploss = -0.1
+    timeframe = '15m'
+    long_timeframe = "4h"
+    use_exit_signal = True
     use_custom_stoploss = True
 
     rsi_15m_enter_long = IntParameter(10, 40, default=30, space='buy')
     rsi_15m_enter_short = IntParameter(60, 90, default=70, space='buy')
     rsi_1m_enter_short = IntParameter(10, 40, default=30, space='buy')
     rsi_1m_enter_long = IntParameter(60, 90, default=70, space='buy')
+    rsi_15m_exit_short = IntParameter(10, 40, default=30, space='sell')
+    rsi_15m_exit_long = IntParameter(60, 90, default=70, space='sell')
 
 
-    @informative('15m')
+    @informative(long_timeframe)
     def populate_indicators_inf1(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        
+
         dataframe['rsi'] = ta.RSI(dataframe, 14)
         dataframe['max'] = dataframe['high'].rolling(14).max()
         dataframe['min'] = dataframe['low'].rolling(14).min()
@@ -40,7 +42,7 @@ class ScalpingStrategyV2(IStrategy):
 
     def calculate_risk(self, p1, p2):
         return abs(1 - (p1 / p2))
-    
+
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
@@ -59,7 +61,7 @@ class ScalpingStrategyV2(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe[f'rsi_15m'] < self.rsi_15m_enter_long.value) &
+                (dataframe[f'rsi_{self.long_timeframe}'] < self.rsi_15m_enter_long.value) &
                 (dataframe[f'rsi'] > self.rsi_1m_enter_short.value)
             ),
             'enter_long'
@@ -67,7 +69,7 @@ class ScalpingStrategyV2(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe[f'rsi_15m'] > self.rsi_15m_enter_short.value) &
+                (dataframe[f'rsi_{self.long_timeframe}'] > self.rsi_15m_enter_short.value) &
                 (dataframe[f'rsi'] < self.rsi_1m_enter_short.value)
             ),
             'enter_short'
@@ -78,19 +80,33 @@ class ScalpingStrategyV2(IStrategy):
 
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
+        dataframe.loc[
+            (
+                (dataframe[f'rsi_{self.long_timeframe}'] > self.rsi_15m_exit_long.value)
+            ),
+            'exit_long'
+        ] = 1
+
+        dataframe.loc[
+            (
+                (dataframe[f'rsi_{self.long_timeframe}'] < self.rsi_15m_exit_short.value)
+            ),
+            'exit_short'
+        ] = 1
+
         return dataframe
 
 
-    def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
-                            proposed_stake: float, min_stake: Optional[float], max_stake: float,
-                            leverage: float, entry_tag: Optional[str], side: str,
-                            **kwargs) -> float:
+    def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
+                            time_in_force: str, current_time: datetime, entry_tag: Optional[str],
+                            side: str, **kwargs) -> bool:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         candle = dataframe.iloc[-1].squeeze()
         risk = candle.short_risk if side == "short" else candle.long_risk
+        self.dp.send_msg(f"Risk: {risk:.2f}")
 
-        return max(max_stake - max_stake * risk / (abs(self.stoploss) / 2), min_stake)
+        return True
 
 
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
@@ -105,29 +121,16 @@ class ScalpingStrategyV2(IStrategy):
 
 
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
-                        current_rate: float, current_profit: float, after_fill: bool, 
+                        current_rate: float, current_profit: float, after_fill: bool,
                         **kwargs) -> Optional[float]:
-
-        if current_profit > 0.2:
-            return -0.05
-
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        candle = dataframe.iloc[-1].squeeze()
-        
-        absolute_value = candle.short_distance if trade.is_short else candle.long_distance
-        if (candle['rsi_15m'] < 30) or (candle['rsi_15m'] > 70):
-            return stoploss_from_absolute(
-                absolute_value,
-                current_rate, 
-                is_short=trade.is_short, 
-                leverage=trade.leverage
-            )
 
         risk = trade.get_custom_data(key='risk')
 
+        stop = - risk
+
         return stoploss_from_open(
-            0 if current_profit > 2 * risk else - risk,
-            current_profit, 
-            is_short=trade.is_short, 
+            stop,
+            current_profit,
+            is_short=trade.is_short,
             leverage=trade.leverage
         )
