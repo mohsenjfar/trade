@@ -1,10 +1,10 @@
 from pandas import DataFrame
+import freqtrade.vendor.qtpylib.indicators as qtpylib
 from freqtrade.strategy import (
     IStrategy,
     informative,
     stoploss_from_open,
-    IntParameter,
-    stoploss_from_absolute
+    IntParameter
 )
 import talib.abstract as ta
 from freqtrade.persistence import Trade
@@ -21,13 +21,14 @@ class ScalpingStrategyV2(IStrategy):
     stoploss = -0.01
     timeframe = '1m'
     long_timeframe = "15m"
-    use_exit_signal = False
+    use_exit_signal = True
     use_custom_stoploss = True
 
-    rsi_15m_enter_long = IntParameter(10, 40, default=30, space='buy')
-    rsi_15m_enter_short = IntParameter(60, 90, default=70, space='buy')
-    rsi_1m_enter_short = IntParameter(10, 40, default=30, space='buy')
-    rsi_1m_enter_long = IntParameter(60, 90, default=70, space='buy')
+    rsi_15m_enter_long = IntParameter(60, 90, default=70, space='buy')
+    rsi_15m_enter_short = IntParameter(10, 40, default=30, space='buy')
+    rsi_1m_enter_long = IntParameter(10, 40, default=30, space='buy')
+    rsi_1m_enter_short = IntParameter(60, 90, default=70, space='buy')
+    atr_multiplexer = IntParameter(1, 10, default=4, space='buy')
 
 
     @informative(long_timeframe)
@@ -47,8 +48,8 @@ class ScalpingStrategyV2(IStrategy):
 
         dataframe['rsi'] = ta.RSI(dataframe, 14)
         dataframe['atr'] = ta.ATR(dataframe, timeperiod=14)
-        dataframe['short_distance'] = dataframe['close'] + dataframe['atr']
-        dataframe['long_distance'] = dataframe['close'] - dataframe['atr']
+        dataframe['short_distance'] = dataframe['close'] + (dataframe['atr'] * self.atr_multiplexer.value)
+        dataframe['long_distance'] = dataframe['close'] - (dataframe['atr'] * self.atr_multiplexer.value)
         dataframe['short_risk'] = self.calculate_risk(dataframe.close, dataframe.short_distance)
         dataframe['long_risk'] = self.calculate_risk(dataframe.close, dataframe.long_distance)
 
@@ -60,16 +61,16 @@ class ScalpingStrategyV2(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe[f'rsi_{self.long_timeframe}'] < self.rsi_15m_enter_long.value) &
-                (dataframe[f'rsi'] > self.rsi_1m_enter_short.value)
+                (dataframe[f'rsi_{self.long_timeframe}'] > self.rsi_15m_enter_long.value) &
+                (qtpylib.crossed_above(dataframe[f'rsi'], self.rsi_1m_enter_long.value))
             ),
             'enter_long'
         ] = 1
 
         dataframe.loc[
             (
-                (dataframe[f'rsi_{self.long_timeframe}'] > self.rsi_15m_enter_short.value) &
-                (dataframe[f'rsi'] < self.rsi_1m_enter_short.value)
+                (dataframe[f'rsi_{self.long_timeframe}'] < self.rsi_15m_enter_short.value) &
+                (qtpylib.crossed_below(dataframe[f'rsi'], self.rsi_1m_enter_short.value))
             ),
             'enter_short'
         ] = 1
@@ -91,7 +92,9 @@ class ScalpingStrategyV2(IStrategy):
         candle = dataframe.iloc[-1].squeeze()
         risk = candle.short_risk if side == "short" else candle.long_risk
 
-        return max(max_stake - max_stake * risk / (abs(self.stoploss) / 2), min_stake)
+        if risk > 0.01: return None
+
+        return max(max_stake - max_stake * risk / abs(self.stoploss * 2), min_stake)
 
 
     def order_filled(self, pair: str, trade: Trade, order, current_time: datetime, **kwargs) -> None:
@@ -104,30 +107,21 @@ class ScalpingStrategyV2(IStrategy):
 
         return None
 
+    
+    def custom_exit(self, pair: str, trade: 'Trade', current_time: 'datetime', current_rate: float,
+                    current_profit: float, **kwargs):
+        
+        risk = trade.get_custom_data(key='risk')
+        if current_profit > 2 * risk:
+            return "Target Hit!"
+
 
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
-        if current_profit > 0.2:
-            return -0.05
-
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        candle = dataframe.iloc[-1].squeeze()
-        
-        absolute_value = candle.short_distance if trade.is_short else candle.long_distance
-        if (candle[f'rsi_{self.long_timeframe}'] < 30) or (candle[f'rsi_{self.long_timeframe}'] > 70):
-            return stoploss_from_absolute(
-                absolute_value,
-                current_rate, 
-                is_short=trade.is_short, 
-                leverage=trade.leverage
-            )
-
-        risk = trade.get_custom_data(key='risk')
-
         return stoploss_from_open(
-            0 if current_profit > 2 * risk else - risk,
+            - trade.get_custom_data(key='risk'),
             current_profit, 
             is_short=trade.is_short, 
             leverage=trade.leverage

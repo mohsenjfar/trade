@@ -48,8 +48,8 @@ class ScalpingStrategyV3(IStrategy):
 
         dataframe['rsi'] = ta.RSI(dataframe, 14)
         dataframe['atr'] = ta.ATR(dataframe, timeperiod=14)
-        dataframe['short_distance'] = dataframe['close'] + dataframe['atr']
-        dataframe['long_distance'] = dataframe['close'] - dataframe['atr']
+        dataframe['short_distance'] = dataframe['close'] + (dataframe['atr'] * 4)
+        dataframe['long_distance'] = dataframe['close'] - (dataframe['atr'] * 4)
         dataframe['short_risk'] = self.calculate_risk(dataframe.close, dataframe.short_distance)
         dataframe['long_risk'] = self.calculate_risk(dataframe.close, dataframe.long_distance)
 
