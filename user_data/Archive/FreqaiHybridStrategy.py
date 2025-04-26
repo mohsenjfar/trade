@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 class FreqaiHybridStrategy(IStrategy):
 
-    timeframe = "5m"
+    timeframe = "15m"
 
     plot_config = {
         'main_plot': {

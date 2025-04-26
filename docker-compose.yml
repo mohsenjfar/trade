@@ -1,44 +1,32 @@
 ---
 version: '3'
 services:
-  # freqtrade1:
+  # freqtrade:
   #     image: freqtradeorg/freqtrade:develop_freqai
   #     restart: unless-stopped
   #     container_name: FreqaiHybridStrategy
-  #     ports:
-  #       - "127.0.0.1:8080:8080"
+  #     # ports:
+  #     #   - "127.0.0.1:8080:8080"
   #     volumes:
   #       - "./user_data:/freqtrade/user_data"
   #     command: >
   #       trade
   #       --logfile /freqtrade/user_data/logs/FreqaiHybridStrategy.log
   #       --db-url sqlite:////freqtrade/user_data/db.sqlite
-  #       --config /freqtrade/user_data/config.json
+  #       --config /freqtrade/user_data/config_xgboost.json
   #       --strategy FreqaiHybridStrategy
   #       --freqaimodel XGBoostClassifier
-  # freqtrade:
-  #     image: freqtradeorg/freqtrade:stable
-  #     restart: unless-stopped
-  #     container_name: ScalpingStrategy
-  #     ports:
-  #       - "127.0.0.1:8080:8080"
-  #     volumes:
-  #       - "./user_data:/freqtrade/user_data"
-  #     command: >
-  #       trade
-  #       --logfile /freqtrade/user_data/logs/Terminal.log
-  #       --db-url sqlite:////freqtrade/user_data/db.sqlite
-  #       --config /freqtrade/user_data/config.json
-  #       --strategy ScalpingStrategy
   freqtrade:
       image: freqtradeorg/freqtrade:stable
       restart: unless-stopped
-      container_name: ScalpingStrategyV2
+      container_name: IchimokuFuturesStrategy
+      # ports:
+      #   - "127.0.0.1:8080:8080"
       volumes:
         - "./user_data:/freqtrade/user_data"
       command: >
         trade
-        --logfile /freqtrade/user_data/logs/Terminal_v2.log
-        --db-url sqlite:////freqtrade/user_data/db_v2.sqlite
-        --config /freqtrade/user_data/config_v2.json
-        --strategy ScalpingStrategyV2
+        --logfile /freqtrade/user_data/logs/ichimoku_futures_strategy.log
+        --db-url sqlite:////freqtrade/user_data/ichimoku_futures_strategy_db.sqlite
+        --config /freqtrade/user_data/ichimoku_futures_strategy_config.json
+        --strategy IchimokuFuturesStrategy

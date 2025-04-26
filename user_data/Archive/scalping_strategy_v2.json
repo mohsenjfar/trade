@@ -1,0 +1,29 @@
+{
+  "strategy_name": "ScalpingStrategyV2",
+  "params": {
+    "roi": {},
+    "stoploss": {
+      "stoploss": -0.01
+    },
+    "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+    },
+    "max_open_trades": {
+      "max_open_trades": 1
+    },
+    "buy": {
+      "atr_multiplexer": 2,
+      "rsi_15m_enter_long": 62,
+      "rsi_15m_enter_short": 35,
+      "rsi_1m_enter_long": 37,
+      "rsi_1m_enter_short": 61
+    },
+    "sell": {},
+    "protection": {}
+  },
+  "ft_stratparam_v": 1,
+  "export_time": "2025-04-15 17:32:27.051845+00:00"
+}
