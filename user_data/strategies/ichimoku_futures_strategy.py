@@ -1,74 +1,73 @@
 import logging
-from freqtrade.strategy.interface import IStrategy
+from freqtrade.strategy import IStrategy, informative
 from pandas import DataFrame
 from technical.indicators import ichimoku
+import talib.abstract as ta
 from typing import Dict
 
 logger = logging.getLogger(__name__)
 
-class IchimokuFuturesStrategy(IStrategy):
-    # تنظیمات استراتژی
-    timeframe = '4h'
-    stoploss = -0.05
-    minimal_roi = {
-        "0": 0.1
-    }
-    
-    # امکان معامله دو طرفه
+class IchimokuRSIStrategy(IStrategy):
+ 
+    timeframe = '15m'
+    informative_timeframe = '4h'
     can_short = True
+    trailing_stop = False
+    trailing_stop_positive = 0.02
+    trailing_stop_positive_offset = 0.03
+    trailing_only_offset_is_reached = True
+
+    @informative(informative_timeframe)
+    def populate_indicators_1h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+        dataframe['rsi'] = ta.RSI(dataframe, period=14)
+        return dataframe
 
     def populate_indicators(self, dataframe: DataFrame, metadata: Dict) -> DataFrame:
-        """
-        محاسبه اندیکاتور ایشیموکو و اضافه کردن آن به dataframe
-        """
+
         ichimoku_data = ichimoku(dataframe)
         dataframe['tenkan_sen'] = ichimoku_data['tenkan_sen']
         dataframe['kijun_sen'] = ichimoku_data['kijun_sen']
         dataframe['senkou_span_a'] = ichimoku_data['senkou_span_a']
         dataframe['senkou_span_b'] = ichimoku_data['senkou_span_b']
         dataframe['chikou_span'] = ichimoku_data['chikou_span']
+
+        dataframe['rsi'] = ta.RSI(dataframe, period=14)
+        
         return dataframe
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: Dict) -> DataFrame:
-        """
-        شرایط ورود به معامله
-        """
-        # ورود به معامله لانگ
+
         dataframe.loc[
-            (dataframe['close'] > dataframe['senkou_span_a']) & 
-            (dataframe['close'] > dataframe['senkou_span_b']) & 
-            (dataframe['tenkan_sen'] > dataframe['kijun_sen']) & 
-            (dataframe['chikou_span'] > dataframe['close'].shift(26)),
+            (
+                (dataframe['close'] > dataframe['senkou_span_a']) & 
+                (dataframe['close'] > dataframe['senkou_span_b']) & 
+                (dataframe['tenkan_sen'] > dataframe['kijun_sen']) & 
+                (dataframe['chikou_span'] > dataframe['close'].shift(26)) &
+                (dataframe['rsi'] < 70) &
+                (dataframe['rsi_4h'] < 70) &
+                (dataframe['rsi_4h'] > 50) &
+                (dataframe['rsi_4h'] > dataframe['rsi_4h'].shift(1))
+
+            ),
             'enter_long'
         ] = 1
 
-        # ورود به معامله شورت
         dataframe.loc[
-            (dataframe['close'] < dataframe['senkou_span_a']) & 
-            (dataframe['close'] < dataframe['senkou_span_b']) & 
-            (dataframe['tenkan_sen'] < dataframe['kijun_sen']) & 
-            (dataframe['chikou_span'] < dataframe['close'].shift(26)),
+            (
+                (dataframe['close'] < dataframe['senkou_span_a']) & 
+                (dataframe['close'] < dataframe['senkou_span_b']) & 
+                (dataframe['tenkan_sen'] < dataframe['kijun_sen']) & 
+                (dataframe['chikou_span'] < dataframe['close'].shift(26)) &
+                (dataframe['rsi'] > 30) &
+                (dataframe['rsi_4h'] > 30) &
+                (dataframe['rsi_4h'] < 50) &
+                (dataframe['rsi_4h'] < dataframe['rsi_4h'].shift(1))
+            ),
             'enter_short'
         ] = 1
 
         return dataframe
 
     def populate_exit_trend(self, dataframe: DataFrame, metadata: Dict) -> DataFrame:
-        """
-        شرایط خروج از معامله
-        """
-        # خروج از معامله لانگ
-        dataframe.loc[
-            (dataframe['close'] < dataframe['senkou_span_a']) | 
-            (dataframe['close'] < dataframe['senkou_span_b']),
-            'exit_long'
-        ] = 1
-
-        # خروج از معامله شورت
-        dataframe.loc[
-            (dataframe['close'] > dataframe['senkou_span_a']) | 
-            (dataframe['close'] > dataframe['senkou_span_b']),
-            'exit_short'
-        ] = 1
 
         return dataframe

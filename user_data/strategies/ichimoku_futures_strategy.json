@@ -1,28 +1,22 @@
 {
-  "strategy_name": "IchimokuFuturesStrategy",
+  "strategy_name": "IchimokuRSIStrategy",
   "params": {
-    "trailing": {
-      "trailing_stop": false,
-      "trailing_stop_positive": null,
-      "trailing_stop_positive_offset": 0.0,
-      "trailing_only_offset_is_reached": false
+    "roi": {
+      "0": 0.186,
+      "118": 0.065,
+      "294": 0.048,
+      "595": 0
+    },
+    "stoploss": {
+      "stoploss": -0.032
     },
     "max_open_trades": {
       "max_open_trades": 1
     },
     "buy": {},
     "sell": {},
-    "protection": {},
-    "roi": {
-      "0": 0.365,
-      "506": 0.319,
-      "1086": 0.11,
-      "6787": 0
-    },
-    "stoploss": {
-      "stoploss": -0.195
-    }
+    "protection": {}
   },
   "ft_stratparam_v": 1,
-  "export_time": "2025-04-25 10:20:08.888725+00:00"
+  "export_time": "2025-04-27 13:43:18.698361+00:00"
 }

@@ -19,14 +19,14 @@ services:
   freqtrade:
       image: freqtradeorg/freqtrade:stable
       restart: unless-stopped
-      container_name: IchimokuFuturesStrategy
-      # ports:
-      #   - "127.0.0.1:8080:8080"
+      container_name: IchimokuRSIStrategy
+      ports:
+        - "127.0.0.1:8080:8080"
       volumes:
         - "./user_data:/freqtrade/user_data"
       command: >
         trade
-        --logfile /freqtrade/user_data/logs/ichimoku_futures_strategy.log
-        --db-url sqlite:////freqtrade/user_data/ichimoku_futures_strategy_db.sqlite
-        --config /freqtrade/user_data/ichimoku_futures_strategy_config.json
-        --strategy IchimokuFuturesStrategy
+        --logfile /freqtrade/user_data/logs/ichimoku_rsi_strategy.log
+        --db-url sqlite:////freqtrade/user_data/ichimoku_rsi_strategy_db.sqlite
+        --config /freqtrade/user_data/ichimoku_rsi_strategy_config.json
+        --strategy IchimokuRSIStrategy
