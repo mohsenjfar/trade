@@ -1,0 +1,19 @@
+{
+  "strategy_name": "IchimokuRSIStrategy",
+  "params": {
+    "roi": {
+      "0": 0.1
+    },
+    "stoploss": {
+      "stoploss": -0.05
+    },
+    "max_open_trades": {
+      "max_open_trades": 1
+    },
+    "buy": {},
+    "sell": {},
+    "protection": {}
+  },
+  "ft_stratparam_v": 1,
+  "export_time": "2025-04-27 13:43:18.698361+00:00"
+}
