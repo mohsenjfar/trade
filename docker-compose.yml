@@ -2,17 +2,16 @@
 version: '3'
 services:
   freqtrade:
-      image: freqtradeorg/freqtrade:develop_freqai
+      image: freqtrade-tensorflow
       restart: unless-stopped
-      container_name: FreqaiHybridStrategy
+      container_name: LSTMPredictorStrategy
       # ports:
       #   - "127.0.0.1:8080:8080"
       volumes:
         - "./user_data:/freqtrade/user_data"
       command: >
         trade
-        --logfile /freqtrade/user_data/logs/FreqaiHybridStrategy.log
-        --db-url sqlite:////freqtrade/user_data/db.sqlite
-        --config /freqtrade/user_data/config_xgboost.json
-        --strategy FreqaiHybridStrategy
-        --freqaimodel XGBoostClassifier
+        --logfile /freqtrade/user_data/logs/lstm_predictor_strategy.log
+        --db-url sqlite:////freqtrade/user_data/lstm_predictor_strategy_db.sqlite
+        --config /freqtrade/user_data/config.json
+        --strategy LSTMPredictorStrategy
