@@ -9,8 +9,9 @@ from tensorflow.keras.losses import MeanSquaredError
 class LSTMPredictorStrategy(IStrategy):
     INTERFACE_VERSION = 3
     minimal_roi = {"0": 0.02}
-    stoploss = -0.1
+    stoploss = -0.01
     timeframe = '5m'
+    can_short: bool = True
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
