@@ -89,6 +89,13 @@ class LSTMPredictorStrategy(IStrategy):
         return dataframe
 
 
+    def custom_entry_price(self, pair: str, trade: Trade | None, current_time: datetime, proposed_rate: float,
+                           entry_tag: str | None, side: str, **kwargs) -> float:
+
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        return dataframe["close"].iat[-1]
+    
+
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
