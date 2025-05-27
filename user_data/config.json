@@ -13,7 +13,7 @@
     "entry": 10,
     "exit": 10,
     "exit_timeout_count": 0,
-    "unit": "minutes"
+    "unit": "seconds"
   },
   "entry_pricing": {
     "price_side": "other",
@@ -61,7 +61,7 @@
   "initial_state": "running",
   "force_entry_enable": true,
   "internals": {
-    "process_throttle_secs": 5
+    "process_throttle_secs": 10
   },
   "api_server": {
     "enabled": true,

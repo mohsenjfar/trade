@@ -9,7 +9,6 @@ from pandas import DataFrame
 from sklearn.preprocessing import MinMaxScaler
 import talib.abstract as ta
 from tensorflow.keras.losses import MeanSquaredError
-import pandas as pd
 from datetime import datetime, timedelta
 from typing import Optional
 from freqtrade.persistence import Trade
@@ -41,57 +40,45 @@ class LSTMPredictorStrategy(IStrategy):
         self.price_scaler = MinMaxScaler(feature_range=(0, 1))
 
     def prepare_data(self, dataframe: DataFrame, seq_length=10):
-        data_array = dataframe.to_numpy()
-        num_rows = len(data_array) - (len(data_array) % seq_length)
-        X = np.split(data_array[:num_rows], num_rows // seq_length)
-        return np.array(X, dtype=np.float32)
+        values = dataframe[self.features].iloc[-seq_length:].values
+        return np.array(values).reshape(1, seq_length, len(self.features))
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe['rsi'] = ta.RSI(dataframe['close'], timeperiod=14)
         dataframe['ema'] = ta.EMA(dataframe['close'], timeperiod=10)
         dataframe['atr'] = ta.ATR(dataframe['high'], dataframe['low'], dataframe['close'], timeperiod=14)
-        dataframe['Close'] = dataframe['close']
+        dataframe.fillna(dataframe.mean())
 
-        dataframe = pd.bfill(dataframe)
-
-        if not hasattr(self, 'scaler_fitted'):
-            self.scaler.fit(dataframe[self.features])
-            self.scaler_fitted = True
-
-        if not hasattr(self, 'price_scaler_fitted'):
-            self.scaler.fit(dataframe['Close'])
-            self.price_scaler_fitted = True
-
+        self.price_scaler.fit(dataframe[['close']])
+        self.price_scaler.transform(dataframe[['close']])
+        self.scaler.fit(dataframe[self.features])
         dataframe[self.features] = self.scaler.transform(dataframe[self.features])
-        self.price_scaler.transform(dataframe['Close'])
-
-        seq_length = 10
-        X_live = np.array(dataframe[self.features].iloc[-seq_length:].values).reshape(1, seq_length, len(self.features))
-
+        
+        X_live = self.prepare_data(dataframe, seq_length=10)
         y_pred = self.model.predict(X_live)
-        real_predicted_prices = self.scaler.inverse_transform(
-            np.concatenate([np.zeros((len(y_pred), len(self.features)-1)), y_pred], axis=1)
-        )[:, -1]
 
+        dataframe[self.features] = self.scaler.inverse_transform(dataframe[self.features])
+        real_predicted_prices = self.price_scaler.inverse_transform(y_pred.reshape(-1, 1))
+        
         dataframe['max_predicted'] = real_predicted_prices.max()
         dataframe['min_predicted'] = real_predicted_prices.min()
 
         return dataframe
-    
+
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         
         dataframe.loc[
             (
-                (dataframe["min_predicted"] >= dataframe['Close'] - dataframe["atr"]) &
-                (dataframe["max_predicted"] >= dataframe['Close'] + 2 * dataframe["atr"])
+                (dataframe["min_predicted"] >= dataframe['close'] - dataframe["atr"]) &
+                (dataframe["max_predicted"] >= dataframe['close'] + 2 * dataframe["atr"])
             ), "enter_long"] = 1
     
         dataframe.loc[
             (
-                (dataframe["max_predicted"] <= dataframe['Close'] + dataframe["atr"]) &
-                (dataframe["min_predicted"] <= dataframe['Close'] - 2 * dataframe["atr"])
+                (dataframe["max_predicted"] <= dataframe['close'] + dataframe["atr"]) &
+                (dataframe["min_predicted"] <= dataframe['close'] - 2 * dataframe["atr"])
             ), "enter_short"] = 1
 
         return dataframe
@@ -111,7 +98,7 @@ class LSTMPredictorStrategy(IStrategy):
         pre_trade_date = timeframe_to_prev_date(self.timeframe, trade_date-timedelta(seconds=10))
         pre_trade_candle = dataframe.loc[dataframe['date'] == pre_trade_date].squeeze()
         side = 1 if trade.is_short else -1
-        stop = pre_trade_candle.close + side * pre_trade_candle.atr
+        stop = trade.open_rate + side * pre_trade_candle.atr
 
         return stoploss_from_absolute(
             stop,
@@ -139,7 +126,7 @@ class LSTMPredictorStrategy(IStrategy):
         if any(conditions):
             return 'Target Hit'
 
-        current_candle = dataframe.loc[-1].squeeze()
+        current_candle = dataframe.iloc[-1].squeeze()
         conditions = [
             (current_candle.max_predicted > trade.open_rate) and trade.is_short,
             (current_candle.min_predicted < trade.open_rate) and not trade.is_short,
