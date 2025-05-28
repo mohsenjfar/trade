@@ -17,9 +17,13 @@ class LSTMPredictorStrategy(IStrategy):
     
     INTERFACE_VERSION = 3
     
-    stoploss = -0.01
+    stoploss = -0.05
     
-    timeframe = '1m'
+    timeframe = '15m'
+
+    trigger_multiplier = 4
+
+    target_multiplier = 4
     
     can_short: bool = True
     
@@ -64,6 +68,16 @@ class LSTMPredictorStrategy(IStrategy):
         dataframe['max_predicted'] = real_predicted_prices.max()
         dataframe['min_predicted'] = real_predicted_prices.min()
 
+        values = (
+            f"Close: {dataframe.close.iat[-1]:.4f}",
+            f"Max: {real_predicted_prices.max():.4f}",
+            f"Min: {real_predicted_prices.min():.4f}",
+            f"ُStop: {(dataframe.atr.iat[-1] / dataframe.close.iat[-1]):.2f} %",
+            f"Max: {(real_predicted_prices.max() / dataframe.close.iat[-1] - 1):.2f} %",
+            f"Min: {(real_predicted_prices.min() / dataframe.close.iat[-1] - 1):.2f} %"
+        )
+        self.dp.send_msg('\n'.join(values))
+
         return dataframe
 
 
@@ -71,14 +85,14 @@ class LSTMPredictorStrategy(IStrategy):
         
         dataframe.loc[
             (
-                (dataframe["min_predicted"] >= dataframe['close'] - dataframe["atr"]) &
-                (dataframe["max_predicted"] >= dataframe['close'] + 2 * dataframe["atr"])
+                (dataframe["min_predicted"] >= dataframe['close']) &
+                (dataframe["max_predicted"] >= dataframe['close'] + self.trigger_multiplier * dataframe["atr"])
             ), "enter_long"] = 1
     
         dataframe.loc[
             (
-                (dataframe["max_predicted"] <= dataframe['close'] + dataframe["atr"]) &
-                (dataframe["min_predicted"] <= dataframe['close'] - 2 * dataframe["atr"])
+                (dataframe["max_predicted"] <= dataframe['close']) &
+                (dataframe["min_predicted"] <= dataframe['close'] - self.trigger_multiplier * dataframe["atr"])
             ), "enter_short"] = 1
 
         return dataframe
@@ -123,20 +137,17 @@ class LSTMPredictorStrategy(IStrategy):
         pre_trade_date = timeframe_to_prev_date(self.timeframe, trade_date-timedelta(seconds=10))
         pre_trade_candle = dataframe.loc[dataframe['date'] == pre_trade_date].squeeze()
         side = -1 if trade.is_short else 1
-        target = trade.open_rate + 2 * side * pre_trade_candle.atr
+        target = trade.open_rate + self.target_multiplier * side * pre_trade_candle.atr
 
         conditions = [
             (current_rate < target) and trade.is_short,
             (current_rate > target) and not trade.is_short
         ]
-
-        if any(conditions):
-            return 'Target Hit'
+        if any(conditions): return 'Target Hit'
 
         current_candle = dataframe.iloc[-1].squeeze()
         conditions = [
             (current_candle.max_predicted > trade.open_rate) and trade.is_short,
             (current_candle.min_predicted < trade.open_rate) and not trade.is_short,
         ]
-        if any(conditions):
-            return "Trade expired"
+        if any(conditions): return "Trade expired"
