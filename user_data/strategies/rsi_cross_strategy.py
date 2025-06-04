@@ -49,14 +49,14 @@ class RSICrossStrategy(IStrategy):
         
         dataframe.loc[
             (
-                qtpylib.crossed_above(dataframe['rsi'], 30) &
+                qtpylib.crossed_above(dataframe['rsi'], 40) &
                 (dataframe['rsi_min_index_4h'] > dataframe['rsi_max_index_4h'] ) &
                 (dataframe['rsi_4h'] > 30 )
             ), "enter_long"] = 1
     
         dataframe.loc[
             (
-                qtpylib.crossed_below(dataframe['rsi'], 70) &
+                qtpylib.crossed_below(dataframe['rsi'], 60) &
                 (dataframe['rsi_max_index_4h'] > dataframe['rsi_min_index_4h'] ) &
                 (dataframe['rsi_4h'] < 70 )
             ), "enter_short"] = 1
