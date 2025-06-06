@@ -10,26 +10,12 @@ import talib.abstract as ta
 from datetime import datetime, timedelta
 from typing import Optional
 from freqtrade.persistence import Trade
+from base import Base
 
-class RSICrossStrategy(IStrategy):
-    
-    INTERFACE_VERSION = 3
-    
-    stoploss = -1
-    
-    timeframe = '15m'
-
-    use_exit_signal = False
-
-    use_custom_stoploss = True
-    
-    can_short: bool = True
-    
-    process_only_new_candles = True
-
+class RSICrossStrategy(Base):
 
     @informative('4h')
-    def populate_indicators_inf4(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+    def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         
         dataframe['rsi'] = ta.RSI(dataframe, 14)
         dataframe['rsi_max_index'] = dataframe[dataframe['rsi'] > 70].index.max()
@@ -37,6 +23,14 @@ class RSICrossStrategy(IStrategy):
 
         return dataframe
 
+    # @informative('1d')
+    # def populate_indicators_1d(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+        
+    #     dataframe['rsi'] = ta.RSI(dataframe, 14)
+    #     dataframe['rsi_max_index'] = dataframe[dataframe['rsi'] > 70].index.max()
+    #     dataframe['rsi_min_index'] = dataframe[dataframe['rsi'] < 30].index.max()
+
+    #     return dataframe
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
@@ -49,22 +43,25 @@ class RSICrossStrategy(IStrategy):
         
         dataframe.loc[
             (
-                qtpylib.crossed_above(dataframe['rsi'], 40) &
+                qtpylib.crossed_above(dataframe['rsi'], 30) &
                 (dataframe['rsi_min_index_4h'] > dataframe['rsi_max_index_4h'] ) &
-                (dataframe['rsi_4h'] > 30 )
+                # (dataframe['rsi_min_index_1d'] > dataframe['rsi_max_index_1d'] ) &
+                (dataframe['rsi_4h'] > 30 ) & 
+                (dataframe['rsi_4h'] < 50 )
+                # (dataframe['rsi_1d'] > 30 ) & 
+                # (dataframe['rsi_1d'] < 50 )
             ), "enter_long"] = 1
     
         dataframe.loc[
             (
-                qtpylib.crossed_below(dataframe['rsi'], 60) &
+                qtpylib.crossed_below(dataframe['rsi'], 70) &
                 (dataframe['rsi_max_index_4h'] > dataframe['rsi_min_index_4h'] ) &
-                (dataframe['rsi_4h'] < 70 )
+                # (dataframe['rsi_max_index_1d'] > dataframe['rsi_min_index_1d'] ) &
+                (dataframe['rsi_4h'] < 70 ) &
+                (dataframe['rsi_4h'] > 50 ) 
+                # (dataframe['rsi_1d'] < 70 ) &
+                # (dataframe['rsi_1d'] > 50 )
             ), "enter_short"] = 1
-
-        return dataframe
-
-
-    def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         return dataframe
 
