@@ -31,9 +31,9 @@ class Base(IStrategy):
         return [
             {
                 "method": "StoplossGuard",
-                "lookback_period_candles": 96,
+                "lookback_period_candles": 16,
                 "trade_limit": 2,
-                "stop_duration_candles": 24,
+                "stop_duration_candles": 4,
                 "required_profit": 0.0,
                 "only_per_pair": False,
                 "only_per_side": False
@@ -58,7 +58,7 @@ class Base(IStrategy):
         risk = abs(1 - current_rate / stop)
         trade_max_loss_allowed = 0.005
 
-        return max(max_stake - max_stake * risk / trade_max_loss_allowed, min_stake)
+        return max(min(max_stake * trade_max_loss_allowed / risk, max_stake), min_stake)
 
     # Take out half of stake to control pull back risk (profit ~= risk)
     def adjust_trade_position(self, trade: Trade, current_time: datetime,
