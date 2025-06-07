@@ -76,5 +76,5 @@ class Base(IStrategy):
         stop = pre_trade_candle.high if trade.is_short else pre_trade_candle.low
         risk = abs(1 - trade.open_rate / stop)
 
-        if (current_profit > risk) and (trade.nr_of_successful_exits == 0):
+        if (current_profit > 2 * risk) and (trade.nr_of_successful_exits == 0):
             return - trade.stake_amount / 2
