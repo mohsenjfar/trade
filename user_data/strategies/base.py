@@ -3,9 +3,8 @@ from freqtrade.strategy import (
     timeframe_to_prev_date,
     stoploss_from_absolute
 )
-
 from pandas import DataFrame
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta
 from typing import Optional
 from freqtrade.persistence import Trade
 
@@ -25,7 +24,7 @@ class Base(IStrategy):
     
     process_only_new_candles = True
 
-    # position_adjustment_enable = True
+    position_adjustment_enable = False
 
     @property
     def protections(self):
@@ -62,23 +61,24 @@ class Base(IStrategy):
         return max(min(max_stake * trade_max_loss_allowed / risk, max_stake), min_stake)
 
     # Take out half of stake to control pull back risk (profit ~= risk)
-    # def adjust_trade_position(self, trade: Trade, current_time: datetime,
-    #                           current_rate: float, current_profit: float,
-    #                           min_stake: float | None, max_stake: float,
-    #                           current_entry_rate: float, current_exit_rate: float,
-    #                           current_entry_profit: float, current_exit_profit: float,
-    #                           **kwargs
-    #                           ) -> float | None | tuple[float | None, str | None]:
+    def adjust_trade_position(self, trade: Trade, current_time: datetime,
+                              current_rate: float, current_profit: float,
+                              min_stake: float | None, max_stake: float,
+                              current_entry_rate: float, current_exit_rate: float,
+                              current_entry_profit: float, current_exit_profit: float,
+                              **kwargs
+                              ) -> float | None | tuple[float | None, str | None]:
 
-    #     dataframe, _ = self.dp.get_analyzed_dataframe(trade.pair, self.timeframe)
-    #     trade_date = timeframe_to_prev_date(self.timeframe, trade.open_date_utc)
-    #     pre_trade_date = timeframe_to_prev_date(self.timeframe, trade_date-timedelta(seconds=10))
-    #     pre_trade_candle = dataframe.loc[dataframe['date'] == pre_trade_date].squeeze()
-    #     stop = pre_trade_candle.high if trade.is_short else pre_trade_candle.low
-    #     risk = abs(1 - trade.open_rate / stop)
+        dataframe, _ = self.dp.get_analyzed_dataframe(trade.pair, self.timeframe)
+        trade_date = timeframe_to_prev_date(self.timeframe, trade.open_date_utc)
+        pre_trade_date = timeframe_to_prev_date(self.timeframe, trade_date-timedelta(seconds=10))
+        pre_trade_candle = dataframe.loc[dataframe['date'] == pre_trade_date].squeeze()
+        stop = pre_trade_candle.high if trade.is_short else pre_trade_candle.low
+        risk = abs(1 - trade.open_rate / stop)
 
-    #     if (current_profit > 2 * risk) and (trade.nr_of_successful_exits == 0):
-    #         return - trade.stake_amount / 2
+        if (current_profit > 2 * risk) and (trade.nr_of_successful_exits == 0):
+            return - trade.stake_amount / 2
+
 
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
                         current_rate: float, current_profit: float, after_fill: bool, 
