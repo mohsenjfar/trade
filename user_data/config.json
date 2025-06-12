@@ -1,5 +1,5 @@
 {
-  "max_open_trades": 4,
+  "max_open_trades": 1,
   "stake_currency": "USDT",
   "stake_amount": "unlimited",
   "tradable_balance_ratio": 0.99,
@@ -45,12 +45,7 @@
   },
   "pairlists": [
     {
-        "method": "PercentChangePairList",
-        "number_assets": 15,
-        "sort_key": "percentage",
-        "refresh_period": 3600,
-        "lookback_timeframe": "1h",
-        "lookback_period": 72
+        "method": "StaticPairList"
     },
     {"method": "FullTradesFilter"}
   ],
