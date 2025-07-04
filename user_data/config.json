@@ -48,8 +48,7 @@
         "number_assets": 20,
         "sort_key": "quoteVolume",
         "refresh_period": 1800
-    },
-    {"method": "FullTradesFilter"}
+    }
   ],
   "telegram": {
     "enabled": true,
