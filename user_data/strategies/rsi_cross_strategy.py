@@ -14,22 +14,22 @@ from typing import Optional
 class RSICrossStrategy(IStrategy):
 
     INTERFACE_VERSION = 3
-    
+
     stoploss = -1
 
     trade_max_loss_allowed = 0.005
-    
-    timeframe = '15m'
+
+    timeframe = '1m'
 
     can_short: bool = True
-    
+
     process_only_new_candles = True
 
     use_exit_signal = True
 
     use_custom_stoploss = True
 
-    position_adjustment_enable = False
+    position_adjustment_enable = True
 
     @property
     def protections(self):
@@ -47,7 +47,7 @@ class RSICrossStrategy(IStrategy):
 
     # @informative('4h')
     # def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        
+
     #     dataframe['rsi'] = ta.RSI(dataframe, 14)
     #     dataframe['rsi_max_index'] = dataframe[dataframe['rsi'] > 70].index.max()
     #     dataframe['rsi_min_index'] = dataframe[dataframe['rsi'] < 30].index.max()
@@ -70,26 +70,26 @@ class RSICrossStrategy(IStrategy):
 
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        
+
         dataframe.loc[
             (
                 qtpylib.crossed_above(dataframe['close'], dataframe['max_high_above_70'])
-            ), ["enter_long" , "entry_tag"]] = (1, "break")
+            ), ["enter_long" , "enter_tag"]] = (1, "break") # type: ignore
 
         dataframe.loc[
             (
                 qtpylib.crossed_above(dataframe['rsi'], 30)
-            ), ["enter_long" , "entry_tag"]] = (1, "reaction")
-    
+            ), ["enter_long" , "enter_tag"]] = (1, "reaction") # type: ignore
+
         dataframe.loc[
             (
                 qtpylib.crossed_below(dataframe['close'], dataframe['min_low_below_30'])
-            ), ["enter_short" , "entry_tag"]] = (1, "break")
+            ), ["enter_short" , "enter_tag"]] = (1, "break") # type: ignore
 
         dataframe.loc[
             (
                 qtpylib.crossed_below(dataframe['rsi'], 70)
-            ), ["enter_short" , "entry_tag"]] = (1, "reaction")
+            ), ["enter_short" , "enter_tag"]] = (1, "reaction") # type: ignore
 
         return dataframe
 
@@ -115,13 +115,13 @@ class RSICrossStrategy(IStrategy):
 
         if side == "short" and entry_tag == 'break':
             stop = prev_candle['high']
-        
+
         if side == "short" and entry_tag == 'reaction':
             stop = prev_candle['max_high_above_70']
-            
-        risk = abs(1 - current_rate / stop)
 
-        return max(min(max_stake * self.trade_max_loss_allowed / risk, max_stake), min_stake)
+        risk = abs(1 - current_rate / stop) # type: ignore
+
+        return max(min(max_stake * self.trade_max_loss_allowed / risk, max_stake), min_stake) # type: ignore
 
 
     def adjust_trade_position(self, trade: Trade, current_time: datetime,
@@ -143,7 +143,7 @@ class RSICrossStrategy(IStrategy):
             return - trade.stake_amount / 2
 
 
-    def custom_exit(self, pair: str, trade: Trade, current_time: datetime, current_rate: float, current_profit: float, **kwargs) -> str:
+    def custom_exit(self, pair: str, trade: Trade, current_time: datetime, current_rate: float, current_profit: float, **kwargs) -> str: # type: ignore
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         prev_candle = dataframe.iloc[-1].squeeze()
@@ -171,24 +171,7 @@ class RSICrossStrategy(IStrategy):
         pre_trade_date = timeframe_to_prev_date(self.timeframe, trade_date-timedelta(seconds=10))
         pre_trade_candle = dataframe.loc[dataframe['date'] == pre_trade_date].squeeze()
         stop = pre_trade_candle.high if trade.is_short else pre_trade_candle.low
-        risk = abs(1 - trade.open_rate / stop)
 
-        if current_profit > risk * 4:
-            return stoploss_from_open(
-                risk * 2, 
-                current_profit, 
-                is_short=trade.is_short, 
-                leverage=trade.leverage
-            )
-
-        if current_profit > risk:
-            return stoploss_from_open(
-                0, 
-                current_profit, 
-                is_short=trade.is_short, 
-                leverage=trade.leverage
-            )
-        
         return stoploss_from_absolute(
             stop,
             current_rate,
