@@ -118,13 +118,13 @@ class RSICrossStrategy(IStrategy):
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
-        
+
         stop = trade.get_custom_data(key='stop', default=None)
         if stop is None:
             dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
             trade_date = timeframe_to_prev_date(self.timeframe, trade.open_date_utc)
             trade_candle = dataframe.loc[dataframe['date'] == trade_date].squeeze()
-            if trade.entry_tag == "break":
+            if trade.enter_tag == "break":
                 stop = trade_candle.high if trade.is_short else trade_candle.low
             else:
                 stop = trade_candle.max_high_above_70 if trade.is_short else trade_candle.min_low_below_30
