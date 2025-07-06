@@ -47,11 +47,11 @@ class RSICrossStrategy(IStrategy):
         ]
 
     @informative(inf_timeframe)
-    def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+    def populate_indicators_inf_timeframe(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe['rsi'] = ta.RSI(dataframe, 14)
-        dataframe['rsi_max_index'] = dataframe[dataframe['rsi'] > 60].index.max()
-        dataframe['rsi_min_index'] = dataframe[dataframe['rsi'] < 40].index.max()
+        dataframe[f'rsi_max_index'] = dataframe[dataframe['rsi'] > 60].index.max()
+        dataframe[f'rsi_min_index'] = dataframe[dataframe['rsi'] < 40].index.max()
 
         return dataframe
 
@@ -77,7 +77,7 @@ class RSICrossStrategy(IStrategy):
                 qtpylib.crossed_above(dataframe['close'], dataframe['max_high_above_70']) &
                 (dataframe[f'rsi_{self.inf_timeframe}'] < 50) &
                 (dataframe[f'rsi_{self.inf_timeframe}'] > dataframe[f'rsi_{self.inf_timeframe}'].shift(1)) &
-                (dataframe['rsi_min_index_4h'] > dataframe['rsi_max_index_4h'])
+                (dataframe[f'rsi_min_index_{self.inf_timeframe}'] > dataframe[f'rsi_max_index_{self.inf_timeframe}'])
             ), ["enter_long" , "enter_tag"]] = (1, "break") # type: ignore
 
         dataframe.loc[
@@ -85,7 +85,7 @@ class RSICrossStrategy(IStrategy):
                 qtpylib.crossed_below(dataframe['close'], dataframe['min_low_below_30']) &
                 (dataframe[f'rsi_{self.inf_timeframe}'] > 50) &
                 (dataframe[f'rsi_{self.inf_timeframe}'] < dataframe[f'rsi_{self.inf_timeframe}'].shift(1)) &
-                (dataframe['rsi_max_index_4h'] > dataframe['rsi_min_index_4h'])
+                (dataframe[f'rsi_max_index_{self.inf_timeframe}'] > dataframe[f'rsi_min_index_{self.inf_timeframe}'])
             ), ["enter_short" , "enter_tag"]] = (1, "break") # type: ignore
 
         return dataframe
