@@ -63,22 +63,12 @@ class RSICrossStrategy(IStrategy):
         dataframe.loc[
             (
                 qtpylib.crossed_above(dataframe['close'], dataframe['max_high'])
-            ), ["enter_long" , "enter_tag"]] = (1, "break") # type: ignore
-
-        dataframe.loc[
-            (
-                qtpylib.crossed_above(dataframe['rsi'], 30)
-            ), ["enter_long" , "enter_tag"]] = (1, "reaction") # type: ignore
+            ), ["enter_long" , "enter_tag"]] = (1, "break")
 
         dataframe.loc[
             (
                 qtpylib.crossed_below(dataframe['close'], dataframe['min_low'])
-            ), ["enter_short" , "enter_tag"]] = (1, "break") # type: ignore
-
-        dataframe.loc[
-            (
-                qtpylib.crossed_below(dataframe['rsi'], 70)
-            ), ["enter_short" , "enter_tag"]] = (1, "reaction") # type: ignore
+            ), ["enter_short" , "enter_tag"]] = (1, "break")
 
         return dataframe
 
@@ -95,17 +85,9 @@ class RSICrossStrategy(IStrategy):
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         prev_candle = dataframe.iloc[-1].squeeze()
-
-        if entry_tag == 'break':
-            trade_side = 1 if side == "short" else -1
-            stop = prev_candle.close + (trade_side * prev_candle["atr"] * self.multiplexer)
-
-        if entry_tag == 'reaction':
-            stop = prev_candle['max_high'] if side == 'short' else prev_candle['min_low']
-
-        risk = abs(1 - current_rate / stop) # type: ignore
-
-        return max(min(max_stake * self.trade_max_loss_allowed / risk, max_stake), min_stake) # type: ignore
+        risk = (prev_candle["atr"] * self.multiplexer) / current_rate
+        
+        return max(min(max_stake * self.trade_max_loss_allowed / risk, max_stake), min_stake)
 
 
     def adjust_trade_position(self, trade: Trade, current_time: datetime,
@@ -119,7 +101,7 @@ class RSICrossStrategy(IStrategy):
         stop = trade.get_custom_data(key='stop', default=None)
         if stop:
             risk = abs(1 - trade.open_rate / stop)
-            if (current_profit > 2 * risk) and (trade.nr_of_successful_exits == 0):
+            if (current_profit > risk * 1.2) and (trade.nr_of_successful_exits == 0):
                 return - trade.stake_amount / 2
 
 
@@ -132,11 +114,8 @@ class RSICrossStrategy(IStrategy):
             dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
             trade_date = timeframe_to_prev_date(self.timeframe, trade.open_date_utc)
             trade_candle = dataframe.loc[dataframe['date'] == trade_date].squeeze()
-            if trade.enter_tag == "break":
-                side = 1 if trade.is_short else -1
-                stop = trade_candle.close + (side * trade_candle["atr"] * self.multiplexer)
-            else:
-                stop = trade_candle.max_high if trade.is_short else trade_candle.min_low
+            side = 1 if trade.is_short else -1
+            stop = trade_candle.close + (side * trade_candle["atr"] * self.multiplexer)
             trade.set_custom_data(key='stop', value=stop)
 
         return stoploss_from_absolute(
@@ -145,25 +124,3 @@ class RSICrossStrategy(IStrategy):
             is_short=trade.is_short,
             leverage=trade.leverage
         )
-
-
-    def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
-                    current_rate: float, current_profit: float, **kwargs) -> str: # type: ignore
-
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        prev_candle = dataframe.iloc[-1].squeeze()
-
-        conditions = (
-            prev_candle['rsi'] > 70 and trade.enter_tag == "reaction" and not trade.is_short,
-            prev_candle['rsi'] < 30 and trade.enter_tag == "reaction" and trade.is_short
-        )
-        if any(conditions):
-            return 'Reaction target hit'
-
-
-        conditions = (
-            prev_candle[f'rsi_{self.inf_timeframe}'] < 30 and trade.enter_tag == "break" and trade.is_short,
-            prev_candle[f'rsi_{self.inf_timeframe}'] > 70 and trade.enter_tag == "break" and not trade.is_short
-        )
-        if any(conditions):
-            return 'Break target hit'
