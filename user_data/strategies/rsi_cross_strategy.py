@@ -18,7 +18,7 @@ class RSICrossStrategy(IStrategy):
     stoploss = -1
 
     trade_max_loss_allowed = 0.005
-    
+
     multiplexer = 1.5
 
     timeframe = '5m'
@@ -47,8 +47,8 @@ class RSICrossStrategy(IStrategy):
 
         dataframe['atr'] = ta.ATR(dataframe, timeperiod=14)
         dataframe['rsi'] = ta.RSI(dataframe['close'], timeperiod=14)
-        dataframe['above_group'] = (dataframe['rsi'] >= 60).astype(int).diff().ne(0).cumsum() * (dataframe['rsi'] >= 60)
-        dataframe['below_group'] = (dataframe['rsi'] <= 40).astype(int).diff().ne(0).cumsum() * (dataframe['rsi'] <= 40)
+        dataframe['above_group'] = (dataframe['rsi'] >= 70).astype(int).diff().ne(0).cumsum() * (dataframe['rsi'] >= 70)
+        dataframe['below_group'] = (dataframe['rsi'] <= 30).astype(int).diff().ne(0).cumsum() * (dataframe['rsi'] <= 30)
         dataframe['max_high'] = dataframe.groupby('above_group')['high'].transform('max')
         dataframe['min_low'] = dataframe.groupby('below_group')['low'].transform('min')
         dataframe.loc[dataframe['above_group'] == 0, 'max_high'] = None
@@ -67,7 +67,7 @@ class RSICrossStrategy(IStrategy):
 
         dataframe.loc[
             (
-                qtpylib.crossed_above(dataframe['rsi'], 40)
+                qtpylib.crossed_above(dataframe['rsi'], 30)
             ), ["enter_long" , "enter_tag"]] = (1, "reaction") # type: ignore
 
         dataframe.loc[
@@ -77,7 +77,7 @@ class RSICrossStrategy(IStrategy):
 
         dataframe.loc[
             (
-                qtpylib.crossed_below(dataframe['rsi'], 60)
+                qtpylib.crossed_below(dataframe['rsi'], 70)
             ), ["enter_short" , "enter_tag"]] = (1, "reaction") # type: ignore
 
         return dataframe
@@ -97,8 +97,8 @@ class RSICrossStrategy(IStrategy):
         prev_candle = dataframe.iloc[-1].squeeze()
 
         if entry_tag == 'break':
-            trade_side = -1 if side == "short" else 1
-            stop = prev_candle.close + (trade_side * prev_candle.atr * self.multiplexer)
+            trade_side = 1 if side == "short" else -1
+            stop = prev_candle.close + (trade_side * prev_candle["atr"] * self.multiplexer)
 
         if entry_tag == 'reaction':
             stop = prev_candle['max_high'] if side == 'short' else prev_candle['min_low']
@@ -133,8 +133,8 @@ class RSICrossStrategy(IStrategy):
             trade_date = timeframe_to_prev_date(self.timeframe, trade.open_date_utc)
             trade_candle = dataframe.loc[dataframe['date'] == trade_date].squeeze()
             if trade.enter_tag == "break":
-                side = -1 if trade.is_short else 1
-                stop = trade_candle.close + (side * trade_candle.atr * self.multiplexer)
+                side = 1 if trade.is_short else -1
+                stop = trade_candle.close + (side * trade_candle["atr"] * self.multiplexer)
             else:
                 stop = trade_candle.max_high if trade.is_short else trade_candle.min_low
             trade.set_custom_data(key='stop', value=stop)
