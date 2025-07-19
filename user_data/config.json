@@ -1,5 +1,5 @@
 {
-  "max_open_trades": 4,
+  "max_open_trades": 1,
   "stake_currency": "USDT",
   "stake_amount": "unlimited",
   "tradable_balance_ratio": 0.99,
@@ -34,8 +34,6 @@
     "name": "bybit",
     "ccxt_config": {},
     "ccxt_async_config": {},
-    "key": "",
-    "secret": "",
     "pair_whitelist": [
       "WIF/USDT:USDT"
     ],
