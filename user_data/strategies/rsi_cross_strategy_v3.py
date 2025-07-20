@@ -68,11 +68,11 @@ class RSICrossStrategyV3(IStrategy):
         trades = Trade.get_trades_proxy(pair=metadata['pair'],is_open=False)
         if trades:
             trade = trades[-1]
-            if trade.enter_tag == "reaction" and trade.close_profit < 0:
+            if trade.enter_tag == "break" and trade.close_profit < 0:
                 if trade.is_short:
-                    dataframe[["enter_long" , "enter_tag"]] = (1, "break")
+                    dataframe[["enter_long" , "enter_tag"]] = (1, "reaction")
                 else:
-                    dataframe[["enter_short" , "enter_tag"]] = (1, "break")
+                    dataframe[["enter_short" , "enter_tag"]] = (1, "reaction")
                 return dataframe
 
         dataframe.loc[
@@ -125,6 +125,14 @@ class RSICrossStrategyV3(IStrategy):
             self.dp.send_msg(f"Trade risk: {risk * 100:.2f} %")
             trade.set_custom_data(key='risk', value=risk)
 
+        if current_profit > risk * 3:
+            return stoploss_from_open(
+                0,
+                current_profit,
+                is_short=trade.is_short,
+                leverage=trade.leverage
+            )
+        
         return stoploss_from_open(
             -risk,
             current_profit,
