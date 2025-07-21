@@ -68,7 +68,7 @@ class RSICrossStrategyV3(IStrategy):
         trades = Trade.get_trades_proxy(pair=metadata['pair'],is_open=False)
         if trades:
             trade = trades[-1]
-            if trade.enter_tag == "break" and trade.close_profit < 0:
+            if trade.enter_tag == "break" and trade.close_profit_abs < 0:
                 if trade.is_short:
                     dataframe[["enter_long" , "enter_tag"]] = (1, "reaction")
                 else:
