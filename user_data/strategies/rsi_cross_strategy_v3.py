@@ -39,7 +39,7 @@ class RSICrossStrategyV3(IStrategy):
         return [
             {
                 "method": "StoplossGuard",
-                "lookback_period": 1440,
+                "lookback_period": 240,
                 "trade_limit": 2,
                 "required_profit": 0.0,
                 "only_per_pair": False,
