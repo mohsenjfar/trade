@@ -80,13 +80,13 @@ class RSICrossStrategyV3(IStrategy):
         return dataframe
 
 
-    def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
-                            time_in_force: str, current_time: datetime, entry_tag: Optional[str],
-                            side: str, **kwargs) -> bool:
+    # def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
+    #                         time_in_force: str, current_time: datetime, entry_tag: Optional[str],
+    #                         side: str, **kwargs) -> bool:
 
-        today_trades = Trade.get_trades_proxy(open_date = date.today(),is_open=False)
-        max_loss = len(trade.close_profit_abs < 0 for trade in today_trades)
-        if max_loss == 2: return False
+    #     today_trades = Trade.get_trades_proxy(open_date = date.today(),is_open=False)
+    #     max_loss = len(trade.close_profit_abs < 0 for trade in today_trades)
+    #     if max_loss == 2: return False
 
 
     def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
