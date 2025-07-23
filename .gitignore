@@ -1,13 +1,9 @@
 .venv
 __pycache__
-data
 hyperopts
 backtest_results
-*secret.json
 .env
 *.sqlite*
 models
-*.log
-*.log.*
 hyperopt_results
 *.csv
