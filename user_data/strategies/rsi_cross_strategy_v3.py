@@ -9,7 +9,7 @@ from freqtrade.strategy import (
     stoploss_from_open,
     informative
 )
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from typing import Optional
 
 class RSICrossStrategyV3(IStrategy):
@@ -20,7 +20,7 @@ class RSICrossStrategyV3(IStrategy):
 
     trade_max_loss_allowed = 0.005
 
-    multiplexer = 1.5
+    multiplexer = 1
 
     timeframe = '5m'
 
@@ -34,23 +34,9 @@ class RSICrossStrategyV3(IStrategy):
 
     position_adjustment_enable = True
 
-    @property
-    def protections(self):
-        return [
-            {
-                "method": "StoplossGuard",
-                "lookback_period": 240,
-                "trade_limit": 2,
-                "required_profit": 0.0,
-                "only_per_pair": False,
-                "only_per_side": False,
-                "unlock_at": "00:00"
-            }
-        ]
-
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe['atr'] = ta.ATR(dataframe, timeperiod=14)
+        dataframe['atr'] = ta.ATR(dataframe, timeperiod=4)
         dataframe['rsi'] = ta.RSI(dataframe['close'], timeperiod=14)
         dataframe['above_group'] = (dataframe['rsi'] >= 70).astype(int).diff().ne(0).cumsum() * (dataframe['rsi'] >= 70)
         dataframe['below_group'] = (dataframe['rsi'] <= 30).astype(int).diff().ne(0).cumsum() * (dataframe['rsi'] <= 30)
@@ -92,6 +78,15 @@ class RSICrossStrategyV3(IStrategy):
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         return dataframe
+
+
+    def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
+                            time_in_force: str, current_time: datetime, entry_tag: Optional[str],
+                            side: str, **kwargs) -> bool:
+
+        today_trades = Trade.get_trades_proxy(open_date = date.today(),is_open=False)
+        max_loss = len(trade.close_profit_abs < 0 for trade in today_trades)
+        if max_loss == 2: return False
 
 
     def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
@@ -174,3 +169,10 @@ class RSICrossStrategyV3(IStrategy):
             trade.enter_tag == "break" and trade.is_short and dataframe['rsi'].iat[-1] > 70
         )
         if any(conditions): return 'Break target hit'
+
+
+    def bot_loop_start(self, **kwargs) -> None:
+        pairs = self.dp.current_whitelist()
+        for pair in pairs:
+            if self.is_pair_locked(pair):
+                self.unlock_pair(pair)
