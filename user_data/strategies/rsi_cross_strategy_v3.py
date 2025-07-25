@@ -20,7 +20,7 @@ class RSICrossStrategyV3(IStrategy):
 
     trade_max_loss_allowed = 0.005
 
-    multiplexer = 1
+    multiplexer = 4
 
     timeframe = '5m'
 
@@ -36,7 +36,7 @@ class RSICrossStrategyV3(IStrategy):
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe['atr'] = ta.ATR(dataframe, timeperiod=4) * self.multiplexer
+        dataframe['atr'] = ta.ATR(dataframe, timeperiod=14) * self.multiplexer
         dataframe['rsi'] = ta.RSI(dataframe['close'], timeperiod=14)
         dataframe['above_group'] = (dataframe['rsi'] >= 70).astype(int).diff().ne(0).cumsum() * (dataframe['rsi'] >= 70)
         dataframe['below_group'] = (dataframe['rsi'] <= 30).astype(int).diff().ne(0).cumsum() * (dataframe['rsi'] <= 30)
