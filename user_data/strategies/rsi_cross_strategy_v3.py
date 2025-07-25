@@ -51,26 +51,25 @@ class RSICrossStrategyV3(IStrategy):
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        trades = Trade.get_trades_proxy(pair=metadata['pair'],is_open=False)
-        if trades:
-            trade = trades[-1]
-            if trade.enter_tag == "break" and trade.close_profit_abs < 0:
-                if trade.is_short:
-                    dataframe[["enter_long" , "enter_tag"]] = (1, "reaction")
-                else:
-                    dataframe[["enter_short" , "enter_tag"]] = (1, "reaction")
-                return dataframe
-
         dataframe.loc[
             (
-                qtpylib.crossed_above(dataframe['close'], dataframe['max_high'])
+                qtpylib.crossed_above(dataframe['close'], dataframe['max_high'] + dataframe['atr'])
             ), ["enter_long" , "enter_tag"]] = (1, "break")
 
         dataframe.loc[
             (
-                qtpylib.crossed_below(dataframe['close'], dataframe['min_low'])
-            ), ["enter_short" , "enter_tag"]] = (1, "break")
+                qtpylib.crossed_above(dataframe['close'], dataframe['max_high'] - dataframe['atr'])
+            ), ["enter_short" , "enter_tag"]] = (1, "reaction")
 
+        dataframe.loc[
+            (
+                qtpylib.crossed_below(dataframe['close'], dataframe['min_low'] - dataframe['atr'])
+            ), ["enter_short" , "enter_tag"]] = (1, "break")
+        
+        dataframe.loc[
+            (
+                qtpylib.crossed_above(dataframe['close'], dataframe['max_high'] + dataframe['atr'])
+            ), ["enter_long" , "enter_tag"]] = (1, "reaction")
 
         return dataframe
 
@@ -78,15 +77,6 @@ class RSICrossStrategyV3(IStrategy):
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         return dataframe
-
-
-    # def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
-    #                         time_in_force: str, current_time: datetime, entry_tag: Optional[str],
-    #                         side: str, **kwargs) -> bool:
-
-    #     today_trades = Trade.get_trades_proxy(open_date = date.today(),is_open=False)
-    #     max_loss = len(trade.close_profit_abs < 0 for trade in today_trades)
-    #     if max_loss == 2: return False
 
 
     def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
