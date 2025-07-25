@@ -36,7 +36,7 @@ class RSICrossStrategyV3(IStrategy):
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe['atr'] = ta.ATR(dataframe, timeperiod=4)
+        dataframe['atr'] = ta.ATR(dataframe, timeperiod=4) * self.multiplexer
         dataframe['rsi'] = ta.RSI(dataframe['close'], timeperiod=14)
         dataframe['above_group'] = (dataframe['rsi'] >= 70).astype(int).diff().ne(0).cumsum() * (dataframe['rsi'] >= 70)
         dataframe['below_group'] = (dataframe['rsi'] <= 30).astype(int).diff().ne(0).cumsum() * (dataframe['rsi'] <= 30)
@@ -53,22 +53,26 @@ class RSICrossStrategyV3(IStrategy):
 
         dataframe.loc[
             (
-                qtpylib.crossed_above(dataframe['close'], dataframe['max_high'] + dataframe['atr'])
+                (dataframe['close'] > dataframe['close'].shift(1)) &
+                (qtpylib.crossed_above(dataframe['close'], dataframe['max_high'] + dataframe['atr']))
             ), ["enter_long" , "enter_tag"]] = (1, "break")
 
         dataframe.loc[
             (
-                qtpylib.crossed_above(dataframe['close'], dataframe['max_high'] - dataframe['atr'])
+                (dataframe['close'] < dataframe['close'].shift(1)) &
+                (qtpylib.crossed_below(dataframe['close'], dataframe['max_high'] - dataframe['atr']))
             ), ["enter_short" , "enter_tag"]] = (1, "reaction")
 
         dataframe.loc[
             (
-                qtpylib.crossed_below(dataframe['close'], dataframe['min_low'] - dataframe['atr'])
+                (dataframe['close'] < dataframe['close'].shift(1)) &
+                (qtpylib.crossed_below(dataframe['close'], dataframe['min_low'] - dataframe['atr']))
             ), ["enter_short" , "enter_tag"]] = (1, "break")
         
         dataframe.loc[
             (
-                qtpylib.crossed_above(dataframe['close'], dataframe['max_high'] + dataframe['atr'])
+                (dataframe['close'] > dataframe['close'].shift(1)) &
+                (qtpylib.crossed_above(dataframe['close'], dataframe['min_low'] + dataframe['atr']))
             ), ["enter_long" , "enter_tag"]] = (1, "reaction")
 
         return dataframe
@@ -159,10 +163,3 @@ class RSICrossStrategyV3(IStrategy):
             trade.enter_tag == "break" and trade.is_short and dataframe['rsi'].iat[-1] > 70
         )
         if any(conditions): return 'Break target hit'
-
-
-    def bot_loop_start(self, **kwargs) -> None:
-        pairs = self.dp.current_whitelist()
-        for pair in pairs:
-            if self.is_pair_locked(pair):
-                self.unlock_pair(pair)
