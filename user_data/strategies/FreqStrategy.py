@@ -33,6 +33,20 @@ class FreqStrategy(IStrategy):
 
     use_custom_stoploss = True
 
+    @property
+    def protections(self):
+        return [
+            {
+                "method": "StoplossGuard",
+                "lookback_period_candles": 1,
+                "trade_limit": 1,
+                "stop_duration_candles": 48,
+                "required_profit": 0.0,
+                "only_per_pair": True,
+                "only_per_side": True
+            }
+        ]
+
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         n = 3
@@ -121,5 +135,9 @@ class FreqStrategy(IStrategy):
                     current_rate: float, current_profit: float, **kwargs) -> str:
 
         risk = trade.get_custom_data(key='risk', default=None)
-        if current_profit > risk * 2:
+        conditions = (
+            (current_profit > risk * 4) and (risk <= 0.005),
+            (current_profit > risk * 2) and (risk > 0.005)
+        )
+        if any(conditions):
             return "Target Hit!"
