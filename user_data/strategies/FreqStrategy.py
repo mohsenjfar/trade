@@ -23,7 +23,7 @@ class FreqStrategy(IStrategy):
 
     trade_max_loss_allowed = 0.005
 
-    timeframe = '5m'
+    timeframe = '15m'
 
     can_short: bool = True
 
