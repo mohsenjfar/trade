@@ -27,7 +27,7 @@ class EMACrossStrategy(IStrategy):
 
     use_exit_signal = True
 
-    use_custom_stoploss = False
+    use_custom_stoploss = True
 
     @property
     def protections(self):
