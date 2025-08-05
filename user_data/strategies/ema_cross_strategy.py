@@ -29,19 +29,19 @@ class EMACrossStrategy(IStrategy):
 
     use_custom_stoploss = False
 
-    # @property
-    # def protections(self):
-    #     return [
-    #         {
-    #             "method": "StoplossGuard",
-    #             "lookback_period_candles": 1,
-    #             "trade_limit": 1,
-    #             "stop_duration_candles": 48,
-    #             "required_profit": 0.0,
-    #             "only_per_pair": True,
-    #             "only_per_side": True
-    #         }
-    #     ]
+    @property
+    def protections(self):
+        return [
+            {
+                "method": "StoplossGuard",
+                "lookback_period_candles": 1,
+                "trade_limit": 1,
+                "stop_duration_candles": 60,
+                "required_profit": 0.0,
+                "only_per_pair": True,
+                "only_per_side": True
+            }
+        ]
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
@@ -64,12 +64,12 @@ class EMACrossStrategy(IStrategy):
 
         dataframe.loc[
             (
-                (qtpylib.crossed_above(dataframe['ema_short'], dataframe['ema_long'])) # Trigger
+                (dataframe['ema_short'] > dataframe['ema_long'])
             ), ["enter_long"]] = 1
 
         dataframe.loc[
             (
-                (qtpylib.crossed_below(dataframe['ema_short'], dataframe['ema_long'])) # Trigger
+                (dataframe['ema_short'] < dataframe['ema_long'])
             ), ["enter_short"]] = 1
 
 
