@@ -1,18 +1,14 @@
 import freqtrade.vendor.qtpylib.indicators as qtpylib
 from pandas import DataFrame
 import numpy as np
-from scipy.fft import fft, ifft, fftfreq
 from scipy.signal import argrelextrema
 import talib.abstract as ta
 from freqtrade.persistence import Trade
 from freqtrade.strategy import (
     IStrategy,
-    timeframe_to_prev_date,
-    stoploss_from_absolute,
-    stoploss_from_open,
-    informative
+    stoploss_from_open
 )
-from datetime import datetime, timedelta, date
+from datetime import datetime
 from typing import Optional
 
 class EMACrossStrategy(IStrategy):
