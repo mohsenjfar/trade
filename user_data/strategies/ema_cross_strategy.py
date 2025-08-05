@@ -64,12 +64,14 @@ class EMACrossStrategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['ema_short'] > dataframe['ema_long'])
+                (dataframe['ss'] > dataframe['ema_long']) & # Guard
+                (dataframe['ema_short'] > dataframe['ema_long']) # Trigger
             ), ["enter_long"]] = 1
 
         dataframe.loc[
             (
-                (dataframe['ema_short'] < dataframe['ema_long'])
+                (dataframe['sl'] < dataframe['ema_long']) & # Guard
+                (dataframe['ema_short'] < dataframe['ema_long']) # Trigger
             ), ["enter_short"]] = 1
 
 
