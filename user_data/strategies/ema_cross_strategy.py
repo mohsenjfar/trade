@@ -15,7 +15,7 @@ from freqtrade.strategy import (
 from datetime import datetime, timedelta, date
 from typing import Optional
 
-class FreqStrategy(IStrategy):
+class EMACrossStrategy(IStrategy):
 
     INTERFACE_VERSION = 3
 
@@ -31,41 +31,35 @@ class FreqStrategy(IStrategy):
 
     use_exit_signal = True
 
-    use_custom_stoploss = True
+    use_custom_stoploss = False
 
-    @property
-    def protections(self):
-        return [
-            {
-                "method": "StoplossGuard",
-                "lookback_period_candles": 1,
-                "trade_limit": 1,
-                "stop_duration_candles": 48,
-                "required_profit": 0.0,
-                "only_per_pair": True,
-                "only_per_side": True
-            }
-        ]
+    # @property
+    # def protections(self):
+    #     return [
+    #         {
+    #             "method": "StoplossGuard",
+    #             "lookback_period_candles": 1,
+    #             "trade_limit": 1,
+    #             "stop_duration_candles": 48,
+    #             "required_profit": 0.0,
+    #             "only_per_pair": True,
+    #             "only_per_side": True
+    #         }
+    #     ]
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        n = 3
-        dataframe['fft_vals'] = fft(dataframe['close'])
-        dataframe['freqs'] = fftfreq(len(dataframe), d=1)
-        keep = np.abs(dataframe['freqs']) <= 0.1
-        filtered_fft = np.zeros_like(dataframe['fft_vals'], dtype=complex)
-        filtered_fft[keep] = dataframe['fft_vals'][keep]
-        dataframe['smoothed'] = ifft(filtered_fft).real
-        min_peaks = argrelextrema(dataframe["smoothed"].values, np.less_equal, order=1)
-        max_peaks = argrelextrema(dataframe["smoothed"].values, np.greater_equal, order=1)
-        dataframe.loc[(dataframe.index.isin(min_peaks[0])),'min_peaks'] = dataframe.smoothed
-        dataframe.loc[(dataframe.index.isin(min_peaks[0]- n)),'long_trigger'] = dataframe.smoothed
-        dataframe['long_stop'] = dataframe.low.rolling(window = n * 2).min()
-        dataframe.loc[(dataframe.index.isin(max_peaks[0])),'max_peaks'] = dataframe.smoothed
-        dataframe.loc[(dataframe.index.isin(max_peaks[0] - n)),'short_trigger'] = dataframe.smoothed
-        dataframe['short_stop'] = dataframe.high.rolling(window = n * 2).max()
-        columns = ['min_peaks','long_trigger','long_stop','max_peaks','short_trigger','short_stop']
-        dataframe[columns] = dataframe[columns].ffill()
+        dataframe["ema_short"] = ta.EMA(dataframe, timeperiod=7)
+        dataframe["ema_medium"] = ta.EMA(dataframe, timeperiod=24)
+        dataframe["ema_long"] = ta.EMA(dataframe, timeperiod=100)
+        
+        min_peaks = argrelextrema(dataframe["ema_medium"].values, np.less_equal, order=1)
+        dataframe.loc[(dataframe.index.isin(min_peaks[0])),'sl'] = dataframe.ema_medium
+
+        max_peaks = argrelextrema(dataframe["ema_medium"].values, np.greater_equal, order=1)
+        dataframe.loc[(dataframe.index.isin(max_peaks[0])),'ss'] = dataframe.ema_medium
+
+        dataframe[['ss','sl']] = dataframe[['ss','sl']].ffill()
 
         return dataframe
 
@@ -74,14 +68,16 @@ class FreqStrategy(IStrategy):
 
         dataframe.loc[
             (
-                (qtpylib.crossed_above(dataframe['close'], dataframe['long_trigger'])) &
-                (dataframe['close'] > dataframe['min_peaks'])
+                (qtpylib.crossed_above(dataframe['ema_short'], dataframe['ema_long'])) &
+                (dataframe['sl'] < dataframe['ema_long']) &
+                (dataframe['sl'].index.max() > dataframe['ss'].index.max())
             ), ["enter_long"]] = 1
 
         dataframe.loc[
             (
-                (qtpylib.crossed_below(dataframe['close'], dataframe['short_trigger'])) &
-                (dataframe['close'] < dataframe['max_peaks'])
+                (qtpylib.crossed_below(dataframe['ema_short'], dataframe['ema_long'])) &
+                (dataframe['ss'] > dataframe['ema_long']) &
+                (dataframe['ss'].index.max() > dataframe['sl'].index.max())
             ), ["enter_short"]] = 1
 
 
@@ -89,6 +85,16 @@ class FreqStrategy(IStrategy):
 
 
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+
+        dataframe.loc[
+            (
+                (dataframe['ema_medium'] < dataframe['ema_long'])
+            ), ["exit_long"]] = 1
+
+        dataframe.loc[
+            (
+                (dataframe['ema_medium'] > dataframe['ema_long'])
+            ), ["exit_short"]] = 1
 
         return dataframe
 
@@ -99,7 +105,7 @@ class FreqStrategy(IStrategy):
                             **kwargs) -> float:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        stop = dataframe['short_stop'].iat[-1] if side == 'short' else dataframe['long_stop'].iat[-1]
+        stop = dataframe['ss'].iat[-1] if side == 'short' else dataframe['sl'].iat[-1]
         risk = abs(stop / dataframe['close'].iat[-1] - 1)
         return max(min(max_stake * self.trade_max_loss_allowed / risk, max_stake), min_stake)
 
@@ -118,7 +124,7 @@ class FreqStrategy(IStrategy):
         risk = trade.get_custom_data(key='risk', default=None)
         if risk is None:
             dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-            stop = dataframe['short_stop'].iat[-1] if trade.is_short else dataframe['long_stop'].iat[-1]
+            stop = dataframe['ss'].iat[-1] if trade.is_short else dataframe['sl'].iat[-1]
             risk = abs(stop / dataframe['close'].iat[-1] - 1)
             self.dp.send_msg(f"Trade risk: {risk * 100:.2f} %")
             trade.set_custom_data(key='risk', value=risk)
@@ -131,13 +137,13 @@ class FreqStrategy(IStrategy):
         )
 
 
-    def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
-                    current_rate: float, current_profit: float, **kwargs) -> str:
+    # def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
+    #                 current_rate: float, current_profit: float, **kwargs) -> str:
 
-        risk = trade.get_custom_data(key='risk', default=None)
-        conditions = (
-            (current_profit > risk * 4) and (risk <= 0.005),
-            (current_profit > risk * 2) and (risk > 0.005)
-        )
-        if any(conditions):
-            return "Target Hit!"
+    #     risk = trade.get_custom_data(key='risk', default=None)
+    #     conditions = (
+    #         (current_profit > risk * 4) and (risk <= 0.005),
+    #         (current_profit > risk * 2) and (risk > 0.005)
+    #     )
+    #     if any(conditions):
+    #         return "Target Hit!"

@@ -4,7 +4,7 @@ services:
   freqtrade:
       image: freqtradeorg/freqtrade:latest
       restart: unless-stopped
-      container_name: FreqStrategy
+      container_name: EMACrossStrategy
       dns:
         - 8.8.8.8
         - 1.1.1.1
@@ -14,7 +14,7 @@ services:
         - "8080:8080"
       command: >
         trade
-        --logfile /freqtrade/user_data/logs/freq_strategy_dry.log
-        --db-url sqlite:////freqtrade/user_data/freq_strategy_db_dry.sqlite
-        --config /freqtrade/user_data/config.json
-        --strategy FreqStrategy
+        --logfile /freqtrade/user_data/logs/ema_cross_strategy_dry.log
+        --db-url sqlite:////freqtrade/user_data/ema_cross_strategy_dry.sqlite
+        --config /freqtrade/user_data/ema_cross_strategy_dry.json
+        --strategy EMACrossStrategy
