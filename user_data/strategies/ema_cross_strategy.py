@@ -64,16 +64,12 @@ class EMACrossStrategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['ema_short'] > dataframe['ema_long']) &
-                (dataframe['sl'] < dataframe['ema_long']) &
-                (dataframe['sl'].index.max() > dataframe['ss'].index.max())
+                (qtpylib.crossed_above(dataframe['ema_short'], dataframe['ema_long'])) # Trigger
             ), ["enter_long"]] = 1
 
         dataframe.loc[
             (
-                (dataframe['ema_short'] < dataframe['ema_long']) &
-                (dataframe['ss'] > dataframe['ema_long']) &
-                (dataframe['ss'].index.max() > dataframe['sl'].index.max())
+                (qtpylib.crossed_below(dataframe['ema_short'], dataframe['ema_long'])) # Trigger
             ), ["enter_short"]] = 1
 
 
