@@ -10,6 +10,7 @@ from freqtrade.strategy import (
 )
 from datetime import datetime
 from typing import Optional
+import statsmodels.api as sm
 
 class EMACrossStrategy(IStrategy):
 
@@ -18,6 +19,8 @@ class EMACrossStrategy(IStrategy):
     stoploss = -1
 
     trade_max_loss_allowed = 0.005
+
+    multiplexer = 1
 
     timeframe = '1m'
 
@@ -29,33 +32,35 @@ class EMACrossStrategy(IStrategy):
 
     use_custom_stoploss = True
 
-    @property
-    def protections(self):
-        return [
-            {
-                "method": "StoplossGuard",
-                "lookback_period_candles": 1,
-                "trade_limit": 1,
-                "stop_duration_candles": 60,
-                "required_profit": 0.0,
-                "only_per_pair": True,
-                "only_per_side": True
-            }
-        ]
+    position_adjustment_enable = True
+
+    # @property
+    # def protections(self):
+    #     return [
+    #         {
+    #             "method": "StoplossGuard",
+    #             "lookback_period_candles": 1,
+    #             "trade_limit": 1,
+    #             "stop_duration_candles": 60,
+    #             "required_profit": 0.0,
+    #             "only_per_pair": True,
+    #             "only_per_side": True
+    #         }
+    #     ]
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe["ema_short"] = ta.EMA(dataframe, timeperiod=7)
         dataframe["ema_medium"] = ta.EMA(dataframe, timeperiod=24)
         dataframe["ema_long"] = ta.EMA(dataframe, timeperiod=100)
+
+        lowess = sm.nonparametric.lowess
+        dataframe["adx"] = ta.ADX(dataframe, timeperiod=14).bfill()
+        dataframe['adx_smoothed'] = lowess(dataframe['adx'], dataframe.index, frac=0.05)[:, 1]
+
+        dataframe["plus_di"] = ta.PLUS_DI(dataframe, timeperiod=14).bfill()
+        dataframe["minus_di"] = ta.MINUS_DI(dataframe, timeperiod=14).bfill()
         
-        min_peaks = argrelextrema(dataframe["ema_medium"].values, np.less_equal, order=1)
-        dataframe.loc[(dataframe.index.isin(min_peaks[0])),'sl'] = dataframe.ema_medium
-
-        max_peaks = argrelextrema(dataframe["ema_medium"].values, np.greater_equal, order=1)
-        dataframe.loc[(dataframe.index.isin(max_peaks[0])),'ss'] = dataframe.ema_medium
-
-        dataframe[['ss','sl']] = dataframe[['ss','sl']].ffill()
+        dataframe['atr'] = ta.ATR(dataframe, timeperiod=14)
 
         return dataframe
 
@@ -64,14 +69,14 @@ class EMACrossStrategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['sl'] < dataframe['ema_long']) & # Guard
-                (dataframe['ema_short'] > dataframe['ema_long']) # Trigger
+                (dataframe["plus_di"] > dataframe["minus_di"]) & # Guard
+                (qtpylib.crossed_above(dataframe['adx_smoothed'], 25)) # Trigger
             ), ["enter_long"]] = 1
 
         dataframe.loc[
             (
                 (dataframe['ss'] > dataframe['ema_long']) & # Guard
-                (dataframe['ema_short'] < dataframe['ema_long']) # Trigger
+                (qtpylib.crossed_above(dataframe['adx_smoothed'], 25)) # Trigger
             ), ["enter_short"]] = 1
 
 
@@ -99,8 +104,7 @@ class EMACrossStrategy(IStrategy):
                             **kwargs) -> float:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        stop = dataframe['ss'].iat[-1] if side == 'short' else dataframe['sl'].iat[-1]
-        risk = abs(stop / dataframe['close'].iat[-1] - 1)
+        risk = (dataframe['atr'].iat[-1] * self.multiplexer) / dataframe['close'].iat[-1]
         return max(min(max_stake * self.trade_max_loss_allowed / risk, max_stake), min_stake)
 
 
@@ -109,6 +113,19 @@ class EMACrossStrategy(IStrategy):
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         return dataframe['close'].iat[-1]
+    
+
+    def adjust_trade_position(self, trade: Trade, current_time: datetime,
+                              current_rate: float, current_profit: float,
+                              min_stake: float | None, max_stake: float,
+                              current_entry_rate: float, current_exit_rate: float,
+                              current_entry_profit: float, current_exit_profit: float,
+                              **kwargs
+                              ) -> float | None | tuple[float | None, str | None]:
+
+        risk = trade.get_custom_data(key='risk')
+        if (current_profit > risk * 2) and (trade.nr_of_successful_exits == 0):
+            return - trade.stake_amount / 2
 
 
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
@@ -118,8 +135,7 @@ class EMACrossStrategy(IStrategy):
         risk = trade.get_custom_data(key='risk', default=None)
         if risk is None:
             dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-            stop = dataframe['ss'].iat[-1] if trade.is_short else dataframe['sl'].iat[-1]
-            risk = abs(stop / dataframe['close'].iat[-1] - 1)
+            risk = (dataframe['atr'].iat[-1] * self.multiplexer) / dataframe['close'].iat[-1]
             self.dp.send_msg(f"Trade risk: {risk * 100:.2f} %")
             trade.set_custom_data(key='risk', value=risk)
         
