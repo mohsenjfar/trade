@@ -75,7 +75,7 @@ class EMACrossStrategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['ss'] > dataframe['ema_long']) & # Guard
+                (dataframe["plus_di"] < dataframe["minus_di"]) & # Guard
                 (qtpylib.crossed_above(dataframe['adx_smoothed'], 25)) # Trigger
             ), ["enter_short"]] = 1
 
