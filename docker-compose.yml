@@ -2,7 +2,7 @@
 version: '3'
 services:
   freqtrade:
-      image: freqtradeorg/freqtrade:latest
+      image: freqstat:latest
       restart: unless-stopped
       container_name: EMACrossStrategy
       dns:
