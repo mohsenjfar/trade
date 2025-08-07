@@ -11,7 +11,6 @@ from freqtrade.strategy import (
 )
 from datetime import datetime
 from typing import Optional
-import statsmodels.api as sm
 
 class EMACrossStrategy(IStrategy):
 
@@ -23,7 +22,7 @@ class EMACrossStrategy(IStrategy):
 
     multiplexer = 3
 
-    timeframe = '1m'
+    timeframe = '5m'
 
     can_short: bool = True
 
@@ -63,9 +62,7 @@ class EMACrossStrategy(IStrategy):
         dataframe["ema_medium"] = ta.EMA(dataframe, timeperiod=24)
         dataframe["ema_long"] = ta.EMA(dataframe, timeperiod=100)
 
-        lowess = sm.nonparametric.lowess
-        dataframe["adx"] = ta.ADX(dataframe, timeperiod=14).bfill()
-        dataframe['adx_smoothed'] = lowess(dataframe['adx'], dataframe.index, frac=0.05)[:, 1]
+        dataframe["adx"] = ta.ADX(dataframe, timeperiod=14)
 
         dataframe["plus_di"] = ta.PLUS_DI(dataframe, timeperiod=14)
         dataframe["minus_di"] = ta.MINUS_DI(dataframe, timeperiod=14)
@@ -81,14 +78,14 @@ class EMACrossStrategy(IStrategy):
             (
                 (dataframe["ema_medium_4h"] > dataframe["ema_long_4h"]) & # Guard
                 (dataframe["plus_di"] > dataframe["minus_di"]) & # Guard
-                (qtpylib.crossed_above(dataframe['adx_smoothed'], 25)) # Trigger
+                (qtpylib.crossed_above(dataframe['adx'], 25)) # Trigger
             ), ["enter_long"]] = 1
 
         dataframe.loc[
             (
                 (dataframe["ema_medium_4h"] < dataframe["ema_long_4h"]) & # Guard
                 (dataframe["plus_di"] < dataframe["minus_di"]) & # Guard
-                (qtpylib.crossed_above(dataframe['adx_smoothed'], 25)) # Trigger
+                (qtpylib.crossed_above(dataframe['adx'], 25)) # Trigger
             ), ["enter_short"]] = 1
 
 
