@@ -20,7 +20,7 @@ class EMACrossStrategy(IStrategy):
 
     trade_max_loss_allowed = 0.005
 
-    multiplexer = 1
+    multiplexer = 3
 
     timeframe = '1m'
 
@@ -57,8 +57,8 @@ class EMACrossStrategy(IStrategy):
         dataframe["adx"] = ta.ADX(dataframe, timeperiod=14).bfill()
         dataframe['adx_smoothed'] = lowess(dataframe['adx'], dataframe.index, frac=0.05)[:, 1]
 
-        dataframe["plus_di"] = ta.PLUS_DI(dataframe, timeperiod=14).bfill()
-        dataframe["minus_di"] = ta.MINUS_DI(dataframe, timeperiod=14).bfill()
+        dataframe["plus_di"] = ta.PLUS_DI(dataframe, timeperiod=14)
+        dataframe["minus_di"] = ta.MINUS_DI(dataframe, timeperiod=14)
         
         dataframe['atr'] = ta.ATR(dataframe, timeperiod=14)
 
@@ -147,13 +147,13 @@ class EMACrossStrategy(IStrategy):
         )
 
 
-    # def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
-    #                 current_rate: float, current_profit: float, **kwargs) -> str:
+    def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
+                    current_rate: float, current_profit: float, **kwargs) -> str:
 
-    #     risk = trade.get_custom_data(key='risk', default=None)
-    #     conditions = (
-    #         (current_profit > risk * 4) and (risk <= 0.005),
-    #         (current_profit > risk * 2) and (risk > 0.005)
-    #     )
-    #     if any(conditions):
-    #         return "Target Hit!"
+        risk = trade.get_custom_data(key='risk', default=None)
+        conditions = (
+            (current_profit > risk * 4) and (risk <= 0.005),
+            (current_profit > risk * 2) and (risk > 0.005)
+        )
+        if any(conditions):
+            return "Target Hit!"
