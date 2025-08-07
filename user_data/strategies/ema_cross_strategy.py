@@ -6,7 +6,8 @@ import talib.abstract as ta
 from freqtrade.persistence import Trade
 from freqtrade.strategy import (
     IStrategy,
-    stoploss_from_open
+    stoploss_from_open,
+    informative
 )
 from datetime import datetime
 from typing import Optional
@@ -48,6 +49,15 @@ class EMACrossStrategy(IStrategy):
     #         }
     #     ]
 
+    @informative('4h')
+    def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+
+        dataframe['ema_medium'] = ta.EMA(dataframe, timeperiod=24)
+        dataframe["ema_long"] = ta.EMA(dataframe, timeperiod=100)
+
+        return dataframe
+
+
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe["ema_medium"] = ta.EMA(dataframe, timeperiod=24)
@@ -69,12 +79,14 @@ class EMACrossStrategy(IStrategy):
 
         dataframe.loc[
             (
+                (dataframe["ema_medium_4h"] > dataframe["ema_long_4h"]) & # Guard
                 (dataframe["plus_di"] > dataframe["minus_di"]) & # Guard
                 (qtpylib.crossed_above(dataframe['adx_smoothed'], 25)) # Trigger
             ), ["enter_long"]] = 1
 
         dataframe.loc[
             (
+                (dataframe["ema_medium_4h"] < dataframe["ema_long_4h"]) & # Guard
                 (dataframe["plus_di"] < dataframe["minus_di"]) & # Guard
                 (qtpylib.crossed_above(dataframe['adx_smoothed'], 25)) # Trigger
             ), ["enter_short"]] = 1
@@ -87,12 +99,12 @@ class EMACrossStrategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['ema_medium'] < dataframe['ema_long'])
+                (dataframe['ema_medium_4h'] < dataframe['ema_long_4h'])
             ), ["exit_long"]] = 1
 
         dataframe.loc[
             (
-                (dataframe['ema_medium'] > dataframe['ema_long'])
+                (dataframe['ema_medium_4h'] > dataframe['ema_long_4h'])
             ), ["exit_short"]] = 1
 
         return dataframe
@@ -124,7 +136,7 @@ class EMACrossStrategy(IStrategy):
                               ) -> float | None | tuple[float | None, str | None]:
 
         risk = trade.get_custom_data(key='risk')
-        if (current_profit > risk * 2) and (trade.nr_of_successful_exits == 0):
+        if (current_profit > risk * 4) and (trade.nr_of_successful_exits == 0):
             return - trade.stake_amount / 2
 
 
@@ -147,13 +159,13 @@ class EMACrossStrategy(IStrategy):
         )
 
 
-    def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
-                    current_rate: float, current_profit: float, **kwargs) -> str:
+    # def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
+    #                 current_rate: float, current_profit: float, **kwargs) -> str:
 
-        risk = trade.get_custom_data(key='risk', default=None)
-        conditions = (
-            (current_profit > risk * 4) and (risk <= 0.005),
-            (current_profit > risk * 2) and (risk > 0.005)
-        )
-        if any(conditions):
-            return "Target Hit!"
+    #     risk = trade.get_custom_data(key='risk', default=None)
+    #     conditions = (
+    #         (current_profit > risk * 4) and (risk <= 0.005),
+    #         (current_profit > risk * 2) and (risk > 0.005)
+    #     )
+    #     if any(conditions):
+    #         return "Target Hit!"
