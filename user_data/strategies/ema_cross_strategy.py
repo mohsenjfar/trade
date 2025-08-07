@@ -33,7 +33,7 @@ class EMACrossStrategy(IStrategy):
 
     use_custom_stoploss = True
 
-    position_adjustment_enable = False
+    position_adjustment_enable = True
 
     # @property
     # def protections(self):
