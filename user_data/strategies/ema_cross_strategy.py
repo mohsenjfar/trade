@@ -34,19 +34,19 @@ class EMACrossStrategy(IStrategy):
 
     position_adjustment_enable = True
 
-    # @property
-    # def protections(self):
-    #     return [
-    #         {
-    #             "method": "StoplossGuard",
-    #             "lookback_period": 1440,
-    #             "trade_limit": 2,
-    #             "stop_duration_candles": 60,
-    #             "required_profit": 0.0,
-    #             "only_per_pair": False,
-    #             "only_per_side": True
-    #         }
-    #     ]
+    @property
+    def protections(self):
+        return [
+            {
+                "method": "StoplossGuard",
+                "lookback_period": 1440,
+                "trade_limit": 2,
+                "stop_duration_candles": 60,
+                "required_profit": 0.0,
+                "only_per_pair": False,
+                "only_per_side": True
+            }
+        ]
 
     @informative('4h')
     def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
@@ -133,7 +133,7 @@ class EMACrossStrategy(IStrategy):
                               ) -> float | None | tuple[float | None, str | None]:
 
         risk = trade.get_custom_data(key='risk')
-        if (current_profit > risk * 4) and (trade.nr_of_successful_exits == 0):
+        if (current_profit > risk * 2) and (trade.nr_of_successful_exits == 0):
             return - trade.stake_amount / 2
 
 
