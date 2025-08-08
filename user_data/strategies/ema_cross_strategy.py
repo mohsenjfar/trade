@@ -20,7 +20,7 @@ class EMACrossStrategy(IStrategy):
 
     trade_max_loss_allowed = 0.005
 
-    multiplexer = 3
+    multiplexer = 1
 
     timeframe = '5m'
 
