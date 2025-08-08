@@ -1,5 +1,5 @@
 {
-  "max_open_trades": 1,
+  "max_open_trades": 4,
   "stake_currency": "USDT",
   "stake_amount": "unlimited",
   "tradable_balance_ratio": 0.99,
@@ -42,7 +42,10 @@
   },
   "pairlists": [
     {
-        "method": "StaticPairList"
+        "method": "VolumePairList",
+        "number_assets": 20,
+        "sort_key": "quoteVolume",
+        "refresh_period": 1800
     }
   ],
   "telegram": {
