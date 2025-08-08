@@ -20,7 +20,7 @@ class EMACrossStrategy(IStrategy):
 
     trade_max_loss_allowed = 0.005
 
-    multiplexer = 1
+    multiplexer = 4
 
     timeframe = '5m'
 
@@ -39,11 +39,11 @@ class EMACrossStrategy(IStrategy):
     #     return [
     #         {
     #             "method": "StoplossGuard",
-    #             "lookback_period_candles": 1,
-    #             "trade_limit": 1,
+    #             "lookback_period": 1440,
+    #             "trade_limit": 2,
     #             "stop_duration_candles": 60,
     #             "required_profit": 0.0,
-    #             "only_per_pair": True,
+    #             "only_per_pair": False,
     #             "only_per_side": True
     #         }
     #     ]
