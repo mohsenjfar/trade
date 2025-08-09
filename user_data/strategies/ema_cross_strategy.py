@@ -39,9 +39,9 @@ class EMACrossStrategy(IStrategy):
         return [
             {
                 "method": "StoplossGuard",
-                "lookback_period": 1440,
+                "lookback_period": 240,
                 "trade_limit": 2,
-                "stop_duration_candles": 60,
+                "unlock_at":"00:00",
                 "required_profit": 0.0,
                 "only_per_pair": False,
                 "only_per_side": True
