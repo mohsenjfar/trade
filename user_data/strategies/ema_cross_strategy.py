@@ -133,7 +133,7 @@ class EMACrossStrategy(IStrategy):
                               ) -> float | None | tuple[float | None, str | None]:
 
         risk = trade.get_custom_data(key='risk')
-        if (current_profit > risk * 1.2) and (trade.nr_of_successful_exits == 0):
+        if (current_profit > risk * 1.5) and (trade.nr_of_successful_exits == 0):
             return - trade.stake_amount / 2
 
 
