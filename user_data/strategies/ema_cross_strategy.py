@@ -117,6 +117,17 @@ class EMACrossStrategy(IStrategy):
         return max(min(max_stake * self.trade_max_loss_allowed / risk, max_stake), min_stake)
 
 
+    def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
+                            time_in_force: str, current_time: datetime, entry_tag: Optional[str],
+                            side: str, **kwargs) -> bool:
+
+        open_trades = Trade.get_trades_proxy(is_open=True)
+        risk_free_trades = sum(trade.nr_of_successful_exits for trade in open_trades)
+        if len(open_trades) - risk_free_trades < 2:
+            return True
+        return False
+
+    
     def custom_entry_price(self, pair: str, trade: Trade | None, current_time: datetime, proposed_rate: float,
                            entry_tag: str | None, side: str, **kwargs) -> float:
 
