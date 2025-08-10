@@ -26,7 +26,7 @@ class DubleSideStrategyV1(IStrategy):
 
     can_short: bool = True
 
-    process_only_new_candles = True
+    process_only_new_candles = False
 
     use_exit_signal = True
 
