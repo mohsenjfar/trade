@@ -52,6 +52,8 @@ class DubleSideStrategyV1(IStrategy):
             if all(conditions):
                 dataframe["enter_short"] = 1
                 return dataframe
+            
+        dataframe["enter_long"] = 1
 
         return dataframe
 
@@ -68,7 +70,7 @@ class DubleSideStrategyV1(IStrategy):
         open_trades = Trade.get_trades_proxy(is_open=True)
         if open_trades:
             last_trade = open_trades[0]
-            if last_trade.is_short == (side=='short'):
+            if last_trade.is_short == (side == 'short'):
                 return False
         return True
 

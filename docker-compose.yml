@@ -1,40 +1,40 @@
 ---
 version: '3'
 services:
-  freqtrade:
-      image: freqstat:latest
-      restart: unless-stopped
-      container_name: ADXCrossStrategyV1
-      dns:
-        - 8.8.8.8
-        - 1.1.1.1
-      volumes:
-        - "./user_data:/freqtrade/user_data"
-      ports:
-        - "8080:8080"
-      command: >
-        trade
-        --logfile /freqtrade/user_data/logs/adx_cross_strategy_v1_dry.log
-        --db-url sqlite:////freqtrade/user_data/adx_cross_strategy_v1_dry.sqlite
-        --config /freqtrade/user_data/adx_cross_strategy_dry.json
-        --strategy ADXCrossStrategyV1
-  freqtrade2:
-      image: freqstat:latest
-      restart: unless-stopped
-      container_name: ADXCrossStrategyV2
-      dns:
-        - 8.8.8.8
-        - 1.1.1.1
-      volumes:
-        - "./user_data:/freqtrade/user_data"
-      # ports:
-      #   - "8080:8080"
-      command: >
-        trade
-        --logfile /freqtrade/user_data/logs/adx_cross_strategy_v2_dry.log
-        --db-url sqlite:////freqtrade/user_data/adx_cross_strategy_v2_dry.sqlite
-        --config /freqtrade/user_data/adx_cross_strategy_dry_v2.json
-        --strategy ADXCrossStrategyV2
+  # freqtrade:
+  #     image: freqstat:latest
+  #     restart: unless-stopped
+  #     container_name: ADXCrossStrategyV1
+  #     dns:
+  #       - 8.8.8.8
+  #       - 1.1.1.1
+  #     volumes:
+  #       - "./user_data:/freqtrade/user_data"
+  #     ports:
+  #       - "8080:8080"
+  #     command: >
+  #       trade
+  #       --logfile /freqtrade/user_data/logs/adx_cross_strategy_v1_dry.log
+  #       --db-url sqlite:////freqtrade/user_data/adx_cross_strategy_v1_dry.sqlite
+  #       --config /freqtrade/user_data/adx_cross_strategy_dry.json
+  #       --strategy ADXCrossStrategyV1
+  # freqtrade2:
+  #     image: freqstat:latest
+  #     restart: unless-stopped
+  #     container_name: ADXCrossStrategyV2
+  #     dns:
+  #       - 8.8.8.8
+  #       - 1.1.1.1
+  #     volumes:
+  #       - "./user_data:/freqtrade/user_data"
+  #     # ports:
+  #     #   - "8080:8080"
+  #     command: >
+  #       trade
+  #       --logfile /freqtrade/user_data/logs/adx_cross_strategy_v2_dry.log
+  #       --db-url sqlite:////freqtrade/user_data/adx_cross_strategy_v2_dry.sqlite
+  #       --config /freqtrade/user_data/adx_cross_strategy_dry_v2.json
+  #       --strategy ADXCrossStrategyV2
   freqtrade3:
       image: freqstat:latest
       restart: unless-stopped
