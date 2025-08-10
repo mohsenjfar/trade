@@ -12,7 +12,7 @@ from freqtrade.strategy import (
 from datetime import datetime
 from typing import Optional
 
-class EMACrossStrategy(IStrategy):
+class ADXCrossStrategyV1(IStrategy):
 
     INTERFACE_VERSION = 3
 
@@ -156,7 +156,7 @@ class EMACrossStrategy(IStrategy):
         if risk is None:
             dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
             risk = (dataframe['atr'].iat[-1] * self.multiplexer) / dataframe['close'].iat[-1]
-            self.dp.send_msg(f"Trade risk: {risk * 100:.2f} %")
+            self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
             trade.set_custom_data(key='risk', value=risk)
         
         return stoploss_from_open(
