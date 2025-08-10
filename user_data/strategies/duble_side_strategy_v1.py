@@ -72,6 +72,11 @@ class DubleSideStrategyV1(IStrategy):
             last_trade = open_trades[0]
             if last_trade.is_short == (side == 'short'):
                 return False
+            
+        close_trades = Trade.get_trades_proxy(is_open=False)
+        if len(close_trades) % 2 == 1:
+            return False
+        
         return True
 
     def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
