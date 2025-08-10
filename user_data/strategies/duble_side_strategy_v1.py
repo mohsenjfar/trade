@@ -52,7 +52,6 @@ class DubleSideStrategyV1(IStrategy):
             if all(conditions):
                 dataframe["enter_short"] = 1
                 return dataframe
-        dataframe["enter_long"] = 1
 
         return dataframe
 
@@ -61,6 +60,17 @@ class DubleSideStrategyV1(IStrategy):
 
         return dataframe
 
+
+    def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
+                            time_in_force: str, current_time: datetime, entry_tag: Optional[str],
+                            side: str, **kwargs) -> bool:
+
+        open_trades = Trade.get_trades_proxy(is_open=True)
+        if open_trades:
+            last_trade = open_trades[0]
+            if last_trade.is_short != (side=='short'):
+                return True
+        return False
 
     def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
                             proposed_stake: float, min_stake: Optional[float], max_stake: float,
