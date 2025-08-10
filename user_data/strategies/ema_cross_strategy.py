@@ -167,13 +167,10 @@ class EMACrossStrategy(IStrategy):
         )
 
 
-    # def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
-    #                 current_rate: float, current_profit: float, **kwargs) -> str:
+    def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
+                    current_rate: float, current_profit: float, **kwargs) -> str:
 
-    #     risk = trade.get_custom_data(key='risk', default=None)
-    #     conditions = (
-    #         (current_profit > risk * 4) and (risk <= 0.005),
-    #         (current_profit > risk * 2) and (risk > 0.005)
-    #     )
-    #     if any(conditions):
-    #         return "Target Hit!"
+        risk = trade.get_custom_data(key='risk', default=None)
+        trade_duration = (current_time - trade.open_date_utc).seconds / 60
+        if (trade_duration > 240) and (0 < current_profit < risk):
+            return "Trade expired"
