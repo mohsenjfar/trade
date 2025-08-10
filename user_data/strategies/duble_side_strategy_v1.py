@@ -42,15 +42,16 @@ class DubleSideStrategyV1(IStrategy):
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         open_trades = Trade.get_trades_proxy(is_open=True)
-        last_trade = open_trades[0]
-        conditions = (
-            len(open_trades) == 1,
-            not last_trade.is_short,
-            last_trade.pair != metadata['pair']
-        )
-        if all(conditions):
-            dataframe["enter_short"] = 1
-            return dataframe
+        if open_trades:
+            last_trade = open_trades[0]
+            conditions = (
+                len(open_trades) == 1,
+                not last_trade.is_short,
+                last_trade.pair != metadata['pair']
+            )
+            if all(conditions):
+                dataframe["enter_short"] = 1
+                return dataframe
         dataframe["enter_long"] = 1
 
         return dataframe
