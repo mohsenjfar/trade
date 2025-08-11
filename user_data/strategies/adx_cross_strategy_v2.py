@@ -33,8 +33,6 @@ class ADXCrossStrategyV2(IStrategy):
 
     use_custom_stoploss = True
 
-    position_adjustment_enable = True
-
     buy_rsi = IntParameter(low=1, high=50, default=30, space='buy', optimize=True, load=True)
     short_rsi = IntParameter(low=51, high=100, default=70, space='sell', optimize=True, load=True)
 
@@ -152,19 +150,6 @@ class ADXCrossStrategyV2(IStrategy):
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         return dataframe['close'].iat[-1]
-    
-
-    def adjust_trade_position(self, trade: Trade, current_time: datetime,
-                              current_rate: float, current_profit: float,
-                              min_stake: float | None, max_stake: float,
-                              current_entry_rate: float, current_exit_rate: float,
-                              current_entry_profit: float, current_exit_profit: float,
-                              **kwargs
-                              ) -> float | None | tuple[float | None, str | None]:
-
-        risk = trade.get_custom_data(key='risk')
-        if (current_profit > risk * 1.5) and (trade.nr_of_successful_exits == 0):
-            return - trade.stake_amount / 2
 
 
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
@@ -191,5 +176,9 @@ class ADXCrossStrategyV2(IStrategy):
 
         risk = trade.get_custom_data(key='risk', default=None)
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
-        if (trade_duration > 240) and (0 < current_profit < risk):
+        conditions = (
+            (trade_duration > 240) and (0 < current_profit < risk),
+            (trade_duration > 480) and (risk < current_profit < 2 * risk)
+        )
+        if any(conditions):
             return "Trade expired"
