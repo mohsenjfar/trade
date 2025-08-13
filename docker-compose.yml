@@ -4,7 +4,7 @@ services:
   freqtrade:
       image: freqstat:latest
       restart: unless-stopped
-      container_name: RSIOverCross
+      container_name: Trader
       dns:
         - 8.8.8.8
         - 1.1.1.1
@@ -14,7 +14,7 @@ services:
         - "8080:8080"
       command: >
         trade
-        --logfile /freqtrade/user_data/logs/rsi_over_cross_dry.log
-        --db-url sqlite:////freqtrade/user_data/rsi_over_cross_dry.sqlite
-        --config /freqtrade/user_data/rsi_over_cross.json
-        --strategy RSIOverCross
+        --logfile /freqtrade/user_data/logs/strategy.log
+        --db-url sqlite:////freqtrade/user_data/db_dry.sqlite
+        --config /freqtrade/user_data/config.json
+        --strategy Strategy

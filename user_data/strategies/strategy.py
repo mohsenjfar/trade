@@ -10,7 +10,7 @@ from freqtrade.strategy import (
 from datetime import datetime, timedelta, date
 from typing import Optional
 
-class RSICrossStrategy(IStrategy):
+class Strategy(IStrategy):
 
     INTERFACE_VERSION = 3
 
