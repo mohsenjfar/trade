@@ -4,23 +4,19 @@ import talib.abstract as ta
 from freqtrade.persistence import Trade
 from freqtrade.strategy import (
     IStrategy,
-    timeframe_to_prev_date,
-    stoploss_from_absolute,
     stoploss_from_open,
     informative
 )
 from datetime import datetime, timedelta, date
 from typing import Optional
 
-class RSICrossStrategyV3(IStrategy):
+class RSICrossStrategy(IStrategy):
 
     INTERFACE_VERSION = 3
 
     stoploss = -1
 
     trade_max_loss_allowed = 0.005
-
-    multiplexer = 4
 
     timeframe = '5m'
 
@@ -32,11 +28,17 @@ class RSICrossStrategyV3(IStrategy):
 
     use_custom_stoploss = True
 
-    position_adjustment_enable = True
+    @informative('4h')
+    def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+
+        dataframe['ema_medium'] = ta.EMA(dataframe, timeperiod=24)
+        dataframe["ema_long"] = ta.EMA(dataframe, timeperiod=100)
+
+        return dataframe
+    
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe['atr'] = ta.ATR(dataframe, timeperiod=14) * self.multiplexer
         dataframe['rsi'] = ta.RSI(dataframe['close'], timeperiod=14)
         dataframe['above_group'] = (dataframe['rsi'] >= 70).astype(int).diff().ne(0).cumsum() * (dataframe['rsi'] >= 70)
         dataframe['below_group'] = (dataframe['rsi'] <= 30).astype(int).diff().ne(0).cumsum() * (dataframe['rsi'] <= 30)
@@ -46,6 +48,11 @@ class RSICrossStrategyV3(IStrategy):
         dataframe.loc[dataframe['below_group'] == 0, 'min_low'] = None
         dataframe = dataframe.ffill()
 
+        last_max_index = dataframe[dataframe['max_high'] == dataframe['high']].index.max()
+        dataframe['sl'] = dataframe.loc[last_max_index:].low.min()
+        last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
+        dataframe['ss'] = dataframe.loc[last_min_index:].high.max()
+
         return dataframe
 
 
@@ -54,31 +61,29 @@ class RSICrossStrategyV3(IStrategy):
         dataframe.loc[
             (
                 (dataframe['close'] > dataframe['close'].shift(1)) &
-                (qtpylib.crossed_above(dataframe['close'], dataframe['max_high'] + dataframe['atr']))
+                (qtpylib.crossed_above(dataframe['close'], dataframe['max_high']))
             ), ["enter_long" , "enter_tag"]] = (1, "break")
 
         dataframe.loc[
             (
                 (dataframe['close'] < dataframe['close'].shift(1)) &
-                (qtpylib.crossed_below(dataframe['close'], dataframe['max_high'] - dataframe['atr']))
-            ), ["enter_short" , "enter_tag"]] = (1, "reaction")
-
-        dataframe.loc[
-            (
-                (dataframe['close'] < dataframe['close'].shift(1)) &
-                (qtpylib.crossed_below(dataframe['close'], dataframe['min_low'] - dataframe['atr']))
+                (qtpylib.crossed_below(dataframe['close'], dataframe['min_low']))
             ), ["enter_short" , "enter_tag"]] = (1, "break")
-        
-        dataframe.loc[
-            (
-                (dataframe['close'] > dataframe['close'].shift(1)) &
-                (qtpylib.crossed_above(dataframe['close'], dataframe['min_low'] + dataframe['atr']))
-            ), ["enter_long" , "enter_tag"]] = (1, "reaction")
 
         return dataframe
 
 
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+
+        dataframe.loc[
+            (
+                (dataframe['ema_medium_4h'] < dataframe['ema_long_4h'])
+            ), ["exit_long"]] = 1
+
+        dataframe.loc[
+            (
+                (dataframe['ema_medium_4h'] > dataframe['ema_long_4h'])
+            ), ["exit_short"]] = 1
 
         return dataframe
 
@@ -89,7 +94,9 @@ class RSICrossStrategyV3(IStrategy):
                             **kwargs) -> float:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        risk = dataframe['atr'].iat[-1] * self.multiplexer / current_rate
+        last_candle = dataframe.iloc[-1].squeeze()
+        stop = last_candle.ss if side == "short" else last_candle.sl
+        risk = abs(stop / last_candle.close - 1)
         return max(min(max_stake * self.trade_max_loss_allowed / risk, max_stake), min_stake)
 
 
@@ -107,20 +114,11 @@ class RSICrossStrategyV3(IStrategy):
         risk = trade.get_custom_data(key='risk', default=None)
         if risk is None:
             dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
-            trade_date = timeframe_to_prev_date(self.timeframe, trade.open_date_utc)
-            pre_trade_date = timeframe_to_prev_date(self.timeframe, trade_date - timedelta(seconds=10))
-            pre_trade_candle = dataframe.loc[dataframe['date'] == pre_trade_date].squeeze()
-            risk = pre_trade_candle["atr"] * self.multiplexer / trade.open_rate
-            self.dp.send_msg(f"Trade risk: {risk * 100:.2f} %")
+            last_candle = dataframe.iloc[-1].squeeze()
+            stop = last_candle.ss if trade.is_short else last_candle.sl
+            risk = abs(stop / last_candle.close - 1)
+            self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
             trade.set_custom_data(key='risk', value=risk)
-
-        if current_profit > risk * 3:
-            return stoploss_from_open(
-                0,
-                current_profit,
-                is_short=trade.is_short,
-                leverage=trade.leverage
-            )
         
         return stoploss_from_open(
             -risk,
@@ -130,36 +128,14 @@ class RSICrossStrategyV3(IStrategy):
         )
 
 
-    def adjust_trade_position(self, trade: Trade, current_time: datetime,
-                              current_rate: float, current_profit: float,
-                              min_stake: float | None, max_stake: float,
-                              current_entry_rate: float, current_exit_rate: float,
-                              current_entry_profit: float, current_exit_profit: float,
-                              **kwargs
-                              ) -> float | None | tuple[float | None, str | None]:
-
-        risk = trade.get_custom_data(key='risk', default=None)
-        conditions = (
-            trade.enter_tag == "break",
-            current_profit > 4 * risk,
-            trade.nr_of_successful_exits == 0
-        )
-        if all(conditions): return - trade.stake_amount / 2
-
-
     def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
                     current_rate: float, current_profit: float, **kwargs) -> str:
 
         risk = trade.get_custom_data(key='risk', default=None)
+        trade_duration = (current_time - trade.open_date_utc).seconds / 60
         conditions = (
-            trade.enter_tag == "reaction",
-            current_profit > risk * 2
+            (trade_duration > 240) and (0 < current_profit < risk),
+            (trade_duration > 480) and (risk < current_profit < 2 * risk)
         )
-        if all(conditions): return 'Reaction target hit'
-
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        conditions = (
-            trade.enter_tag == "break" and not trade.is_short and dataframe['rsi'].iat[-1] < 30,
-            trade.enter_tag == "break" and trade.is_short and dataframe['rsi'].iat[-1] > 70
-        )
-        if any(conditions): return 'Break target hit'
+        if any(conditions):
+            return "Trade expired"
