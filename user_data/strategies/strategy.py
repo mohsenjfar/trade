@@ -5,7 +5,7 @@ from freqtrade.persistence import Trade
 from freqtrade.strategy import (
     IStrategy,
     stoploss_from_open,
-    informative
+    # informative
 )
 from datetime import datetime, timedelta, date
 from typing import Optional
@@ -28,13 +28,13 @@ class Strategy(IStrategy):
 
     use_custom_stoploss = True
 
-    @informative('4h')
-    def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+    # @informative('4h')
+    # def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe['ema_medium'] = ta.EMA(dataframe, timeperiod=24)
-        dataframe["ema_long"] = ta.EMA(dataframe, timeperiod=100)
+    #     dataframe['ema_medium'] = ta.EMA(dataframe, timeperiod=24)
+    #     dataframe["ema_long"] = ta.EMA(dataframe, timeperiod=100)
 
-        return dataframe
+    #     return dataframe
     
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
@@ -53,6 +53,10 @@ class Strategy(IStrategy):
         last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
         dataframe['ss'] = dataframe.loc[last_min_index:].high.max()
 
+        dataframe.loc[dataframe['max_high'] == dataframe['high'],"cat"] = 'H'
+        dataframe.loc[dataframe['min_low'] == dataframe['low'],"cat"] = 'L'
+        dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-2:]
+
         return dataframe
 
 
@@ -60,15 +64,17 @@ class Strategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['close'] > dataframe['close'].shift(1)) &
-                (qtpylib.crossed_above(dataframe['close'], dataframe['max_high']))
-            ), ["enter_long" , "enter_tag"]] = (1, "break")
+                (dataframe['close'] > dataframe['close'].shift(1)) & # Guard
+                (dataframe['cat'] == "LH") & # Guard
+                (qtpylib.crossed_above(dataframe['close'], dataframe['max_high'])) # Trigger
+            ), ["enter_long" , "enter_tag"]] = (1, "LH")
 
         dataframe.loc[
             (
-                (dataframe['close'] < dataframe['close'].shift(1)) &
-                (qtpylib.crossed_below(dataframe['close'], dataframe['min_low']))
-            ), ["enter_short" , "enter_tag"]] = (1, "break")
+                (dataframe['close'] < dataframe['close'].shift(1)) & # Guard
+                (dataframe['cat'] == "HL") & # Guard
+                (qtpylib.crossed_below(dataframe['close'], dataframe['min_low'])) # Trigger
+            ), ["enter_short" , "enter_tag"]] = (1, "HL")
 
         return dataframe
 
@@ -77,12 +83,12 @@ class Strategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['ema_medium_4h'] < dataframe['ema_long_4h'])
+                (dataframe['rsi'] < 30)
             ), ["exit_long"]] = 1
 
         dataframe.loc[
             (
-                (dataframe['ema_medium_4h'] > dataframe['ema_long_4h'])
+                (dataframe['rsi'] > 70)
             ), ["exit_short"]] = 1
 
         return dataframe
@@ -97,7 +103,8 @@ class Strategy(IStrategy):
         last_candle = dataframe.iloc[-1].squeeze()
         stop = last_candle.ss if side == "short" else last_candle.sl
         risk = abs(stop / last_candle.close - 1)
-        return max(min(max_stake * self.trade_max_loss_allowed / risk, max_stake), min_stake)
+        stake = max(min(max_stake * self.trade_max_loss_allowed / risk, max_stake), min_stake)
+        return 0 if stake < 10 else stake
 
 
     def custom_entry_price(self, pair: str, trade: Trade | None, current_time: datetime, proposed_rate: float,
