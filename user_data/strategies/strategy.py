@@ -101,10 +101,10 @@ class Strategy(IStrategy):
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
+        total_stake = max_stake + Trade.total_open_trades_stakes()
         stop = last_candle.ss if side == "short" else last_candle.sl
         risk = abs(stop / last_candle.close - 1)
-        stake = max(min(max_stake * self.trade_max_loss_allowed / risk, max_stake), min_stake)
-        return 0 if stake < 10 else stake
+        return min(total_stake * self.trade_max_loss_allowed / risk, max_stake)
 
 
     def custom_entry_price(self, pair: str, trade: Trade | None, current_time: datetime, proposed_rate: float,
