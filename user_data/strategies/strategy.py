@@ -107,6 +107,14 @@ class Strategy(IStrategy):
         return min(total_stake * self.trade_max_loss_allowed / risk, max_stake)
 
 
+    def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
+                            time_in_force: str, current_time: datetime, entry_tag: Optional[str],
+                            side: str, **kwargs) -> bool:
+
+        today_trades = Trade.get_trades_proxy(open_date = date.today())
+        return False if len(today_trades) > 3 else True
+
+
     def custom_entry_price(self, pair: str, trade: Trade | None, current_time: datetime, proposed_rate: float,
                            entry_tag: str | None, side: str, **kwargs) -> float:
 
@@ -141,8 +149,8 @@ class Strategy(IStrategy):
         risk = trade.get_custom_data(key='risk', default=None)
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
         conditions = (
-            (trade_duration > 480) and (2 * risk < current_profit < 3 * risk),
-            (trade_duration > 1440) and (0 < current_profit < risk)
+            (trade_duration > 480) and (2 * risk < current_profit < 3 * risk)
+            
         )
         if any(conditions):
-            return "Trade expired"
+            return "Trade expired!"
