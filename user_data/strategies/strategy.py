@@ -112,7 +112,10 @@ class Strategy(IStrategy):
                             side: str, **kwargs) -> bool:
 
         today_trades = Trade.get_trades_proxy(open_date = date.today())
-        return False if len(today_trades) > 3 else True
+        short_trades = sum(trade for trade in today_trades if trade.is_short)
+        long_trades = len(today_trades) - short_trades
+        conditions = (short_trades > 3,long_trades > 3)
+        return False if any(conditions) else True
 
 
     def custom_entry_price(self, pair: str, trade: Trade | None, current_time: datetime, proposed_rate: float,
@@ -148,9 +151,5 @@ class Strategy(IStrategy):
 
         risk = trade.get_custom_data(key='risk', default=None)
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
-        conditions = (
-            (trade_duration > 480) and (2 * risk < current_profit < 3 * risk)
-            
-        )
-        if any(conditions):
+        if (trade_duration > 240) and (current_profit < 2 * risk ):
             return "Trade expired!"
