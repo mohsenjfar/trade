@@ -151,5 +151,9 @@ class Strategy(IStrategy):
 
         risk = trade.get_custom_data(key='risk', default=None)
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
-        if (trade_duration > 240) and (current_profit < 2 * risk ):
+        conditions = (
+            (trade_duration > 60) and (current_profit < 0),
+            (trade_duration > 240) and (current_profit < 2 * risk )
+        )
+        if any(conditions):
             return "Trade expired!"
