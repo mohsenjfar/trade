@@ -112,9 +112,12 @@ class Strategy(IStrategy):
                             side: str, **kwargs) -> bool:
 
         today_trades = Trade.get_trades_proxy(open_date = date.today())
-        short_trades = sum(trade for trade in today_trades if trade.is_short)
+        short_trades = sum(True for trade in today_trades if trade.is_short)
         long_trades = len(today_trades) - short_trades
-        conditions = (short_trades > 3,long_trades > 3)
+        conditions = (
+            (short_trades > 3) and (side == "short"),
+            (long_trades > 3) and (side == "long")
+        )
         return False if any(conditions) else True
 
 
