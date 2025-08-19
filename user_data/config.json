@@ -35,17 +35,15 @@
     "ccxt_config": {},
     "ccxt_async_config": {},
     "pair_whitelist": [
-      "WIF/USDT:USDT"
+      "BTC/USDT:USDT",
+      "ETH/USDT:USDT"
     ],
     "pair_blacklist": [
     ]
   },
   "pairlists": [
     {
-        "method": "VolumePairList",
-        "number_assets": 5,
-        "sort_key": "quoteVolume",
-        "refresh_period": 1800
+        "method": "StaticPairList"
     }
   ],
   "telegram": {
