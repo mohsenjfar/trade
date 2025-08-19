@@ -115,8 +115,8 @@ class Strategy(IStrategy):
         short_trades = sum(True for trade in today_trades if trade.is_short)
         long_trades = len(today_trades) - short_trades
         conditions = (
-            (short_trades > 3) and (side == "short"),
-            (long_trades > 3) and (side == "long")
+            (short_trades == 2) and (side == "short"),
+            (long_trades == 2) and (side == "long")
         )
         return False if any(conditions) else True
 
