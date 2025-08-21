@@ -64,8 +64,6 @@ class Strategy(IStrategy):
 
         dataframe = self.analyze_extrema(dataframe)
 
-        self.dp.send_msg(f"{dataframe.tail(1).to_dict('records')}")
-
         return dataframe
 
 
@@ -74,7 +72,7 @@ class Strategy(IStrategy):
         dataframe.loc[
             (
                 (dataframe['cat_1h'] == "LH") & # Guard
-                (dataframe['close'] > dataframe['max_high_1h']) # Guard
+                (dataframe['close'] > dataframe['max_high_1h']) & # Guard
                 (dataframe['close'] > dataframe['close'].shift(1)) & # Guard
                 (dataframe['cat'] == "LH") & # Guard
                 (qtpylib.crossed_above(dataframe['close'], dataframe['max_high'])) # Trigger
@@ -83,7 +81,7 @@ class Strategy(IStrategy):
         dataframe.loc[
             (
                 (dataframe['cat_1h'] == "HL") & # Guard
-                (dataframe['close'] < dataframe['min_low_1h']) # Guard
+                (dataframe['close'] < dataframe['min_low_1h']) & # Guard
                 (dataframe['close'] < dataframe['close'].shift(1)) & # Guard
                 (dataframe['cat'] == "HL") & # Guard
                 (qtpylib.crossed_below(dataframe['close'], dataframe['min_low'])) # Trigger
