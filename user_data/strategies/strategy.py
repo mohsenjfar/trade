@@ -5,7 +5,7 @@ from freqtrade.persistence import Trade
 from freqtrade.strategy import (
     IStrategy,
     stoploss_from_open,
-    # informative
+    informative
 )
 from datetime import datetime, timedelta, date
 from typing import Optional
@@ -28,16 +28,8 @@ class Strategy(IStrategy):
 
     use_custom_stoploss = True
 
-    # @informative('4h')
-    # def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-    #     dataframe['ema_medium'] = ta.EMA(dataframe, timeperiod=24)
-    #     dataframe["ema_long"] = ta.EMA(dataframe, timeperiod=100)
-
-    #     return dataframe
-    
-
-    def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+    def analyze_extrema(self, dataframe):
 
         dataframe['rsi'] = ta.RSI(dataframe['close'], timeperiod=14)
         dataframe['above_group'] = (dataframe['rsi'] >= 70).astype(int).diff().ne(0).cumsum() * (dataframe['rsi'] >= 70)
@@ -60,10 +52,27 @@ class Strategy(IStrategy):
         return dataframe
 
 
+    @informative('1h')
+    def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+
+        dataframe = self.analyze_extrema(dataframe)
+
+        return dataframe
+    
+
+    def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+
+        dataframe = self.analyze_extrema(dataframe)
+
+        return dataframe
+
+
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe.loc[
             (
+                (dataframe['cat_1h'] == "LH") & # Guard
+                (dataframe['close'] > dataframe['max_high_1h']) # Guard
                 (dataframe['close'] > dataframe['close'].shift(1)) & # Guard
                 (dataframe['cat'] == "LH") & # Guard
                 (qtpylib.crossed_above(dataframe['close'], dataframe['max_high'])) # Trigger
@@ -71,6 +80,8 @@ class Strategy(IStrategy):
 
         dataframe.loc[
             (
+                (dataframe['cat_1h'] == "HL") & # Guard
+                (dataframe['close'] < dataframe['min_low_1h']) # Guard
                 (dataframe['close'] < dataframe['close'].shift(1)) & # Guard
                 (dataframe['cat'] == "HL") & # Guard
                 (qtpylib.crossed_below(dataframe['close'], dataframe['min_low'])) # Trigger
@@ -83,12 +94,12 @@ class Strategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['rsi'] < 30)
+                (dataframe['rsi_1h'] < 30)
             ), ["exit_long"]] = 1
 
         dataframe.loc[
             (
-                (dataframe['rsi'] > 70)
+                (dataframe['rsi_1h'] > 70)
             ), ["exit_short"]] = 1
 
         return dataframe
