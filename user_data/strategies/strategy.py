@@ -57,14 +57,14 @@ class Strategy(IStrategy):
 
         dataframe = self.analyze_extrema(dataframe)
 
-        self.dp.send_msg(f"{dataframe.head()}")
-
         return dataframe
     
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe = self.analyze_extrema(dataframe)
+
+        self.dp.send_msg(f"{dataframe.head()}")
 
         return dataframe
 
