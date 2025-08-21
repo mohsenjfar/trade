@@ -107,18 +107,18 @@ class Strategy_(IStrategy):
         return min(total_stake * self.trade_max_loss_allowed / risk, max_stake)
 
 
-    def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
-                            time_in_force: str, current_time: datetime, entry_tag: Optional[str],
-                            side: str, **kwargs) -> bool:
+    # def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
+    #                         time_in_force: str, current_time: datetime, entry_tag: Optional[str],
+    #                         side: str, **kwargs) -> bool:
 
-        today_trades = Trade.get_trades_proxy(open_date = date.today())
-        short_trades = sum(True for trade in today_trades if trade.is_short)
-        long_trades = len(today_trades) - short_trades
-        conditions = (
-            (short_trades == 2) and (side == "short"),
-            (long_trades == 2) and (side == "long")
-        )
-        return False if any(conditions) else True
+    #     today_trades = Trade.get_trades_proxy(open_date = date.today())
+    #     short_trades = sum(True for trade in today_trades if trade.is_short)
+    #     long_trades = len(today_trades) - short_trades
+    #     conditions = (
+    #         (short_trades == 2) and (side == "short"),
+    #         (long_trades == 2) and (side == "long")
+    #     )
+    #     return False if any(conditions) else True
 
 
     def custom_entry_price(self, pair: str, trade: Trade | None, current_time: datetime, proposed_rate: float,
