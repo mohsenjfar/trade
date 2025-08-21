@@ -64,7 +64,7 @@ class Strategy(IStrategy):
 
         dataframe = self.analyze_extrema(dataframe)
 
-        self.dp.send_msg(f"{dataframe.head()}")
+        self.dp.send_msg(f"{dataframe.tail(1).to_dict('records')}")
 
         return dataframe
 
