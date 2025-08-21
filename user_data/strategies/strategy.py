@@ -57,6 +57,8 @@ class Strategy(IStrategy):
 
         dataframe = self.analyze_extrema(dataframe)
 
+        self.dp.send_msg(f"{dataframe.head()}")
+
         return dataframe
     
 
