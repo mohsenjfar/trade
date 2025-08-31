@@ -1,11 +1,14 @@
 import freqtrade.vendor.qtpylib.indicators as qtpylib
 from pandas import DataFrame
+import numpy as np
 import talib.abstract as ta
 from freqtrade.persistence import Trade
+from typing import Dict
 from freqtrade.strategy import (
     IStrategy,
     stoploss_from_open,
-    informative
+    informative,
+    IntParameter
 )
 from datetime import datetime, timedelta, date
 from typing import Optional
@@ -18,8 +21,8 @@ class Strategy(IStrategy):
 
     trade_max_loss_allowed = 0.005
 
-    timeframe = '1m'
-    inf_timeframe = '15m'
+    timeframe = '5m'
+    inf_timeframe = '4h'
 
     can_short: bool = True
 
@@ -28,6 +31,11 @@ class Strategy(IStrategy):
     use_exit_signal = True
 
     use_custom_stoploss = True
+    
+    buy_rsi = IntParameter(low=1, high=50, default=30, space='buy', optimize=True, load=True)
+    sell_rsi = IntParameter(low=50, high=100, default=70, space='sell', optimize=True, load=True)
+    short_rsi = IntParameter(low=51, high=100, default=70, space='sell', optimize=True, load=True)
+    exit_short_rsi = IntParameter(low=1, high=50, default=30, space='buy', optimize=True, load=True)
 
 
     def analyze_extrema(self, dataframe):
@@ -42,29 +50,98 @@ class Strategy(IStrategy):
         dataframe = dataframe.ffill()
 
         return dataframe
-    
+
 
     @informative(inf_timeframe)
-    def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+    def populate_indicators_(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe = self.analyze_extrema(dataframe)
-
-        dataframe.loc[dataframe['max_high'] == dataframe['high'],"cat"] = 'H'
-        dataframe.loc[dataframe['min_low'] == dataframe['low'],"cat"] = 'L'
-        dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-2:]
+        dataframe["ema_short"] = ta.EMA(dataframe, timeperiod=5)
+        dataframe["ema_Long"] = ta.EMA(dataframe, timeperiod=20)
 
         return dataframe
     
 
+    def feature_engineering_expand_all(self, dataframe: DataFrame, period: int,
+                                       metadata: Dict, **kwargs) -> DataFrame:
+
+        dataframe["%-rsi-period"] = ta.RSI(dataframe, timeperiod=period)
+        dataframe["%-mfi-period"] = ta.MFI(dataframe, timeperiod=period)
+        dataframe["%-adx-period"] = ta.ADX(dataframe, timeperiod=period)
+        dataframe["%-sma-period"] = ta.SMA(dataframe, timeperiod=period)
+        dataframe["%-ema-period"] = ta.EMA(dataframe, timeperiod=period)
+
+        bollinger = qtpylib.bollinger_bands(
+            qtpylib.typical_price(dataframe), window=period, stds=2.2
+        )
+        dataframe["bb_lowerband-period"] = bollinger["lower"]
+        dataframe["bb_middleband-period"] = bollinger["mid"]
+        dataframe["bb_upperband-period"] = bollinger["upper"]
+
+        dataframe["%-bb_width-period"] = (
+            dataframe["bb_upperband-period"]
+            - dataframe["bb_lowerband-period"]
+        ) / dataframe["bb_middleband-period"]
+        dataframe["%-close-bb_lower-period"] = (
+            dataframe["close"] / dataframe["bb_lowerband-period"]
+        )
+
+        dataframe["%-roc-period"] = ta.ROC(dataframe, timeperiod=period)
+
+        dataframe["%-relative_volume-period"] = (
+            dataframe["volume"] / dataframe["volume"].rolling(period).mean()
+        )
+
+        return dataframe
+
+
+    def feature_engineering_expand_basic(self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
+
+        dataframe["%-pct-change"] = dataframe["close"].pct_change()
+        dataframe["%-raw_volume"] = dataframe["volume"]
+        dataframe["%-raw_price"] = dataframe["close"]
+
+        return dataframe
+
+
+    def feature_engineering_standard(self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
+
+        dataframe["%-day_of_week"] = dataframe["date"].dt.dayofweek
+        dataframe["%-hour_of_day"] = dataframe["date"].dt.hour
+        return dataframe
+
+
+    def set_freqai_targets(self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
+
+        self.freqai.class_names = ["down", "up"]
+        dataframe['&s-up_or_down'] = np.where(dataframe["close"].shift(-12) > dataframe["close"], 'up', 'down')
+
+        return dataframe
+
+
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
+        dataframe = self.freqai.start(dataframe, metadata, self)
         dataframe = self.analyze_extrema(dataframe)
 
-        last_max_index = dataframe[dataframe['max_high'] == dataframe['high']].index.max()
-        dataframe['sl'] = dataframe.loc[last_max_index:].low.min()
-        
+        bollinger = qtpylib.bollinger_bands(qtpylib.typical_price(dataframe), window=20, stds=2)
+        dataframe['bb_lowerband'] = bollinger['lower']
+        dataframe['bb_middleband'] = bollinger['mid']
+        dataframe['bb_upperband'] = bollinger['upper']
+        dataframe["bb_percent"] = (
+            (dataframe["close"] - dataframe["bb_lowerband"]) /
+            (dataframe["bb_upperband"] - dataframe["bb_lowerband"])
+        )
+        dataframe["bb_width"] = (
+            (dataframe["bb_upperband"] - dataframe["bb_lowerband"]) / dataframe["bb_middleband"]
+        )
+
+        dataframe['tema'] = ta.TEMA(dataframe, timeperiod=9)
+
         last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
-        dataframe['ss'] = dataframe.loc[last_min_index:].high.max()
+        dataframe['sl'] = dataframe.loc[last_min_index:].low.min()
+        
+        last_max_index = dataframe[dataframe['max_high'] == dataframe['high']].index.max()
+        dataframe['ss'] = dataframe.loc[last_max_index:].high.max()
 
         return dataframe
 
@@ -73,17 +150,25 @@ class Strategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe[f'cat_{self.inf_timeframe}'] == f"LH_{self.inf_timeframe}") & # Guard
-                (dataframe['close'] > dataframe['close'].shift(1)) & # Guard
-                (qtpylib.crossed_above(dataframe['close'], dataframe[f'max_high_{self.inf_timeframe}'])) # Trigger
-            ), ["enter_long" , "enter_tag"]] = (1, "LH")
+                (dataframe['tema'] <= dataframe['bb_middleband']) & # Guard
+                (dataframe['tema'] > dataframe['tema'].shift(1)) & # Guard
+                (dataframe['volume'] > 0) & # Guard
+                (dataframe['do_predict'] == 1) & # Guard
+                (dataframe['&s-up_or_down'] == 'up') & # Guard
+                (qtpylib.crossed_above(dataframe['rsi'], self.buy_rsi.value)) # Trigger
+            ),
+            'enter_long'] = 1
 
         dataframe.loc[
             (
-                (dataframe[f'cat_{self.inf_timeframe}'] == f"HL_{self.inf_timeframe}") & # Guard
-                (dataframe['close'] < dataframe['close'].shift(1)) & # Guard
-                (qtpylib.crossed_below(dataframe['close'], dataframe[f'min_low_{self.inf_timeframe}'])) # Trigger
-            ), ["enter_short" , "enter_tag"]] = (1, "HL")
+                (dataframe['tema'] > dataframe['bb_middleband']) & # Guard
+                (dataframe['tema'] < dataframe['tema'].shift(1)) & # Guard
+                (dataframe['volume'] > 0) & # Guard
+                (dataframe['do_predict'] == 1) & # Guard
+                (dataframe['&s-up_or_down'] == 'down') & # Guard
+                (qtpylib.crossed_above(dataframe['rsi'], self.short_rsi.value)) # Trigger
+            ),
+            'enter_short'] = 1
 
         return dataframe
 
@@ -92,12 +177,12 @@ class Strategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe[f'rsi_{self.inf_timeframe}'] < 30)
+                (dataframe[f'ema_short_{self.inf_timeframe}'] < dataframe[f'ema_long_{self.inf_timeframe}'])
             ), ["exit_long"]] = 1
 
         dataframe.loc[
             (
-                (dataframe[f'rsi_{self.inf_timeframe}'] > 70)
+                (dataframe[f'ema_short_{self.inf_timeframe}'] > dataframe[f'ema_long_{self.inf_timeframe}'])
             ), ["exit_short"]] = 1
 
         return dataframe
@@ -150,6 +235,6 @@ class Strategy(IStrategy):
         risk = trade.get_custom_data(key='risk', default=None)
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
         conditions = (
-            (trade_duration > 15) and (current_profit < 2 * risk )
+            (trade_duration > 60) and (current_profit < 2 * risk )
         )
         if any(conditions): return "Trade expired!"
