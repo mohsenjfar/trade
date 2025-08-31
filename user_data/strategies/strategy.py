@@ -60,11 +60,11 @@ class Strategy(IStrategy):
 
         dataframe = self.analyze_extrema(dataframe)
 
-        last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
-        dataframe['sl'] = dataframe.loc[last_min_index:].low.min()
-        
         last_max_index = dataframe[dataframe['max_high'] == dataframe['high']].index.max()
-        dataframe['ss'] = dataframe.loc[last_max_index:].high.max()
+        dataframe['sl'] = dataframe.loc[last_max_index:].low.min()
+        
+        last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
+        dataframe['ss'] = dataframe.loc[last_min_index:].high.max()
 
         return dataframe
 
@@ -74,15 +74,15 @@ class Strategy(IStrategy):
         dataframe.loc[
             (
                 (dataframe[f'cat_{self.inf_timeframe}'] == f"LH_{self.inf_timeframe}") & # Guard
-                (dataframe['close'] > dataframe[f'max_high_{self.inf_timeframe}']) & # Guard
-                (qtpylib.crossed_above(dataframe['rsi'], 30)) # Trigger
+                (dataframe['close'] > dataframe['close'].shift(1)) & # Guard
+                (qtpylib.crossed_above(dataframe['close'], dataframe[f'max_high_{self.inf_timeframe}'])) # Trigger
             ), ["enter_long" , "enter_tag"]] = (1, "LH")
 
         dataframe.loc[
             (
                 (dataframe[f'cat_{self.inf_timeframe}'] == f"HL_{self.inf_timeframe}") & # Guard
-                (dataframe['close'] < dataframe[f'min_low_{self.inf_timeframe}']) & # Guard
-                (qtpylib.crossed_below(dataframe['rsi'], 70)) # Trigger
+                (dataframe['close'] < dataframe['close'].shift(1)) & # Guard
+                (qtpylib.crossed_below(dataframe['close'], dataframe[f'min_low_{self.inf_timeframe}'])) # Trigger
             ), ["enter_short" , "enter_tag"]] = (1, "HL")
 
         return dataframe
@@ -150,6 +150,6 @@ class Strategy(IStrategy):
         risk = trade.get_custom_data(key='risk', default=None)
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
         conditions = (
-            (trade_duration > 60) and (current_profit < 2 * risk )
+            (trade_duration > 15) and (current_profit < 2 * risk )
         )
         if any(conditions): return "Trade expired!"
