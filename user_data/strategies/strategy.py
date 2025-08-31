@@ -52,12 +52,12 @@ class Strategy(IStrategy):
         return dataframe
 
 
-    # @informative('1h')
-    # def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+    @informative('1h')
+    def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-    #     dataframe = self.analyze_extrema(dataframe)
+        dataframe['rsi'] = ta.RSI(dataframe['close'], timeperiod=14)
 
-    #     return dataframe
+        return dataframe
     
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
@@ -71,8 +71,7 @@ class Strategy(IStrategy):
 
         dataframe.loc[
             (
-                # (dataframe['cat_1h'] == "LH") & # Guard
-                # (dataframe['close'] > dataframe['max_high_1h']) & # Guard
+                (dataframe['rsi_1h'] < 30) & # Guard
                 (dataframe['close'] > dataframe['close'].shift(1)) & # Guard
                 (dataframe['cat'] == "LH") & # Guard
                 (qtpylib.crossed_above(dataframe['close'], dataframe['max_high'])) # Trigger
@@ -80,8 +79,7 @@ class Strategy(IStrategy):
 
         dataframe.loc[
             (
-                # (dataframe['cat_1h'] == "HL") & # Guard
-                # (dataframe['close'] < dataframe['min_low_1h']) & # Guard
+                (dataframe['rsi_1h'] > 70) & # Guard
                 (dataframe['close'] < dataframe['close'].shift(1)) & # Guard
                 (dataframe['cat'] == "HL") & # Guard
                 (qtpylib.crossed_below(dataframe['close'], dataframe['min_low'])) # Trigger
@@ -92,15 +90,15 @@ class Strategy(IStrategy):
 
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        # dataframe.loc[
-        #     (
-        #         (dataframe['rsi_1h'] < 30)
-        #     ), ["exit_long"]] = 1
+        dataframe.loc[
+            (
+                (dataframe['rsi_1h'] < 30)
+            ), ["exit_long"]] = 1
 
-        # dataframe.loc[
-        #     (
-        #         (dataframe['rsi_1h'] > 70)
-        #     ), ["exit_short"]] = 1
+        dataframe.loc[
+            (
+                (dataframe['rsi_1h'] > 70)
+            ), ["exit_short"]] = 1
 
         return dataframe
 
@@ -116,20 +114,6 @@ class Strategy(IStrategy):
         stop = last_candle.ss if side == "short" else last_candle.sl
         risk = abs(stop / last_candle.close - 1)
         return min(total_stake * self.trade_max_loss_allowed / risk, max_stake)
-
-
-    # def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
-    #                         time_in_force: str, current_time: datetime, entry_tag: Optional[str],
-    #                         side: str, **kwargs) -> bool:
-
-    #     today_trades = Trade.get_trades_proxy(open_date = date.today())
-    #     short_trades = sum(True for trade in today_trades if trade.is_short)
-    #     long_trades = len(today_trades) - short_trades
-    #     conditions = (
-    #         (short_trades == 2) and (side == "short"),
-    #         (long_trades == 2) and (side == "long")
-    #     )
-    #     return False if any(conditions) else True
 
 
     def custom_entry_price(self, pair: str, trade: Trade | None, current_time: datetime, proposed_rate: float,
@@ -164,13 +148,9 @@ class Strategy(IStrategy):
                     current_rate: float, current_profit: float, **kwargs) -> str:
 
         risk = trade.get_custom_data(key='risk', default=None)
-        # trade_duration = (current_time - trade.open_date_utc).seconds / 60
-        # conditions = (
-        #     # (trade_duration > 60) and (current_profit < 0),
-        #     (trade_duration > 480) and (current_profit < 2 * risk )
-        # )
-        # if any(conditions):
-        #     return "Trade expired!"
-
-        if current_profit > 2 * risk :
-            return "Target hit!"
+        trade_duration = (current_time - trade.open_date_utc).seconds / 60
+        conditions = (
+            (trade_duration > 480) and (current_profit < 2 * risk )
+        )
+        if any(conditions):
+            return "Trade expired!"
