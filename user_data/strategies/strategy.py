@@ -56,7 +56,7 @@ class Strategy(IStrategy):
     def populate_indicators_(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe["ema_short"] = ta.EMA(dataframe, timeperiod=5)
-        dataframe["ema_Long"] = ta.EMA(dataframe, timeperiod=20)
+        dataframe["ema_long"] = ta.EMA(dataframe, timeperiod=20)
 
         return dataframe
     
