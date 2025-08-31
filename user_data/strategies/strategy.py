@@ -18,8 +18,8 @@ class Strategy(IStrategy):
 
     trade_max_loss_allowed = 0.005
 
-    timeframe = '5m'
-    inf_timeframe = '1h'
+    timeframe = '1m'
+    inf_timeframe = '15m'
 
     can_short: bool = True
 
