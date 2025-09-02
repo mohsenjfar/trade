@@ -13,7 +13,7 @@ from freqtrade.strategy import (
 from datetime import datetime, timedelta, date
 from typing import Optional
 
-class Strategy(IStrategy):
+class HybridStrategy(IStrategy):
 
     INTERFACE_VERSION = 3
 
