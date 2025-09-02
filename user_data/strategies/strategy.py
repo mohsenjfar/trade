@@ -6,7 +6,7 @@ from freqtrade.persistence import Trade
 from typing import Dict
 from freqtrade.strategy import (
     IStrategy,
-    stoploss_from_open,
+    stoploss_from_absolute,
     informative,
     IntParameter
 )
@@ -40,7 +40,7 @@ class Strategy(IStrategy):
 
     def analyze_extrema(self, dataframe):
 
-        dataframe['rsi'] = ta.RSI(dataframe['close'], timeperiod=14)
+        # dataframe['rsi'] = ta.RSI(dataframe['close'], timeperiod=14)
         dataframe['above_group'] = (dataframe['rsi'] >= 70).astype(int).diff().ne(0).cumsum() * (dataframe['rsi'] >= 70)
         dataframe['below_group'] = (dataframe['rsi'] <= 30).astype(int).diff().ne(0).cumsum() * (dataframe['rsi'] <= 30)
         dataframe['max_high'] = dataframe.groupby('above_group')['high'].transform('max')
@@ -49,14 +49,25 @@ class Strategy(IStrategy):
         dataframe.loc[dataframe['below_group'] == 0, 'min_low'] = None
         dataframe = dataframe.ffill()
 
+        dataframe.loc[dataframe['max_high'] == dataframe['high'],"cat"] = 'H'
+        dataframe.loc[dataframe['min_low'] == dataframe['low'],"cat"] = 'L'
+        dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-5:]
+
+        last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
+        dataframe['sl'] = dataframe.loc[last_min_index:].low.min()
+        
+        last_max_index = dataframe[dataframe['max_high'] == dataframe['high']].index.max()
+        dataframe['ss'] = dataframe.loc[last_max_index:].high.max()
+
         return dataframe
 
 
-    @informative(inf_timeframe)
+    @informative("4h")
+    @informative("1h")
+    @informative("15m")
     def populate_indicators_(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe["ema_short"] = ta.EMA(dataframe, timeperiod=5)
-        dataframe["ema_Long"] = ta.EMA(dataframe, timeperiod=20)
+        dataframe = self.analyze_extrema(dataframe)
 
         return dataframe
     
@@ -137,12 +148,6 @@ class Strategy(IStrategy):
 
         dataframe['tema'] = ta.TEMA(dataframe, timeperiod=9)
 
-        last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
-        dataframe['sl'] = dataframe.loc[last_min_index:].low.min()
-        
-        last_max_index = dataframe[dataframe['max_high'] == dataframe['high']].index.max()
-        dataframe['ss'] = dataframe.loc[last_max_index:].high.max()
-
         return dataframe
 
 
@@ -175,16 +180,6 @@ class Strategy(IStrategy):
 
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe.loc[
-            (
-                (dataframe[f'ema_short_{self.inf_timeframe}'] < dataframe[f'ema_long_{self.inf_timeframe}'])
-            ), ["exit_long"]] = 1
-
-        dataframe.loc[
-            (
-                (dataframe[f'ema_short_{self.inf_timeframe}'] > dataframe[f'ema_long_{self.inf_timeframe}'])
-            ), ["exit_short"]] = 1
-
         return dataframe
 
 
@@ -212,18 +207,23 @@ class Strategy(IStrategy):
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
-        risk = trade.get_custom_data(key='risk', default=None)
-        if risk is None:
-            dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
-            last_candle = dataframe.iloc[-1].squeeze()
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
+        last_candle = dataframe.iloc[-1].squeeze()
+        if trade.get_custom_data(key='stop') is None:
             stop = last_candle.ss if trade.is_short else last_candle.sl
+            trade.set_custom_data(key='stop', value=stop)
             risk = abs(stop / last_candle.close - 1)
             self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
-            trade.set_custom_data(key='risk', value=risk)
+
+        conditions =(
+            (last_candle.sl < stop) and trade.is_short and (last_candle.rsi > 30),
+            (last_candle.ss > stop) and not trade.is_short and (last_candle.rsi < 70),
+        )
+        if any(conditions): trade.set_custom_data(key='stop', value=stop)
         
-        return stoploss_from_open(
-            -risk,
-            current_profit,
+        return stoploss_from_absolute(
+            trade.get_custom_data(key='stop'),
+            current_rate,
             is_short=trade.is_short,
             leverage=trade.leverage
         )
@@ -232,9 +232,10 @@ class Strategy(IStrategy):
     def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
                     current_rate: float, current_profit: float, **kwargs) -> str:
 
-        risk = trade.get_custom_data(key='risk', default=None)
+        risk = trade.get_custom_data(key='risk')
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
         conditions = (
-            (trade_duration > 60) and (current_profit < 2 * risk )
+            (trade_duration > 60) and (current_profit < 0),
+            (trade_duration > 240) and (current_profit < 2 * risk)
         )
         if any(conditions): return "Trade expired!"
