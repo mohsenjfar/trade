@@ -40,7 +40,7 @@ class HybridStrategy(IStrategy):
 
     def analyze_extrema(self, dataframe):
 
-        # dataframe['rsi'] = ta.RSI(dataframe['close'], timeperiod=14)
+        dataframe['rsi'] = ta.RSI(dataframe['close'], timeperiod=14)
         dataframe['above_group'] = (dataframe['rsi'] >= 70).astype(int).diff().ne(0).cumsum() * (dataframe['rsi'] >= 70)
         dataframe['below_group'] = (dataframe['rsi'] <= 30).astype(int).diff().ne(0).cumsum() * (dataframe['rsi'] <= 30)
         dataframe['max_high'] = dataframe.groupby('above_group')['high'].transform('max')
