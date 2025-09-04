@@ -45,7 +45,7 @@ class MultiframeRSIStrategy(IStrategy):
 
         dataframe.loc[dataframe['max_high'] == dataframe['high'],"cat"] = 'H'
         dataframe.loc[dataframe['min_low'] == dataframe['low'],"cat"] = 'L'
-        dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-5:]
+        dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-1:]
 
         last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
         dataframe['sl'] = dataframe.loc[last_min_index:].low.min()
@@ -75,7 +75,7 @@ class MultiframeRSIStrategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['cat_15m'] == 'HL') & # Guard
+                (dataframe['cat_15m'] == 'H') & # Guard
                 (dataframe['rsi_15m'] > 30) & # Guard
                 (dataframe['rsi_15m'] < 50) & # Guard
                 (qtpylib.crossed_above(dataframe['rsi'], 30)) # Trigger
@@ -84,7 +84,7 @@ class MultiframeRSIStrategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['cat_15m'] == 'LH') & # Guard
+                (dataframe['cat_15m'] == 'L') & # Guard
                 (dataframe['rsi_15m'] < 70) & # Guard
                 (dataframe['rsi_15m'] > 50) & # Guard
                 (qtpylib.crossed_below(dataframe['rsi'], 70)) # Trigger
