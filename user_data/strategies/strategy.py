@@ -22,7 +22,6 @@ class HybridStrategy(IStrategy):
     trade_max_loss_allowed = 0.005
 
     timeframe = '5m'
-    inf_timeframe = '4h'
 
     can_short: bool = True
 
@@ -32,11 +31,8 @@ class HybridStrategy(IStrategy):
 
     use_custom_stoploss = True
     
-    buy_rsi = IntParameter(low=1, high=50, default=30, space='buy', optimize=True, load=True)
-    sell_rsi = IntParameter(low=50, high=100, default=70, space='sell', optimize=True, load=True)
+    long_rsi = IntParameter(low=1, high=50, default=30, space='buy', optimize=True, load=True)
     short_rsi = IntParameter(low=51, high=100, default=70, space='sell', optimize=True, load=True)
-    exit_short_rsi = IntParameter(low=1, high=50, default=30, space='buy', optimize=True, load=True)
-
 
     def analyze_extrema(self, dataframe):
 
@@ -62,7 +58,6 @@ class HybridStrategy(IStrategy):
         return dataframe
 
 
-    @informative("4h")
     @informative("1h")
     @informative("15m")
     def populate_indicators_(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
@@ -160,7 +155,7 @@ class HybridStrategy(IStrategy):
                 (dataframe['volume'] > 0) & # Guard
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'up') & # Guard
-                (qtpylib.crossed_above(dataframe['rsi'], self.buy_rsi.value)) # Trigger
+                (qtpylib.crossed_above(dataframe['rsi'], self.long_rsi.value)) # Trigger
             ),
             'enter_long'] = 1
 
@@ -209,18 +204,54 @@ class HybridStrategy(IStrategy):
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
-        if trade.get_custom_data(key='stop') is None:
+        stop = trade.get_custom_data(key='stop')
+        
+        if stop is None:
             stop = last_candle.ss if trade.is_short else last_candle.sl
             trade.set_custom_data(key='stop', value=stop)
             risk = abs(stop / last_candle.close - 1)
             self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
-        conditions =(
-            (last_candle.sl < stop) and trade.is_short and (last_candle.rsi > 30),
-            (last_candle.ss > stop) and not trade.is_short and (last_candle.rsi < 70),
+        conditions = (
+            all(
+                last_candle.sl < stop,
+                trade.is_short,
+                last_candle.rsi > 30,
+                last_candle.rsi_15m < 30
+            ),
+            all(
+                last_candle.ss > stop,
+                not trade.is_short,
+                last_candle.rsi < 70,
+                last_candle.rsi_15m > 70
+            )
         )
-        if any(conditions): trade.set_custom_data(key='stop', value=stop)
+        if any(conditions) and not trade.get_custom_data(key='5m_break'):
+            stop = last_candle.sl if trade.is_short else last_candle.ss
+            trade.set_custom_data(key='stop', value=stop)
+            trade.set_custom_data(key='5m_break', value=True)
+            self.dp.send_msg("5m RSI break, new stop was set")
         
+        conditions = (
+            all(
+                last_candle.sl_15m < stop,
+                trade.is_short,
+                last_candle.rsi_15m > 30,
+                last_candle.rsi_1h < 30
+            ),
+            all(
+                last_candle.ss_15m > stop,
+                not trade.is_short,
+                last_candle.rsi_15m < 70,
+                last_candle.rsi_1h > 70
+            )
+        )
+        if any(conditions) and not trade.get_custom_data(key='15m_break'):
+            stop = last_candle.sl_15m if trade.is_short else last_candle.ss_15m
+            trade.set_custom_data(key='stop', value=stop)
+            trade.set_custom_data(key='15m_break', value=True)
+            self.dp.send_msg("15m RSI break, new stop was set")
+
         return stoploss_from_absolute(
             trade.get_custom_data(key='stop'),
             current_rate,
@@ -236,6 +267,6 @@ class HybridStrategy(IStrategy):
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
         conditions = (
             (trade_duration > 60) and (current_profit < 0),
-            (trade_duration > 240) and (current_profit < 2 * risk)
+            (trade_duration > 1440) and (current_profit < 2 * risk)
         )
         if any(conditions): return "Trade expired!"
