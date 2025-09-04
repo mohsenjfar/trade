@@ -75,7 +75,7 @@ class MultiframeRSIStrategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['cat_15m'] == 'H') & # Guard
+                (dataframe['cat_15m'] == 'L') & # Guard
                 (dataframe['rsi_15m'] > 30) & # Guard
                 (dataframe['rsi_15m'] < 50) & # Guard
                 (qtpylib.crossed_above(dataframe['rsi'], 30)) # Trigger
@@ -84,7 +84,7 @@ class MultiframeRSIStrategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['cat_15m'] == 'L') & # Guard
+                (dataframe['cat_15m'] == 'H') & # Guard
                 (dataframe['rsi_15m'] < 70) & # Guard
                 (dataframe['rsi_15m'] > 50) & # Guard
                 (qtpylib.crossed_below(dataframe['rsi'], 70)) # Trigger
