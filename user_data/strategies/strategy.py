@@ -142,6 +142,55 @@ class HybridStrategy(IStrategy):
         )
 
         dataframe['tema'] = ta.TEMA(dataframe, timeperiod=9)
+        dataframe['adx'] = ta.ADX(dataframe, timeperiod=9)
+
+        returns = dataframe["close"].pct_change()
+        volatility = returns.rolling(window=20).std()
+        dataframe["normalized_vol"] = volatility / dataframe["close"]
+        dataframe["guard_score_required"] = np.select(
+            [
+                dataframe["normalized_vol"] > 0.05,
+                dataframe["normalized_vol"] > 0.03,
+                dataframe["normalized_vol"] <= 0.03
+            ],
+            [6, 5, 3]
+        )
+
+        price_diff = dataframe["close"] - dataframe["close"].shift(1)
+        rsi_diff = dataframe["rsi"] - dataframe["rsi"].shift(1)
+
+        dataframe["score_position_near_lower_band"] = np.clip((0.3 - dataframe["bb_percent"]) * 10, 0, 1)
+        dataframe["score_adx_strength"] = (dataframe["adx"] > 20).astype(int)
+        dataframe["score_volume_above_avg"] = (dataframe["volume"] > dataframe["volume"].rolling(50).mean()).astype(int)
+        dataframe["score_tema_below_midband"] = (dataframe['tema'] <= dataframe['bb_middleband']).astype(int)
+        dataframe["score_tema_rising"] = (dataframe['tema'] > dataframe['tema'].shift(1)).astype(int)
+        dataframe["score_bollinger_narrow"] = (dataframe["bb_width"] < 0.05).astype(int)
+        dataframe["score_rsi_bullish_divergence"] = ((price_diff < 0) & (rsi_diff > 0)).astype(int)
+
+        dataframe["total_score_long"] = (
+            1.0 * dataframe["score_position_near_lower_band"] +
+            1.5 * dataframe["score_adx_strength"] +
+            1.0 * dataframe["score_volume_above_avg"] +
+            1.2 * dataframe["score_tema_below_midband"] +
+            1.5 * dataframe["score_tema_rising"] +
+            1.0 * dataframe["score_bollinger_narrow"] +
+            2.0 * dataframe["score_rsi_bullish_divergence"]
+        )
+
+        dataframe["score_position_near_upper_band"] = np.clip((dataframe["bb_percent"] - 0.7) * 10, 0, 1)
+        dataframe["score_tema_above_midband"] = (dataframe['tema'] >= dataframe['bb_middleband']).astype(int)
+        dataframe["score_tema_falling"] = (dataframe['tema'] < dataframe['tema'].shift(1)).astype(int)
+        dataframe["score_rsi_bearish_divergence"] = ((price_diff > 0) & (rsi_diff < 0)).astype(int)
+
+        dataframe["total_score_short"] = (
+            1.0 * dataframe["score_position_near_upper_band"] +
+            1.5 * dataframe["score_adx_strength"] +
+            1.0 * dataframe["score_volume_above_avg"] +
+            1.2 * dataframe["score_tema_above_midband"] +
+            1.5 * dataframe["score_tema_falling"] +
+            1.0 * dataframe["score_bollinger_narrow"] +
+            2.0 * dataframe["score_rsi_bearish_divergence"]
+        )
 
         return dataframe
 
@@ -150,9 +199,7 @@ class HybridStrategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['tema'] <= dataframe['bb_middleband']) & # Guard
-                (dataframe['tema'] > dataframe['tema'].shift(1)) & # Guard
-                (dataframe['volume'] > 0) & # Guard
+                (dataframe["total_score_long"] >= dataframe["guard_score_required"]) & # Guard
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'up') & # Guard
                 (qtpylib.crossed_above(dataframe['rsi'], self.long_rsi.value)) # Trigger
@@ -161,9 +208,7 @@ class HybridStrategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['tema'] > dataframe['bb_middleband']) & # Guard
-                (dataframe['tema'] < dataframe['tema'].shift(1)) & # Guard
-                (dataframe['volume'] > 0) & # Guard
+                (dataframe["total_score_short"] >= dataframe["guard_score_required"]) & # Guard
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'down') & # Guard
                 (qtpylib.crossed_above(dataframe['rsi'], self.short_rsi.value)) # Trigger
