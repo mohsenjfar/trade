@@ -1,7 +1,7 @@
 ---
 version: '3'
 services:
-  freqtrade:
+  freqtrade2:
       image: freqtradeorg/freqtrade:stable
       restart: unless-stopped
       container_name: MultiframeRSIStrategy
