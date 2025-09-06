@@ -76,23 +76,24 @@ class MultiframeRSIStrategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['close'] > dataframe['max_high'])
+                (qtpylib.crossed_above(dataframe['rsi'], 30))
+            ), ["enter_long" , "enter_tag"]] = (1, "reaction")
+
+        dataframe.loc[
+            (
+                (qtpylib.crossed_above(dataframe['close'], dataframe['max_high']))
             ), ["enter_long" , "enter_tag"]] = (1, "break")
 
         dataframe.loc[
             (
-                (qtpylib.crossed_below(dataframe['close'], dataframe['max_high']))
+                (qtpylib.crossed_below(dataframe['rsi'], 70))
             ), ["enter_short" , "enter_tag"]] = (1, "reaction")
-
+                                                 
         dataframe.loc[
             (
-                (dataframe['close'] < dataframe['min_low'])
+                (qtpylib.crossed_below(dataframe['close'], dataframe['min_low']))
             ), ["enter_short" , "enter_tag"]] = (1, "break")
         
-        dataframe.loc[
-            (
-                (qtpylib.crossed_above(dataframe['close'], dataframe['min_low']))
-            ), ["enter_long" , "enter_tag"]] = (1, "reaction")
 
         return dataframe
 
