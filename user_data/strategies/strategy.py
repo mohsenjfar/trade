@@ -211,7 +211,7 @@ class HybridStrategy(IStrategy):
                 (dataframe["total_score_short"] >= dataframe["guard_score_required"]) & # Guard
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'down') & # Guard
-                (qtpylib.crossed_above(dataframe['rsi'], self.short_rsi.value)) # Trigger
+                (qtpylib.crossed_below(dataframe['rsi'], self.short_rsi.value)) # Trigger
             ),
             'enter_short'] = 1
 
