@@ -151,13 +151,13 @@ class MultiframeRSIStrategy(IStrategy):
             all(
                 last_candle.slb < stop,
                 trade.is_short,
-                last_candle.rsi > 30,
+                last_candle["rsi"] > 30,
                 last_candle.rsi_15m < 30
             ),
             all(
                 last_candle.ssb > stop,
                 not trade.is_short,
-                last_candle.rsi < 70,
+                last_candle["rsi"] < 70,
                 last_candle.rsi_15m > 70
             )
         )
@@ -201,6 +201,6 @@ class MultiframeRSIStrategy(IStrategy):
         risk = trade.get_custom_data(key='risk')
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
         conditions = (
-            (trade_duration > 1440) and (current_profit < 2 * risk)
+            (trade_duration > 1440) and (current_profit < 2 * risk),
         )
         if any(conditions): return "Trade expired!"
