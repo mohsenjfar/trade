@@ -43,7 +43,7 @@ class MultiframeRSIStrategy(IStrategy):
 
         dataframe.loc[dataframe['max_high'] == dataframe['high'],"cat"] = 'H'
         dataframe.loc[dataframe['min_low'] == dataframe['low'],"cat"] = 'L'
-        dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-1:]
+        dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-3:]
 
         last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
         last_max_index = dataframe[dataframe['max_high'] == dataframe['high']].index.max()
@@ -76,21 +76,25 @@ class MultiframeRSIStrategy(IStrategy):
 
         dataframe.loc[
             (
+                (dataframe['cat'] == "HHL") &
                 (qtpylib.crossed_above(dataframe['rsi'], 30))
             ), ["enter_long" , "enter_tag"]] = (1, "reaction")
 
         dataframe.loc[
             (
+                (dataframe['cat'] == "LLH") &
                 (qtpylib.crossed_above(dataframe['close'], dataframe['max_high']))
             ), ["enter_long" , "enter_tag"]] = (1, "break")
 
         dataframe.loc[
             (
+                (dataframe['cat'] == "LLH") &
                 (qtpylib.crossed_below(dataframe['rsi'], 70))
             ), ["enter_short" , "enter_tag"]] = (1, "reaction")
                                                  
         dataframe.loc[
             (
+                (dataframe['cat'] == "HHL") &
                 (qtpylib.crossed_below(dataframe['close'], dataframe['min_low']))
             ), ["enter_short" , "enter_tag"]] = (1, "break")
         
@@ -197,7 +201,6 @@ class MultiframeRSIStrategy(IStrategy):
         risk = trade.get_custom_data(key='risk')
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
         conditions = (
-            (trade_duration > 60) and (current_profit < 0),
             (trade_duration > 1440) and (current_profit < 2 * risk)
         )
         if any(conditions): return "Trade expired!"
