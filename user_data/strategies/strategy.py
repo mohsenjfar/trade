@@ -149,16 +149,16 @@ class MultiframeRSIStrategy(IStrategy):
 
         conditions = (
             all(
-                last_candle.slb < stop,
+            (last_candle.slb < stop,
                 trade.is_short,
                 last_candle["rsi"] > 30,
-                last_candle.rsi_15m < 30
+                last_candle.rsi_15m < 30)
             ),
             all(
-                last_candle.ssb > stop,
+                (last_candle.ssb > stop,
                 not trade.is_short,
                 last_candle["rsi"] < 70,
-                last_candle.rsi_15m > 70
+                last_candle.rsi_15m > 70)
             )
         )
         if any(conditions) and not trade.get_custom_data(key='5m_break'):
@@ -169,16 +169,16 @@ class MultiframeRSIStrategy(IStrategy):
         
         conditions = (
             all(
-                last_candle.slb_15m < stop,
+                (last_candle.slb_15m < stop,
                 trade.is_short,
                 last_candle.rsi_15m > 30,
-                last_candle.rsi_1h < 30
+                last_candle.rsi_1h < 30)
             ),
             all(
-                last_candle.ssb_15m > stop,
+                (last_candle.ssb_15m > stop,
                 not trade.is_short,
                 last_candle.rsi_15m < 70,
-                last_candle.rsi_1h > 70
+                last_candle.rsi_1h > 70)
             )
         )
         if any(conditions) and not trade.get_custom_data(key='15m_break'):
