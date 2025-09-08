@@ -144,14 +144,14 @@ class HybridStrategy(IStrategy):
         dataframe['tema'] = ta.TEMA(dataframe, timeperiod=9)
         dataframe['adx'] = ta.ADX(dataframe, timeperiod=9)
 
-        returns = dataframe["close"].pct_change()
-        volatility = returns.rolling(window=20).std()
-        dataframe["normalized_vol"] = volatility / dataframe["close"]
+        dataframe["q75"] = dataframe["normalized_vol"].rolling(window=20).quantile(0.75)
+        dataframe["q50"] = dataframe["normalized_vol"].rolling(window=20).quantile(0.50)
+
         dataframe["guard_score_required"] = np.select(
             [
-                dataframe["normalized_vol"] > 0.05,
-                dataframe["normalized_vol"] > 0.03,
-                dataframe["normalized_vol"] <= 0.03
+                dataframe["normalized_vol"] > dataframe["q75"],
+                dataframe["normalized_vol"] > dataframe["q50"],
+                dataframe["normalized_vol"] <= dataframe["q50"]
             ],
             [6, 5, 3]
         )
@@ -202,6 +202,7 @@ class HybridStrategy(IStrategy):
                 (dataframe["total_score_long"] >= dataframe["guard_score_required"]) & # Guard
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'up') & # Guard
+                (dataframe['rsi_15m'] < self.long_rsi.value) & # Guard
                 (qtpylib.crossed_above(dataframe['rsi'], self.long_rsi.value)) # Trigger
             ),
             'enter_long'] = 1
@@ -211,6 +212,7 @@ class HybridStrategy(IStrategy):
                 (dataframe["total_score_short"] >= dataframe["guard_score_required"]) & # Guard
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'down') & # Guard
+                (dataframe['rsi_15m'] > self.short_rsi.value) & # Guard
                 (qtpylib.crossed_below(dataframe['rsi'], self.short_rsi.value)) # Trigger
             ),
             'enter_short'] = 1
@@ -259,43 +261,43 @@ class HybridStrategy(IStrategy):
 
         conditions = (
             all(
-                last_candle.sl < stop,
+                (last_candle.sl < stop,
                 trade.is_short,
                 last_candle.rsi > 30,
-                last_candle.rsi_15m < 30
+                last_candle.rsi_15m < 30)
             ),
             all(
-                last_candle.ss > stop,
+                (last_candle.ss > stop,
                 not trade.is_short,
                 last_candle.rsi < 70,
-                last_candle.rsi_15m > 70
+                last_candle.rsi_15m > 70)
             )
         )
         if any(conditions) and not trade.get_custom_data(key='5m_break'):
             stop = last_candle.sl if trade.is_short else last_candle.ss
             trade.set_custom_data(key='stop', value=stop)
             trade.set_custom_data(key='5m_break', value=True)
-            self.dp.send_msg("5m RSI break, new stop was set")
+            self.dp.send_msg(f"5m RSI break new stop set ({stop:.4f})")
         
         conditions = (
             all(
-                last_candle.sl_15m < stop,
+                (last_candle.sl_15m < stop,
                 trade.is_short,
                 last_candle.rsi_15m > 30,
-                last_candle.rsi_1h < 30
+                last_candle.rsi_1h < 30)
             ),
             all(
-                last_candle.ss_15m > stop,
+                (last_candle.ss_15m > stop,
                 not trade.is_short,
                 last_candle.rsi_15m < 70,
-                last_candle.rsi_1h > 70
+                last_candle.rsi_1h > 70)
             )
         )
         if any(conditions) and not trade.get_custom_data(key='15m_break'):
             stop = last_candle.sl_15m if trade.is_short else last_candle.ss_15m
             trade.set_custom_data(key='stop', value=stop)
             trade.set_custom_data(key='15m_break', value=True)
-            self.dp.send_msg("15m RSI break, new stop was set")
+            self.dp.send_msg(f"15m RSI break new stop set ({stop:.4f})")
 
         return stoploss_from_absolute(
             trade.get_custom_data(key='stop'),
