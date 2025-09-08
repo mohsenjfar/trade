@@ -43,18 +43,16 @@ class MultiframeRSIStrategy(IStrategy):
 
         dataframe.loc[dataframe['max_high'] == dataframe['high'],"cat"] = 'H'
         dataframe.loc[dataframe['min_low'] == dataframe['low'],"cat"] = 'L'
-        dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-3:]
+        dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-1:]
 
         last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
         last_max_index = dataframe[dataframe['max_high'] == dataframe['high']].index.max()
 
-        dataframe['slr'] = dataframe.loc[last_min_index:].low.min()
-        dataframe['ssr'] = dataframe.loc[last_max_index:].high.max()
-        
-        dataframe['slb'] = dataframe.loc[last_max_index:].low.min()
-        dataframe['ssb'] = dataframe.loc[last_min_index:].high.max()
+        dataframe['sl'] = dataframe.loc[last_min_index:].low.min()
+        dataframe['ss'] = dataframe.loc[last_max_index:].high.max()
 
         return dataframe
+
 
     @informative("1h")
     @informative("15m")
@@ -76,26 +74,26 @@ class MultiframeRSIStrategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['cat'] == "HHL") &
+                (dataframe['rsi_1h'] < 30) &
                 (qtpylib.crossed_above(dataframe['rsi'], 30))
             ), ["enter_long" , "enter_tag"]] = (1, "reaction")
 
         dataframe.loc[
             (
-                (dataframe['cat'] == "LLH") &
-                (qtpylib.crossed_above(dataframe['close'], dataframe['max_high']))
+                (dataframe['close'] > dataframe['max_high_15m']) &
+                (qtpylib.crossed_above(dataframe['rsi'], 30))
             ), ["enter_long" , "enter_tag"]] = (1, "break")
 
         dataframe.loc[
             (
-                (dataframe['cat'] == "LLH") &
+                (dataframe['rsi_1h'] > 70) &
                 (qtpylib.crossed_below(dataframe['rsi'], 70))
             ), ["enter_short" , "enter_tag"]] = (1, "reaction")
                                                  
         dataframe.loc[
             (
-                (dataframe['cat'] == "HHL") &
-                (qtpylib.crossed_below(dataframe['close'], dataframe['min_low']))
+                (dataframe['close'] < dataframe['min_low_15m']) &
+                (qtpylib.crossed_below(dataframe['rsi'], 70))
             ), ["enter_short" , "enter_tag"]] = (1, "break")
         
 
@@ -115,10 +113,7 @@ class MultiframeRSIStrategy(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
         total_stake = max_stake + Trade.total_open_trades_stakes()
-        if entry_tag == "reaction":
-            stop = last_candle.ssr if side == "short" else last_candle.slr
-        elif entry_tag == "break":
-            stop = last_candle.ssb if side == "short" else last_candle.slb
+        stop = last_candle.ss if side == "short" else last_candle.sl
         risk = abs(stop / last_candle.close - 1)
         return min(total_stake * self.trade_max_loss_allowed / risk, max_stake)
 
@@ -139,53 +134,50 @@ class MultiframeRSIStrategy(IStrategy):
         stop = trade.get_custom_data(key='stop')
         
         if stop is None:
-            if trade.enter_tag == "reaction":
-                stop = last_candle.ssr if trade.is_short else last_candle.slr
-            else:
-                stop = last_candle.ssb if trade.is_short else last_candle.slb
+            stop = last_candle.ss if trade.is_short else last_candle.sl
             trade.set_custom_data(key='stop', value=stop)
             risk = abs(stop / last_candle.close - 1)
             self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
         conditions = (
             all(
-            (last_candle.slb < stop,
+                (last_candle.sl < stop,
                 trade.is_short,
-                last_candle["rsi"] > 30,
+                last_candle.rsi > 30,
                 last_candle.rsi_15m < 30)
             ),
             all(
-                (last_candle.ssb > stop,
+                (last_candle.ss > stop,
                 not trade.is_short,
-                last_candle["rsi"] < 70,
+                last_candle.rsi < 70,
                 last_candle.rsi_15m > 70)
             )
         )
         if any(conditions) and not trade.get_custom_data(key='5m_break'):
-            stop = last_candle.slb if trade.is_short else last_candle.ssb
+            stop = last_candle.sl if trade.is_short else last_candle.ss
             trade.set_custom_data(key='stop', value=stop)
             trade.set_custom_data(key='5m_break', value=True)
-            self.dp.send_msg("5m RSI break, new stop was set")
+            self.dp.send_msg(f"5m RSI break new stop set ({stop:.4f})")
         
         conditions = (
             all(
-                (last_candle.slb_15m < stop,
+                (last_candle.sl_15m < stop,
                 trade.is_short,
                 last_candle.rsi_15m > 30,
                 last_candle.rsi_1h < 30)
             ),
             all(
-                (last_candle.ssb_15m > stop,
+                (last_candle.ss_15m > stop,
                 not trade.is_short,
                 last_candle.rsi_15m < 70,
                 last_candle.rsi_1h > 70)
             )
         )
         if any(conditions) and not trade.get_custom_data(key='15m_break'):
-            stop = last_candle.slb_15m if trade.is_short else last_candle.ssb_15m
+            stop = last_candle.sl_15m if trade.is_short else last_candle.ss_15m
             trade.set_custom_data(key='stop', value=stop)
             trade.set_custom_data(key='15m_break', value=True)
-            self.dp.send_msg("15m RSI break, new stop was set")
+            self.dp.send_msg(f"15m RSI break new stop set ({stop:.4f})")
 
         return stoploss_from_absolute(
             trade.get_custom_data(key='stop'),
@@ -201,6 +193,7 @@ class MultiframeRSIStrategy(IStrategy):
         risk = trade.get_custom_data(key='risk')
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
         conditions = (
-            (trade_duration > 1440) and (current_profit < 2 * risk),
+            (trade_duration > 60) and (current_profit < 0),
+            (trade_duration > 1440) and (current_profit < 2 * risk)
         )
         if any(conditions): return "Trade expired!"
