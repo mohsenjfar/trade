@@ -144,6 +144,9 @@ class HybridStrategy(IStrategy):
         dataframe['tema'] = ta.TEMA(dataframe, timeperiod=9)
         dataframe['adx'] = ta.ADX(dataframe, timeperiod=9)
 
+        returns = dataframe["close"].pct_change()
+        volatility = returns.rolling(window=20).std()
+        dataframe["normalized_vol"] = volatility / dataframe["close"]
         dataframe["q75"] = dataframe["normalized_vol"].rolling(window=20).quantile(0.75)
         dataframe["q50"] = dataframe["normalized_vol"].rolling(window=20).quantile(0.50)
 
