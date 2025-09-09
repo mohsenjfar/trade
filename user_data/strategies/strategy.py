@@ -260,7 +260,13 @@ class HybridStrategy(IStrategy):
             stop = last_candle.ss if trade.is_short else last_candle.sl
             trade.set_custom_data(key='stop', value=stop)
             risk = abs(stop / last_candle.close - 1)
-            self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
+            score = last_candle.total_score_short if trade.is_short else last_candle.total_score_long
+            message = (
+                f"Trade risk ({pair}): {risk * 100:.2f} %",
+                f"Total score: {score}",
+                f"Required score: {last_candle.guard_score_required}"
+            )
+            self.dp.send_msg('\n'.join(message))
 
         conditions = (
             all(
@@ -316,7 +322,6 @@ class HybridStrategy(IStrategy):
         risk = trade.get_custom_data(key='risk')
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
         conditions = (
-            (trade_duration > 60) and (current_profit < 0),
-            (trade_duration > 1440) and (current_profit < 2 * risk)
+            (trade_duration > 1440) and (current_profit < 2 * risk),
         )
         if any(conditions): return "Trade expired!"
