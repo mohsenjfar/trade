@@ -54,7 +54,6 @@ class MultiframeRSIStrategy(IStrategy):
         return dataframe
 
 
-    @informative("1h")
     @informative("15m")
     def populate_indicators_(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
@@ -74,28 +73,15 @@ class MultiframeRSIStrategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['rsi_1h'] < 30) &
+                (dataframe['rsi_15m'] < 30) &
                 (qtpylib.crossed_above(dataframe['rsi'], 30))
             ), ["enter_long" , "enter_tag"]] = (1, "reaction")
 
         dataframe.loc[
             (
-                (dataframe['close'] > dataframe['max_high_15m']) &
-                (qtpylib.crossed_above(dataframe['rsi'], 30))
-            ), ["enter_long" , "enter_tag"]] = (1, "break")
-
-        dataframe.loc[
-            (
-                (dataframe['rsi_1h'] > 70) &
+                (dataframe['rsi_15m'] > 70) &
                 (qtpylib.crossed_below(dataframe['rsi'], 70))
             ), ["enter_short" , "enter_tag"]] = (1, "reaction")
-                                                 
-        dataframe.loc[
-            (
-                (dataframe['close'] < dataframe['min_low_15m']) &
-                (qtpylib.crossed_below(dataframe['rsi'], 70))
-            ), ["enter_short" , "enter_tag"]] = (1, "break")
-        
 
         return dataframe
 
@@ -139,46 +125,6 @@ class MultiframeRSIStrategy(IStrategy):
             risk = abs(stop / last_candle.close - 1)
             self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
-        conditions = (
-            all(
-                (last_candle.sl < stop,
-                trade.is_short,
-                last_candle.rsi > 30,
-                last_candle.rsi_15m < 30)
-            ),
-            all(
-                (last_candle.ss > stop,
-                not trade.is_short,
-                last_candle.rsi < 70,
-                last_candle.rsi_15m > 70)
-            )
-        )
-        if any(conditions) and not trade.get_custom_data(key='5m_break'):
-            stop = last_candle.sl if trade.is_short else last_candle.ss
-            trade.set_custom_data(key='stop', value=stop)
-            trade.set_custom_data(key='5m_break', value=True)
-            self.dp.send_msg(f"5m RSI break new stop set ({stop:.4f})")
-        
-        conditions = (
-            all(
-                (last_candle.sl_15m < stop,
-                trade.is_short,
-                last_candle.rsi_15m > 30,
-                last_candle.rsi_1h < 30)
-            ),
-            all(
-                (last_candle.ss_15m > stop,
-                not trade.is_short,
-                last_candle.rsi_15m < 70,
-                last_candle.rsi_1h > 70)
-            )
-        )
-        if any(conditions) and not trade.get_custom_data(key='15m_break'):
-            stop = last_candle.sl_15m if trade.is_short else last_candle.ss_15m
-            trade.set_custom_data(key='stop', value=stop)
-            trade.set_custom_data(key='15m_break', value=True)
-            self.dp.send_msg(f"15m RSI break new stop set ({stop:.4f})")
-
         return stoploss_from_absolute(
             trade.get_custom_data(key='stop'),
             current_rate,
@@ -191,9 +137,4 @@ class MultiframeRSIStrategy(IStrategy):
                     current_rate: float, current_profit: float, **kwargs) -> str:
 
         risk = trade.get_custom_data(key='risk')
-        trade_duration = (current_time - trade.open_date_utc).seconds / 60
-        conditions = (
-            (trade_duration > 60) and (current_profit < 0),
-            (trade_duration > 1440) and (current_profit < 2 * risk)
-        )
-        if any(conditions): return "Trade expired!"
+        if current_profit > 3 * risk: return "Target Hit!"
