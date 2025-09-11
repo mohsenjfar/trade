@@ -28,6 +28,8 @@ class MultiframeRSIStrategy(IStrategy):
     use_exit_signal = True
 
     use_custom_stoploss = True
+
+    position_adjustment_enable = True
     
 
     def analyze_extrema(self, dataframe):
@@ -125,6 +127,7 @@ class MultiframeRSIStrategy(IStrategy):
             stop = last_candle.ss if trade.is_short else last_candle.sl
             trade.set_custom_data(key='stop', value=stop)
             risk = abs(stop / last_candle.close - 1)
+            trade.set_custom_data(key='risk', value=risk)
             self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
         
         conditions = (
@@ -155,6 +158,19 @@ class MultiframeRSIStrategy(IStrategy):
             is_short=trade.is_short,
             leverage=trade.leverage
         )
+
+
+    def adjust_trade_position(self, trade: Trade, current_time: datetime,
+                              current_rate: float, current_profit: float,
+                              min_stake: float | None, max_stake: float,
+                              current_entry_rate: float, current_exit_rate: float,
+                              current_entry_profit: float, current_exit_profit: float,
+                              **kwargs
+                              ) -> float | None | tuple[float | None, str | None]:
+
+        risk = trade.get_custom_data(key='risk')
+        if (current_profit > risk * 1.2) and (trade.nr_of_successful_exits == 0):
+            return - trade.stake_amount / 2
 
 
     def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
