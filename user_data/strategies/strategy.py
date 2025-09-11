@@ -11,7 +11,7 @@ from freqtrade.strategy import (
 from datetime import datetime
 from typing import Optional
 
-class MultiframeRSIStrategy(IStrategy):
+class ReactionStrategy(IStrategy):
 
     INTERFACE_VERSION = 3
 
@@ -19,7 +19,7 @@ class MultiframeRSIStrategy(IStrategy):
 
     trade_max_loss_allowed = 0.005
 
-    timeframe = '5m'
+    timeframe = '15m'
 
     can_short: bool = True
 
@@ -29,8 +29,7 @@ class MultiframeRSIStrategy(IStrategy):
 
     use_custom_stoploss = True
 
-    position_adjustment_enable = True
-    
+    position_adjustment_enable = False
 
     def analyze_extrema(self, dataframe):
 
@@ -50,15 +49,13 @@ class MultiframeRSIStrategy(IStrategy):
         last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
         last_max_index = dataframe[dataframe['max_high'] == dataframe['high']].index.max()
 
-        dataframe['sl'] = dataframe.loc[last_max_index:].low.min()
-        dataframe['ss'] = dataframe.loc[last_min_index:].high.max()
-        dataframe['hh'] = dataframe.loc[last_max_index:].high.max()
-        dataframe['ll'] = dataframe.loc[last_min_index:].low.min()
+        dataframe['sl'] = dataframe.loc[last_min_index:].low.min()
+        dataframe['ss'] = dataframe.loc[last_max_index:].high.max()
 
         return dataframe
 
 
-    @informative("15m")
+    @informative("1h")
     def populate_indicators_(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe = self.analyze_extrema(dataframe)
@@ -77,15 +74,13 @@ class MultiframeRSIStrategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['cat_15m'] == "L") &
-                (qtpylib.crossed_above(dataframe['close'], dataframe['hh']))
-            ), ["enter_long" , "enter_tag"]] = (1, "break")
+                (qtpylib.crossed_above(dataframe['rsi'], 30))
+            ), ["enter_long" , "enter_tag"]] = (1, "reaction")
 
         dataframe.loc[
             (
-                (dataframe['cat_15m'] == "H") &
-                (qtpylib.crossed_below(dataframe['close'], dataframe['ll']))
-            ), ["enter_short" , "enter_tag"]] = (1, "break")
+                (qtpylib.crossed_below(dataframe['rsi'], 70))
+            ), ["enter_short" , "enter_tag"]] = (1, "reaction")
 
         return dataframe
 
@@ -129,28 +124,6 @@ class MultiframeRSIStrategy(IStrategy):
             risk = abs(stop / last_candle.close - 1)
             trade.set_custom_data(key='risk', value=risk)
             self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
-        
-        conditions = (
-            all(
-                (
-                    last_candle.ss_15m < stop,
-                    trade.is_short,
-                    last_candle.rsi_15m > 30
-                )
-            ),
-            all(
-                (
-                    last_candle.sl_15m > stop,
-                    not trade.is_short,
-                    last_candle.rsi_15m < 70
-                )
-            )
-        )
-        if any(conditions) and not trade.get_custom_data(key='15m_break'):
-            stop = last_candle.ss_15m if trade.is_short else last_candle.sl_15m
-            trade.set_custom_data(key='stop', value=stop)
-            trade.set_custom_data(key='15m_break', value=True)
-            self.dp.send_msg(f"15m RSI break new stop set ({stop:.4f})")
 
         return stoploss_from_absolute(
             trade.get_custom_data(key='stop'),
