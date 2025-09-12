@@ -155,3 +155,11 @@ class ReactionStrategy(IStrategy):
             (trade_duration > 1440) and (current_profit < 2 * risk),
         )
         if any(conditions): return "Trade expired!"
+
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
+        last_candle = dataframe.iloc[-1].squeeze()
+        conditions = (
+            (last_candle['rsi'] < 70) and not trade.is_short and (last_candle['cat'] == 'H'),
+            (last_candle['rsi'] > 30) and trade.is_short and (last_candle['cat'] == 'L'),
+        )
+        if any(conditions): return "Target Hit!"
