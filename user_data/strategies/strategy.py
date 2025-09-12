@@ -257,53 +257,53 @@ class HybridStrategy(IStrategy):
         stop = trade.get_custom_data(key='stop')
         
         if stop is None:
-            stop = last_candle.ss if trade.is_short else last_candle.sl
+            stop = last_candle['ss'] if trade.is_short else last_candle['sl']
             trade.set_custom_data(key='stop', value=stop)
-            risk = abs(stop / last_candle.close - 1)
-            score = last_candle.total_score_short if trade.is_short else last_candle.total_score_long
+            risk = abs(stop / last_candle['close'] - 1)
+            score = last_candle['total_score_short'] if trade.is_short else last_candle['total_score_long']
             message = (
                 f"Trade risk ({pair}): {risk * 100:.2f} %",
                 f"Total score: {score}",
-                f"Required score: {last_candle.guard_score_required}"
+                f"Required score: {last_candle['guard_score_required']}"
             )
             self.dp.send_msg('\n'.join(message))
 
         conditions = (
             all(
-                (last_candle.sl < stop,
+                (last_candle['sl'] < stop,
                 trade.is_short,
-                last_candle.rsi > 30,
-                last_candle.rsi_15m < 30)
+                last_candle['rsi'] > 30,
+                last_candle['rsi_15m'] < 30)
             ),
             all(
                 (last_candle.ss > stop,
                 not trade.is_short,
-                last_candle.rsi < 70,
-                last_candle.rsi_15m > 70)
+                last_candle['rsi'] < 70,
+                last_candle['rsi_15m'] > 70)
             )
         )
         if any(conditions) and not trade.get_custom_data(key='5m_break'):
-            stop = last_candle.sl if trade.is_short else last_candle.ss
+            stop = last_candle['sl'] if trade.is_short else last_candle['ss']
             trade.set_custom_data(key='stop', value=stop)
             trade.set_custom_data(key='5m_break', value=True)
             self.dp.send_msg(f"5m RSI break new stop set ({stop:.4f})")
         
         conditions = (
             all(
-                (last_candle.sl_15m < stop,
+                (last_candle['sl_15m'] < stop,
                 trade.is_short,
-                last_candle.rsi_15m > 30,
-                last_candle.rsi_1h < 30)
+                last_candle['rsi_15m'] > 30,
+                last_candle['rsi_1h'] < 30)
             ),
             all(
-                (last_candle.ss_15m > stop,
+                (last_candle['ss_15m'] > stop,
                 not trade.is_short,
-                last_candle.rsi_15m < 70,
-                last_candle.rsi_1h > 70)
+                last_candle['rsi_15m'] < 70,
+                last_candle['rsi_1h'] > 70)
             )
         )
         if any(conditions) and not trade.get_custom_data(key='15m_break'):
-            stop = last_candle.sl_15m if trade.is_short else last_candle.ss_15m
+            stop = last_candle['sl_15m'] if trade.is_short else last_candle['ss_15m']
             trade.set_custom_data(key='stop', value=stop)
             trade.set_custom_data(key='15m_break', value=True)
             self.dp.send_msg(f"15m RSI break new stop set ({stop:.4f})")
