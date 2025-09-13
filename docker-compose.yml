@@ -4,7 +4,7 @@ services:
   freqtrade2:
       image: freqtradeorg/freqtrade:stable
       restart: unless-stopped
-      container_name: MultiframeRSIStrategy
+      container_name: RSIReactionV2
       dns:
         - 8.8.8.8
         - 1.1.1.1
@@ -14,7 +14,7 @@ services:
       #   - "8080:8080"
       command: >
         trade
-        --logfile /freqtrade/user_data/logs/multiframe_strategy.log
-        --db-url sqlite:////freqtrade/user_data/multiframe_strategy.sqlite
+        --logfile /freqtrade/user_data/logs/rsi_reaction_v2.log
+        --db-url sqlite:////freqtrade/user_data/rsi_reaction_v2.sqlite
         --config /freqtrade/user_data/config.json
-        --strategy MultiframeRSIStrategy
+        --strategy RSIReactionV2
