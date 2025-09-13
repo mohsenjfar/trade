@@ -63,7 +63,7 @@ class RSIReactionV2(IStrategy):
         dataframe.loc[
             (
                 (dataframe['cat'] == "HHL") &
-                (qtpylib.crossed_above(dataframe['rsi'], dataframe['30']))
+                (qtpylib.crossed_above(dataframe['rsi'], 30))
             ), ["enter_long" , "enter_tag"]] = (1, "break")
 
         dataframe.loc[
