@@ -29,7 +29,7 @@ class ReactionStrategy(IStrategy):
 
     use_custom_stoploss = True
 
-    position_adjustment_enable = True
+    position_adjustment_enable = False
 
     def analyze_extrema(self, dataframe):
 
