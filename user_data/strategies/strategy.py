@@ -136,7 +136,7 @@ class RSIReactionV2(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
         conditions = (
-            (last_candle['cat'] == "HHH") and trade.is_short,
-            (last_candle['cat'] == "LLL") and not trade.is_short,
+            (last_candle['cat'] == "HHL") and trade.is_short,
+            (last_candle['cat'] == "LLH") and not trade.is_short,
         )
         if any(conditions): return "Target Hit!"
