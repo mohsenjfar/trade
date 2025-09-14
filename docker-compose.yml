@@ -4,7 +4,7 @@ services:
   freqtrade:
       image: freqtradeorg/freqtrade:develop_freqai
       restart: unless-stopped
-      container_name: Trader
+      container_name: HybridStrategyV2
       dns:
         - 8.8.8.8
         - 1.1.1.1
@@ -14,8 +14,7 @@ services:
         - "8080:8080"
       command: >
         trade
-        --logfile /freqtrade/user_data/logs/strategy.log
-        --db-url sqlite:////freqtrade/user_data/db.sqlite
+        --logfile /freqtrade/user_data/logs/hybrid_strategy_v2.log
+        --db-url sqlite:////freqtrade/user_data/hybrid_strategy_v2.sqlite
         --config /freqtrade/user_data/config.json
-        --strategy HybridStrategy
-        --freqaimodel XGBoostClassifier
+        --strategy HybridStrategyV2
