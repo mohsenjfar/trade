@@ -11,7 +11,7 @@ from freqtrade.strategy import (
 from datetime import datetime
 from typing import Optional
 
-class ReactionStrategy(IStrategy):
+class RSIBreak(IStrategy):
 
     INTERFACE_VERSION = 3
 
@@ -42,7 +42,7 @@ class ReactionStrategy(IStrategy):
 
         dataframe.loc[dataframe['max_high'] == dataframe['high'],"cat"] = 'H'
         dataframe.loc[dataframe['min_low'] == dataframe['low'],"cat"] = 'L'
-        dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-3:]
+        dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-2:]
 
         last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
         last_max_index = dataframe[dataframe['max_high'] == dataframe['high']].index.max()
@@ -64,12 +64,14 @@ class ReactionStrategy(IStrategy):
 
         dataframe.loc[
             (
-                (qtpylib.crossed_above(dataframe['close'], dataframe['max_high']))
+                (dataframe['cat'] == "LH") & # Guard
+                (qtpylib.crossed_above(dataframe['close'], dataframe['max_high'])) # Trigger
             ), ["enter_long" , "enter_tag"]] = (1, "break")
 
         dataframe.loc[
             (
-                (qtpylib.crossed_below(dataframe['close'], dataframe['min_low']))
+                (dataframe['cat'] == "HL") & # Guard
+                (qtpylib.crossed_below(dataframe['close'], dataframe['min_low'])) # Trigger
             ), ["enter_short" , "enter_tag"]] = (1, "break")
 
         return dataframe

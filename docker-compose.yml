@@ -4,7 +4,7 @@ services:
   freqtrade3:
       image: freqtradeorg/freqtrade:stable
       restart: unless-stopped
-      container_name: ReactionStrategy
+      container_name: RSIBreak
       dns:
         - 8.8.8.8
         - 1.1.1.1
@@ -14,7 +14,7 @@ services:
       #   - "8080:8080"
       command: >
         trade
-        --logfile /freqtrade/user_data/logs/reaction_strategy.log
-        --db-url sqlite:////freqtrade/user_data/reaction_strategy.sqlite
+        --logfile /freqtrade/user_data/logs/rsi_break.log
+        --db-url sqlite:////freqtrade/user_data/rsi_break.sqlite
         --config /freqtrade/user_data/config.json
-        --strategy ReactionStrategy
+        --strategy RSIBreak
