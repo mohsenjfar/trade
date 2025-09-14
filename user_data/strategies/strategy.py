@@ -43,6 +43,7 @@ class ReactionStrategy(IStrategy):
         dataframe.loc[dataframe['max_high'] == dataframe['high'],"cat"] = 'H'
         dataframe.loc[dataframe['min_low'] == dataframe['low'],"cat"] = 'L'
         dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-3:]
+        dataframe['guard'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-2:]
 
         last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
         last_max_index = dataframe[dataframe['max_high'] == dataframe['high']].index.max()
@@ -64,13 +65,13 @@ class ReactionStrategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe["cat"] == "LHL") &
+                (dataframe["guard"] == "HL") &
                 (qtpylib.crossed_above(dataframe['rsi'], 30))
             ), ["enter_long" , "enter_tag"]] = (1, "reaction")
 
         dataframe.loc[
             (
-                (dataframe["cat"] == "HLH") &
+                (dataframe["guard"] == "LH") &
                 (qtpylib.crossed_below(dataframe['rsi'], 70))
             ), ["enter_short" , "enter_tag"]] = (1, "reaction")
 
