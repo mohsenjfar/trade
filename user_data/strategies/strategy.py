@@ -19,7 +19,7 @@ class ReactionStrategy(IStrategy):
 
     trade_max_loss_allowed = 0.005
 
-    timeframe = '15m'
+    timeframe = '1m'
 
     can_short: bool = True
 
@@ -28,8 +28,6 @@ class ReactionStrategy(IStrategy):
     use_exit_signal = True
 
     use_custom_stoploss = True
-
-    position_adjustment_enable = False
 
     def analyze_extrema(self, dataframe):
 
@@ -44,7 +42,7 @@ class ReactionStrategy(IStrategy):
 
         dataframe.loc[dataframe['max_high'] == dataframe['high'],"cat"] = 'H'
         dataframe.loc[dataframe['min_low'] == dataframe['low'],"cat"] = 'L'
-        dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-1:]
+        dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-3:]
 
         last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
         last_max_index = dataframe[dataframe['max_high'] == dataframe['high']].index.max()
@@ -54,15 +52,7 @@ class ReactionStrategy(IStrategy):
 
         return dataframe
 
-
-    @informative("1h")
-    def populate_indicators_(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-
-        dataframe = self.analyze_extrema(dataframe)
-
-        return dataframe
-
-
+    
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe = self.analyze_extrema(dataframe)
@@ -74,11 +64,13 @@ class ReactionStrategy(IStrategy):
 
         dataframe.loc[
             (
+                (dataframe["cat"] == "LHL") &
                 (qtpylib.crossed_above(dataframe['rsi'], 30))
             ), ["enter_long" , "enter_tag"]] = (1, "reaction")
 
         dataframe.loc[
             (
+                (dataframe["cat"] == "HLH") &
                 (qtpylib.crossed_below(dataframe['rsi'], 70))
             ), ["enter_short" , "enter_tag"]] = (1, "reaction")
 
@@ -132,34 +124,21 @@ class ReactionStrategy(IStrategy):
             leverage=trade.leverage
         )
 
-
-    def adjust_trade_position(self, trade: Trade, current_time: datetime,
-                              current_rate: float, current_profit: float,
-                              min_stake: float | None, max_stake: float,
-                              current_entry_rate: float, current_exit_rate: float,
-                              current_entry_profit: float, current_exit_profit: float,
-                              **kwargs
-                              ) -> float | None | tuple[float | None, str | None]:
-
-        risk = trade.get_custom_data(key='risk')
-        if (current_profit > risk * 1.2) and (trade.nr_of_successful_exits == 0):
-            return - trade.stake_amount / 2
-
-
+    
     def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
                     current_rate: float, current_profit: float, **kwargs) -> str:
 
         risk = trade.get_custom_data(key='risk')
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
         conditions = (
-            (trade_duration > 1440) and (current_profit < 2 * risk),
+            (trade_duration > 60) and (current_profit < 2 * risk),
         )
         if any(conditions): return "Trade expired!"
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
         conditions = (
-            (last_candle['rsi'] < 70) and not trade.is_short and (last_candle['cat'] == 'H'),
-            (last_candle['rsi'] > 30) and trade.is_short and (last_candle['cat'] == 'L'),
+            (last_candle['cat'] == 'HHL') and not trade.is_short,
+            (last_candle['cat'] == 'LLH') and trade.is_short
         )
         if any(conditions): return "Target Hit!"
