@@ -97,7 +97,7 @@ class HybridStrategyV2(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['first_derivative_high'] > 0)
+                (dataframe['first_derivative_high'] > 0) &
                 (dataframe['second_derivative_high'] > 0)
             ),
             'exit_short'] = 1
