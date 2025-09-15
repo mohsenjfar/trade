@@ -52,8 +52,7 @@ class HybridStrategyV2(IStrategy):
         dataframe['sl'] = dataframe.loc[last_min_index:].low.min()
         dataframe['ss'] = dataframe.loc[last_max_index:].high.max()
 
-        # fractions = {"low":0.01, "medium":0.05, "high":0.1}
-        fractions = {"medium":0.05}
+        fractions = {"low":0.01, "medium":0.05}
         for level, frac in fractions.items():
             dataframe[f'smoothed_{level}'] = lowess(dataframe['close'], np.arange(len(dataframe)), frac=frac, return_sorted=False)
             dataframe[f'first_derivative_{level}'] = np.gradient(dataframe[f'smoothed_{level}'])
@@ -66,21 +65,17 @@ class HybridStrategyV2(IStrategy):
 
         dataframe.loc[
             (
-                # (dataframe['first_derivative_high'] > 0) & # Guard
-                # (dataframe['second_derivative_high'] > 0) & # Guard
+                (dataframe['first_derivative_low'] > 0) & # Guard
                 (dataframe['first_derivative_medium'] > 0) & # Guard
-                # (dataframe['first_derivative_low'] > 0) & # Guard
-                (qtpylib.crossed_above(dataframe['rsi'], self.long_rsi.value)) # Trigger
+                (qtpylib.crossed_above(dataframe['rsi'], 30)) # Trigger
             ),
             'enter_long'] = 1
 
         dataframe.loc[
             (
-                # (dataframe['first_derivative_high'] < 0) & # Guard
-                # (dataframe['second_derivative_high'] < 0) & # Guard
+                (dataframe['first_derivative_low'] < 0) & # Guard
                 (dataframe['first_derivative_medium'] < 0) & # Guard
-                # (dataframe['first_derivative_low'] < 0) & # Guard
-                (qtpylib.crossed_below(dataframe['rsi'], self.short_rsi.value)) # Trigger
+                (qtpylib.crossed_below(dataframe['rsi'], 70)) # Trigger
             ),
             'enter_short'] = 1
 
@@ -91,15 +86,13 @@ class HybridStrategyV2(IStrategy):
 
         dataframe.loc[
             (
-                # (dataframe['first_derivative_high'] < 0) &
-                (dataframe['first_derivative_medium'] == 0)
+                (qtpylib.crossed_below(dataframe['first_derivative_medium'], 0))
             ),
             'exit_long'] = 1
 
         dataframe.loc[
             (
-                # (dataframe['first_derivative_high'] > 0) &
-                (dataframe['first_derivative_medium'] == 0)
+                (qtpylib.crossed_above(dataframe['first_derivative_medium'], 0))
             ),
             'exit_short'] = 1
 
