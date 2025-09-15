@@ -66,8 +66,9 @@ class HybridStrategyV2(IStrategy):
         dataframe.loc[
             (
                 (dataframe['first_derivative_high'] > 0) & # Guard
+                (dataframe['second_derivative_high'] > 0) & # Guard
                 (dataframe['first_derivative_medium'] > 0) & # Guard
-                (dataframe['first_derivative_low'] < 0) & # Guard
+                (dataframe['first_derivative_low'] > 0) & # Guard
                 (qtpylib.crossed_above(dataframe['rsi'], self.long_rsi.value)) # Trigger
             ),
             'enter_long'] = 1
@@ -75,8 +76,9 @@ class HybridStrategyV2(IStrategy):
         dataframe.loc[
             (
                 (dataframe['first_derivative_high'] < 0) & # Guard
+                (dataframe['second_derivative_high'] < 0) & # Guard
                 (dataframe['first_derivative_medium'] < 0) & # Guard
-                (dataframe['first_derivative_low'] > 0) & # Guard
+                (dataframe['first_derivative_low'] < 0) & # Guard
                 (qtpylib.crossed_below(dataframe['rsi'], self.short_rsi.value)) # Trigger
             ),
             'enter_short'] = 1
@@ -85,6 +87,20 @@ class HybridStrategyV2(IStrategy):
 
 
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+
+        dataframe.loc[
+            (
+                (dataframe['first_derivative_high'] < 0) &
+                (dataframe['second_derivative_high'] < 0)
+            ),
+            'exit_long'] = 1
+
+        dataframe.loc[
+            (
+                (dataframe['first_derivative_high'] > 0)
+                (dataframe['second_derivative_high'] > 0)
+            ),
+            'exit_short'] = 1
 
         return dataframe
 
