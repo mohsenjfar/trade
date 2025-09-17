@@ -32,14 +32,16 @@ class HybridStrategyV2(IStrategy):
 
     use_custom_stoploss = True
     
-    long_rsi = IntParameter(low=1, high=50, default=30, space='buy', optimize=True, load=True)
-    short_rsi = IntParameter(low=51, high=100, default=70, space='sell', optimize=True, load=True)
+    long_rsi = IntParameter(low=1, high=50, default=40, space='buy', optimize=True, load=True)
+    short_rsi = IntParameter(low=51, high=100, default=60, space='sell', optimize=True, load=True)
+    low_frac = DecimalParameter(0.01, 0.5, decimals=2, default=0.01, space="buy")
+    medium_frac = DecimalParameter(0.01, 0.5, decimals=2, default=0.1, space="buy")
     
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe['rsi'] = ta.RSI(dataframe['close'], timeperiod=14)
-        dataframe['above_group'] = (dataframe['rsi'] >= 70).astype(int).diff().ne(0).cumsum() * (dataframe['rsi'] >= 70)
-        dataframe['below_group'] = (dataframe['rsi'] <= 30).astype(int).diff().ne(0).cumsum() * (dataframe['rsi'] <= 30)
+        dataframe['above_group'] = (dataframe['rsi'] >= self.short_rsi.value).astype(int).diff().ne(0).cumsum() * (dataframe['rsi'] >= self.short_rsi.value)
+        dataframe['below_group'] = (dataframe['rsi'] <= self.long_rsi.value).astype(int).diff().ne(0).cumsum() * (dataframe['rsi'] <= self.long_rsi.value)
         dataframe['max_high'] = dataframe.groupby('above_group')['high'].transform('max')
         dataframe['min_low'] = dataframe.groupby('below_group')['low'].transform('min')
         dataframe.loc[dataframe['above_group'] == 0, 'max_high'] = None
@@ -52,7 +54,7 @@ class HybridStrategyV2(IStrategy):
         dataframe['sl'] = dataframe.loc[last_min_index:].low.min()
         dataframe['ss'] = dataframe.loc[last_max_index:].high.max()
 
-        fractions = {"low":0.01, "medium":0.05}
+        fractions = {"low":self.low_frac.value, "medium":self.medium_frac.value}
         for level, frac in fractions.items():
             dataframe[f'smoothed_{level}'] = lowess(dataframe['close'], np.arange(len(dataframe)), frac=frac, return_sorted=False)
             dataframe[f'first_derivative_{level}'] = np.gradient(dataframe[f'smoothed_{level}'])
@@ -67,7 +69,7 @@ class HybridStrategyV2(IStrategy):
             (
                 (dataframe['first_derivative_low'] > 0) & # Guard
                 (dataframe['first_derivative_medium'] > 0) & # Guard
-                (qtpylib.crossed_above(dataframe['rsi'], 30)) # Trigger
+                (qtpylib.crossed_above(dataframe['rsi'], self.long_rsi.value)) # Trigger
             ),
             'enter_long'] = 1
 
@@ -75,7 +77,7 @@ class HybridStrategyV2(IStrategy):
             (
                 (dataframe['first_derivative_low'] < 0) & # Guard
                 (dataframe['first_derivative_medium'] < 0) & # Guard
-                (qtpylib.crossed_below(dataframe['rsi'], 70)) # Trigger
+                (qtpylib.crossed_below(dataframe['rsi'], self.short_rsi.value)) # Trigger
             ),
             'enter_short'] = 1
 
