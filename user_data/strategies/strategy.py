@@ -108,6 +108,8 @@ class HybridStrategyV2(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
         total_stake = max_stake + Trade.total_open_trades_stakes()
+        trade_hist = Trade.get_trades_proxy(pair=pair, is_open=False)
+        if trade_hist and (trade_hist[-1].side == side): return 0
         stop = last_candle.ss if side == "short" else last_candle.sl
         risk = abs(stop / last_candle.close - 1)
         return min(total_stake * self.trade_max_loss_allowed / risk, max_stake)
