@@ -34,8 +34,8 @@ class HybridStrategyV2(IStrategy):
     
     long_rsi = IntParameter(low=1, high=50, default=40, space='buy', optimize=True, load=True)
     short_rsi = IntParameter(low=51, high=100, default=60, space='sell', optimize=True, load=True)
-    low_frac = DecimalParameter(0.01, 0.5, decimals=2, default=0.01, space="buy")
-    medium_frac = DecimalParameter(0.01, 0.5, decimals=2, default=0.1, space="buy")
+    low_frac = DecimalParameter(0.01, 0.1, decimals=2, default=0.03, space="buy")
+    medium_frac = DecimalParameter(0.1, 0.5, decimals=2, default=0.1, space="buy")
     
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
@@ -68,7 +68,6 @@ class HybridStrategyV2(IStrategy):
         dataframe.loc[
             (
                 (dataframe['first_derivative_low'] > 0) & # Guard
-                (dataframe['first_derivative_medium'] > 0) & # Guard
                 (qtpylib.crossed_above(dataframe['rsi'], self.long_rsi.value)) # Trigger
             ),
             'enter_long'] = 1
@@ -76,7 +75,6 @@ class HybridStrategyV2(IStrategy):
         dataframe.loc[
             (
                 (dataframe['first_derivative_low'] < 0) & # Guard
-                (dataframe['first_derivative_medium'] < 0) & # Guard
                 (qtpylib.crossed_below(dataframe['rsi'], self.short_rsi.value)) # Trigger
             ),
             'enter_short'] = 1
