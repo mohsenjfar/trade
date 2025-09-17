@@ -9,7 +9,8 @@ from freqtrade.strategy import (
     IStrategy,
     stoploss_from_absolute,
     informative,
-    IntParameter
+    IntParameter,
+    DecimalParameter
 )
 from datetime import datetime, timedelta, date
 from typing import Optional
@@ -34,8 +35,8 @@ class HybridStrategyV2(IStrategy):
     
     long_rsi = IntParameter(low=1, high=50, default=40, space='buy', optimize=True, load=True)
     short_rsi = IntParameter(low=51, high=100, default=60, space='sell', optimize=True, load=True)
-    low_frac = DecimalParameter(0.01, 0.1, decimals=2, default=0.03, space="buy")
-    medium_frac = DecimalParameter(0.1, 0.5, decimals=2, default=0.1, space="buy")
+    low_frac = DecimalParameter(0.01, 0.05, decimals=2, default=0.03, space="buy")
+    medium_frac = DecimalParameter(0.05, 0.2, decimals=2, default=0.07, space="buy")
     
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
