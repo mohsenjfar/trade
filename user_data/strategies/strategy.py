@@ -1,18 +1,14 @@
 import freqtrade.vendor.qtpylib.indicators as qtpylib
 from pandas import DataFrame
 import numpy as np
-import talib.abstract as ta
 from freqtrade.persistence import Trade
-from typing import Dict
 from statsmodels.nonparametric.smoothers_lowess import lowess
 from freqtrade.strategy import (
     IStrategy,
     stoploss_from_absolute,
-    informative,
-    IntParameter,
     DecimalParameter
 )
-from datetime import datetime, timedelta, date
+from datetime import datetime
 from typing import Optional
 
 class HybridStrategyV2(IStrategy):
@@ -33,8 +29,8 @@ class HybridStrategyV2(IStrategy):
 
     use_custom_stoploss = True
     
-    low = DecimalParameter(0.01, 0.05, decimals=2, default=0.03, space="buy")
-    high = DecimalParameter(0.05, 0.2, decimals=2, default=0.07, space="buy")
+    low = DecimalParameter(0.01, 0.1, decimals=2, default=0.03, space="buy")
+    high = DecimalParameter(0.1, 0.5, decimals=2, default=0.1, space="buy")
     
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
@@ -43,6 +39,11 @@ class HybridStrategyV2(IStrategy):
             dataframe[f'smoothed_{level}'] = lowess(dataframe['close'], np.arange(len(dataframe)), frac=frac, return_sorted=False)
             dataframe[f'derivative_{level}'] = np.gradient(dataframe[f'smoothed_{level}'])
 
+        dataframe['distance'] = np.abs(dataframe['smoothed_high'] - dataframe['smoothed_low'])
+
+        dataframe['sl'] = dataframe['low'].rolling(10).min()
+        dataframe['ss'] = dataframe['high'].rolling(10).max()
+
         return dataframe
 
 
@@ -50,12 +51,18 @@ class HybridStrategyV2(IStrategy):
 
         dataframe.loc[
             (
+                (dataframe['derivative_high'] > 0) & # Guard
+                (dataframe['smoothed_low'] < dataframe['smoothed_high']) & # Guard
+                (dataframe['distance'] > dataframe['distance'].mean()) & # Guard
                 (qtpylib.crossed_above(dataframe['derivative_low'], 0)) # Trigger
             ),
             'enter_long'] = 1
 
         dataframe.loc[
             (
+                (dataframe['derivative_high'] < 0) & # Guard
+                (dataframe['smoothed_low'] > dataframe['smoothed_high']) & # Guard
+                (dataframe['distance'] > dataframe['distance'].mean()) & # Guard
                 (qtpylib.crossed_below(dataframe['derivative_low'], 0)) # Trigger
             ),
             'enter_short'] = 1
@@ -67,13 +74,13 @@ class HybridStrategyV2(IStrategy):
 
         dataframe.loc[
             (
-                (qtpylib.crossed_below(dataframe['derivative_low'], 0))
+                (qtpylib.crossed_below(dataframe['derivative_high'], 0))
             ),
             'exit_long'] = 1
 
         dataframe.loc[
             (
-                (qtpylib.crossed_above(dataframe['derivative_low'], 0))
+                (qtpylib.crossed_above(dataframe['derivative_high'], 0))
             ),
             'exit_short'] = 1
 
@@ -88,7 +95,7 @@ class HybridStrategyV2(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
         total_stake = max_stake + Trade.total_open_trades_stakes()
-        stop = last_candle['high'] if side == "short" else last_candle['low']
+        stop = last_candle['ss'] if side == "short" else last_candle['sl']
         risk = abs(stop / last_candle['close'] - 1)
         return min(total_stake * self.trade_max_loss_allowed / risk, max_stake)
 
@@ -109,7 +116,7 @@ class HybridStrategyV2(IStrategy):
         stop = trade.get_custom_data(key='stop')
         
         if stop is None:
-            stop = last_candle['high'] if trade.is_short else last_candle['low']
+            stop = last_candle['ss'] if trade.is_short else last_candle['sl']
             risk = abs(stop / last_candle['close'] - 1)
 
             trade.set_custom_data(key='stop', value=stop)
