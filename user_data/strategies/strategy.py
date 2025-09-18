@@ -33,33 +33,15 @@ class HybridStrategyV2(IStrategy):
 
     use_custom_stoploss = True
     
-    long_rsi = IntParameter(low=1, high=50, default=40, space='buy', optimize=True, load=True)
-    short_rsi = IntParameter(low=51, high=100, default=60, space='sell', optimize=True, load=True)
-    low_frac = DecimalParameter(0.01, 0.05, decimals=2, default=0.03, space="buy")
-    medium_frac = DecimalParameter(0.05, 0.2, decimals=2, default=0.07, space="buy")
+    low = DecimalParameter(0.01, 0.05, decimals=2, default=0.03, space="buy")
+    high = DecimalParameter(0.05, 0.2, decimals=2, default=0.07, space="buy")
     
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe['rsi'] = ta.RSI(dataframe['close'], timeperiod=14)
-        dataframe['above_group'] = (dataframe['rsi'] >= self.short_rsi.value).astype(int).diff().ne(0).cumsum() * (dataframe['rsi'] >= self.short_rsi.value)
-        dataframe['below_group'] = (dataframe['rsi'] <= self.long_rsi.value).astype(int).diff().ne(0).cumsum() * (dataframe['rsi'] <= self.long_rsi.value)
-        dataframe['max_high'] = dataframe.groupby('above_group')['high'].transform('max')
-        dataframe['min_low'] = dataframe.groupby('below_group')['low'].transform('min')
-        dataframe.loc[dataframe['above_group'] == 0, 'max_high'] = None
-        dataframe.loc[dataframe['below_group'] == 0, 'min_low'] = None
-        dataframe = dataframe.ffill()
-
-        last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
-        last_max_index = dataframe[dataframe['max_high'] == dataframe['high']].index.max()
-
-        dataframe['sl'] = dataframe.loc[last_min_index:].low.min()
-        dataframe['ss'] = dataframe.loc[last_max_index:].high.max()
-
-        fractions = {"low":self.low_frac.value, "medium":self.medium_frac.value}
+        fractions = {"low":self.low.value, "high":self.high.value}
         for level, frac in fractions.items():
             dataframe[f'smoothed_{level}'] = lowess(dataframe['close'], np.arange(len(dataframe)), frac=frac, return_sorted=False)
-            dataframe[f'first_derivative_{level}'] = np.gradient(dataframe[f'smoothed_{level}'])
-            dataframe[f'second_derivative_{level}'] = np.gradient(dataframe[f'first_derivative_{level}'])
+            dataframe[f'derivative_{level}'] = np.gradient(dataframe[f'smoothed_{level}'])
 
         return dataframe
 
@@ -68,15 +50,13 @@ class HybridStrategyV2(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['first_derivative_low'] > 0) & # Guard
-                (qtpylib.crossed_above(dataframe['rsi'], self.long_rsi.value)) # Trigger
+                (qtpylib.crossed_above(dataframe['derivative_low'], 0)) # Trigger
             ),
             'enter_long'] = 1
 
         dataframe.loc[
             (
-                (dataframe['first_derivative_low'] < 0) & # Guard
-                (qtpylib.crossed_below(dataframe['rsi'], self.short_rsi.value)) # Trigger
+                (qtpylib.crossed_below(dataframe['derivative_low'], 0)) # Trigger
             ),
             'enter_short'] = 1
 
@@ -87,13 +67,13 @@ class HybridStrategyV2(IStrategy):
 
         dataframe.loc[
             (
-                (qtpylib.crossed_below(dataframe['first_derivative_medium'], 0))
+                (qtpylib.crossed_below(dataframe['derivative_low'], 0))
             ),
             'exit_long'] = 1
 
         dataframe.loc[
             (
-                (qtpylib.crossed_above(dataframe['first_derivative_medium'], 0))
+                (qtpylib.crossed_above(dataframe['derivative_low'], 0))
             ),
             'exit_short'] = 1
 
@@ -108,10 +88,8 @@ class HybridStrategyV2(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
         total_stake = max_stake + Trade.total_open_trades_stakes()
-        trade_hist = Trade.get_trades_proxy(pair=pair, is_open=False)
-        if trade_hist and (trade_hist[-1].side == side): return 0
-        stop = last_candle.ss if side == "short" else last_candle.sl
-        risk = abs(stop / last_candle.close - 1)
+        stop = last_candle['high'] if side == "short" else last_candle['low']
+        risk = abs(stop / last_candle['close'] - 1)
         return min(total_stake * self.trade_max_loss_allowed / risk, max_stake)
 
 
@@ -131,10 +109,12 @@ class HybridStrategyV2(IStrategy):
         stop = trade.get_custom_data(key='stop')
         
         if stop is None:
-            stop = last_candle['ss'] if trade.is_short else last_candle['sl']
-            trade.set_custom_data(key='stop', value=stop)
+            stop = last_candle['high'] if trade.is_short else last_candle['low']
             risk = abs(stop / last_candle['close'] - 1)
+
+            trade.set_custom_data(key='stop', value=stop)
             trade.set_custom_data(key='risk', value=risk)
+
             self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
         return stoploss_from_absolute(
