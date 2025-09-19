@@ -29,17 +29,18 @@ class HybridStrategyV2(IStrategy):
 
     use_custom_stoploss = True
     
-    low = DecimalParameter(0.01, 0.1, decimals=2, default=0.03, space="buy")
+    low = DecimalParameter(0.01, 0.03, decimals=2, default=0.01, space="buy")
+    medium = DecimalParameter(0.03, 0.1, decimals=2, default=0.03, space="buy")
     high = DecimalParameter(0.1, 0.5, decimals=2, default=0.1, space="buy")
     
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        fractions = {"low":self.low.value, "high":self.high.value}
+        fractions = {"low":self.low.value, "medium":self.medium.value, "high":self.high.value}
         for level, frac in fractions.items():
             dataframe[f'smoothed_{level}'] = lowess(dataframe['close'], np.arange(len(dataframe)), frac=frac, return_sorted=False)
             dataframe[f'derivative_{level}'] = np.gradient(dataframe[f'smoothed_{level}'])
 
-        dataframe['distance'] = np.abs(dataframe['smoothed_high'] - dataframe['smoothed_low'])
+        dataframe['distance'] = np.abs(dataframe['smoothed_high'] - dataframe['smoothed_medium'])
 
         dataframe['sl'] = dataframe['low'].rolling(10).min()
         dataframe['ss'] = dataframe['high'].rolling(10).max()
@@ -51,19 +52,19 @@ class HybridStrategyV2(IStrategy):
 
         dataframe.loc[
             (
-                # (dataframe['derivative_high'] > 0) & # Guard
-                (dataframe['smoothed_low'] < dataframe['smoothed_high']) & # Guard
+                (dataframe['derivative_medium'] > 0) & # Guard
+                (dataframe['smoothed_medium'] < dataframe['smoothed_high']) & # Guard
                 (dataframe['distance'] > dataframe['distance'].mean()) & # Guard
-                (qtpylib.crossed_above(dataframe['derivative_low'], 0)) # Trigger
+                (qtpylib.crossed_above(dataframe['derivative_low'], dataframe['derivative_medium'])) # Trigger
             ),
             'enter_long'] = 1
 
         dataframe.loc[
             (
-                # (dataframe['derivative_high'] < 0) & # Guard
-                (dataframe['smoothed_low'] > dataframe['smoothed_high']) & # Guard
+                (dataframe['derivative_medium'] < 0) & # Guard
+                (dataframe['smoothed_medium'] > dataframe['smoothed_high']) & # Guard
                 (dataframe['distance'] > dataframe['distance'].mean()) & # Guard
-                (qtpylib.crossed_below(dataframe['derivative_low'], 0)) # Trigger
+                (qtpylib.crossed_below(dataframe['derivative_low'], dataframe['derivative_medium'])) # Trigger
             ),
             'enter_short'] = 1
 
