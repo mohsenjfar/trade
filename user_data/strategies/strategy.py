@@ -51,7 +51,7 @@ class HybridStrategyV2(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['derivative_high'] > 0) & # Guard
+                # (dataframe['derivative_high'] > 0) & # Guard
                 (dataframe['smoothed_low'] < dataframe['smoothed_high']) & # Guard
                 (dataframe['distance'] > dataframe['distance'].mean()) & # Guard
                 (qtpylib.crossed_above(dataframe['derivative_low'], 0)) # Trigger
@@ -60,7 +60,7 @@ class HybridStrategyV2(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['derivative_high'] < 0) & # Guard
+                # (dataframe['derivative_high'] < 0) & # Guard
                 (dataframe['smoothed_low'] > dataframe['smoothed_high']) & # Guard
                 (dataframe['distance'] > dataframe['distance'].mean()) & # Guard
                 (qtpylib.crossed_below(dataframe['derivative_low'], 0)) # Trigger
