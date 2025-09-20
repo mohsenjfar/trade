@@ -58,6 +58,7 @@ class HybridStrategyV2(IStrategy):
                 (dataframe['smoothed_medium'] < dataframe['smoothed_high']) & # Guard
                 (dataframe['distance'] > dataframe['distance'].mean()) & # Guard
                 (dataframe['sl_dist'] < dataframe['sl_dist'].mean()) & # Guard
+                (dataframe['derivative_high'] > 0) & # Guard
                 (qtpylib.crossed_above(dataframe['derivative_low'], dataframe['derivative_medium'])) # Trigger
             ),
             'enter_long'] = 1
@@ -67,6 +68,7 @@ class HybridStrategyV2(IStrategy):
                 (dataframe['smoothed_medium'] > dataframe['smoothed_high']) & # Guard
                 (dataframe['distance'] > dataframe['distance'].mean()) & # Guard
                 (dataframe['ss_dist'] < dataframe['ss_dist'].mean()) & # Guard
+                (dataframe['derivative_high'] < 0) & # Guard
                 (qtpylib.crossed_below(dataframe['derivative_low'], dataframe['derivative_medium'])) # Trigger
             ),
             'enter_short'] = 1
