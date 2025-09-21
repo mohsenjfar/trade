@@ -80,13 +80,13 @@ class HybridStrategyV2(IStrategy):
 
         dataframe.loc[
             (
-                (qtpylib.crossed_below(dataframe['derivative_high'], 0))
+                (dataframe['derivative_high'] < 0)
             ),
             'exit_long'] = 1
 
         dataframe.loc[
             (
-                (qtpylib.crossed_above(dataframe['derivative_high'], 0))
+                (dataframe['derivative_high'] > 0)
             ),
             'exit_short'] = 1
 
