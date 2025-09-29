@@ -37,7 +37,7 @@ class HybridStrategyV2(IStrategy):
     @informative('5m')
     def populate_indicators_5m(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe = dataframe.tail(1000).reset_index()
+        dataframe = dataframe.tail(1000)
         fractions = {"low":self.low.value, "medium":self.medium.value, "high":self.high.value}
         for level, frac in fractions.items():
             dataframe[f'smoothed_{level}'] = lowess(dataframe['close'], np.arange(len(dataframe)), frac=frac, return_sorted=False)
@@ -81,7 +81,7 @@ class HybridStrategyV2(IStrategy):
             ),
             'enter_short'] = 1
         
-        print(dataframe.tail(5))
+        dataframe.to_csv('/freqtrade/user_data/df.csv', index=False, encoding='utf-8-sig')
 
         return dataframe
 
