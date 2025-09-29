@@ -80,6 +80,8 @@ class HybridStrategyV2(IStrategy):
                 (qtpylib.crossed_below(dataframe['derivative_low_5m'], dataframe['derivative_medium_5m'])) # Trigger
             ),
             'enter_short'] = 1
+        
+        print(dataframe.tail(5))
 
         return dataframe
 
