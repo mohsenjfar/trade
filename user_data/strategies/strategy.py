@@ -37,7 +37,7 @@ class HybridStrategyV2(IStrategy):
     @informative('5m')
     def populate_indicators_5m(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe = dataframe.tail(1000)
+        dataframe = dataframe.copy().tail(1000)
         fractions = {"low":self.low.value, "medium":self.medium.value, "high":self.high.value}
         for level, frac in fractions.items():
             dataframe[f'smoothed_{level}'] = lowess(dataframe['close'], np.arange(len(dataframe)), frac=frac, return_sorted=False)
