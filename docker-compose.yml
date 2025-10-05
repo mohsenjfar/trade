@@ -4,17 +4,17 @@ services:
   freqtrade:
       image: freqstat:latest
       restart: unless-stopped
-      container_name: HybridStrategyV2
+      container_name: HybridStrategyV3
       dns:
         - 8.8.8.8
         - 1.1.1.1
       volumes:
         - "./user_data:/freqtrade/user_data"
-      ports:
-        - "8080:8080"
+      # ports:
+      #   - "8080:8080"
       command: >
         trade
-        --logfile /freqtrade/user_data/logs/hybrid_strategy_v2.log
-        --db-url sqlite:////freqtrade/user_data/hybrid_strategy_v2.sqlite
+        --logfile /freqtrade/user_data/logs/hybrid_strategy_v3.log
+        --db-url sqlite:////freqtrade/user_data/hybrid_strategy_v3.sqlite
         --config /freqtrade/user_data/config.json
-        --strategy HybridStrategyV2
+        --strategy HybridStrategyV3

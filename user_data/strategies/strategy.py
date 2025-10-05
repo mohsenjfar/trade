@@ -11,7 +11,7 @@ from freqtrade.strategy import (
 from datetime import datetime
 from typing import Optional
 
-class HybridStrategyV2(IStrategy):
+class HybridStrategyV3(IStrategy):
 
     INTERFACE_VERSION = 3
 
@@ -30,12 +30,12 @@ class HybridStrategyV2(IStrategy):
     use_custom_stoploss = True
     
     low = DecimalParameter(0.01, 0.03, decimals=2, default=0.01, space="buy")
-    medium = DecimalParameter(0.03, 0.1, decimals=2, default=0.03, space="buy")
-    high = DecimalParameter(0.1, 0.5, decimals=2, default=0.1, space="buy")
+    medium = DecimalParameter(0.03, 0.1, decimals=2, default=0.02, space="buy")
+    high = DecimalParameter(0.1, 0.5, decimals=2, default=0.05, space="buy")
     
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe = dataframe.copy().tail(1000)
+        dataframe = dataframe.copy().tail(288)
         fractions = {"low":self.low.value, "medium":self.medium.value, "high":self.high.value}
         for level, frac in fractions.items():
             dataframe[f'smoothed_{level}'] = lowess(dataframe['close'], np.arange(len(dataframe)), frac=frac, return_sorted=False)
