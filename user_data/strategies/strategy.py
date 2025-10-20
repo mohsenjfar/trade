@@ -7,10 +7,9 @@ from typing import Dict
 from freqtrade.strategy import (
     IStrategy,
     stoploss_from_absolute,
-    informative,
     IntParameter
 )
-from datetime import datetime, timedelta, date
+from datetime import datetime
 from typing import Optional
 
 class HybridStrategy(IStrategy):
@@ -21,7 +20,7 @@ class HybridStrategy(IStrategy):
 
     trade_max_loss_allowed = 0.005
 
-    timeframe = '5m'
+    timeframe = '15m'
 
     can_short: bool = True
 
@@ -57,16 +56,6 @@ class HybridStrategy(IStrategy):
 
         return dataframe
 
-
-    @informative("1h")
-    @informative("15m")
-    def populate_indicators_(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-
-        dataframe = self.analyze_extrema(dataframe)
-
-        return dataframe
-    
-
     def feature_engineering_expand_all(self, dataframe: DataFrame, period: int,
                                        metadata: Dict, **kwargs) -> DataFrame:
 
@@ -99,15 +88,20 @@ class HybridStrategy(IStrategy):
 
         return dataframe
 
-
     def feature_engineering_expand_basic(self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
 
         dataframe["%-pct-change"] = dataframe["close"].pct_change()
+        dataframe['%-price_change'] = dataframe['close'] - dataframe['open']
+        dataframe['%-range'] = dataframe['high'] - dataframe['low']
+        dataframe['%-close_open_ratio'] = dataframe['close'] / dataframe['open']
+        dataframe['%-high_close_ratio'] = dataframe['high'] / dataframe['close']
+        dataframe['%-is_bullish'] = (dataframe['close'] > dataframe['open']).astype(int)
         dataframe["%-raw_volume"] = dataframe["volume"]
         dataframe["%-raw_price"] = dataframe["close"]
+        dataframe['%-volume_price_ratio'] = dataframe['volume'] / (dataframe['high'] - dataframe['low']).replace(0, np.nan)
+        dataframe['%-volume_change'] = dataframe['volume'] / dataframe['volume'].shift(1)
 
         return dataframe
-
 
     def feature_engineering_standard(self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
 
@@ -115,118 +109,43 @@ class HybridStrategy(IStrategy):
         dataframe["%-hour_of_day"] = dataframe["date"].dt.hour
         return dataframe
 
-
     def set_freqai_targets(self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
 
         self.freqai.class_names = ["down", "up"]
-        dataframe['&s-up_or_down'] = np.where(dataframe["close"].shift(-12) > dataframe["close"], 'up', 'down')
+        dataframe['&s-up_or_down'] = np.where(dataframe["close"].shift(-36) > dataframe["close"], 'up', 'down')
 
         return dataframe
-
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe = self.freqai.start(dataframe, metadata, self)
         dataframe = self.analyze_extrema(dataframe)
 
-        bollinger = qtpylib.bollinger_bands(qtpylib.typical_price(dataframe), window=20, stds=2)
-        dataframe['bb_lowerband'] = bollinger['lower']
-        dataframe['bb_middleband'] = bollinger['mid']
-        dataframe['bb_upperband'] = bollinger['upper']
-        dataframe["bb_percent"] = (
-            (dataframe["close"] - dataframe["bb_lowerband"]) /
-            (dataframe["bb_upperband"] - dataframe["bb_lowerband"])
-        )
-        dataframe["bb_width"] = (
-            (dataframe["bb_upperband"] - dataframe["bb_lowerband"]) / dataframe["bb_middleband"]
-        )
-
-        dataframe['tema'] = ta.TEMA(dataframe, timeperiod=9)
-        dataframe['adx'] = ta.ADX(dataframe, timeperiod=9)
-
-        returns = dataframe["close"].pct_change()
-        volatility = returns.rolling(window=20).std()
-        dataframe["normalized_vol"] = volatility / dataframe["close"]
-        dataframe["q75"] = dataframe["normalized_vol"].rolling(window=20).quantile(0.75)
-        dataframe["q50"] = dataframe["normalized_vol"].rolling(window=20).quantile(0.50)
-
-        dataframe["guard_score_required"] = np.select(
-            [
-                dataframe["normalized_vol"] > dataframe["q75"],
-                dataframe["normalized_vol"] > dataframe["q50"],
-                dataframe["normalized_vol"] <= dataframe["q50"]
-            ],
-            [6, 5, 3]
-        )
-
-        price_diff = dataframe["close"] - dataframe["close"].shift(1)
-        rsi_diff = dataframe["rsi"] - dataframe["rsi"].shift(1)
-
-        dataframe["score_position_near_lower_band"] = np.clip((0.3 - dataframe["bb_percent"]) * 10, 0, 1)
-        dataframe["score_adx_strength"] = (dataframe["adx"] > 20).astype(int)
-        dataframe["score_volume_above_avg"] = (dataframe["volume"] > dataframe["volume"].rolling(50).mean()).astype(int)
-        dataframe["score_tema_below_midband"] = (dataframe['tema'] <= dataframe['bb_middleband']).astype(int)
-        dataframe["score_tema_rising"] = (dataframe['tema'] > dataframe['tema'].shift(1)).astype(int)
-        dataframe["score_bollinger_narrow"] = (dataframe["bb_width"] < 0.05).astype(int)
-        dataframe["score_rsi_bullish_divergence"] = ((price_diff < 0) & (rsi_diff > 0)).astype(int)
-
-        dataframe["total_score_long"] = (
-            1.0 * dataframe["score_position_near_lower_band"] +
-            1.5 * dataframe["score_adx_strength"] +
-            1.0 * dataframe["score_volume_above_avg"] +
-            1.2 * dataframe["score_tema_below_midband"] +
-            1.5 * dataframe["score_tema_rising"] +
-            1.0 * dataframe["score_bollinger_narrow"] +
-            2.0 * dataframe["score_rsi_bullish_divergence"]
-        )
-
-        dataframe["score_position_near_upper_band"] = np.clip((dataframe["bb_percent"] - 0.7) * 10, 0, 1)
-        dataframe["score_tema_above_midband"] = (dataframe['tema'] >= dataframe['bb_middleband']).astype(int)
-        dataframe["score_tema_falling"] = (dataframe['tema'] < dataframe['tema'].shift(1)).astype(int)
-        dataframe["score_rsi_bearish_divergence"] = ((price_diff > 0) & (rsi_diff < 0)).astype(int)
-
-        dataframe["total_score_short"] = (
-            1.0 * dataframe["score_position_near_upper_band"] +
-            1.5 * dataframe["score_adx_strength"] +
-            1.0 * dataframe["score_volume_above_avg"] +
-            1.2 * dataframe["score_tema_above_midband"] +
-            1.5 * dataframe["score_tema_falling"] +
-            1.0 * dataframe["score_bollinger_narrow"] +
-            2.0 * dataframe["score_rsi_bearish_divergence"]
-        )
-
         return dataframe
-
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe.loc[
             (
-                (dataframe["total_score_long"] >= dataframe["guard_score_required"]) & # Guard
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'up') & # Guard
-                (dataframe['rsi_15m'] < self.long_rsi.value) & # Guard
                 (qtpylib.crossed_above(dataframe['rsi'], self.long_rsi.value)) # Trigger
             ),
             'enter_long'] = 1
 
         dataframe.loc[
             (
-                (dataframe["total_score_short"] >= dataframe["guard_score_required"]) & # Guard
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'down') & # Guard
-                (dataframe['rsi_15m'] > self.short_rsi.value) & # Guard
                 (qtpylib.crossed_below(dataframe['rsi'], self.short_rsi.value)) # Trigger
             ),
             'enter_short'] = 1
 
         return dataframe
 
-
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         return dataframe
-
 
     def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
                             proposed_stake: float, min_stake: Optional[float], max_stake: float,
@@ -240,13 +159,11 @@ class HybridStrategy(IStrategy):
         risk = abs(stop / last_candle.close - 1)
         return min(total_stake * self.trade_max_loss_allowed / risk, max_stake)
 
-
     def custom_entry_price(self, pair: str, trade: Trade | None, current_time: datetime, proposed_rate: float,
                            entry_tag: str | None, side: str, **kwargs) -> float:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         return dataframe['close'].iat[-1]
-
 
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
                         current_rate: float, current_profit: float, after_fill: bool, 
@@ -260,61 +177,14 @@ class HybridStrategy(IStrategy):
             stop = last_candle['ss'] if trade.is_short else last_candle['sl']
             trade.set_custom_data(key='stop', value=stop)
             risk = abs(stop / last_candle['close'] - 1)
-            score = last_candle['total_score_short'] if trade.is_short else last_candle['total_score_long']
-            message = (
-                f"Trade risk ({pair}): {risk * 100:.2f} %",
-                f"Total score: {score}",
-                f"Required score: {last_candle['guard_score_required']}"
-            )
-            self.dp.send_msg('\n'.join(message))
-
-        conditions = (
-            all(
-                (last_candle['sl'] < stop,
-                trade.is_short,
-                last_candle['rsi'] > 30,
-                last_candle['rsi_15m'] < 30)
-            ),
-            all(
-                (last_candle.ss > stop,
-                not trade.is_short,
-                last_candle['rsi'] < 70,
-                last_candle['rsi_15m'] > 70)
-            )
-        )
-        if any(conditions) and not trade.get_custom_data(key='5m_break'):
-            stop = last_candle['sl'] if trade.is_short else last_candle['ss']
-            trade.set_custom_data(key='stop', value=stop)
-            trade.set_custom_data(key='5m_break', value=True)
-            self.dp.send_msg(f"5m RSI break new stop set ({stop:.4f})")
-        
-        conditions = (
-            all(
-                (last_candle['sl_15m'] < stop,
-                trade.is_short,
-                last_candle['rsi_15m'] > 30,
-                last_candle['rsi_1h'] < 30)
-            ),
-            all(
-                (last_candle['ss_15m'] > stop,
-                not trade.is_short,
-                last_candle['rsi_15m'] < 70,
-                last_candle['rsi_1h'] > 70)
-            )
-        )
-        if any(conditions) and not trade.get_custom_data(key='15m_break'):
-            stop = last_candle['sl_15m'] if trade.is_short else last_candle['ss_15m']
-            trade.set_custom_data(key='stop', value=stop)
-            trade.set_custom_data(key='15m_break', value=True)
-            self.dp.send_msg(f"15m RSI break new stop set ({stop:.4f})")
+            self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
         return stoploss_from_absolute(
-            trade.get_custom_data(key='stop'),
+            stop,
             current_rate,
             is_short=trade.is_short,
             leverage=trade.leverage
         )
-
 
     def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
                     current_rate: float, current_profit: float, **kwargs) -> str:
@@ -322,6 +192,6 @@ class HybridStrategy(IStrategy):
         risk = trade.get_custom_data(key='risk')
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
         conditions = (
-            (trade_duration > 1440) and (current_profit < 2 * risk),
+            (trade_duration > 540) and (current_profit < 2 * risk),
         )
         if any(conditions): return "Trade expired!"
