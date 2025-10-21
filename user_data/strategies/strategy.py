@@ -30,14 +30,16 @@ class HybridStrategy(IStrategy):
 
     use_custom_stoploss = True
     
-    long_rsi = IntParameter(low=1, high=50, default=30, space='buy', optimize=True, load=True)
-    short_rsi = IntParameter(low=51, high=100, default=70, space='sell', optimize=True, load=True)
+    max_rsi = IntParameter(low=51, high=100, default=70, space='sell', optimize=True, load=True)
+    min_rsi = IntParameter(low=1, high=50, default=30, space='buy', optimize=True, load=True)
 
     def analyze_extrema(self, dataframe):
 
         dataframe['rsi'] = ta.RSI(dataframe['close'], timeperiod=14)
-        dataframe['above_group'] = (dataframe['rsi'] >= 70).astype(int).diff().ne(0).cumsum() * (dataframe['rsi'] >= 70)
-        dataframe['below_group'] = (dataframe['rsi'] <= 30).astype(int).diff().ne(0).cumsum() * (dataframe['rsi'] <= 30)
+        max_condition = dataframe['rsi'] >= self.max_rsi.value
+        min_condition = dataframe['rsi'] <= self.min_rsi.value
+        dataframe['above_group'] = (max_condition).astype(int).diff().ne(0).cumsum() * (max_condition)
+        dataframe['below_group'] = (min_condition).astype(int).diff().ne(0).cumsum() * (min_condition)
         dataframe['max_high'] = dataframe.groupby('above_group')['high'].transform('max')
         dataframe['min_low'] = dataframe.groupby('below_group')['low'].transform('min')
         dataframe.loc[dataframe['above_group'] == 0, 'max_high'] = None
@@ -46,13 +48,13 @@ class HybridStrategy(IStrategy):
 
         dataframe.loc[dataframe['max_high'] == dataframe['high'],"cat"] = 'H'
         dataframe.loc[dataframe['min_low'] == dataframe['low'],"cat"] = 'L'
-        dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-5:]
+        dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-2:]
 
         last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
-        dataframe['sl'] = dataframe.loc[last_min_index:].low.min()
+        dataframe['ss'] = dataframe.loc[last_min_index:].high.max()
         
         last_max_index = dataframe[dataframe['max_high'] == dataframe['high']].index.max()
-        dataframe['ss'] = dataframe.loc[last_max_index:].high.max()
+        dataframe['sl'] = dataframe.loc[last_max_index:].low.min()
 
         return dataframe
 
@@ -129,7 +131,7 @@ class HybridStrategy(IStrategy):
             (
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'up') & # Guard
-                (qtpylib.crossed_above(dataframe['rsi'], self.long_rsi.value)) # Trigger
+                (qtpylib.crossed_above(dataframe['close'], dataframe['max_high'])) # Trigger
             ),
             'enter_long'] = 1
 
@@ -137,7 +139,7 @@ class HybridStrategy(IStrategy):
             (
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'down') & # Guard
-                (qtpylib.crossed_below(dataframe['rsi'], self.short_rsi.value)) # Trigger
+                (qtpylib.crossed_below(dataframe['close'], dataframe['min_low'])) # Trigger
             ),
             'enter_short'] = 1
 
