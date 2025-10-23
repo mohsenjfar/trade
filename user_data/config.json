@@ -71,8 +71,8 @@
     "identifier": "1",
     "feature_parameters": {
         "include_timeframes": [
+            "5m",
             "15m",
-            "1h",
             "4h"
         ],
         "include_corr_pairlist": [

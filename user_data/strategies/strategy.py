@@ -7,7 +7,8 @@ from typing import Dict
 from freqtrade.strategy import (
     IStrategy,
     stoploss_from_absolute,
-    IntParameter
+    IntParameter,
+    informative
 )
 from datetime import datetime
 from typing import Optional
@@ -20,7 +21,7 @@ class HybridStrategy(IStrategy):
 
     trade_max_loss_allowed = 0.005
 
-    timeframe = '15m'
+    timeframe = '5m'
 
     can_short: bool = True
 
@@ -118,6 +119,13 @@ class HybridStrategy(IStrategy):
 
         return dataframe
 
+    @informative('15m')
+    def populate_indicators_15m(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+
+        dataframe = self.analyze_extrema(dataframe)
+
+        return dataframe
+
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe = self.freqai.start(dataframe, metadata, self)
@@ -131,6 +139,7 @@ class HybridStrategy(IStrategy):
             (
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'up') & # Guard
+                (dataframe['rsi_15m'] > 50) & # Guard
                 (qtpylib.crossed_above(dataframe['close'], dataframe['max_high'])) # Trigger
             ),
             'enter_long'] = 1
@@ -139,6 +148,7 @@ class HybridStrategy(IStrategy):
             (
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'down') & # Guard
+                (dataframe['rsi_15m'] < 50) & # Guard
                 (qtpylib.crossed_below(dataframe['close'], dataframe['min_low'])) # Trigger
             ),
             'enter_short'] = 1
@@ -194,6 +204,6 @@ class HybridStrategy(IStrategy):
         risk = trade.get_custom_data(key='risk')
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
         conditions = (
-            (trade_duration > 540) and (current_profit < 2 * risk),
+            (trade_duration > 180) and (current_profit < 2 * risk),
         )
         if any(conditions): return "Trade expired!"
