@@ -28,6 +28,20 @@ class RSIBreak(IStrategy):
 
     use_custom_stoploss = True
 
+    @property
+    def protections(self):
+        return [
+            {
+                "method": "StoplossGuard",
+                "lookback_period_candles": 4,
+                "trade_limit": 1,
+                "unlock_at":"00:00",
+                "required_profit": 0.0,
+                "only_per_pair": True,
+                "only_per_side": False
+            }
+        ]
+
     def analyze_extrema(self, dataframe):
 
         dataframe['rsi'] = ta.RSI(dataframe['close'], timeperiod=14)
@@ -57,18 +71,28 @@ class RSIBreak(IStrategy):
 
         dataframe.loc[
             (
-                (qtpylib.crossed_below(dataframe['rsi'], 70)) # Trigger
-            ), "enter_short"] = 1
+                (qtpylib.crossed_above(dataframe['rsi'], 60)) # Trigger
+            ), "enter_long"] = 1
 
         dataframe.loc[
             (
-                (qtpylib.crossed_above(dataframe['rsi'], 30)) # Triggerr
+                (qtpylib.crossed_below(dataframe['rsi'], 40)) # Trigger
             ), "enter_short"] = 1
 
         return dataframe
 
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
+        dataframe.loc[
+            (
+                (qtpylib.crossed_above(dataframe['rsi'], 70))
+            ), "exit_short"] = 1
+
+        dataframe.loc[
+            (
+                (qtpylib.crossed_below(dataframe['rsi'], 30))
+            ), "exit_long"] = 1
+        
         return dataframe
 
     def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
@@ -79,7 +103,7 @@ class RSIBreak(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
         total_stake = max_stake + Trade.total_open_trades_stakes()
-        stop = last_candle.ss if side == "short" else last_candle.sl
+        stop = last_candle.high if side == "short" else last_candle.low
         risk = abs(stop / last_candle.close - 1)
         return min(total_stake * self.trade_max_loss_allowed / risk, max_stake)
 
@@ -97,7 +121,7 @@ class RSIBreak(IStrategy):
         if stop is None:
             dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
             last_candle = dataframe.iloc[-1].squeeze()
-            stop = last_candle.ss if trade.is_short else last_candle.sl
+            stop = last_candle.high if trade.is_short else last_candle.low
             trade.set_custom_data(key='stop', value=stop)
             risk = abs(stop / last_candle.close - 1)
             trade.set_custom_data(key='risk', value=risk)
@@ -116,6 +140,6 @@ class RSIBreak(IStrategy):
         risk = trade.get_custom_data(key='risk')
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
         conditions = (
-            (trade_duration > 1440) and (current_profit < 2 * risk),
+            (trade_duration > 480) and (current_profit < 2 * risk),
         )
         if any(conditions): return "Trade expired!"
