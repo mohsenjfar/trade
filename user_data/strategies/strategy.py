@@ -38,7 +38,7 @@ class RSIBreak(IStrategy):
                 "unlock_at":"00:00",
                 "required_profit": 0.0,
                 "only_per_pair": True,
-                "only_per_side": False
+                "only_per_side": True
             }
         ]
 
