@@ -28,20 +28,6 @@ class RSIBreak(IStrategy):
 
     use_custom_stoploss = True
 
-    @property
-    def protections(self):
-        return [
-            {
-                "method": "StoplossGuard",
-                "lookback_period_candles": 4,
-                "trade_limit": 1,
-                "unlock_at":"00:00",
-                "required_profit": 0.0,
-                "only_per_pair": True,
-                "only_per_side": True
-            }
-        ]
-
     def analyze_extrema(self, dataframe):
 
         dataframe['rsi'] = ta.RSI(dataframe['close'], timeperiod=14)
@@ -62,6 +48,10 @@ class RSIBreak(IStrategy):
         last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
         last_max_index = dataframe[dataframe['max_high'] == dataframe['high']].index.max()
 
+        dataframe.loc[dataframe['max_high'] == dataframe['high'],"cat"] = 'H'
+        dataframe.loc[dataframe['min_low'] == dataframe['low'],"cat"] = 'L'
+        dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-2:]
+
         dataframe['sl'] = dataframe.loc[last_min_index:].low.min()
         dataframe['ss'] = dataframe.loc[last_max_index:].high.max()
         
@@ -71,12 +61,14 @@ class RSIBreak(IStrategy):
 
         dataframe.loc[
             (
-                (qtpylib.crossed_above(dataframe['rsi'], 60)) # Trigger
+                (dataframe['cat'] == 'LH') & # Guard
+                (qtpylib.crossed_above(dataframe['close'], dataframe['max_high'])) # Trigger
             ), "enter_long"] = 1
 
         dataframe.loc[
             (
-                (qtpylib.crossed_below(dataframe['rsi'], 40)) # Trigger
+                (dataframe['cat'] == 'HL') & # Guard
+                (qtpylib.crossed_below(dataframe['close'], dataframe['min_low'])) # Trigger
             ), "enter_short"] = 1
 
         return dataframe
@@ -140,6 +132,6 @@ class RSIBreak(IStrategy):
         risk = trade.get_custom_data(key='risk')
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
         conditions = (
-            (trade_duration > 60) and (current_profit < 2 * risk),
+            (trade_duration > 1440) and (current_profit < 2 * risk),
         )
         if any(conditions): return "Trade expired!"
