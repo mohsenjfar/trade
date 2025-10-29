@@ -16,7 +16,7 @@ class RSIBreak(IStrategy):
 
     stoploss = -1
 
-    trade_max_loss_allowed = 0.005
+    trade_max_loss_allowed = 0.01
 
     timeframe = '15m'
 
@@ -45,15 +45,9 @@ class RSIBreak(IStrategy):
 
         dataframe = self.analyze_extrema(dataframe)
 
-        last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
-        last_max_index = dataframe[dataframe['max_high'] == dataframe['high']].index.max()
-
         dataframe.loc[dataframe['max_high'] == dataframe['high'],"cat"] = 'H'
         dataframe.loc[dataframe['min_low'] == dataframe['low'],"cat"] = 'L'
         dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-2:]
-
-        dataframe['sl'] = dataframe.loc[last_min_index:].low.min()
-        dataframe['ss'] = dataframe.loc[last_max_index:].high.max()
         
         return dataframe
 
