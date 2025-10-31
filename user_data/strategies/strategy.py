@@ -61,7 +61,7 @@ class RSIBreak(IStrategy):
                     (dataframe['cat'] == 'LHH')
                 ) & # Guards
                 (qtpylib.crossed_above(dataframe['close'], dataframe['max_high'])) # Trigger
-            ), ["enter_long", "enter_tag"]] = (1, dataframe['cat'])
+            ), ["enter_long"]] = (1)
 
         dataframe.loc[
             (
