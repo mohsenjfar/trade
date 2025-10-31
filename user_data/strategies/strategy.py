@@ -47,7 +47,7 @@ class RSIBreak(IStrategy):
 
         dataframe.loc[dataframe['max_high'] == dataframe['high'],"cat"] = 'H'
         dataframe.loc[dataframe['min_low'] == dataframe['low'],"cat"] = 'L'
-        dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-2:]
+        dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-3:]
         
         return dataframe
 
@@ -55,15 +55,23 @@ class RSIBreak(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['cat'] == 'LH') & # Guard
+                (
+                    (dataframe['cat'] == 'HLH') |
+                    (dataframe['cat'] == 'LLH') |
+                    (dataframe['cat'] == 'LHH')
+                ) & # Guards
                 (qtpylib.crossed_above(dataframe['close'], dataframe['max_high'])) # Trigger
-            ), "enter_long"] = 1
+            ), ["enter_tag","enter_long"]] = (dataframe['cat'], 1)
 
         dataframe.loc[
             (
-                (dataframe['cat'] == 'HL') & # Guard
+                (
+                    (dataframe['cat'] == 'HHL') |
+                    (dataframe['cat'] == 'LHL') |
+                    (dataframe['cat'] == 'HLL')
+                ) & # Guards
                 (qtpylib.crossed_below(dataframe['close'], dataframe['min_low'])) # Trigger
-            ), "enter_short"] = 1
+            ), ["enter_tag","enter_short"]] = (dataframe['cat'], 1)
 
         return dataframe
 
