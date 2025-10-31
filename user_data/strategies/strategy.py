@@ -28,6 +28,20 @@ class RSIBreak(IStrategy):
 
     use_custom_stoploss = True
 
+    @property
+    def protections(self):
+        return [
+            {
+                "method": "StoplossGuard",
+                "lookback_period_candles": 4,
+                "trade_limit": 1,
+                "required_profit": 0,
+                "only_per_pair": True,
+                "only_per_side": True,
+                "unlock_at":"00:00"
+            }
+        ]
+
     def analyze_extrema(self, dataframe):
 
         dataframe['rsi'] = ta.RSI(dataframe['close'], timeperiod=14)
@@ -48,6 +62,12 @@ class RSIBreak(IStrategy):
         dataframe.loc[dataframe['max_high'] == dataframe['high'],"cat"] = 'H'
         dataframe.loc[dataframe['min_low'] == dataframe['low'],"cat"] = 'L'
         dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-3:]
+
+        last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
+        last_max_index = dataframe[dataframe['max_high'] == dataframe['high']].index.max()
+
+        dataframe['sl'] = dataframe.loc[last_max_index:].low.min()
+        dataframe['ss'] = dataframe.loc[last_min_index:].high.max()
         
         return dataframe
 
