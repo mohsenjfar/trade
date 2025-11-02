@@ -91,16 +91,6 @@ class RSIBreak(IStrategy):
         return dataframe
 
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-
-        dataframe.loc[
-            (
-                (qtpylib.crossed_above(dataframe['rsi'], 70))
-            ), "exit_short"] = 1
-
-        dataframe.loc[
-            (
-                (qtpylib.crossed_below(dataframe['rsi'], 30))
-            ), "exit_long"] = 1
         
         return dataframe
 
