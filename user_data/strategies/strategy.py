@@ -47,9 +47,8 @@ class RSIBreak(IStrategy):
 
         return dataframe
     
-    @informative('30m')
-    @informative('45m')
     @informative('1h')
+    @informative('2h')
     @informative('4h')
     def populate_indicators_(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
