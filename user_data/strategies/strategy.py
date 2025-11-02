@@ -5,7 +5,7 @@ from freqtrade.persistence import Trade
 from freqtrade.strategy import (
     IStrategy,
     stoploss_from_absolute,
-    # informative
+    informative
 )
 from datetime import datetime
 from typing import Optional
@@ -28,20 +28,6 @@ class RSIBreak(IStrategy):
 
     use_custom_stoploss = True
 
-    @property
-    def protections(self):
-        return [
-            {
-                "method": "StoplossGuard",
-                "lookback_period_candles": 4,
-                "trade_limit": 1,
-                "required_profit": 0,
-                "only_per_pair": True,
-                "only_per_side": True,
-                "unlock_at":"00:00"
-            }
-        ]
-
     def analyze_extrema(self, dataframe):
 
         dataframe['rsi'] = ta.RSI(dataframe['close'], timeperiod=14)
@@ -53,8 +39,24 @@ class RSIBreak(IStrategy):
         dataframe.loc[dataframe['below_group'] == 0, 'min_low'] = None
         dataframe = dataframe.ffill()
 
+        last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
+        last_max_index = dataframe[dataframe['max_high'] == dataframe['high']].index.max()
+
+        dataframe['sl'] = dataframe.loc[last_max_index:].low.min()
+        dataframe['ss'] = dataframe.loc[last_min_index:].high.max()
+
         return dataframe
     
+    @informative('30m')
+    @informative('45m')
+    @informative('1h')
+    @informative('4h')
+    def populate_indicators_(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+
+        dataframe = self.analyze_extrema(dataframe)
+
+        return dataframe
+
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe = self.analyze_extrema(dataframe)
@@ -63,12 +65,6 @@ class RSIBreak(IStrategy):
         dataframe.loc[dataframe['min_low'] == dataframe['low'],"cat"] = 'L'
         dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-3:]
 
-        last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
-        last_max_index = dataframe[dataframe['max_high'] == dataframe['high']].index.max()
-
-        dataframe['sl'] = dataframe.loc[last_max_index:].low.min()
-        dataframe['ss'] = dataframe.loc[last_min_index:].high.max()
-        
         return dataframe
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
@@ -117,7 +113,7 @@ class RSIBreak(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
         total_stake = max_stake + Trade.total_open_trades_stakes()
-        stop = last_candle.high if side == "short" else last_candle.low
+        stop = last_candle.ss if side == "short" else last_candle.sl
         risk = abs(stop / last_candle.close - 1)
         return min(total_stake * self.trade_max_loss_allowed / risk, max_stake)
 
@@ -131,12 +127,11 @@ class RSIBreak(IStrategy):
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
-        stop = trade.get_custom_data(key='stop')
-        if stop is None:
-            dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
-            last_candle = dataframe.iloc[-1].squeeze()
-            stop = last_candle.high if trade.is_short else last_candle.low
-            trade.set_custom_data(key='stop', value=stop)
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
+        last_candle = dataframe.iloc[-1].squeeze()
+        stop = last_candle.ss if trade.is_short else last_candle.sl
+
+        if trade.get_custom_data(key='risk') is None:
             risk = abs(stop / last_candle.close - 1)
             trade.set_custom_data(key='risk', value=risk)
             self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %") 
@@ -154,6 +149,6 @@ class RSIBreak(IStrategy):
         risk = trade.get_custom_data(key='risk')
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
         conditions = (
-            (trade_duration > 1440) and (current_profit < 2 * risk),
+            (trade_duration > 1440) and (current_profit < risk),
         )
         if any(conditions): return "Trade expired!"
