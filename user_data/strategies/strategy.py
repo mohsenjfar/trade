@@ -16,7 +16,7 @@ class RSIBreak(IStrategy):
 
     stoploss = -1
 
-    trade_max_loss_allowed = 0.01
+    trade_max_loss_allowed = 0.005
 
     timeframe = '5m'
 
@@ -31,23 +31,15 @@ class RSIBreak(IStrategy):
     def analyze_extrema(self, dataframe):
 
         dataframe['rsi'] = ta.RSI(dataframe['close'], timeperiod=14)
-        dataframe['above_group'] = (dataframe['rsi'] >= 70).astype(int).diff().ne(0).cumsum() * (dataframe['rsi'] >= 70)
-        dataframe['below_group'] = (dataframe['rsi'] <= 30).astype(int).diff().ne(0).cumsum() * (dataframe['rsi'] <= 30)
+        long_condition = (dataframe['rsi'] >= 70)
+        short_condition = (dataframe['rsi'] <= 30)
+        dataframe['above_group'] = (long_condition).astype(int).diff().ne(0).cumsum() * (long_condition)
+        dataframe['below_group'] = (short_condition).astype(int).diff().ne(0).cumsum() * (short_condition)
         dataframe['max_high'] = dataframe.groupby('above_group')['high'].transform('max')
         dataframe['min_low'] = dataframe.groupby('below_group')['low'].transform('min')
         dataframe.loc[dataframe['above_group'] == 0, 'max_high'] = None
         dataframe.loc[dataframe['below_group'] == 0, 'min_low'] = None
         dataframe = dataframe.ffill()
-
-        dataframe.loc[dataframe['max_high'] == dataframe['high'],"cat"] = 'H'
-        dataframe.loc[dataframe['min_low'] == dataframe['low'],"cat"] = 'L'
-        dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-3:]
-
-        last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
-        last_max_index = dataframe[dataframe['max_high'] == dataframe['high']].index.max()
-
-        dataframe['sl'] = dataframe.loc[last_max_index:].low.min()
-        dataframe['ss'] = dataframe.loc[last_min_index:].high.max()
 
         return dataframe
     
@@ -56,11 +48,36 @@ class RSIBreak(IStrategy):
 
         dataframe = self.analyze_extrema(dataframe)
 
+        dataframe['price_cross_long'] = qtpylib.crossed_above(dataframe['close'], dataframe['max_high'])
+        last_high_index = dataframe['max_high'].index.max()
+        last_high_cross_index = dataframe['price_cross_long'].index.max()
+        dataframe['lowest_high'] = dataframe['close'][last_high_index:last_high_cross_index].min()
+        dataframe['price_cross_short'] = qtpylib.crossed_below(dataframe['close'], dataframe['min_low'])
+        last_low_index = dataframe['min_low'].index.max()
+        last_low_cross_index = dataframe['price_cross_short'].index.max()
+        dataframe['highest_low'] = dataframe['close'][last_low_index:last_low_cross_index].max()
+
+        dataframe.loc[dataframe['max_high'] == dataframe['high'],"cat"] = 'H'
+        dataframe.loc[dataframe['min_low'] == dataframe['low'],"cat"] = 'L'
+        dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-1]
+
         return dataframe
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe = self.analyze_extrema(dataframe)
+
+        last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
+        condition = qtpylib.crossed_below(dataframe['close'], dataframe['highest_low_15m'])
+        min_cross_indicies = dataframe[condition].index.values
+        first_short_cross_index = min_cross_indicies[min_cross_indicies > last_min_index][0]
+        dataframe['ss'] = dataframe.loc[last_min_index:first_short_cross_index].high.max()
+        
+        last_max_index = dataframe[dataframe['max_high'] == dataframe['high']].index.max()
+        condition = qtpylib.crossed_above(dataframe['close'], dataframe['lowest_high_15m'])
+        min_cross_indicies = dataframe[condition].index.values
+        first_long_cross_index = min_cross_indicies[min_cross_indicies > last_min_index][0]
+        dataframe['sl'] = dataframe.loc[last_max_index:first_long_cross_index].low.min()
 
         return dataframe
 
@@ -68,22 +85,14 @@ class RSIBreak(IStrategy):
 
         dataframe.loc[
             (
-                (
-                    (dataframe['cat_15m'] == 'HLH') |
-                    (dataframe['cat_15m'] == 'LLH') |
-                    (dataframe['cat_15m'] == 'LHH')
-                ) & # Guards
-                (qtpylib.crossed_above(dataframe['close_15m'], dataframe['max_high_15m'])) # Trigger
+                (dataframe['cat_15m'] == 'L') & # Guard
+                (qtpylib.crossed_above(dataframe['close'], dataframe['lowest_high_15m'])) # Trigger
             ), ["enter_long"]] = (1)
 
         dataframe.loc[
             (
-                (
-                    (dataframe['cat_15m'] == 'HHL') |
-                    (dataframe['cat_15m'] == 'LHL') |
-                    (dataframe['cat_15m'] == 'HLL')
-                ) & # Guards
-                (qtpylib.crossed_below(dataframe['close_15m'], dataframe['min_low_15m'])) # Trigger
+                (dataframe['cat_15m'] == 'H') & # Guard
+                (qtpylib.crossed_below(dataframe['close'], dataframe['highest_low_15m'])) # Trigger
             ), ["enter_short"]] = (1)
 
         return dataframe
@@ -100,15 +109,15 @@ class RSIBreak(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
         total_stake = max_stake + Trade.total_open_trades_stakes()
-        stop = last_candle.ss_15m if side == "short" else last_candle.sl_15m
-        risk = abs(stop / last_candle.close_15m - 1)
+        stop = last_candle.ss if side == "short" else last_candle.sl
+        risk = abs(stop / last_candle.close - 1)
         return min(total_stake * self.trade_max_loss_allowed / risk, max_stake)
 
     def custom_entry_price(self, pair: str, trade: Trade | None, current_time: datetime, proposed_rate: float,
                            entry_tag: str | None, side: str, **kwargs) -> float:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        return dataframe['close_15m'].iat[-1]
+        return dataframe['close'].iat[-1]
 
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
                         current_rate: float, current_profit: float, after_fill: bool, 
@@ -116,15 +125,24 @@ class RSIBreak(IStrategy):
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
-        stop = last_candle.ss_15m if trade.is_short else last_candle.sl_15m
-
-        if trade.get_custom_data(key='risk') is None:
-            risk = abs(stop / last_candle.close_15m - 1)
+        stop = last_candle.highest_low_15m if trade.is_short else last_candle.lowest_high_15m
+        
+        if trade.get_custom_data(key='stop') is None:
+            stop = last_candle.ss if trade.is_short else last_candle.sl
+            trade.set_custom_data(key='stop', value=stop)
+            risk = abs(stop / last_candle.close - 1)
             trade.set_custom_data(key='risk', value=risk)
-            self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %") 
+            self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
+        
+        conditions = (
+            trade.is_short and stop < trade.get_custom_data(key='stop'),
+            not trade.is_short and stop > trade.get_custom_data(key='stop')
+        )
+        if any(conditions):
+            trade.set_custom_data(key='stop', value=stop)
 
         return stoploss_from_absolute(
-            stop,
+            trade.get_custom_data(key='stop'),
             current_rate,
             is_short=trade.is_short,
             leverage=trade.leverage
@@ -136,6 +154,6 @@ class RSIBreak(IStrategy):
         risk = trade.get_custom_data(key='risk')
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
         conditions = (
-            (trade_duration > 1440) and (current_profit < risk),
+            (trade_duration > 1440) and (current_profit < risk * 2),
         )
         if any(conditions): return "Trade expired!"
