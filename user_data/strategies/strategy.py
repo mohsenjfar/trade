@@ -40,24 +40,22 @@ class RSIBreak(IStrategy):
         dataframe.loc[dataframe['above_group'] == 0, 'max_high'] = None
         dataframe.loc[dataframe['below_group'] == 0, 'min_low'] = None
         dataframe = dataframe.ffill()
-        dataframe['price_cross_long'] = qtpylib.crossed_above(dataframe['close'], dataframe['max_high'])
-        last_high_index = dataframe['max_high'].index.max()
-        last_high_cross_index = dataframe['price_cross_long'].index.max()
-        dataframe['lowest_high'] = dataframe['close'][last_high_index:last_high_cross_index].min()
-        dataframe['price_cross_short'] = qtpylib.crossed_below(dataframe['close'], dataframe['min_low'])
-        last_low_index = dataframe['min_low'].index.max()
-        last_low_cross_index = dataframe['price_cross_short'].index.max()
-        dataframe['highest_low'] = dataframe['close'][last_low_index:last_low_cross_index].max()
 
         dataframe.loc[dataframe['max_high'] == dataframe['high'],"cat"] = 'H'
         dataframe.loc[dataframe['min_low'] == dataframe['low'],"cat"] = 'L'
         dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-2]
 
+        max_index = dataframe['max_high'].index.max()
+        dataframe['sl'] = dataframe['close'][max_index:].min()
+
+        min_index = dataframe['min_low'].index.max()
+        dataframe['ss'] = dataframe['close'][min_index:].max()
+
         return dataframe
     
     @informative('15m')
     @informative('1h')
-    def populate_indicators_15m(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+    def populate_indicators_(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe = self.analyze_extrema(dataframe)
 
@@ -67,28 +65,18 @@ class RSIBreak(IStrategy):
 
         dataframe = self.analyze_extrema(dataframe)
 
-        last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
-        dataframe['ss'] = dataframe.loc[last_min_index:].high.max()
-        
-        last_max_index = dataframe[dataframe['max_high'] == dataframe['high']].index.max()
-        dataframe['sl'] = dataframe.loc[last_max_index:].low.min()
-
         return dataframe
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe.loc[
             (
-                (dataframe['cat_1h'].iat[-1][-1] == 'L') & # Guard
-                (dataframe['rsi_1h'] < 50) & # Guard
                 (dataframe['cat'] == 'HL') & # Guard
                 (qtpylib.crossed_above(dataframe['close'], dataframe['min_low'])) # Trigger
             ), ["enter_long"]] = (1)
 
         dataframe.loc[
             (
-                (dataframe['cat_1h'].iat[-1][-1] == 'H') & # Guard
-                (dataframe['rsi_1h'] > 50) & # Guard
                 (dataframe['cat'] == 'LH') & # Guard
                 (qtpylib.crossed_below(dataframe['close'], dataframe['max_high'])) # Trigger
             ), ["enter_short"]] = (1)
@@ -123,28 +111,85 @@ class RSIBreak(IStrategy):
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
-        stop = last_candle.highest_low_15m if trade.is_short else last_candle.lowest_high_15m
         
-        if trade.get_custom_data(key='stop') is None:
-            stop = last_candle.ss if trade.is_short else last_candle.sl
-            trade.set_custom_data(key='stop', value=stop)
-            risk = abs(stop / last_candle.close - 1)
-            trade.set_custom_data(key='risk', value=risk)
-            self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
-        
-        conditions = (
-            trade.is_short and stop < trade.get_custom_data(key='stop'),
-            not trade.is_short and stop > trade.get_custom_data(key='stop')
-        )
-        if any(conditions):
-            trade.set_custom_data(key='stop', value=stop)
+        if trade.is_short:          
+            conditions = (
+                last_candle.cat_1h[-1] == "L",
+                last_candle.close < last_candle.min_low_1h,
+                last_candle.ss_1h < trade.open_rate
+            )
+            if all(conditions):
+                return stoploss_from_absolute(
+                    last_candle.ss_1h,
+                    current_rate,
+                    is_short=trade.is_short,
+                    leverage=trade.leverage
+                )
+            
+            conditions = (
+                last_candle.cat_15m[-1] == "L",
+                last_candle.close < last_candle.min_low_15m,
+                last_candle.ss_15m < trade.open_rate
+            )
+            if all(conditions):
+                return stoploss_from_absolute(
+                    last_candle.ss_15m,
+                    current_rate,
+                    is_short=trade.is_short,
+                    leverage=trade.leverage
+                )
+            
+            if trade.get_custom_data(key='risk') is None:
+                risk = abs(last_candle.ss / last_candle.close - 1)
+                trade.set_custom_data(key='risk', value=risk)
+                self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
-        return stoploss_from_absolute(
-            trade.get_custom_data(key='stop'),
-            current_rate,
-            is_short=trade.is_short,
-            leverage=trade.leverage
-        )
+            return stoploss_from_absolute(
+                last_candle.ss,
+                current_rate,
+                is_short=trade.is_short,
+                leverage=trade.leverage
+            )
+
+        else:
+            
+            conditions = (
+                last_candle.cat_1h[-1] == "H",
+                last_candle.close > last_candle.max_high_1h,
+                last_candle.sl_1h > trade.open_rate
+            )
+            if all(conditions):
+                return stoploss_from_absolute(
+                    last_candle.sl_1h,
+                    current_rate,
+                    is_short=trade.is_short,
+                    leverage=trade.leverage
+                )
+            
+            conditions = (
+                last_candle.cat_15m[-1] == "H",
+                last_candle.close > last_candle.max_high_15m,
+                last_candle.sl_15m > trade.open_rate
+            )
+            if all(conditions):
+                return stoploss_from_absolute(
+                    last_candle.sl_15m,
+                    current_rate,
+                    is_short=trade.is_short,
+                    leverage=trade.leverage
+                )
+            
+            if trade.get_custom_data(key='risk') is None:
+                risk = abs(last_candle.sl / last_candle.close - 1)
+                trade.set_custom_data(key='risk', value=risk)
+                self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
+
+            return stoploss_from_absolute(
+                last_candle.sl,
+                current_rate,
+                is_short=trade.is_short,
+                leverage=trade.leverage
+            )
     
     def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
                     current_rate: float, current_profit: float, **kwargs) -> str:
