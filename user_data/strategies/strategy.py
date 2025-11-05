@@ -197,6 +197,7 @@ class RSIBreak(IStrategy):
         risk = trade.get_custom_data(key='risk')
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
         conditions = (
-            (trade_duration > 240) and (current_profit < risk * 2),
+            (trade_duration > 240) and (current_profit < 0),
+            (trade_duration > 1440) and (current_profit < risk * 2)
         )
         if any(conditions): return "Trade expired!"
