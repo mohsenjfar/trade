@@ -39,7 +39,7 @@ class HybridStrategy(IStrategy):
         return [
             {
                 "method": "StoplossGuard",
-                "lookback_period": 12,
+                "lookback_period": 60,
                 "trade_limit": 2,
                 # "unlock_at":"00:00",
                 "stop_duration_candles": 12,
