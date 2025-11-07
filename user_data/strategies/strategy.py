@@ -39,8 +39,8 @@ class HybridStrategy(IStrategy):
         return [
             {
                 "method": "StoplossGuard",
-                "lookback_period": 240,
-                "trade_limit": 1,
+                "lookback_period": 12,
+                "trade_limit": 2,
                 # "unlock_at":"00:00",
                 "stop_duration_candles": 12,
                 "required_profit": 0.0,
@@ -146,7 +146,12 @@ class HybridStrategy(IStrategy):
 
         dataframe = self.freqai.start(dataframe, metadata, self)
         dataframe = self.analyze_extrema(dataframe)
-        dataframe['rsi_sma'] = ta.SMA(dataframe['rsi'], timeperiod=14)
+
+        last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
+        dataframe['iss'] = dataframe.loc[last_min_index:].low.min()
+        
+        last_max_index = dataframe[dataframe['max_high'] == dataframe['high']].index.max()
+        dataframe['isl'] = dataframe.loc[last_max_index:].high.max()
 
         return dataframe
 
@@ -156,16 +161,14 @@ class HybridStrategy(IStrategy):
             (
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'up') & # Guard
-                (dataframe['rsi'] < 40) & # Guard
-                (qtpylib.crossed_above(dataframe['rsi_sma'], dataframe['rsi'])) # Trigger
+                (qtpylib.crossed_above(dataframe['rsi'], 30)) # Trigger
             ), ["enter_long"]] = (1)
 
         dataframe.loc[
             (
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'down') & # Guard
-                (dataframe['rsi'] > 60) & # Guard
-                (qtpylib.crossed_below(dataframe['rsi_sma'], dataframe['rsi'])) # Trigger
+                (qtpylib.crossed_below(dataframe['rsi'], 70)) # Trigger
             ), ["enter_short"]] = (1)
 
         return dataframe
@@ -182,8 +185,8 @@ class HybridStrategy(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
         total_stake = max_stake + Trade.total_open_trades_stakes()
-        stop = last_candle.high if side == "short" else last_candle.low
-        risk = abs(stop / last_candle.close - 1)
+        stop = last_candle["iss"] if side == "short" else last_candle["isl"]
+        risk = abs(stop / last_candle["close"] - 1)
         return min(total_stake * self.trade_max_loss_allowed / risk, max_stake)
 
     def custom_entry_price(self, pair: str, trade: Trade | None, current_time: datetime, proposed_rate: float,
@@ -240,12 +243,12 @@ class HybridStrategy(IStrategy):
                 )
             
             if trade.get_custom_data(key='risk') is None:
-                risk = abs(last_candle["high"] / last_candle["close"] - 1)
+                risk = abs(last_candle["iss"] / last_candle["close"] - 1)
                 trade.set_custom_data(key='risk', value=risk)
                 self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
             return stoploss_from_absolute(
-                last_candle["high"],
+                last_candle["iss"],
                 current_rate,
                 is_short=trade.is_short,
                 leverage=trade.leverage
@@ -292,12 +295,12 @@ class HybridStrategy(IStrategy):
                 )
             
             if trade.get_custom_data(key='risk') is None:
-                risk = abs(last_candle["low"] / last_candle["close"] - 1)
+                risk = abs(last_candle["isl"] / last_candle["close"] - 1)
                 trade.set_custom_data(key='risk', value=risk)
                 self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
             return stoploss_from_absolute(
-                last_candle["low"],
+                last_candle["isl"],
                 current_rate,
                 is_short=trade.is_short,
                 leverage=trade.leverage
