@@ -33,6 +33,21 @@ class HybridStrategy(IStrategy):
 
     max_rsi = IntParameter(low=51, high=100, default=70, space='sell', optimize=True, load=True)
     min_rsi = IntParameter(low=1, high=50, default=30, space='buy', optimize=True, load=True)
+
+    @property
+    def protections(self):
+        return [
+            {
+                "method": "StoplossGuard",
+                "lookback_period": 240,
+                "trade_limit": 1,
+                # "unlock_at":"00:00",
+                "stop_duration_candles": 12,
+                "required_profit": 0.0,
+                "only_per_pair": False,
+                "only_per_side": True
+            }
+        ]
     
     def analyze_extrema(self, dataframe):
 
@@ -295,6 +310,6 @@ class HybridStrategy(IStrategy):
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
         conditions = (
             (trade_duration > 60) and (current_profit < 0),
-            (trade_duration > 240) and (current_profit < risk * 2)
+            (trade_duration > 240) and (current_profit < risk * 4)
         )
         if any(conditions): return "Trade expired!"
