@@ -30,10 +30,10 @@ class HybridStrategy(IStrategy):
     use_exit_signal = True
 
     use_custom_stoploss = True
-    
+
     max_rsi = IntParameter(low=51, high=100, default=70, space='sell', optimize=True, load=True)
     min_rsi = IntParameter(low=1, high=50, default=30, space='buy', optimize=True, load=True)
-
+    
     def analyze_extrema(self, dataframe):
 
         dataframe['rsi'] = ta.RSI(dataframe['close'], timeperiod=14)
@@ -58,7 +58,7 @@ class HybridStrategy(IStrategy):
         dataframe['sl'] = dataframe.loc[last_max_index:].low.min()
 
         return dataframe
-
+    
     def feature_engineering_expand_all(self, dataframe: DataFrame, period: int,
                                        metadata: Dict, **kwargs) -> DataFrame:
 
@@ -115,12 +115,13 @@ class HybridStrategy(IStrategy):
     def set_freqai_targets(self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
 
         self.freqai.class_names = ["down", "up"]
-        dataframe['&s-up_or_down'] = np.where(dataframe["close"].shift(-36) > dataframe["close"], 'up', 'down')
+        dataframe['&s-up_or_down'] = np.where(dataframe["close"].shift(-12) > dataframe["close"], 'up', 'down')
 
         return dataframe
 
     @informative('15m')
-    def populate_indicators_15m(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+    @informative('1h')
+    def populate_indicators_(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe = self.analyze_extrema(dataframe)
 
@@ -130,6 +131,7 @@ class HybridStrategy(IStrategy):
 
         dataframe = self.freqai.start(dataframe, metadata, self)
         dataframe = self.analyze_extrema(dataframe)
+        dataframe['rsi_sma'] = ta.SMA(dataframe['rsi'], timeperiod=14)
 
         return dataframe
 
@@ -139,24 +141,22 @@ class HybridStrategy(IStrategy):
             (
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'up') & # Guard
-                (dataframe['rsi_15m'] > 50) & # Guard
-                (qtpylib.crossed_above(dataframe['close'], dataframe['max_high'])) # Trigger
-            ),
-            'enter_long'] = 1
+                (dataframe['rsi'] < 40) & # Guard
+                (qtpylib.crossed_above(dataframe['rsi_sma'], dataframe['rsi'])) # Trigger
+            ), ["enter_long"]] = (1)
 
         dataframe.loc[
             (
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'down') & # Guard
-                (dataframe['rsi_15m'] < 50) & # Guard
-                (qtpylib.crossed_below(dataframe['close'], dataframe['min_low'])) # Trigger
-            ),
-            'enter_short'] = 1
+                (dataframe['rsi'] > 60) & # Guard
+                (qtpylib.crossed_below(dataframe['rsi_sma'], dataframe['rsi'])) # Trigger
+            ), ["enter_short"]] = (1)
 
         return dataframe
 
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-
+        
         return dataframe
 
     def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
@@ -167,7 +167,7 @@ class HybridStrategy(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
         total_stake = max_stake + Trade.total_open_trades_stakes()
-        stop = last_candle.ss if side == "short" else last_candle.sl
+        stop = last_candle.high if side == "short" else last_candle.low
         risk = abs(stop / last_candle.close - 1)
         return min(total_stake * self.trade_max_loss_allowed / risk, max_stake)
 
@@ -183,27 +183,118 @@ class HybridStrategy(IStrategy):
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
-        stop = trade.get_custom_data(key='stop')
         
-        if stop is None:
-            stop = last_candle['ss'] if trade.is_short else last_candle['sl']
-            trade.set_custom_data(key='stop', value=stop)
-            risk = abs(stop / last_candle['close'] - 1)
-            self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
+        if trade.is_short:          
+            conditions = (
+                last_candle.cat_1h[-1] == "L",
+                last_candle.close < last_candle.min_low_1h,
+                last_candle.ss_1h < trade.open_rate
+            )
+            if all(conditions):
+                return stoploss_from_absolute(
+                    last_candle.ss_1h,
+                    current_rate,
+                    is_short=trade.is_short,
+                    leverage=trade.leverage
+                )
+            
+            conditions = (
+                last_candle.cat_15m[-1] == "L",
+                last_candle.close < last_candle.min_low_15m,
+                last_candle.ss_15m < trade.open_rate
+            )
+            if all(conditions):
+                return stoploss_from_absolute(
+                    last_candle.ss_15m,
+                    current_rate,
+                    is_short=trade.is_short,
+                    leverage=trade.leverage
+                )
 
-        return stoploss_from_absolute(
-            stop,
-            current_rate,
-            is_short=trade.is_short,
-            leverage=trade.leverage
-        )
+            conditions = (
+                last_candle.cat[-1] == "L",
+                last_candle.close < last_candle.min_low,
+                last_candle.ss < trade.open_rate
+            )
+            if all(conditions):
+                return stoploss_from_absolute(
+                    last_candle.ss,
+                    current_rate,
+                    is_short=trade.is_short,
+                    leverage=trade.leverage
+                )
+            
+            if trade.get_custom_data(key='risk') is None:
+                risk = abs(last_candle.high / last_candle.close - 1)
+                trade.set_custom_data(key='risk', value=risk)
+                self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
+            return stoploss_from_absolute(
+                last_candle.high,
+                current_rate,
+                is_short=trade.is_short,
+                leverage=trade.leverage
+            )
+
+        else:
+            conditions = (
+                last_candle.cat_1h[-1] == "H",
+                last_candle.close > last_candle.max_high_1h,
+                last_candle.sl_1h > trade.open_rate
+            )
+            if all(conditions):
+                return stoploss_from_absolute(
+                    last_candle.sl_1h,
+                    current_rate,
+                    is_short=trade.is_short,
+                    leverage=trade.leverage
+                )
+            
+            conditions = (
+                last_candle.cat_15m[-1] == "H",
+                last_candle.close > last_candle.max_high_15m,
+                last_candle.sl_15m > trade.open_rate
+            )
+            if all(conditions):
+                return stoploss_from_absolute(
+                    last_candle.sl_15m,
+                    current_rate,
+                    is_short=trade.is_short,
+                    leverage=trade.leverage
+                )
+            
+            conditions = (
+                last_candle.cat[-1] == "H",
+                last_candle.close > last_candle.max_high,
+                last_candle.sl> trade.open_rate
+            )
+            if all(conditions):
+                return stoploss_from_absolute(
+                    last_candle.sl,
+                    current_rate,
+                    is_short=trade.is_short,
+                    leverage=trade.leverage
+                )
+            
+            if trade.get_custom_data(key='risk') is None:
+                risk = abs(last_candle.low / last_candle.close - 1)
+                trade.set_custom_data(key='risk', value=risk)
+                self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
+
+            return stoploss_from_absolute(
+                last_candle.low,
+                current_rate,
+                is_short=trade.is_short,
+                leverage=trade.leverage
+            )
+    
     def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
                     current_rate: float, current_profit: float, **kwargs) -> str:
 
         risk = trade.get_custom_data(key='risk')
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
         conditions = (
-            (trade_duration > 180) and (current_profit < 2 * risk),
+            (trade_duration > 60) and (current_profit < 0),
+            (trade_duration > 240) and (current_profit < risk * 2)
         )
         if any(conditions): return "Trade expired!"
