@@ -312,7 +312,6 @@ class HybridStrategy(IStrategy):
         risk = trade.get_custom_data(key='risk')
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
         conditions = (
-            (trade_duration > 60) and (current_profit < 0),
             (trade_duration > 240) and (current_profit < risk * 4)
         )
         if any(conditions): return "Trade expired!"
