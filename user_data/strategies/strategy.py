@@ -186,51 +186,51 @@ class HybridStrategy(IStrategy):
         
         if trade.is_short:          
             conditions = (
-                last_candle.cat_1h[-1] == "L",
-                last_candle.close < last_candle.min_low_1h,
-                last_candle.ss_1h < trade.open_rate
+                last_candle["cat_1h"][-1] == "L",
+                last_candle["close"] < last_candle["min_low_1h"],
+                last_candle["ss_1h"] < trade.open_rate
             )
             if all(conditions):
                 return stoploss_from_absolute(
-                    last_candle.ss_1h,
+                    last_candle["ss_1h"],
                     current_rate,
                     is_short=trade.is_short,
                     leverage=trade.leverage
                 )
             
             conditions = (
-                last_candle.cat_15m[-1] == "L",
-                last_candle.close < last_candle.min_low_15m,
-                last_candle.ss_15m < trade.open_rate
+                last_candle["cat_15m"][-1] == "L",
+                last_candle["close"] < last_candle["min_low_15m"],
+                last_candle["ss_15m"] < trade.open_rate
             )
             if all(conditions):
                 return stoploss_from_absolute(
-                    last_candle.ss_15m,
+                    last_candle["ss_15m"],
                     current_rate,
                     is_short=trade.is_short,
                     leverage=trade.leverage
                 )
 
             conditions = (
-                last_candle.cat[-1] == "L",
-                last_candle.close < last_candle.min_low,
-                last_candle.ss < trade.open_rate
+                last_candle["cat"][-1] == "L",
+                last_candle["close"] < last_candle["min_low"],
+                last_candle["ss"] < trade.open_rate
             )
             if all(conditions):
                 return stoploss_from_absolute(
-                    last_candle.ss,
+                    last_candle["ss"],
                     current_rate,
                     is_short=trade.is_short,
                     leverage=trade.leverage
                 )
             
             if trade.get_custom_data(key='risk') is None:
-                risk = abs(last_candle.high / last_candle.close - 1)
+                risk = abs(last_candle["high"] / last_candle["close"] - 1)
                 trade.set_custom_data(key='risk', value=risk)
                 self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
             return stoploss_from_absolute(
-                last_candle.high,
+                last_candle["high"],
                 current_rate,
                 is_short=trade.is_short,
                 leverage=trade.leverage
@@ -238,51 +238,51 @@ class HybridStrategy(IStrategy):
 
         else:
             conditions = (
-                last_candle.cat_1h[-1] == "H",
-                last_candle.close > last_candle.max_high_1h,
-                last_candle.sl_1h > trade.open_rate
+                last_candle["cat_1h"][-1] == "H",
+                last_candle["close"] > last_candle["max_high_1h"],
+                last_candle["sl_1h"] > trade.open_rate
             )
             if all(conditions):
                 return stoploss_from_absolute(
-                    last_candle.sl_1h,
+                    last_candle["sl_1h"],
                     current_rate,
                     is_short=trade.is_short,
                     leverage=trade.leverage
                 )
             
             conditions = (
-                last_candle.cat_15m[-1] == "H",
-                last_candle.close > last_candle.max_high_15m,
-                last_candle.sl_15m > trade.open_rate
+                last_candle["cat_15m"][-1] == "H",
+                last_candle["close"] > last_candle["max_high_15m"],
+                last_candle["sl_15m"] > trade.open_rate
             )
             if all(conditions):
                 return stoploss_from_absolute(
-                    last_candle.sl_15m,
+                    last_candle["sl_15m"],
                     current_rate,
                     is_short=trade.is_short,
                     leverage=trade.leverage
                 )
             
             conditions = (
-                last_candle.cat[-1] == "H",
-                last_candle.close > last_candle.max_high,
-                last_candle.sl> trade.open_rate
+                last_candle["cat"][-1] == "H",
+                last_candle["close"] > last_candle["max_high"],
+                last_candle["sl"]> trade.open_rate
             )
             if all(conditions):
                 return stoploss_from_absolute(
-                    last_candle.sl,
+                    last_candle["sl"],
                     current_rate,
                     is_short=trade.is_short,
                     leverage=trade.leverage
                 )
             
             if trade.get_custom_data(key='risk') is None:
-                risk = abs(last_candle.low / last_candle.close - 1)
+                risk = abs(last_candle["low"] / last_candle["close"] - 1)
                 trade.set_custom_data(key='risk', value=risk)
                 self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
             return stoploss_from_absolute(
-                last_candle.low,
+                last_candle["low"],
                 current_rate,
                 is_short=trade.is_short,
                 leverage=trade.leverage
