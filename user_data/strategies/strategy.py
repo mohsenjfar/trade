@@ -136,6 +136,7 @@ class HybridStrategy(IStrategy):
 
     @informative('15m')
     @informative('1h')
+    @informative('4h')
     def populate_indicators_(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe = self.analyze_extrema(dataframe)
@@ -161,15 +162,49 @@ class HybridStrategy(IStrategy):
             (
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'up') & # Guard
+                (dataframe['rsi_15m'] > 30) & # Guard
                 (qtpylib.crossed_above(dataframe['rsi'], 30)) # Trigger
-            ), ["enter_long"]] = (1)
+            ), ["enter_long","enter_tag"]] = (1,'5m_break')
+
+        dataframe.loc[
+            (
+                (dataframe['do_predict'] == 1) & # Guard
+                (dataframe['&s-up_or_down'] == 'up') & # Guard
+                (dataframe['rsi_1h'] > 30) & # Guard
+                (qtpylib.crossed_above(dataframe['rsi_15m'], 30)) # Trigger
+            ), ["enter_long","enter_tag"]] = (1,'15m_break')
+
+        dataframe.loc[
+            (
+                (dataframe['do_predict'] == 1) & # Guard
+                (dataframe['&s-up_or_down'] == 'up') & # Guard
+                (dataframe['rsi_4h'] > 30) & # Guard
+                (qtpylib.crossed_above(dataframe['rsi_1h'], 30)) # Trigger
+            ), ["enter_long","enter_tag"]] = (1,'1h_break')
 
         dataframe.loc[
             (
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'down') & # Guard
+                (dataframe['rsi_15m'] < 70) & # Guard
                 (qtpylib.crossed_below(dataframe['rsi'], 70)) # Trigger
-            ), ["enter_short"]] = (1)
+            ), ["enter_short","enter_tag"]] = (1,'5m_break')
+
+        dataframe.loc[
+            (
+                (dataframe['do_predict'] == 1) & # Guard
+                (dataframe['&s-up_or_down'] == 'down') & # Guard
+                (dataframe['rsi_1h'] < 70) & # Guard
+                (qtpylib.crossed_below(dataframe['rsi_15m'], 70)) # Trigger
+            ), ["enter_short","enter_tag"]] = (1,'15m_break')
+        
+        dataframe.loc[
+            (
+                (dataframe['do_predict'] == 1) & # Guard
+                (dataframe['&s-up_or_down'] == 'down') & # Guard
+                (dataframe['rsi_4h'] < 70) & # Guard
+                (qtpylib.crossed_below(dataframe['rsi_1h'], 70)) # Trigger
+            ), ["enter_short","enter_tag"]] = (1,'1h_break')
 
         return dataframe
 
