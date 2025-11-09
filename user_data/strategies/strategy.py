@@ -149,10 +149,10 @@ class HybridStrategy(IStrategy):
         dataframe = self.analyze_extrema(dataframe)
 
         last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
-        dataframe['iss'] = dataframe.loc[last_min_index:].low.min()
+        dataframe['isl'] = dataframe.loc[last_min_index:].low.min()
         
         last_max_index = dataframe[dataframe['max_high'] == dataframe['high']].index.max()
-        dataframe['isl'] = dataframe.loc[last_max_index:].high.max()
+        dataframe['iss'] = dataframe.loc[last_max_index:].high.max()
 
         return dataframe
 
@@ -164,7 +164,7 @@ class HybridStrategy(IStrategy):
                 (dataframe['&s-up_or_down'] == 'up') & # Guard
                 (dataframe['rsi_15m'] > 30) & # Guard
                 (qtpylib.crossed_above(dataframe['rsi'], 30)) # Trigger
-            ), ["enter_long","enter_tag"]] = (1,'5m_break')
+            ), ["enter_long","enter_tag"]] = (1,'5m')
 
         dataframe.loc[
             (
@@ -172,7 +172,7 @@ class HybridStrategy(IStrategy):
                 (dataframe['&s-up_or_down'] == 'up') & # Guard
                 (dataframe['rsi_1h'] > 30) & # Guard
                 (qtpylib.crossed_above(dataframe['rsi_15m'], 30)) # Trigger
-            ), ["enter_long","enter_tag"]] = (1,'15m_break')
+            ), ["enter_long","enter_tag"]] = (1,'15m')
 
         dataframe.loc[
             (
@@ -180,7 +180,7 @@ class HybridStrategy(IStrategy):
                 (dataframe['&s-up_or_down'] == 'up') & # Guard
                 (dataframe['rsi_4h'] > 30) & # Guard
                 (qtpylib.crossed_above(dataframe['rsi_1h'], 30)) # Trigger
-            ), ["enter_long","enter_tag"]] = (1,'1h_break')
+            ), ["enter_long","enter_tag"]] = (1,'1h')
 
         dataframe.loc[
             (
@@ -188,7 +188,7 @@ class HybridStrategy(IStrategy):
                 (dataframe['&s-up_or_down'] == 'down') & # Guard
                 (dataframe['rsi_15m'] < 70) & # Guard
                 (qtpylib.crossed_below(dataframe['rsi'], 70)) # Trigger
-            ), ["enter_short","enter_tag"]] = (1,'5m_break')
+            ), ["enter_short","enter_tag"]] = (1,'5m')
 
         dataframe.loc[
             (
@@ -196,7 +196,7 @@ class HybridStrategy(IStrategy):
                 (dataframe['&s-up_or_down'] == 'down') & # Guard
                 (dataframe['rsi_1h'] < 70) & # Guard
                 (qtpylib.crossed_below(dataframe['rsi_15m'], 70)) # Trigger
-            ), ["enter_short","enter_tag"]] = (1,'15m_break')
+            ), ["enter_short","enter_tag"]] = (1,'15m')
         
         dataframe.loc[
             (
@@ -204,7 +204,7 @@ class HybridStrategy(IStrategy):
                 (dataframe['&s-up_or_down'] == 'down') & # Guard
                 (dataframe['rsi_4h'] < 70) & # Guard
                 (qtpylib.crossed_below(dataframe['rsi_1h'], 70)) # Trigger
-            ), ["enter_short","enter_tag"]] = (1,'1h_break')
+            ), ["enter_short","enter_tag"]] = (1,'1h')
 
         return dataframe
 
@@ -346,7 +346,24 @@ class HybridStrategy(IStrategy):
 
         risk = trade.get_custom_data(key='risk')
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
-        conditions = (
-            (trade_duration > 240) and (current_profit < risk * 4),
+        
+        conditions_1 = any(
+            (trade.entery_tag == "5m"),
+            (trade_duration > 15) and (current_profit < 0),
+            (trade_duration > 60) and (current_profit < risk * 2),
         )
-        if any(conditions): return "Trade expired!"
+        
+        conditions_2 = any(
+            (trade.entery_tag == "15m"),
+            (trade_duration > 60) and (current_profit < 0),
+            (trade_duration > 240) and (current_profit < risk * 2),
+        )
+        
+        conditions_3 = any(
+            (trade.entery_tag == "1h"),
+            (trade_duration > 240) and (current_profit < 0),
+            (trade_duration > 1440) and (current_profit < risk * 2),
+        )
+        
+        if any(conditions_1, conditions_2, conditions_3):
+            return "Trade expired!"
