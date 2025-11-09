@@ -234,6 +234,8 @@ class HybridStrategy(IStrategy):
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
+        if current_profit > 1: return 0.7
+
         dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
         
@@ -347,21 +349,18 @@ class HybridStrategy(IStrategy):
         risk = trade.get_custom_data(key='risk')
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
         
-        conditions_1 = any(
+        conditions_1 = all(
             (trade.enter_tag == "5m"),
-            (trade_duration > 15) and (current_profit < 0),
             (trade_duration > 60) and (current_profit < risk * 2),
         )
         
-        conditions_2 = any(
+        conditions_2 = all(
             (trade.enter_tag == "15m"),
-            (trade_duration > 60) and (current_profit < 0),
             (trade_duration > 240) and (current_profit < risk * 2),
         )
         
-        conditions_3 = any(
+        conditions_3 = all(
             (trade.enter_tag == "1h"),
-            (trade_duration > 240) and (current_profit < 0),
             (trade_duration > 1440) and (current_profit < risk * 2),
         )
         
