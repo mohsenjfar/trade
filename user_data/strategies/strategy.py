@@ -348,19 +348,19 @@ class HybridStrategy(IStrategy):
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
         
         conditions_1 = any(
-            (trade.entery_tag == "5m"),
+            (trade.enter_tag == "5m"),
             (trade_duration > 15) and (current_profit < 0),
             (trade_duration > 60) and (current_profit < risk * 2),
         )
         
         conditions_2 = any(
-            (trade.entery_tag == "15m"),
+            (trade.enter_tag == "15m"),
             (trade_duration > 60) and (current_profit < 0),
             (trade_duration > 240) and (current_profit < risk * 2),
         )
         
         conditions_3 = any(
-            (trade.entery_tag == "1h"),
+            (trade.enter_tag == "1h"),
             (trade_duration > 240) and (current_profit < 0),
             (trade_duration > 1440) and (current_profit < risk * 2),
         )
