@@ -350,19 +350,19 @@ class HybridStrategy(IStrategy):
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
         
         conditions_1 = all(
-            (trade.enter_tag == "5m"),
-            (trade_duration > 60) and (current_profit < risk * 2),
+            ((trade.enter_tag == "5m"),
+            (trade_duration > 60) and (current_profit < risk * 2),)
         )
         
         conditions_2 = all(
-            (trade.enter_tag == "15m"),
-            (trade_duration > 240) and (current_profit < risk * 2),
+            ((trade.enter_tag == "15m"),
+            (trade_duration > 240) and (current_profit < risk * 2),)
         )
         
         conditions_3 = all(
-            (trade.enter_tag == "1h"),
-            (trade_duration > 1440) and (current_profit < risk * 2),
+            ((trade.enter_tag == "1h"),
+            (trade_duration > 1440) and (current_profit < risk * 2),)
         )
         
-        if any(conditions_1, conditions_2, conditions_3):
+        if any((conditions_1, conditions_2, conditions_3)):
             return "Trade expired!"
