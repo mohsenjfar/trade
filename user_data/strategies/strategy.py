@@ -162,49 +162,15 @@ class HybridStrategy(IStrategy):
             (
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'up') & # Guard
-                (dataframe['rsi_15m'] > 30) & # Guard
                 (qtpylib.crossed_above(dataframe['rsi'], 30)) # Trigger
             ), ["enter_long","enter_tag"]] = (1,'5m')
 
         dataframe.loc[
             (
                 (dataframe['do_predict'] == 1) & # Guard
-                (dataframe['&s-up_or_down'] == 'up') & # Guard
-                (dataframe['rsi_1h'] > 30) & # Guard
-                (qtpylib.crossed_above(dataframe['rsi_15m'], 30)) # Trigger
-            ), ["enter_long","enter_tag"]] = (1,'15m')
-
-        dataframe.loc[
-            (
-                (dataframe['do_predict'] == 1) & # Guard
-                (dataframe['&s-up_or_down'] == 'up') & # Guard
-                (dataframe['rsi_4h'] > 30) & # Guard
-                (qtpylib.crossed_above(dataframe['rsi_1h'], 30)) # Trigger
-            ), ["enter_long","enter_tag"]] = (1,'1h')
-
-        dataframe.loc[
-            (
-                (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'down') & # Guard
-                (dataframe['rsi_15m'] < 70) & # Guard
                 (qtpylib.crossed_below(dataframe['rsi'], 70)) # Trigger
             ), ["enter_short","enter_tag"]] = (1,'5m')
-
-        dataframe.loc[
-            (
-                (dataframe['do_predict'] == 1) & # Guard
-                (dataframe['&s-up_or_down'] == 'down') & # Guard
-                (dataframe['rsi_1h'] < 70) & # Guard
-                (qtpylib.crossed_below(dataframe['rsi_15m'], 70)) # Trigger
-            ), ["enter_short","enter_tag"]] = (1,'15m')
-        
-        dataframe.loc[
-            (
-                (dataframe['do_predict'] == 1) & # Guard
-                (dataframe['&s-up_or_down'] == 'down') & # Guard
-                (dataframe['rsi_4h'] < 70) & # Guard
-                (qtpylib.crossed_below(dataframe['rsi_1h'], 70)) # Trigger
-            ), ["enter_short","enter_tag"]] = (1,'1h')
 
         return dataframe
 
@@ -350,7 +316,7 @@ class HybridStrategy(IStrategy):
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
         
         conditions = (
-            (trade_duration > 1440),
-            (current_profit < risk * 2)
+            (trade_duration > 60) and (current_profit < 0)
+            (trade_duration > 1440) and (current_profit < risk * 2)
         )
-        if all(conditions): return "Trade expired!"
+        if any(conditions): return "Trade expired!"
