@@ -71,15 +71,15 @@
     "identifier": "1",
     "feature_parameters": {
         "include_timeframes": [
-            "5m",
             "15m",
+            "1h",
             "4h"
         ],
         "include_corr_pairlist": [
             "BTC/USDT",
             "ETH/USDT"
         ],
-        "label_period_candles": 12,
+        "label_period_candles": 16,
         "include_shifted_candles": 2,
         "DI_threshold": 0.9,
         "weight_factor": 0.9,

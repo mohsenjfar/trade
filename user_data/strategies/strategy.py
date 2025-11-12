@@ -21,7 +21,7 @@ class HybridStrategy(IStrategy):
 
     trade_max_loss_allowed = 0.005
 
-    timeframe = '5m'
+    timeframe = '15m'
 
     can_short: bool = True
 
@@ -39,10 +39,9 @@ class HybridStrategy(IStrategy):
         return [
             {
                 "method": "StoplossGuard",
-                "lookback_period": 60,
+                "lookback_period": 1440,
                 "trade_limit": 2,
-                # "unlock_at":"00:00",
-                "stop_duration_candles": 12,
+                "unlock_at":"00:00",
                 "required_profit": 0.0,
                 "only_per_pair": False,
                 "only_per_side": True
@@ -130,13 +129,11 @@ class HybridStrategy(IStrategy):
     def set_freqai_targets(self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
 
         self.freqai.class_names = ["down", "up"]
-        dataframe['&s-up_or_down'] = np.where(dataframe["close"].shift(-12) > dataframe["close"], 'up', 'down')
+        dataframe['&s-up_or_down'] = np.where(dataframe["close"].shift(-16) > dataframe["close"], 'up', 'down')
 
         return dataframe
 
-    @informative('15m')
     @informative('1h')
-    @informative('4h')
     def populate_indicators_(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe = self.analyze_extrema(dataframe)
@@ -162,15 +159,17 @@ class HybridStrategy(IStrategy):
             (
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'up') & # Guard
+                (dataframe['rsi_1h'] < 70) & # Guard
                 (qtpylib.crossed_above(dataframe['rsi'], 30)) # Trigger
-            ), ["enter_long","enter_tag"]] = (1,'5m')
+            ), ["enter_long","enter_tag"]] = (1,'15m')
 
         dataframe.loc[
             (
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'down') & # Guard
+                (dataframe['rsi_1h'] > 30) & # Guard
                 (qtpylib.crossed_below(dataframe['rsi'], 70)) # Trigger
-            ), ["enter_short","enter_tag"]] = (1,'5m')
+            ), ["enter_short","enter_tag"]] = (1,'15m')
 
         return dataframe
 
@@ -218,19 +217,6 @@ class HybridStrategy(IStrategy):
                     is_short=trade.is_short,
                     leverage=trade.leverage
                 )
-            
-            conditions = (
-                last_candle["cat_15m"][-1] == "L",
-                last_candle["close"] < last_candle["min_low_15m"],
-                last_candle["ss_15m"] < trade.open_rate
-            )
-            if all(conditions):
-                return stoploss_from_absolute(
-                    last_candle["ss_15m"],
-                    current_rate,
-                    is_short=trade.is_short,
-                    leverage=trade.leverage
-                )
 
             conditions = (
                 last_candle["cat"][-1] == "L",
@@ -272,19 +258,6 @@ class HybridStrategy(IStrategy):
                 )
             
             conditions = (
-                last_candle["cat_15m"][-1] == "H",
-                last_candle["close"] > last_candle["max_high_15m"],
-                last_candle["sl_15m"] > trade.open_rate
-            )
-            if all(conditions):
-                return stoploss_from_absolute(
-                    last_candle["sl_15m"],
-                    current_rate,
-                    is_short=trade.is_short,
-                    leverage=trade.leverage
-                )
-            
-            conditions = (
                 last_candle["cat"][-1] == "H",
                 last_candle["close"] > last_candle["max_high"],
                 last_candle["sl"]> trade.open_rate
@@ -316,7 +289,6 @@ class HybridStrategy(IStrategy):
         trade_duration = (current_time - trade.open_date_utc).seconds / 60
         
         conditions = (
-            (trade_duration > 60) and (current_profit < 0)
-            (trade_duration > 1440) and (current_profit < risk * 2)
+            (trade_duration > 1440) and (current_profit < risk * 2),
         )
         if any(conditions): return "Trade expired!"
