@@ -613,3 +613,1811 @@ freqtrade.exceptions.OperationalException: Exchange Bybit does not support fetch
 2025-11-13 10:11:39,881 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
 2025-11-13 10:12:39,888 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
 2025-11-13 10:13:39,896 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:14:39,902 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:15:06,154 - freqtrade.freqai.data_kitchen - INFO - dropped 94 of 1000 prediction data points due to NaNs.
+2025-11-13 10:15:06,741 - freqtrade.freqai.freqai_interface - INFO - Total time spent inferencing pairlist 1.58 seconds
+2025-11-13 10:15:39,911 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:16:39,917 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:17:39,925 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:18:39,932 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:19:39,940 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:20:39,948 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:21:39,954 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:22:39,962 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:23:39,969 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:24:39,976 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:25:39,012 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Starting training WIF/USDT:USDT --------------------
+2025-11-13 10:25:39,068 - freqtrade.freqai.data_kitchen - INFO - WIF/USDT:USDT: dropped 1205 training points due to NaNs in populated dataset 1439.
+2025-11-13 10:25:39,076 - freqtrade.freqai.data_kitchen - WARNING -  84 percent  of training data dropped due to NaNs, model may perform inconsistent with expectations. Verify %-adx-period_20_shift-2_WIF/USDTUSDT_1d
+2025-11-13 10:25:39,078 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Training on data from 2025-10-29 to 2025-11-13 --------------------
+2025-11-13 10:25:39,091 - datasieve.pipeline - INFO - VarianceThreshold will remove 1 features from the dataset.on transform. ['%-is_bullish_gen_ETH/USDT_1d']
+2025-11-13 10:25:39,220 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - Training model on 1009 features
+2025-11-13 10:25:39,222 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - Training model on 234 data points
+2025-11-13 10:25:39,985 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:25:42,929 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Done training WIF/USDT:USDT (3.92 secs) --------------------
+2025-11-13 10:25:42,969 - freqtrade.freqai.freqai_interface - INFO - Total time spent training pairlist 4.88 seconds
+2025-11-13 10:26:39,992 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:27:40,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:28:40,021 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:29:40,028 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:30:02,362 - freqtrade.freqai.freqai_interface - INFO - Total time spent inferencing pairlist 1.13 seconds
+2025-11-13 10:30:41,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:31:07,205 - freqtrade.wallets - INFO - Wallets synced.
+2025-11-13 10:31:41,010 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:32:41,017 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:33:41,024 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:34:41,030 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:35:41,038 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:36:41,049 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:37:41,056 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:38:41,067 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:39:41,072 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:40:39,687 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Starting training WIF/USDT:USDT --------------------
+2025-11-13 10:40:39,729 - freqtrade.freqai.data_kitchen - INFO - WIF/USDT:USDT: dropped 1204 training points due to NaNs in populated dataset 1439.
+2025-11-13 10:40:39,741 - freqtrade.freqai.data_kitchen - WARNING -  84 percent  of training data dropped due to NaNs, model may perform inconsistent with expectations. Verify %-adx-period_20_shift-2_WIF/USDTUSDT_1d
+2025-11-13 10:40:39,743 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Training on data from 2025-10-29 to 2025-11-13 --------------------
+2025-11-13 10:40:39,758 - datasieve.pipeline - INFO - VarianceThreshold will remove 1 features from the dataset.on transform. ['%-is_bullish_gen_ETH/USDT_1d']
+2025-11-13 10:40:39,847 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - Training model on 1009 features
+2025-11-13 10:40:39,849 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - Training model on 235 data points
+2025-11-13 10:40:41,079 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:40:43,678 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Done training WIF/USDT:USDT (3.99 secs) --------------------
+2025-11-13 10:40:43,717 - freqtrade.freqai.data_drawer - INFO - Freqai purging old model file /freqtrade/user_data/models/1/sub-train-WIF_1763028638
+2025-11-13 10:40:43,722 - freqtrade.freqai.freqai_interface - INFO - Total time spent training pairlist 5.03 seconds
+2025-11-13 10:41:41,084 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:42:41,091 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:43:41,100 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:44:41,109 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:45:02,474 - freqtrade.freqai.freqai_interface - INFO - Total time spent inferencing pairlist 1.25 seconds
+2025-11-13 10:45:46,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:46:46,011 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:47:46,021 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:48:46,032 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:49:46,041 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:50:46,049 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:51:46,056 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:52:46,067 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:53:46,077 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:54:46,085 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:55:39,555 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Starting training WIF/USDT:USDT --------------------
+2025-11-13 10:55:39,585 - freqtrade.freqai.data_kitchen - INFO - WIF/USDT:USDT: dropped 1203 training points due to NaNs in populated dataset 1439.
+2025-11-13 10:55:39,592 - freqtrade.freqai.data_kitchen - WARNING -  84 percent  of training data dropped due to NaNs, model may perform inconsistent with expectations. Verify %-adx-period_20_shift-2_WIF/USDTUSDT_1d
+2025-11-13 10:55:39,594 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Training on data from 2025-10-29 to 2025-11-13 --------------------
+2025-11-13 10:55:39,601 - datasieve.pipeline - INFO - VarianceThreshold will remove 1 features from the dataset.on transform. ['%-is_bullish_gen_ETH/USDT_1d']
+2025-11-13 10:55:39,704 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - Training model on 1009 features
+2025-11-13 10:55:39,706 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - Training model on 236 data points
+2025-11-13 10:55:43,754 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Done training WIF/USDT:USDT (4.20 secs) --------------------
+2025-11-13 10:55:43,804 - freqtrade.freqai.data_drawer - INFO - Freqai purging old model file /freqtrade/user_data/models/1/sub-train-WIF_1763029538
+2025-11-13 10:55:43,811 - freqtrade.freqai.freqai_interface - INFO - Total time spent training pairlist 5.39 seconds
+2025-11-13 10:55:46,091 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:56:46,098 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:57:46,104 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:58:46,111 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 10:59:46,119 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:00:02,607 - freqtrade.freqai.freqai_interface - INFO - Total time spent inferencing pairlist 1.24 seconds
+2025-11-13 11:00:51,008 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:01:07,143 - freqtrade.wallets - INFO - Wallets synced.
+2025-11-13 11:01:51,018 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:02:51,024 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:03:51,032 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:04:51,039 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:05:51,046 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:06:51,055 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:07:51,060 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:08:51,067 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:09:51,076 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:10:32,232 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['WIF/USDT:USDT']
+2025-11-13 11:10:39,487 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Starting training WIF/USDT:USDT --------------------
+2025-11-13 11:10:39,513 - freqtrade.freqai.data_kitchen - INFO - WIF/USDT:USDT: dropped 1202 training points due to NaNs in populated dataset 1439.
+2025-11-13 11:10:39,521 - freqtrade.freqai.data_kitchen - WARNING -  84 percent  of training data dropped due to NaNs, model may perform inconsistent with expectations. Verify %-adx-period_20_shift-2_WIF/USDTUSDT_1d
+2025-11-13 11:10:39,522 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Training on data from 2025-10-29 to 2025-11-13 --------------------
+2025-11-13 11:10:39,529 - datasieve.pipeline - INFO - VarianceThreshold will remove 1 features from the dataset.on transform. ['%-is_bullish_gen_ETH/USDT_1d']
+2025-11-13 11:10:39,615 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - Training model on 1009 features
+2025-11-13 11:10:39,619 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - Training model on 237 data points
+2025-11-13 11:10:43,610 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Done training WIF/USDT:USDT (4.12 secs) --------------------
+2025-11-13 11:10:43,672 - freqtrade.freqai.data_drawer - INFO - Freqai purging old model file /freqtrade/user_data/models/1/sub-train-WIF_1763030438
+2025-11-13 11:10:43,679 - freqtrade.freqai.freqai_interface - INFO - Total time spent training pairlist 5.19 seconds
+2025-11-13 11:10:52,423 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:11:52,429 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:12:52,434 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:13:52,442 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:14:52,452 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:15:02,509 - freqtrade.freqai.freqai_interface - INFO - Total time spent inferencing pairlist 1.27 seconds
+2025-11-13 11:15:56,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:16:56,013 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:17:56,024 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:18:56,034 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:19:56,042 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:20:56,048 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:21:56,055 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:22:56,063 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:23:56,070 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:24:56,080 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:25:39,353 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Starting training WIF/USDT:USDT --------------------
+2025-11-13 11:25:39,379 - freqtrade.freqai.data_kitchen - INFO - WIF/USDT:USDT: dropped 1201 training points due to NaNs in populated dataset 1439.
+2025-11-13 11:25:39,386 - freqtrade.freqai.data_kitchen - WARNING -  83 percent  of training data dropped due to NaNs, model may perform inconsistent with expectations. Verify %-adx-period_20_shift-2_WIF/USDTUSDT_1d
+2025-11-13 11:25:39,387 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Training on data from 2025-10-29 to 2025-11-13 --------------------
+2025-11-13 11:25:39,395 - datasieve.pipeline - INFO - VarianceThreshold will remove 1 features from the dataset.on transform. ['%-is_bullish_gen_ETH/USDT_1d']
+2025-11-13 11:25:39,493 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - Training model on 1009 features
+2025-11-13 11:25:39,495 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - Training model on 238 data points
+2025-11-13 11:25:43,352 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Done training WIF/USDT:USDT (4.00 secs) --------------------
+2025-11-13 11:25:43,390 - freqtrade.freqai.data_drawer - INFO - Freqai purging old model file /freqtrade/user_data/models/1/sub-train-WIF_1763031338
+2025-11-13 11:25:43,396 - freqtrade.freqai.freqai_interface - INFO - Total time spent training pairlist 5.04 seconds
+2025-11-13 11:25:56,088 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:26:56,094 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:27:56,101 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:28:56,107 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:29:51,297 - freqtrade.commands.trade_commands - INFO - worker found ... calling exit
+2025-11-13 11:29:51,302 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'process died'}
+2025-11-13 11:29:51,305 - freqtrade.freqtradebot - INFO - Cleaning up modules ...
+2025-11-13 11:29:51,320 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': warning, 'status': "1 open trades active.\n\nHandle these trades manually on Bybit, or '/start' the bot again and use '/stopentry' to handle open trades gracefully. \n"}
+2025-11-13 11:29:51,323 - freqtrade.freqai.freqai_interface - INFO - Stopping FreqAI
+2025-11-13 11:29:51,345 - freqtrade.freqai.freqai_interface - INFO - Waiting on Training iteration
+2025-11-13 11:29:52,205 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc modules ...
+2025-11-13 11:29:52,207 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc.apiserver ...
+2025-11-13 11:29:52,209 - freqtrade.rpc.api_server.webserver - INFO - Stopping API Server
+2025-11-13 11:29:52,247 - uvicorn.error - INFO - Shutting down
+2025-11-13 11:29:52,350 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-11-13 11:29:52,354 - uvicorn.error - INFO - Application shutdown complete.
+2025-11-13 11:29:52,356 - uvicorn.error - INFO - Finished server process [1]
+2025-11-13 11:29:52,358 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc.telegram ...
+2025-11-13 11:29:52,482 - telegram.ext.Application - INFO - Application is stopping. This might take a moment.
+2025-11-13 11:29:52,486 - telegram.ext.Application - INFO - Application.stop() complete
+2025-11-13 11:29:57,729 - freqtrade.exchange.exchange_ws - INFO - Resetting WS connections.
+2025-11-13 11:29:57,732 - freqtrade.exchange.exchange_ws - INFO - WIF/USDT:USDT, 1h, futures - Task finished - cancelled
+2025-11-13 11:29:57,733 - freqtrade.exchange.exchange_ws - INFO - BTC/USDT, 15m, futures - Task finished - cancelled
+2025-11-13 11:29:57,735 - freqtrade.exchange.exchange_ws - INFO - ETH/USDT, 1d, futures - Task finished - cancelled
+2025-11-13 11:29:57,736 - freqtrade.exchange.exchange_ws - INFO - ETH/USDT, 4h, futures - Task finished - cancelled
+2025-11-13 11:29:57,738 - freqtrade.exchange.exchange_ws - INFO - WIF/USDT:USDT, 1d, futures - Task finished - cancelled
+2025-11-13 11:29:57,739 - freqtrade.exchange.exchange_ws - INFO - WIF/USDT:USDT, 4h, futures - Task finished - cancelled
+2025-11-13 11:29:57,740 - freqtrade.exchange.exchange_ws - INFO - BTC/USDT, 1d, futures - Task finished - cancelled
+2025-11-13 11:29:57,742 - freqtrade.exchange.exchange_ws - INFO - BTC/USDT, 4h, futures - Task finished - cancelled
+2025-11-13 11:29:57,743 - freqtrade.exchange.exchange_ws - INFO - ETH/USDT, 1h, futures - Task finished - cancelled
+2025-11-13 11:29:57,745 - freqtrade.exchange.exchange_ws - INFO - ETH/USDT, 15m, futures - Task finished - cancelled
+2025-11-13 11:29:57,746 - freqtrade.exchange.exchange_ws - INFO - BTC/USDT, 1h, futures - Task finished - cancelled
+2025-11-13 11:29:57,748 - freqtrade.exchange.exchange_ws - INFO - WIF/USDT:USDT, 15m, futures - Task finished - cancelled
+2025-11-13 11:29:57,755 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:29:57,764 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:29:57,768 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:29:57,772 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:29:57,776 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:29:57,780 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:29:57,784 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:29:57,788 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:29:57,792 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:29:57,796 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:29:57,799 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:29:57,803 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:29:58,586 - freqtrade - INFO - SIGINT received, aborting ...
+2025-11-13 11:30:33,323 - freqtrade.loggers - INFO - Enabling colorized output.
+2025-11-13 11:30:33,324 - freqtrade.loggers - INFO - Logfile configured
+2025-11-13 11:30:33,324 - freqtrade.loggers - INFO - Verbosity set to 0
+2025-11-13 11:30:33,325 - freqtrade.configuration.configuration - INFO - Runmode set to live.
+2025-11-13 11:30:33,325 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2025-11-13 11:30:33,326 - freqtrade.configuration.configuration - WARNING - `force_entry_enable` RPC message enabled.
+2025-11-13 11:30:33,327 - freqtrade.configuration.configuration - INFO - Dry run is disabled
+2025-11-13 11:30:33,327 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/db.sqlite"
+2025-11-13 11:30:33,328 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 1 ...
+2025-11-13 11:30:33,356 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2025-11-13 11:30:33,358 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/bybit ...
+2025-11-13 11:30:33,359 - freqtrade.configuration.configuration - INFO - Using freqaimodel class name: XGBoostClassifier
+2025-11-13 11:30:33,363 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2025-11-13 11:30:33,387 - freqtrade.exchange.check_exchange - INFO - Exchange "bybit" is officially supported by the Freqtrade development team.
+2025-11-13 11:30:33,389 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2025-11-13 11:30:33,391 - freqtrade.exchange.exchange - INFO - Using CCXT 4.5.2
+2025-11-13 11:30:33,392 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-11-13 11:30:33,414 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-11-13 11:30:33,440 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-11-13 11:30:33,467 - freqtrade.exchange.exchange - INFO - Using Exchange "Bybit"
+2025-11-13 11:30:38,128 - freqtrade.exchange.bybit - INFO - Bybit: Unified account. Assuming dedicated subaccount for this bot.
+2025-11-13 11:30:38,129 - freqtrade.resolvers.exchange_resolver - INFO - Using resolved exchange 'Bybit'...
+2025-11-13 11:30:38,186 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy HybridStrategy from '/freqtrade/user_data/strategies/strategy.py'...
+2025-11-13 11:30:38,188 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2025-11-13 11:30:38,189 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: USDT.
+2025-11-13 11:30:38,191 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: unlimited.
+2025-11-13 11:30:38,192 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2025-11-13 11:30:38,193 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 1.
+2025-11-13 11:30:38,194 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {}
+2025-11-13 11:30:38,195 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 15m
+2025-11-13 11:30:38,196 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -1
+2025-11-13 11:30:38,198 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2025-11-13 11:30:38,199 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2025-11-13 11:30:38,200 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2025-11-13 11:30:38,201 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: True
+2025-11-13 11:30:38,202 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2025-11-13 11:30:38,203 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'limit', 'exit': 'limit', 'stoploss': 'limit', 'stoploss_on_exchange': False, 'stoploss_on_exchange_interval': 60}
+2025-11-13 11:30:38,205 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2025-11-13 11:30:38,206 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: USDT
+2025-11-13 11:30:38,207 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: unlimited
+2025-11-13 11:30:38,209 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 0
+2025-11-13 11:30:38,212 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2025-11-13 11:30:38,213 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2025-11-13 11:30:38,215 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2025-11-13 11:30:38,216 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2025-11-13 11:30:38,217 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2025-11-13 11:30:38,218 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2025-11-13 11:30:38,219 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2025-11-13 11:30:38,220 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2025-11-13 11:30:38,221 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2025-11-13 11:30:38,222 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 1
+2025-11-13 11:30:38,224 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2025-11-13 11:30:38,655 - freqtrade.wallets - INFO - Wallets synced.
+2025-11-13 11:30:38,932 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.telegram ...
+2025-11-13 11:30:39,240 - freqtrade.rpc.telegram - INFO - using custom keyboard from config.json: [['/status table', '/reload_config'], ['/forcelong', '/forceshort', '/forceexit'], ['/stop', '/start', '/profit', '/logs']]
+2025-11-13 11:30:39,243 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.api_server
+2025-11-13 11:30:40,009 - freqtrade.rpc.api_server.webserver - INFO - Starting HTTP Server at 0.0.0.0:8080
+2025-11-13 11:30:40,011 - freqtrade.rpc.api_server.webserver - INFO - Starting Local Rest Server.
+2025-11-13 11:30:40,025 - freqtrade.rpc.telegram - INFO - rpc.telegram is listening for following commands: [['status'], ['profit'], ['balance'], ['start'], ['stop'], ['forceexit', 'forcesell', 'fx'], ['forcebuy', 'forcelong'], ['forceshort'], ['reload_trade'], ['trades'], ['delete'], ['cancel_open_order', 'coo'], ['performance'], ['buys', 'entries'], ['exits', 'sells'], ['mix_tags'], ['stats'], ['daily'], ['weekly'], ['monthly'], ['count'], ['locks'], ['delete_locks', 'unlock'], ['reload_conf', 'reload_config'], ['show_conf', 'show_config'], ['pause', 'stopbuy', 'stopentry'], ['whitelist'], ['blacklist'], ['bl_delete', 'blacklist_delete'], ['logs'], ['health'], ['help'], ['version'], ['marketdir'], ['order'], ['list_custom_data'], ['tg_info'], ['profit_long'], ['profit_short']]
+2025-11-13 11:30:40,074 - uvicorn.error - INFO - Started server process [1]
+2025-11-13 11:30:40,076 - uvicorn.error - INFO - Waiting for application startup.
+2025-11-13 11:30:40,078 - uvicorn.error - INFO - Application startup complete.
+2025-11-13 11:30:40,080 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2025-11-13 11:30:40,119 - freqtrade.resolvers.iresolver - INFO - Using resolved pairlist StaticPairList from '/freqtrade/freqtrade/plugins/pairlist/StaticPairList.py'...
+2025-11-13 11:30:40,120 - freqtrade.freqtradebot - INFO - Starting initial pairlist refresh
+2025-11-13 11:30:40,146 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['WIF/USDT:USDT']
+2025-11-13 11:30:40,150 - freqtrade.freqtradebot - INFO - Initial Pairlist refresh took 0.03s
+2025-11-13 11:30:40,189 - telegram.ext.Application - INFO - Application started
+2025-11-13 11:30:41,853 - freqtrade.resolvers.iresolver - WARNING - Could not import /freqtrade/user_data/freqaimodels/MyReinforcementLearner.py due to 'No module named 'torch''
+2025-11-13 11:30:41,855 - freqtrade.resolvers.iresolver - WARNING - Could not import /freqtrade/freqtrade/freqai/prediction_models/ReinforcementLearner_multiproc.py due to 'No module named 'sb3_contrib''
+2025-11-13 11:30:42,149 - freqtrade.resolvers.iresolver - INFO - Using resolved freqaimodel XGBoostClassifier from '/freqtrade/freqtrade/freqai/prediction_models/XGBoostClassifier.py'...
+2025-11-13 11:30:42,150 - freqtrade.freqai.data_drawer - INFO - Could not find existing datadrawer, starting from scratch
+2025-11-13 11:30:42,151 - freqtrade.freqai.data_drawer - INFO - Could not find existing historic_predictions, starting from scratch
+2025-11-13 11:30:42,152 - freqtrade.freqai.freqai_interface - INFO - Set fresh train queue from whitelist. Queue: ['WIF/USDT:USDT']
+2025-11-13 11:30:42,153 - freqtrade.strategy.interface - INFO - Downloading all training data for all pairs in whitelist and corr_pairlist, this may take a while if the data is not already on disk.
+2025-11-13 11:30:42,161 - freqtrade.freqai.utils - INFO - FreqAI auto-downloader using 30 startup candles.
+2025-11-13 11:30:42,266 - freqtrade.data.history.history_utils - INFO - WIF/USDT:USDT, 15m, futures: Requested start date 2024-10-14 11:30:42 earlier than local data start date 2025-10-24 10:15:00. Use `--prepend` to download data prior to 2025-10-24 10:15:00, or `--erase` to redownload all data.
+2025-11-13 11:30:42,268 - freqtrade.data.history.history_utils - INFO - Download history data for "WIF/USDT:USDT", 15m, futures and store in /freqtrade/user_data/data/bybit. From 2025-11-13T09:30:00 to 2025-11-13T11:30:42
+2025-11-13 11:30:42,537 - freqtrade.data.history.history_utils - INFO - Downloaded data for WIF/USDT:USDT with length 8.
+2025-11-13 11:30:42,598 - freqtrade.data.history.history_utils - INFO - WIF/USDT:USDT, 1h, futures: Requested start date 2024-10-14 11:30:42 earlier than local data start date 2025-10-24 11:00:00. Use `--prepend` to download data prior to 2025-10-24 11:00:00, or `--erase` to redownload all data.
+2025-11-13 11:30:42,600 - freqtrade.data.history.history_utils - INFO - Download history data for "WIF/USDT:USDT", 1h, futures and store in /freqtrade/user_data/data/bybit. From 2025-11-13T08:00:00 to 2025-11-13T11:30:42
+2025-11-13 11:30:42,887 - freqtrade.data.history.history_utils - INFO - Downloaded data for WIF/USDT:USDT with length 3.
+2025-11-13 11:30:42,928 - freqtrade.data.history.history_utils - INFO - WIF/USDT:USDT, 4h, futures: Requested start date 2024-10-14 11:30:42 earlier than local data start date 2025-10-24 12:00:00. Use `--prepend` to download data prior to 2025-10-24 12:00:00, or `--erase` to redownload all data.
+2025-11-13 11:30:42,931 - freqtrade.data.history.history_utils - INFO - Download history data for "WIF/USDT:USDT", 4h, futures and store in /freqtrade/user_data/data/bybit. From 2025-11-13T00:00:00 to 2025-11-13T11:30:42
+2025-11-13 11:30:43,241 - freqtrade.data.history.history_utils - INFO - Downloaded data for WIF/USDT:USDT with length 2.
+2025-11-13 11:30:43,277 - freqtrade.data.history.history_utils - INFO - WIF/USDT:USDT, 1d, futures: Requested start date 2024-10-14 11:30:42 earlier than local data start date 2025-09-30 00:00:00. Use `--prepend` to download data prior to 2025-09-30 00:00:00, or `--erase` to redownload all data.
+2025-11-13 11:30:43,279 - freqtrade.data.history.history_utils - INFO - Download history data for "WIF/USDT:USDT", 1d, futures and store in /freqtrade/user_data/data/bybit. From 2025-11-11T00:00:00 to 2025-11-13T11:30:42
+2025-11-13 11:30:43,563 - freqtrade.data.history.history_utils - INFO - Downloaded data for WIF/USDT:USDT with length 2.
+2025-11-13 11:30:43,605 - freqtrade.data.history.history_utils - INFO - WIF/USDT:USDT, 8h, funding_rate: Requested start date 2024-10-14 11:30:42 earlier than local data start date 2025-10-24 12:00:00. Use `--prepend` to download data prior to 2025-10-24 12:00:00, or `--erase` to redownload all data.
+2025-11-13 11:30:43,608 - freqtrade.data.history.history_utils - INFO - Download history data for "WIF/USDT:USDT", 8h, funding_rate and store in /freqtrade/user_data/data/bybit. From 2025-11-13T00:00:00 to 2025-11-13T11:30:42
+2025-11-13 11:30:43,895 - freqtrade.data.history.history_utils - INFO - Downloaded data for WIF/USDT:USDT with length 2.
+2025-11-13 11:30:43,936 - freqtrade.data.history.history_utils - INFO - WIF/USDT:USDT, 4h, mark: Requested start date 2024-10-14 11:30:42 earlier than local data start date 2025-10-24 12:00:00. Use `--prepend` to download data prior to 2025-10-24 12:00:00, or `--erase` to redownload all data.
+2025-11-13 11:30:43,938 - freqtrade.data.history.history_utils - INFO - Download history data for "WIF/USDT:USDT", 4h, mark and store in /freqtrade/user_data/data/bybit. From 2025-11-13T00:00:00 to 2025-11-13T11:30:42
+2025-11-13 11:30:44,222 - freqtrade.data.history.history_utils - INFO - Downloaded data for WIF/USDT:USDT with length 2.
+2025-11-13 11:30:44,261 - freqtrade.data.history.history_utils - INFO - BTC/USDT, 15m, futures: Requested start date 2024-10-14 11:30:42 earlier than local data start date 2025-10-24 10:15:00. Use `--prepend` to download data prior to 2025-10-24 10:15:00, or `--erase` to redownload all data.
+2025-11-13 11:30:44,262 - freqtrade.data.history.history_utils - INFO - Download history data for "BTC/USDT", 15m, futures and store in /freqtrade/user_data/data/bybit. From 2025-11-13T09:30:00 to 2025-11-13T11:30:42
+2025-11-13 11:30:44,543 - freqtrade.data.history.history_utils - INFO - Downloaded data for BTC/USDT with length 8.
+2025-11-13 11:30:44,589 - freqtrade.data.history.history_utils - INFO - BTC/USDT, 1h, futures: Requested start date 2024-10-14 11:30:42 earlier than local data start date 2025-10-24 11:00:00. Use `--prepend` to download data prior to 2025-10-24 11:00:00, or `--erase` to redownload all data.
+2025-11-13 11:30:44,591 - freqtrade.data.history.history_utils - INFO - Download history data for "BTC/USDT", 1h, futures and store in /freqtrade/user_data/data/bybit. From 2025-11-13T08:00:00 to 2025-11-13T11:30:42
+2025-11-13 11:30:44,878 - freqtrade.data.history.history_utils - INFO - Downloaded data for BTC/USDT with length 3.
+2025-11-13 11:30:44,916 - freqtrade.data.history.history_utils - INFO - BTC/USDT, 4h, futures: Requested start date 2024-10-14 11:30:42 earlier than local data start date 2025-10-24 12:00:00. Use `--prepend` to download data prior to 2025-10-24 12:00:00, or `--erase` to redownload all data.
+2025-11-13 11:30:44,919 - freqtrade.data.history.history_utils - INFO - Download history data for "BTC/USDT", 4h, futures and store in /freqtrade/user_data/data/bybit. From 2025-11-13T00:00:00 to 2025-11-13T11:30:42
+2025-11-13 11:30:45,203 - freqtrade.data.history.history_utils - INFO - Downloaded data for BTC/USDT with length 2.
+2025-11-13 11:30:45,243 - freqtrade.data.history.history_utils - INFO - BTC/USDT, 1d, futures: Requested start date 2024-10-14 11:30:42 earlier than local data start date 2025-09-30 00:00:00. Use `--prepend` to download data prior to 2025-09-30 00:00:00, or `--erase` to redownload all data.
+2025-11-13 11:30:45,245 - freqtrade.data.history.history_utils - INFO - Download history data for "BTC/USDT", 1d, futures and store in /freqtrade/user_data/data/bybit. From 2025-11-11T00:00:00 to 2025-11-13T11:30:42
+2025-11-13 11:30:45,529 - freqtrade.data.history.history_utils - INFO - Downloaded data for BTC/USDT with length 2.
+2025-11-13 11:30:45,549 - freqtrade.data.history.history_utils - INFO - Download history data for "BTC/USDT", 8h, funding_rate and store in /freqtrade/user_data/data/bybit. From 2024-10-14T11:30:42 to 2025-11-13T11:30:42
+2025-11-13 11:30:45,554 - freqtrade.exchange.exchange - WARNING - Async code raised an exception: OperationalException('Exchange Bybit does not support fetching historical candle (OHLCV) data. Message: bybit fetchFundingRateHistory() only support linear and inverse market')
+2025-11-13 11:30:45,556 - freqtrade.data.history.history_utils - ERROR - Failed to download history data for pair: "BTC/USDT", timeframe: 8h.
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2767, in _async_get_candle_history
+    data = await self._fetch_funding_rate_history(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2816, in _fetch_funding_rate_history
+    data = await self._api_async.fetch_funding_rate_history(pair, since=since_ms, limit=limit)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/async_support/bybit.py", line 2768, in fetch_funding_rate_history
+    raise NotSupported(self.id + ' fetchFundingRateHistory() only support linear and inverse market')
+ccxt.base.errors.NotSupported: bybit fetchFundingRateHistory() only support linear and inverse market
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/data/history/history_utils.py", line 276, in _download_pair_history
+    new_dataframe = exchange.get_historic_ohlcv(
+        pair=pair,
+    ...<8 lines>...
+        until_ms=until_ms if until_ms else None,
+    )
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2402, in get_historic_ohlcv
+    pair, _, _, data, _ = self.loop.run_until_complete(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._async_get_historic_ohlcv(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+        )
+        ^
+    )
+    ^
+  File "/usr/local/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2450, in _async_get_historic_ohlcv
+    raise res
+  File "/freqtrade/freqtrade/exchange/common.py", line 118, in wrapper
+    return await f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2787, in _async_get_candle_history
+    raise OperationalException(
+    ...<2 lines>...
+    ) from e
+freqtrade.exceptions.OperationalException: Exchange Bybit does not support fetching historical candle (OHLCV) data. Message: bybit fetchFundingRateHistory() only support linear and inverse market
+2025-11-13 11:30:45,601 - freqtrade.data.history.history_utils - INFO - BTC/USDT, 4h, mark: Requested start date 2024-10-14 11:30:42 earlier than local data start date 2025-10-24 12:00:00. Use `--prepend` to download data prior to 2025-10-24 12:00:00, or `--erase` to redownload all data.
+2025-11-13 11:30:45,605 - freqtrade.data.history.history_utils - INFO - Download history data for "BTC/USDT", 4h, mark and store in /freqtrade/user_data/data/bybit. From 2025-11-13T00:00:00 to 2025-11-13T11:30:42
+2025-11-13 11:30:45,889 - freqtrade.data.history.history_utils - INFO - Downloaded data for BTC/USDT with length 2.
+2025-11-13 11:30:45,935 - freqtrade.data.history.history_utils - INFO - ETH/USDT, 15m, futures: Requested start date 2024-10-14 11:30:42 earlier than local data start date 2025-10-24 10:15:00. Use `--prepend` to download data prior to 2025-10-24 10:15:00, or `--erase` to redownload all data.
+2025-11-13 11:30:45,938 - freqtrade.data.history.history_utils - INFO - Download history data for "ETH/USDT", 15m, futures and store in /freqtrade/user_data/data/bybit. From 2025-11-13T09:30:00 to 2025-11-13T11:30:42
+2025-11-13 11:30:46,222 - freqtrade.data.history.history_utils - INFO - Downloaded data for ETH/USDT with length 8.
+2025-11-13 11:30:46,272 - freqtrade.data.history.history_utils - INFO - ETH/USDT, 1h, futures: Requested start date 2024-10-14 11:30:42 earlier than local data start date 2025-10-24 11:00:00. Use `--prepend` to download data prior to 2025-10-24 11:00:00, or `--erase` to redownload all data.
+2025-11-13 11:30:46,274 - freqtrade.data.history.history_utils - INFO - Download history data for "ETH/USDT", 1h, futures and store in /freqtrade/user_data/data/bybit. From 2025-11-13T08:00:00 to 2025-11-13T11:30:42
+2025-11-13 11:30:46,561 - freqtrade.data.history.history_utils - INFO - Downloaded data for ETH/USDT with length 3.
+2025-11-13 11:30:46,600 - freqtrade.data.history.history_utils - INFO - ETH/USDT, 4h, futures: Requested start date 2024-10-14 11:30:42 earlier than local data start date 2025-10-24 12:00:00. Use `--prepend` to download data prior to 2025-10-24 12:00:00, or `--erase` to redownload all data.
+2025-11-13 11:30:46,602 - freqtrade.data.history.history_utils - INFO - Download history data for "ETH/USDT", 4h, futures and store in /freqtrade/user_data/data/bybit. From 2025-11-13T00:00:00 to 2025-11-13T11:30:42
+2025-11-13 11:30:46,900 - freqtrade.data.history.history_utils - INFO - Downloaded data for ETH/USDT with length 2.
+2025-11-13 11:30:46,936 - freqtrade.data.history.history_utils - INFO - ETH/USDT, 1d, futures: Requested start date 2024-10-14 11:30:42 earlier than local data start date 2025-09-30 00:00:00. Use `--prepend` to download data prior to 2025-09-30 00:00:00, or `--erase` to redownload all data.
+2025-11-13 11:30:46,940 - freqtrade.data.history.history_utils - INFO - Download history data for "ETH/USDT", 1d, futures and store in /freqtrade/user_data/data/bybit. From 2025-11-11T00:00:00 to 2025-11-13T11:30:42
+2025-11-13 11:30:47,225 - freqtrade.data.history.history_utils - INFO - Downloaded data for ETH/USDT with length 2.
+2025-11-13 11:30:47,243 - freqtrade.data.history.history_utils - INFO - Download history data for "ETH/USDT", 8h, funding_rate and store in /freqtrade/user_data/data/bybit. From 2024-10-14T11:30:42 to 2025-11-13T11:30:42
+2025-11-13 11:30:47,247 - freqtrade.exchange.exchange - WARNING - Async code raised an exception: OperationalException('Exchange Bybit does not support fetching historical candle (OHLCV) data. Message: bybit fetchFundingRateHistory() only support linear and inverse market')
+2025-11-13 11:30:47,249 - freqtrade.data.history.history_utils - ERROR - Failed to download history data for pair: "ETH/USDT", timeframe: 8h.
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2767, in _async_get_candle_history
+    data = await self._fetch_funding_rate_history(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2816, in _fetch_funding_rate_history
+    data = await self._api_async.fetch_funding_rate_history(pair, since=since_ms, limit=limit)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/async_support/bybit.py", line 2768, in fetch_funding_rate_history
+    raise NotSupported(self.id + ' fetchFundingRateHistory() only support linear and inverse market')
+ccxt.base.errors.NotSupported: bybit fetchFundingRateHistory() only support linear and inverse market
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/data/history/history_utils.py", line 276, in _download_pair_history
+    new_dataframe = exchange.get_historic_ohlcv(
+        pair=pair,
+    ...<8 lines>...
+        until_ms=until_ms if until_ms else None,
+    )
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2402, in get_historic_ohlcv
+    pair, _, _, data, _ = self.loop.run_until_complete(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._async_get_historic_ohlcv(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+        )
+        ^
+    )
+    ^
+  File "/usr/local/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2450, in _async_get_historic_ohlcv
+    raise res
+  File "/freqtrade/freqtrade/exchange/common.py", line 118, in wrapper
+    return await f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2787, in _async_get_candle_history
+    raise OperationalException(
+    ...<2 lines>...
+    ) from e
+freqtrade.exceptions.OperationalException: Exchange Bybit does not support fetching historical candle (OHLCV) data. Message: bybit fetchFundingRateHistory() only support linear and inverse market
+2025-11-13 11:30:47,284 - freqtrade.data.history.history_utils - INFO - ETH/USDT, 4h, mark: Requested start date 2024-10-14 11:30:42 earlier than local data start date 2025-10-24 12:00:00. Use `--prepend` to download data prior to 2025-10-24 12:00:00, or `--erase` to redownload all data.
+2025-11-13 11:30:47,286 - freqtrade.data.history.history_utils - INFO - Download history data for "ETH/USDT", 4h, mark and store in /freqtrade/user_data/data/bybit. From 2025-11-13T00:00:00 to 2025-11-13T11:30:42
+2025-11-13 11:30:47,576 - freqtrade.data.history.history_utils - INFO - Downloaded data for ETH/USDT with length 2.
+2025-11-13 11:30:47,604 - freqtrade.strategy.hyper - INFO - No params for buy found, using default values.
+2025-11-13 11:30:47,607 - freqtrade.strategy.hyper - INFO - Strategy Parameter(default): min_rsi = 30
+2025-11-13 11:30:47,608 - freqtrade.strategy.hyper - INFO - No params for sell found, using default values.
+2025-11-13 11:30:47,610 - freqtrade.strategy.hyper - INFO - Strategy Parameter(default): max_rsi = 70
+2025-11-13 11:30:47,611 - freqtrade.strategy.hyper - INFO - No params for protection found, using default values.
+2025-11-13 11:30:47,619 - freqtrade.resolvers.iresolver - INFO - Using resolved protection StoplossGuard from '/freqtrade/freqtrade/plugins/protections/stoploss_guard.py'...
+2025-11-13 11:30:47,620 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'running'}
+2025-11-13 11:30:47,622 - freqtrade.worker - INFO - Changing state to: RUNNING
+2025-11-13 11:30:47,647 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': '*Exchange:* `bybit`\n*Stake per trade:* `unlimited USDT`\n*Minimum ROI:* `{}`\n*Stoploss:* `-1`\n*Position adjustment:* `Off`\n*Timeframe:* `15m`\n*Strategy:* `HybridStrategy`'}
+2025-11-13 11:30:47,650 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': "Searching for USDT pairs to buy and sell based on [{'StaticPairList': 'StaticPairList'}]"}
+2025-11-13 11:30:47,652 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': 'Using Protections: \nStoplossGuard - Frequent Stoploss Guard, 2 stoplosses with profit < 0.00% within 1440 minutes.'}
+2025-11-13 11:30:47,693 - freqtrade.persistence.trade_model - INFO - Found open trade: Trade(id=2, pair=WIF/USDT:USDT, amount=352.00000000, is_short=True, leverage=1.0, open_rate=0.47080000, open_since=2025-11-13 06:45:03)
+2025-11-13 11:30:47,699 - freqtrade.freqtradebot - INFO - Updating 0 open orders.
+2025-11-13 11:30:51,608 - freqtrade.freqai.freqai_interface - WARNING - No model ready for WIF/USDT:USDT, returning null values to strategy.
+2025-11-13 11:30:51,634 - freqtrade.freqai.freqai_interface - INFO - Total time spent inferencing pairlist 1.52 seconds
+2025-11-13 11:30:52,916 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Starting training WIF/USDT:USDT --------------------
+2025-11-13 11:30:52,969 - freqtrade.freqai.data_kitchen - INFO - WIF/USDT:USDT: dropped 1686 training points due to NaNs in populated dataset 1925.
+2025-11-13 11:30:52,980 - freqtrade.freqai.data_kitchen - WARNING -  88 percent  of training data dropped due to NaNs, model may perform inconsistent with expectations. Verify %-adx-period_20_shift-2_WIF/USDTUSDT_1d
+2025-11-13 11:30:52,982 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Training on data from 2025-10-24 to 2025-11-13 --------------------
+2025-11-13 11:30:52,988 - datasieve.pipeline - INFO - VarianceThreshold will remove 1 features from the dataset.on transform. ['%-is_bullish_gen_ETH/USDT_1d']
+2025-11-13 11:30:53,096 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - Training model on 1009 features
+2025-11-13 11:30:53,098 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - Training model on 239 data points
+2025-11-13 11:30:53,155 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:30:54,764 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Done training WIF/USDT:USDT (1.85 secs) --------------------
+2025-11-13 11:30:54,790 - freqtrade.freqai.freqai_interface - INFO - Total time spent training pairlist 3.24 seconds
+2025-11-13 11:31:04,136 - freqtrade.wallets - INFO - Wallets synced.
+2025-11-13 11:31:52,268 - freqtrade.commands.trade_commands - INFO - worker found ... calling exit
+2025-11-13 11:31:52,270 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'process died'}
+2025-11-13 11:31:52,272 - freqtrade.freqtradebot - INFO - Cleaning up modules ...
+2025-11-13 11:31:52,280 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': warning, 'status': "1 open trades active.\n\nHandle these trades manually on Bybit, or '/start' the bot again and use '/stopentry' to handle open trades gracefully. \n"}
+2025-11-13 11:31:52,284 - freqtrade.freqai.freqai_interface - INFO - Stopping FreqAI
+2025-11-13 11:31:52,290 - freqtrade.freqai.freqai_interface - INFO - Waiting on Training iteration
+2025-11-13 11:31:52,963 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc modules ...
+2025-11-13 11:31:52,965 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc.apiserver ...
+2025-11-13 11:31:52,966 - freqtrade.rpc.api_server.webserver - INFO - Stopping API Server
+2025-11-13 11:31:53,059 - uvicorn.error - INFO - Shutting down
+2025-11-13 11:31:53,162 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-11-13 11:31:53,164 - uvicorn.error - INFO - Application shutdown complete.
+2025-11-13 11:31:53,165 - uvicorn.error - INFO - Finished server process [1]
+2025-11-13 11:31:53,167 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc.telegram ...
+2025-11-13 11:31:53,326 - telegram.ext.Application - INFO - Application is stopping. This might take a moment.
+2025-11-13 11:31:53,328 - telegram.ext.Application - INFO - Application.stop() complete
+2025-11-13 11:32:00,268 - freqtrade.exchange.exchange_ws - INFO - Resetting WS connections.
+2025-11-13 11:32:00,271 - freqtrade.exchange.exchange_ws - INFO - BTC/USDT, 1h, futures - Task finished - cancelled
+2025-11-13 11:32:00,272 - freqtrade.exchange.exchange_ws - INFO - ETH/USDT, 1d, futures - Task finished - cancelled
+2025-11-13 11:32:00,273 - freqtrade.exchange.exchange_ws - INFO - BTC/USDT, 15m, futures - Task finished - cancelled
+2025-11-13 11:32:00,274 - freqtrade.exchange.exchange_ws - INFO - WIF/USDT:USDT, 15m, futures - Task finished - cancelled
+2025-11-13 11:32:00,275 - freqtrade.exchange.exchange_ws - INFO - BTC/USDT, 4h, futures - Task finished - cancelled
+2025-11-13 11:32:00,276 - freqtrade.exchange.exchange_ws - INFO - ETH/USDT, 15m, futures - Task finished - cancelled
+2025-11-13 11:32:00,276 - freqtrade.exchange.exchange_ws - INFO - WIF/USDT:USDT, 1d, futures - Task finished - cancelled
+2025-11-13 11:32:00,278 - freqtrade.exchange.exchange_ws - INFO - WIF/USDT:USDT, 4h, futures - Task finished - cancelled
+2025-11-13 11:32:00,279 - freqtrade.exchange.exchange_ws - INFO - WIF/USDT:USDT, 1h, futures - Task finished - cancelled
+2025-11-13 11:32:00,280 - freqtrade.exchange.exchange_ws - INFO - BTC/USDT, 1d, futures - Task finished - cancelled
+2025-11-13 11:32:00,280 - freqtrade.exchange.exchange_ws - INFO - ETH/USDT, 1h, futures - Task finished - cancelled
+2025-11-13 11:32:00,282 - freqtrade.exchange.exchange_ws - INFO - ETH/USDT, 4h, futures - Task finished - cancelled
+2025-11-13 11:32:00,286 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:32:00,291 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:32:00,294 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:32:00,297 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:32:00,299 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:32:00,302 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:32:00,304 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:32:00,307 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:32:00,309 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:32:00,313 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:32:00,315 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:32:00,318 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:32:01,128 - freqtrade - INFO - SIGINT received, aborting ...
+2025-11-13 11:32:48,265 - freqtrade.loggers - INFO - Enabling colorized output.
+2025-11-13 11:32:48,266 - freqtrade.loggers - INFO - Logfile configured
+2025-11-13 11:32:48,266 - freqtrade.loggers - INFO - Verbosity set to 0
+2025-11-13 11:32:48,267 - freqtrade.configuration.configuration - INFO - Runmode set to live.
+2025-11-13 11:32:48,268 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2025-11-13 11:32:48,268 - freqtrade.configuration.configuration - WARNING - `force_entry_enable` RPC message enabled.
+2025-11-13 11:32:48,269 - freqtrade.configuration.configuration - INFO - Dry run is disabled
+2025-11-13 11:32:48,269 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/db.sqlite"
+2025-11-13 11:32:48,270 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 1 ...
+2025-11-13 11:32:48,295 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2025-11-13 11:32:48,300 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/bybit ...
+2025-11-13 11:32:48,301 - freqtrade.configuration.configuration - INFO - Using freqaimodel class name: XGBoostClassifier
+2025-11-13 11:32:48,305 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2025-11-13 11:32:48,330 - freqtrade.exchange.check_exchange - INFO - Exchange "bybit" is officially supported by the Freqtrade development team.
+2025-11-13 11:32:48,332 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2025-11-13 11:32:48,334 - freqtrade.exchange.exchange - INFO - Using CCXT 4.5.2
+2025-11-13 11:32:48,335 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-11-13 11:32:48,357 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-11-13 11:32:48,383 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-11-13 11:32:48,411 - freqtrade.exchange.exchange - INFO - Using Exchange "Bybit"
+2025-11-13 11:33:03,441 - freqtrade.misc - INFO - dumping json to "/freqtrade/user_data/data/bybit/futures/leverage_tiers_USDT.json"
+2025-11-13 11:33:04,104 - freqtrade.exchange.bybit - INFO - Bybit: Unified account. Assuming dedicated subaccount for this bot.
+2025-11-13 11:33:04,106 - freqtrade.resolvers.exchange_resolver - INFO - Using resolved exchange 'Bybit'...
+2025-11-13 11:33:04,165 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy HybridStrategy from '/freqtrade/user_data/strategies/strategy.py'...
+2025-11-13 11:33:04,167 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2025-11-13 11:33:04,169 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: USDT.
+2025-11-13 11:33:04,171 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: unlimited.
+2025-11-13 11:33:04,172 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2025-11-13 11:33:04,173 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 1.
+2025-11-13 11:33:04,174 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {}
+2025-11-13 11:33:04,175 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 15m
+2025-11-13 11:33:04,176 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -1
+2025-11-13 11:33:04,178 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2025-11-13 11:33:04,179 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2025-11-13 11:33:04,180 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2025-11-13 11:33:04,181 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: True
+2025-11-13 11:33:04,182 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2025-11-13 11:33:04,183 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'limit', 'exit': 'limit', 'stoploss': 'limit', 'stoploss_on_exchange': False, 'stoploss_on_exchange_interval': 60}
+2025-11-13 11:33:04,185 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2025-11-13 11:33:04,186 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: USDT
+2025-11-13 11:33:04,187 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: unlimited
+2025-11-13 11:33:04,188 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 0
+2025-11-13 11:33:04,189 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2025-11-13 11:33:04,191 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2025-11-13 11:33:04,192 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2025-11-13 11:33:04,193 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2025-11-13 11:33:04,194 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2025-11-13 11:33:04,195 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2025-11-13 11:33:04,196 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2025-11-13 11:33:04,197 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2025-11-13 11:33:04,198 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2025-11-13 11:33:04,199 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 1
+2025-11-13 11:33:04,201 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2025-11-13 11:33:04,638 - freqtrade.wallets - INFO - Wallets synced.
+2025-11-13 11:33:04,912 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.telegram ...
+2025-11-13 11:33:05,221 - freqtrade.rpc.telegram - INFO - using custom keyboard from config.json: [['/status table', '/reload_config'], ['/forcelong', '/forceshort', '/forceexit'], ['/stop', '/start', '/profit', '/logs']]
+2025-11-13 11:33:05,223 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.api_server
+2025-11-13 11:33:05,877 - freqtrade.rpc.api_server.webserver - INFO - Starting HTTP Server at 0.0.0.0:8080
+2025-11-13 11:33:05,878 - freqtrade.rpc.api_server.webserver - INFO - Starting Local Rest Server.
+2025-11-13 11:33:05,895 - freqtrade.rpc.telegram - INFO - rpc.telegram is listening for following commands: [['status'], ['profit'], ['balance'], ['start'], ['stop'], ['forceexit', 'forcesell', 'fx'], ['forcebuy', 'forcelong'], ['forceshort'], ['reload_trade'], ['trades'], ['delete'], ['cancel_open_order', 'coo'], ['performance'], ['buys', 'entries'], ['exits', 'sells'], ['mix_tags'], ['stats'], ['daily'], ['weekly'], ['monthly'], ['count'], ['locks'], ['delete_locks', 'unlock'], ['reload_conf', 'reload_config'], ['show_conf', 'show_config'], ['pause', 'stopbuy', 'stopentry'], ['whitelist'], ['blacklist'], ['bl_delete', 'blacklist_delete'], ['logs'], ['health'], ['help'], ['version'], ['marketdir'], ['order'], ['list_custom_data'], ['tg_info'], ['profit_long'], ['profit_short']]
+2025-11-13 11:33:05,931 - uvicorn.error - INFO - Started server process [1]
+2025-11-13 11:33:05,932 - uvicorn.error - INFO - Waiting for application startup.
+2025-11-13 11:33:05,933 - uvicorn.error - INFO - Application startup complete.
+2025-11-13 11:33:05,934 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2025-11-13 11:33:05,969 - freqtrade.resolvers.iresolver - INFO - Using resolved pairlist StaticPairList from '/freqtrade/freqtrade/plugins/pairlist/StaticPairList.py'...
+2025-11-13 11:33:05,973 - freqtrade.freqtradebot - INFO - Starting initial pairlist refresh
+2025-11-13 11:33:05,998 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['WIF/USDT:USDT']
+2025-11-13 11:33:06,000 - freqtrade.freqtradebot - INFO - Initial Pairlist refresh took 0.03s
+2025-11-13 11:33:06,078 - telegram.ext.Application - INFO - Application started
+2025-11-13 11:33:07,634 - freqtrade.resolvers.iresolver - WARNING - Could not import /freqtrade/user_data/freqaimodels/MyReinforcementLearner.py due to 'No module named 'torch''
+2025-11-13 11:33:07,636 - freqtrade.resolvers.iresolver - WARNING - Could not import /freqtrade/freqtrade/freqai/prediction_models/ReinforcementLearner_multiproc.py due to 'No module named 'sb3_contrib''
+2025-11-13 11:33:07,912 - freqtrade.resolvers.iresolver - INFO - Using resolved freqaimodel XGBoostClassifier from '/freqtrade/freqtrade/freqai/prediction_models/XGBoostClassifier.py'...
+2025-11-13 11:33:07,913 - freqtrade.freqai.data_drawer - INFO - Could not find existing datadrawer, starting from scratch
+2025-11-13 11:33:07,914 - freqtrade.freqai.data_drawer - INFO - Could not find existing historic_predictions, starting from scratch
+2025-11-13 11:33:07,914 - freqtrade.freqai.freqai_interface - INFO - Set fresh train queue from whitelist. Queue: ['WIF/USDT:USDT']
+2025-11-13 11:33:07,915 - freqtrade.strategy.interface - INFO - Downloading all training data for all pairs in whitelist and corr_pairlist, this may take a while if the data is not already on disk.
+2025-11-13 11:33:07,924 - freqtrade.freqai.utils - INFO - FreqAI auto-downloader using 30 startup candles.
+2025-11-13 11:33:07,953 - freqtrade.data.history.history_utils - INFO - Download history data for "WIF/USDT:USDT", 15m, futures and store in /freqtrade/user_data/data/bybit. From 2024-10-14T11:33:07 to 2025-11-13T11:33:07
+2025-11-13 11:33:12,107 - freqtrade.data.history.history_utils - INFO - Downloaded data for WIF/USDT:USDT with length 37919.
+2025-11-13 11:33:12,176 - freqtrade.data.history.history_utils - INFO - Download history data for "WIF/USDT:USDT", 1h, futures and store in /freqtrade/user_data/data/bybit. From 2024-10-14T11:33:07 to 2025-11-13T11:33:07
+2025-11-13 11:33:13,405 - freqtrade.data.history.history_utils - INFO - Downloaded data for WIF/USDT:USDT with length 9479.
+2025-11-13 11:33:13,439 - freqtrade.data.history.history_utils - INFO - Download history data for "WIF/USDT:USDT", 4h, futures and store in /freqtrade/user_data/data/bybit. From 2024-10-14T11:33:07 to 2025-11-13T11:33:07
+2025-11-13 11:33:13,921 - freqtrade.data.history.history_utils - INFO - Downloaded data for WIF/USDT:USDT with length 2369.
+2025-11-13 11:33:13,939 - freqtrade.data.history.history_utils - INFO - Download history data for "WIF/USDT:USDT", 1d, futures and store in /freqtrade/user_data/data/bybit. From 2024-10-14T11:33:07 to 2025-11-13T11:33:07
+2025-11-13 11:33:14,234 - freqtrade.data.history.history_utils - INFO - Downloaded data for WIF/USDT:USDT with length 394.
+2025-11-13 11:33:14,245 - freqtrade.data.history.history_utils - INFO - Download history data for "WIF/USDT:USDT", 8h, funding_rate and store in /freqtrade/user_data/data/bybit. From 2024-10-14T11:33:07 to 2025-11-13T11:33:07
+2025-11-13 11:33:15,055 - freqtrade.data.history.history_utils - INFO - Downloaded data for WIF/USDT:USDT with length 1199.
+2025-11-13 11:33:15,073 - freqtrade.data.history.history_utils - INFO - Download history data for "WIF/USDT:USDT", 4h, mark and store in /freqtrade/user_data/data/bybit. From 2024-10-14T11:33:07 to 2025-11-13T11:33:07
+2025-11-13 11:33:15,581 - freqtrade.data.history.history_utils - INFO - Downloaded data for WIF/USDT:USDT with length 2369.
+2025-11-13 11:33:15,598 - freqtrade.data.history.history_utils - INFO - Download history data for "BTC/USDT", 15m, futures and store in /freqtrade/user_data/data/bybit. From 2024-10-14T11:33:07 to 2025-11-13T11:33:07
+2025-11-13 11:33:19,740 - freqtrade.data.history.history_utils - INFO - Downloaded data for BTC/USDT with length 37882.
+2025-11-13 11:33:19,831 - freqtrade.data.history.history_utils - INFO - Download history data for "BTC/USDT", 1h, futures and store in /freqtrade/user_data/data/bybit. From 2024-10-14T11:33:07 to 2025-11-13T11:33:07
+2025-11-13 11:33:21,068 - freqtrade.data.history.history_utils - INFO - Downloaded data for BTC/USDT with length 9470.
+2025-11-13 11:33:21,097 - freqtrade.data.history.history_utils - INFO - Download history data for "BTC/USDT", 4h, futures and store in /freqtrade/user_data/data/bybit. From 2024-10-14T11:33:07 to 2025-11-13T11:33:07
+2025-11-13 11:33:21,592 - freqtrade.data.history.history_utils - INFO - Downloaded data for BTC/USDT with length 2367.
+2025-11-13 11:33:21,615 - freqtrade.data.history.history_utils - INFO - Download history data for "BTC/USDT", 1d, futures and store in /freqtrade/user_data/data/bybit. From 2024-10-14T11:33:07 to 2025-11-13T11:33:07
+2025-11-13 11:33:21,909 - freqtrade.data.history.history_utils - INFO - Downloaded data for BTC/USDT with length 394.
+2025-11-13 11:33:21,921 - freqtrade.data.history.history_utils - INFO - Download history data for "BTC/USDT", 8h, funding_rate and store in /freqtrade/user_data/data/bybit. From 2024-10-14T11:33:07 to 2025-11-13T11:33:07
+2025-11-13 11:33:21,927 - freqtrade.exchange.exchange - WARNING - Async code raised an exception: OperationalException('Exchange Bybit does not support fetching historical candle (OHLCV) data. Message: bybit fetchFundingRateHistory() only support linear and inverse market')
+2025-11-13 11:33:21,929 - freqtrade.data.history.history_utils - ERROR - Failed to download history data for pair: "BTC/USDT", timeframe: 8h.
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2767, in _async_get_candle_history
+    data = await self._fetch_funding_rate_history(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2816, in _fetch_funding_rate_history
+    data = await self._api_async.fetch_funding_rate_history(pair, since=since_ms, limit=limit)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/async_support/bybit.py", line 2768, in fetch_funding_rate_history
+    raise NotSupported(self.id + ' fetchFundingRateHistory() only support linear and inverse market')
+ccxt.base.errors.NotSupported: bybit fetchFundingRateHistory() only support linear and inverse market
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/data/history/history_utils.py", line 276, in _download_pair_history
+    new_dataframe = exchange.get_historic_ohlcv(
+        pair=pair,
+    ...<8 lines>...
+        until_ms=until_ms if until_ms else None,
+    )
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2402, in get_historic_ohlcv
+    pair, _, _, data, _ = self.loop.run_until_complete(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._async_get_historic_ohlcv(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+        )
+        ^
+    )
+    ^
+  File "/usr/local/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2450, in _async_get_historic_ohlcv
+    raise res
+  File "/freqtrade/freqtrade/exchange/common.py", line 118, in wrapper
+    return await f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2787, in _async_get_candle_history
+    raise OperationalException(
+    ...<2 lines>...
+    ) from e
+freqtrade.exceptions.OperationalException: Exchange Bybit does not support fetching historical candle (OHLCV) data. Message: bybit fetchFundingRateHistory() only support linear and inverse market
+2025-11-13 11:33:21,952 - freqtrade.data.history.history_utils - INFO - Download history data for "BTC/USDT", 4h, mark and store in /freqtrade/user_data/data/bybit. From 2024-10-14T11:33:07 to 2025-11-13T11:33:07
+2025-11-13 11:33:22,454 - freqtrade.data.history.history_utils - INFO - Downloaded data for BTC/USDT with length 2367.
+2025-11-13 11:33:22,471 - freqtrade.data.history.history_utils - INFO - Download history data for "ETH/USDT", 15m, futures and store in /freqtrade/user_data/data/bybit. From 2024-10-14T11:33:07 to 2025-11-13T11:33:07
+2025-11-13 11:33:26,615 - freqtrade.data.history.history_utils - INFO - Downloaded data for ETH/USDT with length 37882.
+2025-11-13 11:33:26,680 - freqtrade.data.history.history_utils - INFO - Download history data for "ETH/USDT", 1h, futures and store in /freqtrade/user_data/data/bybit. From 2024-10-14T11:33:07 to 2025-11-13T11:33:07
+2025-11-13 11:33:27,931 - freqtrade.data.history.history_utils - INFO - Downloaded data for ETH/USDT with length 9470.
+2025-11-13 11:33:27,964 - freqtrade.data.history.history_utils - INFO - Download history data for "ETH/USDT", 4h, futures and store in /freqtrade/user_data/data/bybit. From 2024-10-14T11:33:07 to 2025-11-13T11:33:07
+2025-11-13 11:33:28,583 - freqtrade.data.history.history_utils - INFO - Downloaded data for ETH/USDT with length 2367.
+2025-11-13 11:33:28,599 - freqtrade.data.history.history_utils - INFO - Download history data for "ETH/USDT", 1d, futures and store in /freqtrade/user_data/data/bybit. From 2024-10-14T11:33:07 to 2025-11-13T11:33:07
+2025-11-13 11:33:29,043 - freqtrade.data.history.history_utils - INFO - Downloaded data for ETH/USDT with length 394.
+2025-11-13 11:33:29,055 - freqtrade.data.history.history_utils - INFO - Download history data for "ETH/USDT", 8h, funding_rate and store in /freqtrade/user_data/data/bybit. From 2024-10-14T11:33:07 to 2025-11-13T11:33:07
+2025-11-13 11:33:29,064 - freqtrade.exchange.exchange - WARNING - Async code raised an exception: OperationalException('Exchange Bybit does not support fetching historical candle (OHLCV) data. Message: bybit fetchFundingRateHistory() only support linear and inverse market')
+2025-11-13 11:33:29,065 - freqtrade.data.history.history_utils - ERROR - Failed to download history data for pair: "ETH/USDT", timeframe: 8h.
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2767, in _async_get_candle_history
+    data = await self._fetch_funding_rate_history(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2816, in _fetch_funding_rate_history
+    data = await self._api_async.fetch_funding_rate_history(pair, since=since_ms, limit=limit)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/async_support/bybit.py", line 2768, in fetch_funding_rate_history
+    raise NotSupported(self.id + ' fetchFundingRateHistory() only support linear and inverse market')
+ccxt.base.errors.NotSupported: bybit fetchFundingRateHistory() only support linear and inverse market
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/data/history/history_utils.py", line 276, in _download_pair_history
+    new_dataframe = exchange.get_historic_ohlcv(
+        pair=pair,
+    ...<8 lines>...
+        until_ms=until_ms if until_ms else None,
+    )
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2402, in get_historic_ohlcv
+    pair, _, _, data, _ = self.loop.run_until_complete(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._async_get_historic_ohlcv(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+        )
+        ^
+    )
+    ^
+  File "/usr/local/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2450, in _async_get_historic_ohlcv
+    raise res
+  File "/freqtrade/freqtrade/exchange/common.py", line 118, in wrapper
+    return await f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2787, in _async_get_candle_history
+    raise OperationalException(
+    ...<2 lines>...
+    ) from e
+freqtrade.exceptions.OperationalException: Exchange Bybit does not support fetching historical candle (OHLCV) data. Message: bybit fetchFundingRateHistory() only support linear and inverse market
+2025-11-13 11:33:29,078 - freqtrade.data.history.history_utils - INFO - Download history data for "ETH/USDT", 4h, mark and store in /freqtrade/user_data/data/bybit. From 2024-10-14T11:33:07 to 2025-11-13T11:33:07
+2025-11-13 11:33:29,580 - freqtrade.data.history.history_utils - INFO - Downloaded data for ETH/USDT with length 2367.
+2025-11-13 11:33:29,602 - freqtrade.strategy.hyper - INFO - No params for buy found, using default values.
+2025-11-13 11:33:29,604 - freqtrade.strategy.hyper - INFO - Strategy Parameter(default): min_rsi = 30
+2025-11-13 11:33:29,605 - freqtrade.strategy.hyper - INFO - No params for sell found, using default values.
+2025-11-13 11:33:29,607 - freqtrade.strategy.hyper - INFO - Strategy Parameter(default): max_rsi = 70
+2025-11-13 11:33:29,608 - freqtrade.strategy.hyper - INFO - No params for protection found, using default values.
+2025-11-13 11:33:29,616 - freqtrade.resolvers.iresolver - INFO - Using resolved protection StoplossGuard from '/freqtrade/freqtrade/plugins/protections/stoploss_guard.py'...
+2025-11-13 11:33:29,617 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'running'}
+2025-11-13 11:33:29,619 - freqtrade.worker - INFO - Changing state to: RUNNING
+2025-11-13 11:33:29,643 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': '*Exchange:* `bybit`\n*Stake per trade:* `unlimited USDT`\n*Minimum ROI:* `{}`\n*Stoploss:* `-1`\n*Position adjustment:* `Off`\n*Timeframe:* `15m`\n*Strategy:* `HybridStrategy`'}
+2025-11-13 11:33:29,645 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': "Searching for USDT pairs to buy and sell based on [{'StaticPairList': 'StaticPairList'}]"}
+2025-11-13 11:33:29,653 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': 'Using Protections: \nStoplossGuard - Frequent Stoploss Guard, 2 stoplosses with profit < 0.00% within 1440 minutes.'}
+2025-11-13 11:33:29,692 - freqtrade.persistence.trade_model - INFO - Found open trade: Trade(id=2, pair=WIF/USDT:USDT, amount=352.00000000, is_short=True, leverage=1.0, open_rate=0.47080000, open_since=2025-11-13 06:45:03)
+2025-11-13 11:33:29,697 - freqtrade.freqtradebot - INFO - Updating 0 open orders.
+2025-11-13 11:33:34,070 - freqtrade.freqai.freqai_interface - WARNING - No model ready for WIF/USDT:USDT, returning null values to strategy.
+2025-11-13 11:33:34,093 - freqtrade.freqai.freqai_interface - INFO - Total time spent inferencing pairlist 1.92 seconds
+2025-11-13 11:33:35,155 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:33:45,489 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Starting training WIF/USDT:USDT --------------------
+2025-11-13 11:33:46,640 - freqtrade.freqai.data_kitchen - INFO - WIF/USDT:USDT: dropped 1532 training points due to NaNs in populated dataset 35039.
+2025-11-13 11:33:46,641 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Training on data from 2024-11-13 to 2025-11-13 --------------------
+2025-11-13 11:33:48,961 - datasieve.pipeline - INFO - SVM detected 908 data points as outliers.
+2025-11-13 11:33:48,968 - freqtrade.freqai.freqai_interface - ERROR - Training WIF/USDT:USDT raised exception MemoryError. Message: Unable to allocate 7.92 GiB for an array with shape (32599, 32599) and data type float64, skipping.
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/freqai/freqai_interface.py", line 251, in _start_scanning
+    self.extract_data_and_train_model(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        new_trained_timerange, pair, strategy, dk, data_load_timerange
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/freqtrade/freqtrade/freqai/freqai_interface.py", line 630, in extract_data_and_train_model
+    model = self.train(unfiltered_dataframe, pair, dk)
+  File "/freqtrade/freqtrade/freqai/base_models/BaseClassifierModel.py", line 59, in train
+    dk.feature_pipeline.fit_transform(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dd["train_features"], dd["train_labels"], dd["train_weights"]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/datasieve/pipeline.py", line 77, in fit_transform
+    X, y, sample_weight, feature_list = trans.fit_transform(
+                                        ~~~~~~~~~~~~~~~~~~~^
+        X,
+        ^^
+    ...<3 lines>...
+        **self.fitparams[name]
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/datasieve/transforms/base_transform.py", line 62, in fit_transform
+    self.fit(X, y, sample_weight, feature_list)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/datasieve/transforms/dissimilarity_index.py", line 35, in fit
+    pairwise = pairwise_distances(X)
+  File "/home/ftuser/.local/lib/python3.13/site-packages/sklearn/utils/_param_validation.py", line 218, in wrapper
+    return func(*args, **kwargs)
+  File "/home/ftuser/.local/lib/python3.13/site-packages/sklearn/metrics/pairwise.py", line 2476, in pairwise_distances
+    return _parallel_pairwise(X, Y, func, n_jobs, **kwds)
+  File "/home/ftuser/.local/lib/python3.13/site-packages/sklearn/metrics/pairwise.py", line 1964, in _parallel_pairwise
+    ret = np.empty((X.shape[0], Y.shape[0]), dtype=dtype, order="F")
+numpy._core._exceptions._ArrayMemoryError: Unable to allocate 7.92 GiB for an array with shape (32599, 32599) and data type float64
+2025-11-13 11:33:48,994 - freqtrade.freqai.freqai_interface - INFO - Total time spent training pairlist 15.09 seconds
+2025-11-13 11:34:07,810 - freqtrade.commands.trade_commands - INFO - worker found ... calling exit
+2025-11-13 11:34:07,827 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'process died'}
+2025-11-13 11:34:07,829 - freqtrade.freqtradebot - INFO - Cleaning up modules ...
+2025-11-13 11:34:07,839 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': warning, 'status': "1 open trades active.\n\nHandle these trades manually on Bybit, or '/start' the bot again and use '/stopentry' to handle open trades gracefully. \n"}
+2025-11-13 11:34:07,844 - freqtrade.freqai.freqai_interface - INFO - Stopping FreqAI
+2025-11-13 11:34:07,851 - freqtrade.freqai.freqai_interface - INFO - Waiting on Training iteration
+2025-11-13 11:34:09,120 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Starting training WIF/USDT:USDT --------------------
+2025-11-13 11:34:10,566 - freqtrade.freqai.data_kitchen - INFO - WIF/USDT:USDT: dropped 1532 training points due to NaNs in populated dataset 35039.
+2025-11-13 11:34:10,568 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Training on data from 2024-11-13 to 2025-11-13 --------------------
+2025-11-13 11:34:14,273 - datasieve.pipeline - INFO - SVM detected 908 data points as outliers.
+2025-11-13 11:34:14,511 - freqtrade.freqai.freqai_interface - ERROR - Training WIF/USDT:USDT raised exception MemoryError. Message: Unable to allocate 7.92 GiB for an array with shape (32599, 32599) and data type float64, skipping.
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/freqai/freqai_interface.py", line 251, in _start_scanning
+    self.extract_data_and_train_model(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        new_trained_timerange, pair, strategy, dk, data_load_timerange
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/freqtrade/freqtrade/freqai/freqai_interface.py", line 630, in extract_data_and_train_model
+    model = self.train(unfiltered_dataframe, pair, dk)
+  File "/freqtrade/freqtrade/freqai/base_models/BaseClassifierModel.py", line 59, in train
+    dk.feature_pipeline.fit_transform(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dd["train_features"], dd["train_labels"], dd["train_weights"]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/datasieve/pipeline.py", line 77, in fit_transform
+    X, y, sample_weight, feature_list = trans.fit_transform(
+                                        ~~~~~~~~~~~~~~~~~~~^
+        X,
+        ^^
+    ...<3 lines>...
+        **self.fitparams[name]
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/datasieve/transforms/base_transform.py", line 62, in fit_transform
+    self.fit(X, y, sample_weight, feature_list)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/datasieve/transforms/dissimilarity_index.py", line 35, in fit
+    pairwise = pairwise_distances(X)
+  File "/home/ftuser/.local/lib/python3.13/site-packages/sklearn/utils/_param_validation.py", line 218, in wrapper
+    return func(*args, **kwargs)
+  File "/home/ftuser/.local/lib/python3.13/site-packages/sklearn/metrics/pairwise.py", line 2476, in pairwise_distances
+    return _parallel_pairwise(X, Y, func, n_jobs, **kwds)
+  File "/home/ftuser/.local/lib/python3.13/site-packages/sklearn/metrics/pairwise.py", line 1964, in _parallel_pairwise
+    ret = np.empty((X.shape[0], Y.shape[0]), dtype=dtype, order="F")
+numpy._core._exceptions._ArrayMemoryError: Unable to allocate 7.92 GiB for an array with shape (32599, 32599) and data type float64
+2025-11-13 11:34:14,660 - freqtrade.freqai.freqai_interface - INFO - Total time spent training pairlist 24.66 seconds
+2025-11-13 11:34:14,669 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc modules ...
+2025-11-13 11:34:14,670 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc.apiserver ...
+2025-11-13 11:34:14,673 - freqtrade.rpc.api_server.webserver - INFO - Stopping API Server
+2025-11-13 11:34:14,747 - uvicorn.error - INFO - Shutting down
+2025-11-13 11:34:14,850 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-11-13 11:34:14,853 - uvicorn.error - INFO - Application shutdown complete.
+2025-11-13 11:34:14,854 - uvicorn.error - INFO - Finished server process [1]
+2025-11-13 11:34:14,856 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc.telegram ...
+2025-11-13 11:34:14,983 - telegram.ext.Application - INFO - Application is stopping. This might take a moment.
+2025-11-13 11:34:14,985 - telegram.ext.Application - INFO - Application.stop() complete
+2025-11-13 11:34:16,147 - freqtrade.exchange.exchange_ws - INFO - Resetting WS connections.
+2025-11-13 11:34:16,150 - freqtrade.exchange.exchange_ws - INFO - ETH/USDT, 4h, futures - Task finished - cancelled
+2025-11-13 11:34:16,152 - freqtrade.exchange.exchange_ws - INFO - ETH/USDT, 1d, futures - Task finished - cancelled
+2025-11-13 11:34:16,153 - freqtrade.exchange.exchange_ws - INFO - WIF/USDT:USDT, 15m, futures - Task finished - cancelled
+2025-11-13 11:34:16,155 - freqtrade.exchange.exchange_ws - INFO - ETH/USDT, 1h, futures - Task finished - cancelled
+2025-11-13 11:34:16,156 - freqtrade.exchange.exchange_ws - INFO - WIF/USDT:USDT, 1h, futures - Task finished - cancelled
+2025-11-13 11:34:16,158 - freqtrade.exchange.exchange_ws - INFO - BTC/USDT, 1d, futures - Task finished - cancelled
+2025-11-13 11:34:16,159 - freqtrade.exchange.exchange_ws - INFO - ETH/USDT, 15m, futures - Task finished - cancelled
+2025-11-13 11:34:16,161 - freqtrade.exchange.exchange_ws - INFO - BTC/USDT, 4h, futures - Task finished - cancelled
+2025-11-13 11:34:16,162 - freqtrade.exchange.exchange_ws - INFO - BTC/USDT, 15m, futures - Task finished - cancelled
+2025-11-13 11:34:16,164 - freqtrade.exchange.exchange_ws - INFO - BTC/USDT, 1h, futures - Task finished - cancelled
+2025-11-13 11:34:16,165 - freqtrade.exchange.exchange_ws - INFO - WIF/USDT:USDT, 1d, futures - Task finished - cancelled
+2025-11-13 11:34:16,167 - freqtrade.exchange.exchange_ws - INFO - WIF/USDT:USDT, 4h, futures - Task finished - cancelled
+2025-11-13 11:34:16,176 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:34:16,185 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:34:16,188 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:34:16,190 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:34:16,192 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:34:16,194 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:34:16,196 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:34:16,198 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:34:16,200 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:34:16,202 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:34:16,205 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:34:16,208 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:34:17,012 - freqtrade - INFO - SIGINT received, aborting ...
+2025-11-13 11:35:59,480 - freqtrade.loggers - INFO - Enabling colorized output.
+2025-11-13 11:35:59,482 - freqtrade.loggers - INFO - Logfile configured
+2025-11-13 11:35:59,483 - freqtrade.loggers - INFO - Verbosity set to 0
+2025-11-13 11:35:59,485 - freqtrade.configuration.configuration - INFO - Runmode set to live.
+2025-11-13 11:35:59,486 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2025-11-13 11:35:59,488 - freqtrade.configuration.configuration - WARNING - `force_entry_enable` RPC message enabled.
+2025-11-13 11:35:59,489 - freqtrade.configuration.configuration - INFO - Dry run is disabled
+2025-11-13 11:35:59,490 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/db.sqlite"
+2025-11-13 11:35:59,491 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 1 ...
+2025-11-13 11:35:59,619 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2025-11-13 11:35:59,622 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/bybit ...
+2025-11-13 11:35:59,623 - freqtrade.configuration.configuration - INFO - Using freqaimodel class name: XGBoostClassifier
+2025-11-13 11:35:59,628 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2025-11-13 11:35:59,655 - freqtrade.exchange.check_exchange - INFO - Exchange "bybit" is officially supported by the Freqtrade development team.
+2025-11-13 11:35:59,656 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2025-11-13 11:35:59,659 - freqtrade.exchange.exchange - INFO - Using CCXT 4.5.2
+2025-11-13 11:35:59,660 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-11-13 11:35:59,683 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-11-13 11:35:59,710 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-11-13 11:35:59,738 - freqtrade.exchange.exchange - INFO - Using Exchange "Bybit"
+2025-11-13 11:36:15,789 - freqtrade.misc - INFO - dumping json to "/freqtrade/user_data/data/bybit/futures/leverage_tiers_USDT.json"
+2025-11-13 11:36:16,457 - freqtrade.exchange.bybit - INFO - Bybit: Unified account. Assuming dedicated subaccount for this bot.
+2025-11-13 11:36:16,459 - freqtrade.resolvers.exchange_resolver - INFO - Using resolved exchange 'Bybit'...
+2025-11-13 11:36:16,551 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy HybridStrategy from '/freqtrade/user_data/strategies/strategy.py'...
+2025-11-13 11:36:16,553 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2025-11-13 11:36:16,555 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: USDT.
+2025-11-13 11:36:16,557 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: unlimited.
+2025-11-13 11:36:16,559 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2025-11-13 11:36:16,562 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 1.
+2025-11-13 11:36:16,563 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {}
+2025-11-13 11:36:16,565 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 15m
+2025-11-13 11:36:16,566 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -1
+2025-11-13 11:36:16,567 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2025-11-13 11:36:16,568 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2025-11-13 11:36:16,569 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2025-11-13 11:36:16,571 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: True
+2025-11-13 11:36:16,572 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2025-11-13 11:36:16,573 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'limit', 'exit': 'limit', 'stoploss': 'limit', 'stoploss_on_exchange': False, 'stoploss_on_exchange_interval': 60}
+2025-11-13 11:36:16,575 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2025-11-13 11:36:16,576 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: USDT
+2025-11-13 11:36:16,577 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: unlimited
+2025-11-13 11:36:16,579 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 0
+2025-11-13 11:36:16,580 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2025-11-13 11:36:16,581 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2025-11-13 11:36:16,582 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2025-11-13 11:36:16,584 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2025-11-13 11:36:16,585 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2025-11-13 11:36:16,586 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2025-11-13 11:36:16,587 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2025-11-13 11:36:16,588 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2025-11-13 11:36:16,589 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2025-11-13 11:36:16,590 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 1
+2025-11-13 11:36:16,592 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2025-11-13 11:36:17,065 - freqtrade.wallets - INFO - Wallets synced.
+2025-11-13 11:36:17,318 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.telegram ...
+2025-11-13 11:36:18,171 - freqtrade.rpc.telegram - INFO - using custom keyboard from config.json: [['/status table', '/reload_config'], ['/forcelong', '/forceshort', '/forceexit'], ['/stop', '/start', '/profit', '/logs']]
+2025-11-13 11:36:18,174 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.api_server
+2025-11-13 11:36:18,969 - freqtrade.rpc.api_server.webserver - INFO - Starting HTTP Server at 0.0.0.0:8080
+2025-11-13 11:36:18,971 - freqtrade.rpc.api_server.webserver - INFO - Starting Local Rest Server.
+2025-11-13 11:36:18,980 - freqtrade.rpc.telegram - INFO - rpc.telegram is listening for following commands: [['status'], ['profit'], ['balance'], ['start'], ['stop'], ['forceexit', 'forcesell', 'fx'], ['forcebuy', 'forcelong'], ['forceshort'], ['reload_trade'], ['trades'], ['delete'], ['cancel_open_order', 'coo'], ['performance'], ['buys', 'entries'], ['exits', 'sells'], ['mix_tags'], ['stats'], ['daily'], ['weekly'], ['monthly'], ['count'], ['locks'], ['delete_locks', 'unlock'], ['reload_conf', 'reload_config'], ['show_conf', 'show_config'], ['pause', 'stopbuy', 'stopentry'], ['whitelist'], ['blacklist'], ['bl_delete', 'blacklist_delete'], ['logs'], ['health'], ['help'], ['version'], ['marketdir'], ['order'], ['list_custom_data'], ['tg_info'], ['profit_long'], ['profit_short']]
+2025-11-13 11:36:19,070 - uvicorn.error - INFO - Started server process [1]
+2025-11-13 11:36:19,072 - uvicorn.error - INFO - Waiting for application startup.
+2025-11-13 11:36:19,074 - uvicorn.error - INFO - Application startup complete.
+2025-11-13 11:36:19,076 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2025-11-13 11:36:19,120 - freqtrade.resolvers.iresolver - INFO - Using resolved pairlist StaticPairList from '/freqtrade/freqtrade/plugins/pairlist/StaticPairList.py'...
+2025-11-13 11:36:19,122 - freqtrade.freqtradebot - INFO - Starting initial pairlist refresh
+2025-11-13 11:36:19,148 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['WIF/USDT:USDT']
+2025-11-13 11:36:19,154 - telegram.ext.Application - INFO - Application started
+2025-11-13 11:36:19,156 - freqtrade.freqtradebot - INFO - Initial Pairlist refresh took 0.03s
+2025-11-13 11:36:23,562 - freqtrade.resolvers.iresolver - WARNING - Could not import /freqtrade/user_data/freqaimodels/MyReinforcementLearner.py due to 'No module named 'torch''
+2025-11-13 11:36:23,568 - freqtrade.resolvers.iresolver - WARNING - Could not import /freqtrade/freqtrade/freqai/prediction_models/ReinforcementLearner_multiproc.py due to 'No module named 'sb3_contrib''
+2025-11-13 11:36:24,631 - freqtrade.resolvers.iresolver - INFO - Using resolved freqaimodel XGBoostClassifier from '/freqtrade/freqtrade/freqai/prediction_models/XGBoostClassifier.py'...
+2025-11-13 11:36:24,634 - freqtrade.freqai.data_drawer - INFO - Could not find existing datadrawer, starting from scratch
+2025-11-13 11:36:24,635 - freqtrade.freqai.data_drawer - INFO - Could not find existing historic_predictions, starting from scratch
+2025-11-13 11:36:24,636 - freqtrade.freqai.freqai_interface - INFO - Set fresh train queue from whitelist. Queue: ['WIF/USDT:USDT']
+2025-11-13 11:36:24,638 - freqtrade.strategy.interface - INFO - Downloading all training data for all pairs in whitelist and corr_pairlist, this may take a while if the data is not already on disk.
+2025-11-13 11:36:24,652 - freqtrade.freqai.utils - INFO - FreqAI auto-downloader using 30 startup candles.
+2025-11-13 11:36:24,774 - freqtrade.data.history.history_utils - INFO - Download history data for "WIF/USDT:USDT", 15m, futures and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:36:24 to 2025-11-13T11:36:24
+2025-11-13 11:36:26,553 - freqtrade.data.history.history_utils - INFO - Downloaded data for WIF/USDT:USDT with length 14399.
+2025-11-13 11:36:26,666 - freqtrade.data.history.history_utils - INFO - Download history data for "WIF/USDT:USDT", 1h, futures and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:36:24 to 2025-11-13T11:36:24
+2025-11-13 11:36:27,464 - freqtrade.data.history.history_utils - INFO - Downloaded data for WIF/USDT:USDT with length 3599.
+2025-11-13 11:36:27,490 - freqtrade.data.history.history_utils - INFO - Download history data for "WIF/USDT:USDT", 4h, futures and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:36:24 to 2025-11-13T11:36:24
+2025-11-13 11:36:27,798 - freqtrade.data.history.history_utils - INFO - Downloaded data for WIF/USDT:USDT with length 899.
+2025-11-13 11:36:27,815 - freqtrade.data.history.history_utils - INFO - Download history data for "WIF/USDT:USDT", 1d, futures and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:36:24 to 2025-11-13T11:36:24
+2025-11-13 11:36:28,102 - freqtrade.data.history.history_utils - INFO - Downloaded data for WIF/USDT:USDT with length 149.
+2025-11-13 11:36:28,117 - freqtrade.data.history.history_utils - INFO - Download history data for "WIF/USDT:USDT", 8h, funding_rate and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:36:24 to 2025-11-13T11:36:24
+2025-11-13 11:36:28,666 - freqtrade.data.history.history_utils - INFO - Downloaded data for WIF/USDT:USDT with length 499.
+2025-11-13 11:36:28,676 - freqtrade.data.history.history_utils - INFO - Download history data for "WIF/USDT:USDT", 4h, mark and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:36:24 to 2025-11-13T11:36:24
+2025-11-13 11:36:28,982 - freqtrade.data.history.history_utils - INFO - Downloaded data for WIF/USDT:USDT with length 899.
+2025-11-13 11:36:29,001 - freqtrade.data.history.history_utils - INFO - Download history data for "BTC/USDT", 15m, futures and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:36:24 to 2025-11-13T11:36:24
+2025-11-13 11:36:30,746 - freqtrade.data.history.history_utils - INFO - Downloaded data for BTC/USDT with length 14385.
+2025-11-13 11:36:30,789 - freqtrade.data.history.history_utils - INFO - Download history data for "BTC/USDT", 1h, futures and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:36:24 to 2025-11-13T11:36:24
+2025-11-13 11:36:31,903 - freqtrade.data.history.history_utils - INFO - Downloaded data for BTC/USDT with length 3596.
+2025-11-13 11:36:31,927 - freqtrade.data.history.history_utils - INFO - Download history data for "BTC/USDT", 4h, futures and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:36:24 to 2025-11-13T11:36:24
+2025-11-13 11:36:32,236 - freqtrade.data.history.history_utils - INFO - Downloaded data for BTC/USDT with length 899.
+2025-11-13 11:36:32,251 - freqtrade.data.history.history_utils - INFO - Download history data for "BTC/USDT", 1d, futures and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:36:24 to 2025-11-13T11:36:24
+2025-11-13 11:36:32,542 - freqtrade.data.history.history_utils - INFO - Downloaded data for BTC/USDT with length 149.
+2025-11-13 11:36:32,556 - freqtrade.data.history.history_utils - INFO - Download history data for "BTC/USDT", 8h, funding_rate and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:36:24 to 2025-11-13T11:36:24
+2025-11-13 11:36:32,560 - freqtrade.exchange.exchange - WARNING - Async code raised an exception: OperationalException('Exchange Bybit does not support fetching historical candle (OHLCV) data. Message: bybit fetchFundingRateHistory() only support linear and inverse market')
+2025-11-13 11:36:32,561 - freqtrade.data.history.history_utils - ERROR - Failed to download history data for pair: "BTC/USDT", timeframe: 8h.
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2767, in _async_get_candle_history
+    data = await self._fetch_funding_rate_history(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2816, in _fetch_funding_rate_history
+    data = await self._api_async.fetch_funding_rate_history(pair, since=since_ms, limit=limit)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/async_support/bybit.py", line 2768, in fetch_funding_rate_history
+    raise NotSupported(self.id + ' fetchFundingRateHistory() only support linear and inverse market')
+ccxt.base.errors.NotSupported: bybit fetchFundingRateHistory() only support linear and inverse market
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/data/history/history_utils.py", line 276, in _download_pair_history
+    new_dataframe = exchange.get_historic_ohlcv(
+        pair=pair,
+    ...<8 lines>...
+        until_ms=until_ms if until_ms else None,
+    )
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2402, in get_historic_ohlcv
+    pair, _, _, data, _ = self.loop.run_until_complete(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._async_get_historic_ohlcv(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+        )
+        ^
+    )
+    ^
+  File "/usr/local/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2450, in _async_get_historic_ohlcv
+    raise res
+  File "/freqtrade/freqtrade/exchange/common.py", line 118, in wrapper
+    return await f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2787, in _async_get_candle_history
+    raise OperationalException(
+    ...<2 lines>...
+    ) from e
+freqtrade.exceptions.OperationalException: Exchange Bybit does not support fetching historical candle (OHLCV) data. Message: bybit fetchFundingRateHistory() only support linear and inverse market
+2025-11-13 11:36:32,590 - freqtrade.data.history.history_utils - INFO - Download history data for "BTC/USDT", 4h, mark and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:36:24 to 2025-11-13T11:36:24
+2025-11-13 11:36:32,903 - freqtrade.data.history.history_utils - INFO - Downloaded data for BTC/USDT with length 899.
+2025-11-13 11:36:32,919 - freqtrade.data.history.history_utils - INFO - Download history data for "ETH/USDT", 15m, futures and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:36:24 to 2025-11-13T11:36:24
+2025-11-13 11:36:34,676 - freqtrade.data.history.history_utils - INFO - Downloaded data for ETH/USDT with length 14385.
+2025-11-13 11:36:34,717 - freqtrade.data.history.history_utils - INFO - Download history data for "ETH/USDT", 1h, futures and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:36:24 to 2025-11-13T11:36:24
+2025-11-13 11:36:35,529 - freqtrade.data.history.history_utils - INFO - Downloaded data for ETH/USDT with length 3596.
+2025-11-13 11:36:35,551 - freqtrade.data.history.history_utils - INFO - Download history data for "ETH/USDT", 4h, futures and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:36:24 to 2025-11-13T11:36:24
+2025-11-13 11:36:35,863 - freqtrade.data.history.history_utils - INFO - Downloaded data for ETH/USDT with length 899.
+2025-11-13 11:36:35,881 - freqtrade.data.history.history_utils - INFO - Download history data for "ETH/USDT", 1d, futures and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:36:24 to 2025-11-13T11:36:24
+2025-11-13 11:36:36,173 - freqtrade.data.history.history_utils - INFO - Downloaded data for ETH/USDT with length 149.
+2025-11-13 11:36:36,187 - freqtrade.data.history.history_utils - INFO - Download history data for "ETH/USDT", 8h, funding_rate and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:36:24 to 2025-11-13T11:36:24
+2025-11-13 11:36:36,190 - freqtrade.exchange.exchange - WARNING - Async code raised an exception: OperationalException('Exchange Bybit does not support fetching historical candle (OHLCV) data. Message: bybit fetchFundingRateHistory() only support linear and inverse market')
+2025-11-13 11:36:36,192 - freqtrade.data.history.history_utils - ERROR - Failed to download history data for pair: "ETH/USDT", timeframe: 8h.
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2767, in _async_get_candle_history
+    data = await self._fetch_funding_rate_history(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2816, in _fetch_funding_rate_history
+    data = await self._api_async.fetch_funding_rate_history(pair, since=since_ms, limit=limit)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/async_support/bybit.py", line 2768, in fetch_funding_rate_history
+    raise NotSupported(self.id + ' fetchFundingRateHistory() only support linear and inverse market')
+ccxt.base.errors.NotSupported: bybit fetchFundingRateHistory() only support linear and inverse market
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/data/history/history_utils.py", line 276, in _download_pair_history
+    new_dataframe = exchange.get_historic_ohlcv(
+        pair=pair,
+    ...<8 lines>...
+        until_ms=until_ms if until_ms else None,
+    )
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2402, in get_historic_ohlcv
+    pair, _, _, data, _ = self.loop.run_until_complete(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._async_get_historic_ohlcv(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+        )
+        ^
+    )
+    ^
+  File "/usr/local/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2450, in _async_get_historic_ohlcv
+    raise res
+  File "/freqtrade/freqtrade/exchange/common.py", line 118, in wrapper
+    return await f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2787, in _async_get_candle_history
+    raise OperationalException(
+    ...<2 lines>...
+    ) from e
+freqtrade.exceptions.OperationalException: Exchange Bybit does not support fetching historical candle (OHLCV) data. Message: bybit fetchFundingRateHistory() only support linear and inverse market
+2025-11-13 11:36:36,204 - freqtrade.data.history.history_utils - INFO - Download history data for "ETH/USDT", 4h, mark and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:36:24 to 2025-11-13T11:36:24
+2025-11-13 11:36:36,512 - freqtrade.data.history.history_utils - INFO - Downloaded data for ETH/USDT with length 899.
+2025-11-13 11:36:36,535 - freqtrade.strategy.hyper - INFO - No params for buy found, using default values.
+2025-11-13 11:36:36,538 - freqtrade.strategy.hyper - INFO - Strategy Parameter(default): min_rsi = 30
+2025-11-13 11:36:36,539 - freqtrade.strategy.hyper - INFO - No params for sell found, using default values.
+2025-11-13 11:36:36,541 - freqtrade.strategy.hyper - INFO - Strategy Parameter(default): max_rsi = 70
+2025-11-13 11:36:36,542 - freqtrade.strategy.hyper - INFO - No params for protection found, using default values.
+2025-11-13 11:36:36,551 - freqtrade.resolvers.iresolver - INFO - Using resolved protection StoplossGuard from '/freqtrade/freqtrade/plugins/protections/stoploss_guard.py'...
+2025-11-13 11:36:36,553 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'running'}
+2025-11-13 11:36:36,558 - freqtrade.worker - INFO - Changing state to: RUNNING
+2025-11-13 11:36:36,580 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': '*Exchange:* `bybit`\n*Stake per trade:* `unlimited USDT`\n*Minimum ROI:* `{}`\n*Stoploss:* `-1`\n*Position adjustment:* `Off`\n*Timeframe:* `15m`\n*Strategy:* `HybridStrategy`'}
+2025-11-13 11:36:36,585 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': "Searching for USDT pairs to buy and sell based on [{'StaticPairList': 'StaticPairList'}]"}
+2025-11-13 11:36:36,588 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': 'Using Protections: \nStoplossGuard - Frequent Stoploss Guard, 2 stoplosses with profit < 0.00% within 1440 minutes.'}
+2025-11-13 11:36:36,631 - freqtrade.persistence.trade_model - INFO - Found open trade: Trade(id=2, pair=WIF/USDT:USDT, amount=352.00000000, is_short=True, leverage=1.0, open_rate=0.47080000, open_since=2025-11-13 06:45:03)
+2025-11-13 11:36:36,638 - freqtrade.freqtradebot - INFO - Updating 0 open orders.
+2025-11-13 11:36:40,859 - freqtrade.freqai.freqai_interface - WARNING - No model ready for WIF/USDT:USDT, returning null values to strategy.
+2025-11-13 11:36:40,876 - freqtrade.freqai.freqai_interface - INFO - Total time spent inferencing pairlist 1.69 seconds
+2025-11-13 11:36:42,270 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:36:45,437 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Starting training WIF/USDT:USDT --------------------
+2025-11-13 11:36:45,753 - freqtrade.freqai.data_kitchen - INFO - WIF/USDT:USDT: dropped 1266 training points due to NaNs in populated dataset 11519.
+2025-11-13 11:36:45,790 - freqtrade.freqai.data_kitchen - WARNING -  11 percent  of training data dropped due to NaNs, model may perform inconsistent with expectations. Verify %-adx-period_20_shift-2_WIF/USDTUSDT_1d
+2025-11-13 11:36:45,792 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Training on data from 2025-07-16 to 2025-11-13 --------------------
+2025-11-13 11:36:46,525 - datasieve.pipeline - INFO - SVM detected 41 data points as outliers.
+2025-11-13 11:37:00,984 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - Training model on 1010 features
+2025-11-13 11:37:00,990 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - Training model on 10212 data points
+2025-11-13 11:37:42,284 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:38:42,292 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:39:04,442 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Done training WIF/USDT:USDT (139.00 secs) --------------------
+2025-11-13 11:39:04,974 - freqtrade.freqai.freqai_interface - INFO - Total time spent training pairlist 144.11 seconds
+2025-11-13 11:39:42,301 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:40:42,313 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:41:09,796 - freqtrade.commands.trade_commands - INFO - worker found ... calling exit
+2025-11-13 11:41:09,799 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'process died'}
+2025-11-13 11:41:09,801 - freqtrade.freqtradebot - INFO - Cleaning up modules ...
+2025-11-13 11:41:09,810 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': warning, 'status': "1 open trades active.\n\nHandle these trades manually on Bybit, or '/start' the bot again and use '/stopentry' to handle open trades gracefully. \n"}
+2025-11-13 11:41:09,812 - freqtrade.freqai.freqai_interface - INFO - Stopping FreqAI
+2025-11-13 11:41:09,819 - freqtrade.freqai.freqai_interface - INFO - Waiting on Training iteration
+2025-11-13 11:41:10,399 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc modules ...
+2025-11-13 11:41:10,400 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc.apiserver ...
+2025-11-13 11:41:10,402 - freqtrade.rpc.api_server.webserver - INFO - Stopping API Server
+2025-11-13 11:41:10,478 - uvicorn.error - INFO - Shutting down
+2025-11-13 11:41:10,581 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-11-13 11:41:10,584 - uvicorn.error - INFO - Application shutdown complete.
+2025-11-13 11:41:10,585 - uvicorn.error - INFO - Finished server process [1]
+2025-11-13 11:41:10,587 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc.telegram ...
+2025-11-13 11:41:10,743 - telegram.ext.Application - INFO - Application is stopping. This might take a moment.
+2025-11-13 11:41:10,745 - telegram.ext.Application - INFO - Application.stop() complete
+2025-11-13 11:41:19,398 - freqtrade.exchange.exchange_ws - INFO - Resetting WS connections.
+2025-11-13 11:41:19,400 - freqtrade.exchange.exchange_ws - INFO - WIF/USDT:USDT, 4h, futures - Task finished - cancelled
+2025-11-13 11:41:19,402 - freqtrade.exchange.exchange_ws - INFO - ETH/USDT, 1d, futures - Task finished - cancelled
+2025-11-13 11:41:19,403 - freqtrade.exchange.exchange_ws - INFO - BTC/USDT, 4h, futures - Task finished - cancelled
+2025-11-13 11:41:19,404 - freqtrade.exchange.exchange_ws - INFO - ETH/USDT, 15m, futures - Task finished - cancelled
+2025-11-13 11:41:19,406 - freqtrade.exchange.exchange_ws - INFO - BTC/USDT, 1d, futures - Task finished - cancelled
+2025-11-13 11:41:19,407 - freqtrade.exchange.exchange_ws - INFO - ETH/USDT, 1h, futures - Task finished - cancelled
+2025-11-13 11:41:19,409 - freqtrade.exchange.exchange_ws - INFO - BTC/USDT, 15m, futures - Task finished - cancelled
+2025-11-13 11:41:19,410 - freqtrade.exchange.exchange_ws - INFO - WIF/USDT:USDT, 15m, futures - Task finished - cancelled
+2025-11-13 11:41:19,412 - freqtrade.exchange.exchange_ws - INFO - WIF/USDT:USDT, 1h, futures - Task finished - cancelled
+2025-11-13 11:41:19,413 - freqtrade.exchange.exchange_ws - INFO - ETH/USDT, 4h, futures - Task finished - cancelled
+2025-11-13 11:41:19,414 - freqtrade.exchange.exchange_ws - INFO - WIF/USDT:USDT, 1d, futures - Task finished - cancelled
+2025-11-13 11:41:19,416 - freqtrade.exchange.exchange_ws - INFO - BTC/USDT, 1h, futures - Task finished - cancelled
+2025-11-13 11:41:19,422 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:41:19,433 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:41:19,437 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:41:19,441 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:41:19,445 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:41:19,448 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:41:19,452 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:41:19,456 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:41:19,459 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:41:19,463 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:41:19,467 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:41:19,471 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-11-13 11:41:58,639 - freqtrade.loggers - INFO - Enabling colorized output.
+2025-11-13 11:41:58,639 - freqtrade.loggers - INFO - Logfile configured
+2025-11-13 11:41:58,640 - freqtrade.loggers - INFO - Verbosity set to 0
+2025-11-13 11:41:58,641 - freqtrade.configuration.configuration - INFO - Runmode set to live.
+2025-11-13 11:41:58,642 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2025-11-13 11:41:58,642 - freqtrade.configuration.configuration - WARNING - `force_entry_enable` RPC message enabled.
+2025-11-13 11:41:58,643 - freqtrade.configuration.configuration - INFO - Dry run is disabled
+2025-11-13 11:41:58,643 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/db.sqlite"
+2025-11-13 11:41:58,644 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 1 ...
+2025-11-13 11:41:58,672 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2025-11-13 11:41:58,674 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/bybit ...
+2025-11-13 11:41:58,675 - freqtrade.configuration.configuration - INFO - Using freqaimodel class name: XGBoostClassifier
+2025-11-13 11:41:58,678 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2025-11-13 11:41:58,703 - freqtrade.exchange.check_exchange - INFO - Exchange "bybit" is officially supported by the Freqtrade development team.
+2025-11-13 11:41:58,705 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2025-11-13 11:41:58,707 - freqtrade.exchange.exchange - INFO - Using CCXT 4.5.2
+2025-11-13 11:41:58,709 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-11-13 11:41:58,731 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-11-13 11:41:58,757 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-11-13 11:41:58,785 - freqtrade.exchange.exchange - INFO - Using Exchange "Bybit"
+2025-11-13 11:42:12,708 - freqtrade.misc - INFO - dumping json to "/freqtrade/user_data/data/bybit/futures/leverage_tiers_USDT.json"
+2025-11-13 11:42:13,375 - freqtrade.exchange.bybit - INFO - Bybit: Unified account. Assuming dedicated subaccount for this bot.
+2025-11-13 11:42:13,377 - freqtrade.resolvers.exchange_resolver - INFO - Using resolved exchange 'Bybit'...
+2025-11-13 11:42:13,440 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy HybridStrategy from '/freqtrade/user_data/strategies/strategy.py'...
+2025-11-13 11:42:13,442 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2025-11-13 11:42:13,444 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: USDT.
+2025-11-13 11:42:13,445 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: unlimited.
+2025-11-13 11:42:13,447 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2025-11-13 11:42:13,448 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 1.
+2025-11-13 11:42:13,449 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {}
+2025-11-13 11:42:13,450 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 15m
+2025-11-13 11:42:13,452 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -1
+2025-11-13 11:42:13,453 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2025-11-13 11:42:13,454 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2025-11-13 11:42:13,455 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2025-11-13 11:42:13,456 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: True
+2025-11-13 11:42:13,458 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2025-11-13 11:42:13,459 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'limit', 'exit': 'limit', 'stoploss': 'limit', 'stoploss_on_exchange': False, 'stoploss_on_exchange_interval': 60}
+2025-11-13 11:42:13,461 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2025-11-13 11:42:13,462 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: USDT
+2025-11-13 11:42:13,464 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: unlimited
+2025-11-13 11:42:13,465 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 0
+2025-11-13 11:42:13,466 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 10, 'exit': 10, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2025-11-13 11:42:13,468 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2025-11-13 11:42:13,469 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2025-11-13 11:42:13,471 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2025-11-13 11:42:13,472 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2025-11-13 11:42:13,473 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2025-11-13 11:42:13,474 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2025-11-13 11:42:13,475 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2025-11-13 11:42:13,477 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2025-11-13 11:42:13,478 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 1
+2025-11-13 11:42:13,479 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2025-11-13 11:42:13,919 - freqtrade.wallets - INFO - Wallets synced.
+2025-11-13 11:42:14,196 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.telegram ...
+2025-11-13 11:42:14,524 - freqtrade.rpc.telegram - INFO - using custom keyboard from config.json: [['/status table', '/reload_config'], ['/forcelong', '/forceshort', '/forceexit'], ['/stop', '/start', '/profit', '/logs']]
+2025-11-13 11:42:14,526 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.api_server
+2025-11-13 11:42:15,264 - freqtrade.rpc.api_server.webserver - INFO - Starting HTTP Server at 0.0.0.0:8080
+2025-11-13 11:42:15,266 - freqtrade.rpc.api_server.webserver - INFO - Starting Local Rest Server.
+2025-11-13 11:42:15,296 - uvicorn.error - INFO - Started server process [1]
+2025-11-13 11:42:15,298 - uvicorn.error - INFO - Waiting for application startup.
+2025-11-13 11:42:15,301 - uvicorn.error - INFO - Application startup complete.
+2025-11-13 11:42:15,304 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2025-11-13 11:42:15,333 - freqtrade.resolvers.iresolver - INFO - Using resolved pairlist StaticPairList from '/freqtrade/freqtrade/plugins/pairlist/StaticPairList.py'...
+2025-11-13 11:42:15,334 - freqtrade.freqtradebot - INFO - Starting initial pairlist refresh
+2025-11-13 11:42:15,354 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['WIF/USDT:USDT']
+2025-11-13 11:42:15,356 - freqtrade.freqtradebot - INFO - Initial Pairlist refresh took 0.02s
+2025-11-13 11:42:15,503 - freqtrade.rpc.telegram - INFO - rpc.telegram is listening for following commands: [['status'], ['profit'], ['balance'], ['start'], ['stop'], ['forceexit', 'forcesell', 'fx'], ['forcebuy', 'forcelong'], ['forceshort'], ['reload_trade'], ['trades'], ['delete'], ['cancel_open_order', 'coo'], ['performance'], ['buys', 'entries'], ['exits', 'sells'], ['mix_tags'], ['stats'], ['daily'], ['weekly'], ['monthly'], ['count'], ['locks'], ['delete_locks', 'unlock'], ['reload_conf', 'reload_config'], ['show_conf', 'show_config'], ['pause', 'stopbuy', 'stopentry'], ['whitelist'], ['blacklist'], ['bl_delete', 'blacklist_delete'], ['logs'], ['health'], ['help'], ['version'], ['marketdir'], ['order'], ['list_custom_data'], ['tg_info'], ['profit_long'], ['profit_short']]
+2025-11-13 11:42:15,695 - telegram.ext.Application - INFO - Application started
+2025-11-13 11:42:17,830 - freqtrade.resolvers.iresolver - WARNING - Could not import /freqtrade/user_data/freqaimodels/MyReinforcementLearner.py due to 'No module named 'torch''
+2025-11-13 11:42:17,835 - freqtrade.resolvers.iresolver - WARNING - Could not import /freqtrade/freqtrade/freqai/prediction_models/ReinforcementLearner_multiproc.py due to 'No module named 'sb3_contrib''
+2025-11-13 11:42:18,230 - freqtrade.resolvers.iresolver - INFO - Using resolved freqaimodel XGBoostClassifier from '/freqtrade/freqtrade/freqai/prediction_models/XGBoostClassifier.py'...
+2025-11-13 11:42:18,231 - freqtrade.freqai.data_drawer - INFO - Could not find existing datadrawer, starting from scratch
+2025-11-13 11:42:18,232 - freqtrade.freqai.data_drawer - INFO - Could not find existing historic_predictions, starting from scratch
+2025-11-13 11:42:18,233 - freqtrade.freqai.freqai_interface - INFO - Set fresh train queue from whitelist. Queue: ['WIF/USDT:USDT']
+2025-11-13 11:42:18,234 - freqtrade.strategy.interface - INFO - Downloading all training data for all pairs in whitelist and corr_pairlist, this may take a while if the data is not already on disk.
+2025-11-13 11:42:18,243 - freqtrade.freqai.utils - INFO - FreqAI auto-downloader using 30 startup candles.
+2025-11-13 11:42:18,278 - freqtrade.data.history.history_utils - INFO - Download history data for "WIF/USDT:USDT", 15m, futures and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:42:18 to 2025-11-13T11:42:18
+2025-11-13 11:42:20,020 - freqtrade.data.history.history_utils - INFO - Downloaded data for WIF/USDT:USDT with length 14399.
+2025-11-13 11:42:20,092 - freqtrade.data.history.history_utils - INFO - Download history data for "WIF/USDT:USDT", 4h, futures and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:42:18 to 2025-11-13T11:42:18
+2025-11-13 11:42:20,403 - freqtrade.data.history.history_utils - INFO - Downloaded data for WIF/USDT:USDT with length 899.
+2025-11-13 11:42:20,434 - freqtrade.data.history.history_utils - INFO - Download history data for "WIF/USDT:USDT", 1d, futures and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:42:18 to 2025-11-13T11:42:18
+2025-11-13 11:42:20,722 - freqtrade.data.history.history_utils - INFO - Downloaded data for WIF/USDT:USDT with length 149.
+2025-11-13 11:42:20,733 - freqtrade.data.history.history_utils - INFO - Download history data for "WIF/USDT:USDT", 8h, funding_rate and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:42:18 to 2025-11-13T11:42:18
+2025-11-13 11:42:21,234 - freqtrade.data.history.history_utils - INFO - Downloaded data for WIF/USDT:USDT with length 499.
+2025-11-13 11:42:21,245 - freqtrade.data.history.history_utils - INFO - Download history data for "WIF/USDT:USDT", 4h, mark and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:42:18 to 2025-11-13T11:42:18
+2025-11-13 11:42:21,558 - freqtrade.data.history.history_utils - INFO - Downloaded data for WIF/USDT:USDT with length 899.
+2025-11-13 11:42:21,575 - freqtrade.data.history.history_utils - INFO - Download history data for "BTC/USDT", 15m, futures and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:42:18 to 2025-11-13T11:42:18
+2025-11-13 11:42:23,337 - freqtrade.data.history.history_utils - INFO - Downloaded data for BTC/USDT with length 14385.
+2025-11-13 11:42:23,380 - freqtrade.data.history.history_utils - INFO - Download history data for "BTC/USDT", 4h, futures and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:42:18 to 2025-11-13T11:42:18
+2025-11-13 11:42:23,679 - freqtrade.data.history.history_utils - INFO - Downloaded data for BTC/USDT with length 899.
+2025-11-13 11:42:23,697 - freqtrade.data.history.history_utils - INFO - Download history data for "BTC/USDT", 1d, futures and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:42:18 to 2025-11-13T11:42:18
+2025-11-13 11:42:23,986 - freqtrade.data.history.history_utils - INFO - Downloaded data for BTC/USDT with length 149.
+2025-11-13 11:42:24,005 - freqtrade.data.history.history_utils - INFO - Download history data for "BTC/USDT", 8h, funding_rate and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:42:18 to 2025-11-13T11:42:18
+2025-11-13 11:42:24,008 - freqtrade.exchange.exchange - WARNING - Async code raised an exception: OperationalException('Exchange Bybit does not support fetching historical candle (OHLCV) data. Message: bybit fetchFundingRateHistory() only support linear and inverse market')
+2025-11-13 11:42:24,009 - freqtrade.data.history.history_utils - ERROR - Failed to download history data for pair: "BTC/USDT", timeframe: 8h.
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2767, in _async_get_candle_history
+    data = await self._fetch_funding_rate_history(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2816, in _fetch_funding_rate_history
+    data = await self._api_async.fetch_funding_rate_history(pair, since=since_ms, limit=limit)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/async_support/bybit.py", line 2768, in fetch_funding_rate_history
+    raise NotSupported(self.id + ' fetchFundingRateHistory() only support linear and inverse market')
+ccxt.base.errors.NotSupported: bybit fetchFundingRateHistory() only support linear and inverse market
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/data/history/history_utils.py", line 276, in _download_pair_history
+    new_dataframe = exchange.get_historic_ohlcv(
+        pair=pair,
+    ...<8 lines>...
+        until_ms=until_ms if until_ms else None,
+    )
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2402, in get_historic_ohlcv
+    pair, _, _, data, _ = self.loop.run_until_complete(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._async_get_historic_ohlcv(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+        )
+        ^
+    )
+    ^
+  File "/usr/local/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2450, in _async_get_historic_ohlcv
+    raise res
+  File "/freqtrade/freqtrade/exchange/common.py", line 118, in wrapper
+    return await f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2787, in _async_get_candle_history
+    raise OperationalException(
+    ...<2 lines>...
+    ) from e
+freqtrade.exceptions.OperationalException: Exchange Bybit does not support fetching historical candle (OHLCV) data. Message: bybit fetchFundingRateHistory() only support linear and inverse market
+2025-11-13 11:42:24,035 - freqtrade.data.history.history_utils - INFO - Download history data for "BTC/USDT", 4h, mark and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:42:18 to 2025-11-13T11:42:18
+2025-11-13 11:42:24,346 - freqtrade.data.history.history_utils - INFO - Downloaded data for BTC/USDT with length 899.
+2025-11-13 11:42:24,364 - freqtrade.data.history.history_utils - INFO - Download history data for "ETH/USDT", 15m, futures and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:42:18 to 2025-11-13T11:42:18
+2025-11-13 11:42:26,120 - freqtrade.data.history.history_utils - INFO - Downloaded data for ETH/USDT with length 14385.
+2025-11-13 11:42:26,159 - freqtrade.data.history.history_utils - INFO - Download history data for "ETH/USDT", 4h, futures and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:42:18 to 2025-11-13T11:42:18
+2025-11-13 11:42:26,628 - freqtrade.data.history.history_utils - INFO - Downloaded data for ETH/USDT with length 899.
+2025-11-13 11:42:26,646 - freqtrade.data.history.history_utils - INFO - Download history data for "ETH/USDT", 1d, futures and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:42:18 to 2025-11-13T11:42:18
+2025-11-13 11:42:26,933 - freqtrade.data.history.history_utils - INFO - Downloaded data for ETH/USDT with length 149.
+2025-11-13 11:42:26,943 - freqtrade.data.history.history_utils - INFO - Download history data for "ETH/USDT", 8h, funding_rate and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:42:18 to 2025-11-13T11:42:18
+2025-11-13 11:42:26,945 - freqtrade.exchange.exchange - WARNING - Async code raised an exception: OperationalException('Exchange Bybit does not support fetching historical candle (OHLCV) data. Message: bybit fetchFundingRateHistory() only support linear and inverse market')
+2025-11-13 11:42:26,946 - freqtrade.data.history.history_utils - ERROR - Failed to download history data for pair: "ETH/USDT", timeframe: 8h.
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2767, in _async_get_candle_history
+    data = await self._fetch_funding_rate_history(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2816, in _fetch_funding_rate_history
+    data = await self._api_async.fetch_funding_rate_history(pair, since=since_ms, limit=limit)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/async_support/bybit.py", line 2768, in fetch_funding_rate_history
+    raise NotSupported(self.id + ' fetchFundingRateHistory() only support linear and inverse market')
+ccxt.base.errors.NotSupported: bybit fetchFundingRateHistory() only support linear and inverse market
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/data/history/history_utils.py", line 276, in _download_pair_history
+    new_dataframe = exchange.get_historic_ohlcv(
+        pair=pair,
+    ...<8 lines>...
+        until_ms=until_ms if until_ms else None,
+    )
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2402, in get_historic_ohlcv
+    pair, _, _, data, _ = self.loop.run_until_complete(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._async_get_historic_ohlcv(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+        )
+        ^
+    )
+    ^
+  File "/usr/local/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2450, in _async_get_historic_ohlcv
+    raise res
+  File "/freqtrade/freqtrade/exchange/common.py", line 118, in wrapper
+    return await f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/freqtrade/freqtrade/exchange/exchange.py", line 2787, in _async_get_candle_history
+    raise OperationalException(
+    ...<2 lines>...
+    ) from e
+freqtrade.exceptions.OperationalException: Exchange Bybit does not support fetching historical candle (OHLCV) data. Message: bybit fetchFundingRateHistory() only support linear and inverse market
+2025-11-13 11:42:26,954 - freqtrade.data.history.history_utils - INFO - Download history data for "ETH/USDT", 4h, mark and store in /freqtrade/user_data/data/bybit. From 2025-06-16T11:42:18 to 2025-11-13T11:42:18
+2025-11-13 11:42:27,265 - freqtrade.data.history.history_utils - INFO - Downloaded data for ETH/USDT with length 899.
+2025-11-13 11:42:27,288 - freqtrade.strategy.hyper - INFO - No params for buy found, using default values.
+2025-11-13 11:42:27,292 - freqtrade.strategy.hyper - INFO - Strategy Parameter(default): min_rsi = 30
+2025-11-13 11:42:27,293 - freqtrade.strategy.hyper - INFO - No params for sell found, using default values.
+2025-11-13 11:42:27,295 - freqtrade.strategy.hyper - INFO - Strategy Parameter(default): max_rsi = 70
+2025-11-13 11:42:27,296 - freqtrade.strategy.hyper - INFO - No params for protection found, using default values.
+2025-11-13 11:42:27,303 - freqtrade.resolvers.iresolver - INFO - Using resolved protection StoplossGuard from '/freqtrade/freqtrade/plugins/protections/stoploss_guard.py'...
+2025-11-13 11:42:27,304 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'running'}
+2025-11-13 11:42:27,310 - freqtrade.worker - INFO - Changing state to: RUNNING
+2025-11-13 11:42:27,331 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': '*Exchange:* `bybit`\n*Stake per trade:* `unlimited USDT`\n*Minimum ROI:* `{}`\n*Stoploss:* `-1`\n*Position adjustment:* `Off`\n*Timeframe:* `15m`\n*Strategy:* `HybridStrategy`'}
+2025-11-13 11:42:27,333 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': "Searching for USDT pairs to buy and sell based on [{'StaticPairList': 'StaticPairList'}]"}
+2025-11-13 11:42:27,340 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': 'Using Protections: \nStoplossGuard - Frequent Stoploss Guard, 2 stoplosses with profit < 0.00% within 1440 minutes.'}
+2025-11-13 11:42:27,383 - freqtrade.persistence.trade_model - INFO - Found open trade: Trade(id=2, pair=WIF/USDT:USDT, amount=352.00000000, is_short=True, leverage=1.0, open_rate=0.47080000, open_since=2025-11-13 06:45:03)
+2025-11-13 11:42:27,389 - freqtrade.freqtradebot - INFO - Updating 0 open orders.
+2025-11-13 11:42:30,577 - freqtrade.freqai.freqai_interface - WARNING - No model ready for WIF/USDT:USDT, returning null values to strategy.
+2025-11-13 11:42:30,586 - freqtrade.freqai.freqai_interface - INFO - Total time spent inferencing pairlist 1.14 seconds
+2025-11-13 11:42:32,837 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:42:33,654 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Starting training WIF/USDT:USDT --------------------
+2025-11-13 11:42:33,890 - freqtrade.freqai.data_kitchen - INFO - WIF/USDT:USDT: dropped 1240 training points due to NaNs in populated dataset 11519.
+2025-11-13 11:42:33,916 - freqtrade.freqai.data_kitchen - WARNING -  11 percent  of training data dropped due to NaNs, model may perform inconsistent with expectations. Verify %-adx-period_20_shift-2_WIF/USDTUSDT_1d
+2025-11-13 11:42:33,918 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Training on data from 2025-07-16 to 2025-11-13 --------------------
+2025-11-13 11:42:34,480 - datasieve.pipeline - INFO - SVM detected 33 data points as outliers.
+2025-11-13 11:42:46,108 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - Training model on 758 features
+2025-11-13 11:42:46,109 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - Training model on 10246 data points
+2025-11-13 11:43:32,843 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:44:13,160 - freqtrade.freqai.base_models.BaseClassifierModel - INFO - -------------------- Done training WIF/USDT:USDT (99.50 secs) --------------------
+2025-11-13 11:44:13,613 - freqtrade.freqai.freqai_interface - INFO - Total time spent training pairlist 102.72 seconds
+2025-11-13 11:44:32,881 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-11-13 11:45:02,313 - freqtrade.freqai.data_kitchen - INFO - dropped 88 of 1000 prediction data points due to NaNs.
+2025-11-13 11:45:03,332 - freqtrade.freqai.freqai_interface - INFO - Total time spent inferencing pairlist 1.93 seconds
+2025-11-13 11:45:36,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
