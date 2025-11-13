@@ -134,6 +134,8 @@ class HybridStrategy(IStrategy):
         return dataframe
 
     @informative('1h')
+    @informative('4h')
+    @informative('1d')
     def populate_indicators_(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe = self.analyze_extrema(dataframe)
