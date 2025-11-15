@@ -66,20 +66,20 @@
   "freqai": {
     "enabled": true,
     "purge_old_models": 2,
-    "train_period_days": 15,
-    "live_retrain_hours": 0.25,
+    "train_period_days": 1,
+    "live_retrain_hours": 0.08,
     "identifier": "1",
     "feature_parameters": {
         "include_timeframes": [
+            "5m",
             "15m",
-            "1h",
-            "4h"
+            "1h"
         ],
         "include_corr_pairlist": [
             "BTC/USDT",
             "ETH/USDT"
         ],
-        "label_period_candles": 16,
+        "label_period_candles": 48,
         "include_shifted_candles": 2,
         "DI_threshold": 0.9,
         "weight_factor": 0.9,
