@@ -66,10 +66,11 @@ class HybridStrategy(IStrategy):
         dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-2:]
 
         last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
+        last_max_index = dataframe[dataframe['max_high'] == dataframe['high']].index.max()
+
         dataframe['iss'] = dataframe.loc[last_max_index:].high.max()
         dataframe['ss'] = dataframe.loc[last_min_index:].high.max()
         
-        last_max_index = dataframe[dataframe['max_high'] == dataframe['high']].index.max()
         dataframe['isl'] = dataframe.loc[last_min_index:].low.min()
         dataframe['sl'] = dataframe.loc[last_max_index:].low.min()
 
