@@ -126,7 +126,7 @@ class RSIBreak(IStrategy):
                 (qtpylib.crossed_below(dataframe['close'], dataframe['sl_1h'].ffill())) # Trigger
             ), ["enter_short", "enter_tag"]] = (1,"1h")
         
-        dataframe.to_feather("df.feather")
+        dataframe.to_feather("user_data/notebooks/df.feather")
 
         return dataframe
 
