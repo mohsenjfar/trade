@@ -125,6 +125,8 @@ class RSIBreak(IStrategy):
                 (dataframe['close'] < dataframe['max_high_4h'].ffill()) & # Guard
                 (qtpylib.crossed_below(dataframe['close'], dataframe['sl_1h'].ffill())) # Trigger
             ), ["enter_short", "enter_tag"]] = (1,"1h")
+        
+        dataframe.to_feather("df.feather")
 
         return dataframe
 
