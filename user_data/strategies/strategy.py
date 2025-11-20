@@ -1,6 +1,8 @@
 import freqtrade.vendor.qtpylib.indicators as qtpylib
 from pandas import DataFrame
 import talib.abstract as ta
+import numpy as np
+import pandas as pd
 from freqtrade.persistence import Trade
 from freqtrade.strategy import (
     IStrategy,
@@ -18,7 +20,7 @@ class RSIBreak(IStrategy):
 
     trade_max_loss_allowed = 0.005
 
-    timeframe = '5m'
+    timeframe = '15m'
 
     can_short: bool = True
 
@@ -28,42 +30,73 @@ class RSIBreak(IStrategy):
 
     use_custom_stoploss = True
 
-    def analyze_extrema(self, dataframe):
+    def extract_features(self, df, c1, c2, e, name):
+
+        highs = df.loc[c1].reset_index().rename(columns={'index':'up_index'})
+        crosses = df.loc[c2].reset_index().rename(columns={'index':'down_index'})
+
+        if highs.empty or crosses.empty:
+            df[name] = np.nan
+            return df
+
+        pairs = pd.merge_asof(
+            highs.sort_values('up_index'),
+            crosses.sort_values('down_index'),
+            left_on='up_index',
+            right_on='down_index',
+            direction='forward'
+        )
+
+        pairs = pairs[['up_index','down_index']].drop_duplicates('down_index', keep='last').dropna().reset_index(drop=True)
+
+        intervals = pd.IntervalIndex.from_arrays(pairs['up_index'], pairs['down_index'], closed='both')
+        df['range_id'] = pd.cut(df.index, intervals)
+
+        groups = df.groupby('range_id', observed=True)[e]
+        values = groups.max() if e == "high" else groups.min()
+        values = values.reset_index().rename(columns={e: name})
+        values['index'] = intervals.left
+
+        df = df.merge(values, left_on=df.index, right_on='index', how='left')
+
+        return df.drop(['range_id_x','range_id_y','index'],axis=1)
+
+    def populate_features(self, dataframe):
 
         dataframe['rsi'] = ta.RSI(dataframe['close'], timeperiod=14)
-        long_condition = (dataframe['rsi'] >= 70)
-        short_condition = (dataframe['rsi'] <= 30)
-        dataframe['above_group'] = (long_condition).astype(int).diff().ne(0).cumsum() * (long_condition)
-        dataframe['below_group'] = (short_condition).astype(int).diff().ne(0).cumsum() * (short_condition)
-        dataframe['max_high'] = dataframe.groupby('above_group')['high'].transform('max')
-        dataframe['min_low'] = dataframe.groupby('below_group')['low'].transform('min')
-        dataframe.loc[dataframe['above_group'] == 0, 'max_high'] = None
-        dataframe.loc[dataframe['below_group'] == 0, 'min_low'] = None
-        dataframe = dataframe.ffill()
 
-        dataframe.loc[dataframe['max_high'] == dataframe['high'],"cat"] = 'H'
-        dataframe.loc[dataframe['min_low'] == dataframe['low'],"cat"] = 'L'
-        dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-2]
+        c1 = qtpylib.crossed_above(dataframe['rsi'], 70)
+        c2 = qtpylib.crossed_below(dataframe['rsi'], 70)
+        dataframe = self.extract_features(dataframe, c1, c2, 'high', "max_high")
 
-        max_index = dataframe['max_high'].index.max()
-        dataframe['sl'] = dataframe['close'][max_index:].min()
+        c1 = qtpylib.crossed_below(dataframe['rsi'], 30)
+        c2 = qtpylib.crossed_above(dataframe['rsi'], 30)
+        dataframe = self.extract_features(dataframe, c1, c2, 'low', "min_low")
 
-        min_index = dataframe['min_low'].index.max()
-        dataframe['ss'] = dataframe['close'][min_index:].max()
+        dataframe.loc[dataframe['max_high'].notna(),"cat"] = 'H'
+        dataframe.loc[dataframe['min_low'].notna(),"cat"] = 'L'
 
+        c1 = dataframe['max_high'].notna()
+        c2 = qtpylib.crossed_above(dataframe['close'], dataframe['max_high'].ffill())
+        dataframe = self.extract_features(dataframe, c1, c2, 'low', "sl")
+
+        c1 = dataframe['min_low'].notna()
+        c2 = qtpylib.crossed_below(dataframe['close'], dataframe['min_low'].ffill())
+        dataframe = self.extract_features(dataframe, c1, c2, 'high', "ss")
+        
         return dataframe
-    
-    @informative('15m')
+
     @informative('1h')
+    @informative('4h')
     def populate_indicators_(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe = self.analyze_extrema(dataframe)
+        dataframe = self.populate_features(dataframe)
 
         return dataframe
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe = self.analyze_extrema(dataframe)
+        dataframe = self.populate_features(dataframe)
 
         return dataframe
 
@@ -71,15 +104,27 @@ class RSIBreak(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['cat'] == 'LH') & # Guard
-                (qtpylib.crossed_above(dataframe['close'], dataframe['max_high'])) # Trigger
-            ), ["enter_long"]] = (1)
+                (dataframe['close'] > dataframe['min_low_1h'].ffill()) & # Guard
+                (qtpylib.crossed_above(dataframe['close'], dataframe['ss'].ffill())) # Trigger
+            ), ["enter_long", "enter_tag"]] = (1,"15m")
+        
+        dataframe.loc[
+            (
+                (dataframe['close'] > dataframe['min_low_4h'].ffill()) & # Guard
+                (qtpylib.crossed_above(dataframe['close'], dataframe['ss_1h'].ffill())) # Trigger
+            ), ["enter_long", "enter_tag"]] = (1,"1h")
 
         dataframe.loc[
             (
-                (dataframe['cat'] == 'HL') & # Guard
-                (qtpylib.crossed_below(dataframe['close'], dataframe['min_low'])) # Trigger
-            ), ["enter_short"]] = (1)
+                (dataframe['close'] < dataframe['max_high_1h'].ffill()) & # Guard
+                (qtpylib.crossed_below(dataframe['close'], dataframe['sl'].ffill())) # Trigger
+            ), ["enter_short", "enter_tag"]] = (1,"15m")
+        
+        dataframe.loc[
+            (
+                (dataframe['close'] < dataframe['max_high_4h'].ffill()) & # Guard
+                (qtpylib.crossed_below(dataframe['close'], dataframe['sl_1h'].ffill())) # Trigger
+            ), ["enter_short", "enter_tag"]] = (1,"1h")
 
         return dataframe
 
@@ -95,7 +140,7 @@ class RSIBreak(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
         total_stake = max_stake + Trade.total_open_trades_stakes()
-        stop = last_candle.ss if side == "short" else last_candle.sl
+        stop = last_candle.high if side == "short" else last_candle.low
         risk = abs(stop / last_candle.close - 1)
         return min(total_stake * self.trade_max_loss_allowed / risk, max_stake)
 
@@ -109,83 +154,45 @@ class RSIBreak(IStrategy):
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
+        dataframe_, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
+        dataframe = dataframe_.copy().ffill()
         last_candle = dataframe.iloc[-1].squeeze()
         
-        if trade.is_short:          
-            conditions = (
-                last_candle.cat_1h[-1] == "L",
-                last_candle.close < last_candle.min_low_1h,
-                last_candle.ss_1h < trade.open_rate
-            )
-            if all(conditions):
-                return stoploss_from_absolute(
-                    last_candle.ss_1h,
-                    current_rate,
-                    is_short=trade.is_short,
-                    leverage=trade.leverage
-                )
-            
-            conditions = (
-                last_candle.cat_15m[-1] == "L",
-                last_candle.close < last_candle.min_low_15m,
-                last_candle.ss_15m < trade.open_rate
-            )
-            if all(conditions):
-                return stoploss_from_absolute(
-                    last_candle.ss_15m,
-                    current_rate,
-                    is_short=trade.is_short,
-                    leverage=trade.leverage
-                )
+        if trade.is_short:
+            if last_candle.ss_1h < trade.open_rate:
+                stop = last_candle.ss_1h
+            elif last_candle.ss_15m < trade.open_rate:
+                stop = last_candle.ss_15m
+            else:
+                stop = last_candle.high
             
             if trade.get_custom_data(key='risk') is None:
-                risk = abs(last_candle.ss / last_candle.close - 1)
+                risk = abs(stop / last_candle.close - 1)
                 trade.set_custom_data(key='risk', value=risk)
                 self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
             return stoploss_from_absolute(
-                last_candle.ss,
+                stop,
                 current_rate,
                 is_short=trade.is_short,
                 leverage=trade.leverage
             )
 
         else:
-            
-            conditions = (
-                last_candle.cat_1h[-1] == "H",
-                last_candle.close > last_candle.max_high_1h,
-                last_candle.sl_1h > trade.open_rate
-            )
-            if all(conditions):
-                return stoploss_from_absolute(
-                    last_candle.sl_1h,
-                    current_rate,
-                    is_short=trade.is_short,
-                    leverage=trade.leverage
-                )
-            
-            conditions = (
-                last_candle.cat_15m[-1] == "H",
-                last_candle.close > last_candle.max_high_15m,
-                last_candle.sl_15m > trade.open_rate
-            )
-            if all(conditions):
-                return stoploss_from_absolute(
-                    last_candle.sl_15m,
-                    current_rate,
-                    is_short=trade.is_short,
-                    leverage=trade.leverage
-                )
+            if last_candle.sl_1h > trade.open_rate:
+                stop = last_candle.sl_1h
+            elif last_candle.sl_15m > trade.open_rate:
+                stop = last_candle.sl_15m
+            else:
+                stop = last_candle.low
             
             if trade.get_custom_data(key='risk') is None:
-                risk = abs(last_candle.sl / last_candle.close - 1)
+                risk = abs(stop / last_candle.close - 1)
                 trade.set_custom_data(key='risk', value=risk)
                 self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
             return stoploss_from_absolute(
-                last_candle.sl,
+                stop,
                 current_rate,
                 is_short=trade.is_short,
                 leverage=trade.leverage
