@@ -40,41 +40,13 @@ class HybridStrategy(IStrategy):
             {
                 "method": "StoplossGuard",
                 "lookback_period": 1440,
-                "trade_limit": 2,
+                "trade_limit": 4,
                 "unlock_at":"00:00",
                 "required_profit": 0.0,
                 "only_per_pair": False,
                 "only_per_side": True
             }
         ]
-    
-    def analyze_extrema(self, dataframe):
-
-        dataframe['rsi'] = ta.RSI(dataframe['close'], timeperiod=14)
-        max_condition = dataframe['rsi'] >= self.max_rsi.value
-        min_condition = dataframe['rsi'] <= self.min_rsi.value
-        dataframe['above_group'] = (max_condition).astype(int).diff().ne(0).cumsum() * (max_condition)
-        dataframe['below_group'] = (min_condition).astype(int).diff().ne(0).cumsum() * (min_condition)
-        dataframe['max_high'] = dataframe.groupby('above_group')['high'].transform('max')
-        dataframe['min_low'] = dataframe.groupby('below_group')['low'].transform('min')
-        dataframe.loc[dataframe['above_group'] == 0, 'max_high'] = None
-        dataframe.loc[dataframe['below_group'] == 0, 'min_low'] = None
-        dataframe = dataframe.ffill()
-
-        dataframe.loc[dataframe['max_high'] == dataframe['high'],"cat"] = 'H'
-        dataframe.loc[dataframe['min_low'] == dataframe['low'],"cat"] = 'L'
-        dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-2:]
-
-        last_min_index = dataframe[dataframe['min_low'] == dataframe['low']].index.max()
-        last_max_index = dataframe[dataframe['max_high'] == dataframe['high']].index.max()
-
-        dataframe['iss'] = dataframe.loc[last_max_index:].high.max()
-        dataframe['ss'] = dataframe.loc[last_min_index:].high.max()
-        
-        dataframe['isl'] = dataframe.loc[last_min_index:].low.min()
-        dataframe['sl'] = dataframe.loc[last_max_index:].low.min()
-
-        return dataframe
     
     def feature_engineering_expand_all(self, dataframe: DataFrame, period: int,
                                        metadata: Dict, **kwargs) -> DataFrame:
@@ -132,7 +104,33 @@ class HybridStrategy(IStrategy):
     def set_freqai_targets(self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
 
         self.freqai.class_names = ["down", "up"]
-        dataframe['&s-up_or_down'] = np.where(dataframe["close"].shift(-48) > dataframe["close"], 'up', 'down')
+        dataframe['&s-up_or_down'] = np.where(dataframe["close"].shift(-36) > dataframe["close"], 'up', 'down')
+
+        return dataframe
+
+    def analyze_extrema(self, dataframe):
+
+        dataframe['rsi'] = ta.RSI(dataframe['close'], timeperiod=14)
+        max_condition = dataframe['rsi'] >= self.max_rsi.value
+        min_condition = dataframe['rsi'] <= self.min_rsi.value
+        dataframe['above_group'] = (max_condition).astype(int).diff().ne(0).cumsum() * (max_condition)
+        dataframe['below_group'] = (min_condition).astype(int).diff().ne(0).cumsum() * (min_condition)
+        dataframe['max_high'] = dataframe.groupby('above_group')['high'].transform('max')
+        dataframe['min_low'] = dataframe.groupby('below_group')['low'].transform('min')
+        dataframe.loc[dataframe['above_group'] == 0, 'max_high'] = None
+        dataframe.loc[dataframe['below_group'] == 0, 'min_low'] = None
+
+        dataframe.loc[dataframe['max_high'].notna(),"cat"] = 'H'
+        dataframe.loc[dataframe['min_low'].notna(),"cat"] = 'L'
+
+        last_min_index = dataframe[dataframe['min_low'].notna()].index.max()
+        last_max_index = dataframe[dataframe['max_high'].notna()].index.max()
+
+        dataframe['iss'] = dataframe.loc[last_max_index:].high.max()
+        dataframe['ss'] = dataframe.loc[last_min_index:].high.max()
+        
+        dataframe['isl'] = dataframe.loc[last_min_index:].low.min()
+        dataframe['sl'] = dataframe.loc[last_max_index:].low.min()
 
         return dataframe
 
@@ -157,17 +155,15 @@ class HybridStrategy(IStrategy):
             (
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'up') & # Guard
-                (dataframe['rsi_1h'] < 70) & # Guard
-                (qtpylib.crossed_above(dataframe['rsi_15m'], 30)) # Trigger
-            ), ["enter_long","enter_tag"]] = (1,'15m')
+                (qtpylib.crossed_above(dataframe['close'], dataframe['min_low'].ffill())) # Trigger
+            ), "enter_long"] = 1
 
         dataframe.loc[
             (
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'down') & # Guard
-                (dataframe['rsi_1h'] > 30) & # Guard
-                (qtpylib.crossed_below(dataframe['rsi_15m'], 70)) # Trigger
-            ), ["enter_short","enter_tag"]] = (1,'15m')
+                (qtpylib.crossed_below(dataframe['close'], dataframe['max_high'].ffill())) # Trigger
+            ), "enter_short"] = 1
 
         return dataframe
 
@@ -183,15 +179,15 @@ class HybridStrategy(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
         total_stake = max_stake + Trade.total_open_trades_stakes()
-        stop = last_candle["iss_15m"] if side == "short" else last_candle["isl_15m"]
-        risk = abs(stop / last_candle["close_15m"] - 1)
+        stop = last_candle["iss"] if side == "short" else last_candle["isl"]
+        risk = abs(stop / last_candle["close"] - 1)
         return min(total_stake * self.trade_max_loss_allowed / risk, max_stake)
 
     def custom_entry_price(self, pair: str, trade: Trade | None, current_time: datetime, proposed_rate: float,
                            entry_tag: str | None, side: str, **kwargs) -> float:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        return dataframe['close_15m'].iat[-1]
+        return dataframe['close'].iat[-1]
 
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
                         current_rate: float, current_profit: float, after_fill: bool, 
@@ -199,12 +195,13 @@ class HybridStrategy(IStrategy):
 
         if current_profit > 1: return 0.7
 
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
+        dataframe_, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
+        dataframe = dataframe_.copy().ffill()
         last_candle = dataframe.iloc[-1].squeeze()
         
         if trade.is_short:          
             conditions = (
-                last_candle["cat_1h"][-1] == "L",
+                last_candle["cat_1h"] == "L",
                 last_candle["close"] < last_candle["min_low_1h"],
                 last_candle["ss_1h"] < trade.open_rate
             )
@@ -217,7 +214,7 @@ class HybridStrategy(IStrategy):
                 )
             
             conditions = (
-                last_candle["cat_15m"][-1] == "L",
+                last_candle["cat_15m"] == "L",
                 last_candle["close"] < last_candle["min_low_15m"],
                 last_candle["ss_15m"] < trade.open_rate
             )
@@ -230,7 +227,7 @@ class HybridStrategy(IStrategy):
                 )
 
             conditions = (
-                last_candle["cat"][-1] == "L",
+                last_candle["cat"] == "L",
                 last_candle["close"] < last_candle["min_low"],
                 last_candle["ss"] < trade.open_rate
             )
@@ -243,12 +240,12 @@ class HybridStrategy(IStrategy):
                 )
             
             if trade.get_custom_data(key='risk') is None:
-                risk = abs(last_candle["iss_15m"] / last_candle["close_15m"] - 1)
+                risk = abs(last_candle["iss"] / last_candle["close_15m"] - 1)
                 trade.set_custom_data(key='risk', value=risk)
                 self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
             return stoploss_from_absolute(
-                last_candle["iss_15m"],
+                last_candle["iss"],
                 current_rate,
                 is_short=trade.is_short,
                 leverage=trade.leverage
@@ -256,7 +253,7 @@ class HybridStrategy(IStrategy):
 
         else:
             conditions = (
-                last_candle["cat_1h"][-1] == "H",
+                last_candle["cat_1h"] == "H",
                 last_candle["close"] > last_candle["max_high_1h"],
                 last_candle["sl_1h"] > trade.open_rate
             )
@@ -269,7 +266,7 @@ class HybridStrategy(IStrategy):
                 )
             
             conditions = (
-                last_candle["cat_15m"][-1] == "H",
+                last_candle["cat_15m"] == "H",
                 last_candle["close"] > last_candle["max_high_15m"],
                 last_candle["sl_15m"] > trade.open_rate
             )
@@ -282,7 +279,7 @@ class HybridStrategy(IStrategy):
                 )
             
             conditions = (
-                last_candle["cat"][-1] == "H",
+                last_candle["cat"] == "H",
                 last_candle["close"] > last_candle["max_high"],
                 last_candle["sl"]> trade.open_rate
             )
@@ -295,24 +292,13 @@ class HybridStrategy(IStrategy):
                 )
             
             if trade.get_custom_data(key='risk') is None:
-                risk = abs(last_candle["isl_15m"] / last_candle["close_15m"] - 1)
+                risk = abs(last_candle["isl"] / last_candle["close_15m"] - 1)
                 trade.set_custom_data(key='risk', value=risk)
                 self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
             return stoploss_from_absolute(
-                last_candle["isl_15m"],
+                last_candle["isl"],
                 current_rate,
                 is_short=trade.is_short,
                 leverage=trade.leverage
             )
-    
-    def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
-                    current_rate: float, current_profit: float, **kwargs) -> str:
-
-        risk = trade.get_custom_data(key='risk')
-        trade_duration = (current_time - trade.open_date_utc).seconds / 60
-        
-        conditions = (
-            (trade_duration > 240) and (current_profit < risk * 2),
-        )
-        if any(conditions): return "Trade expired!"
