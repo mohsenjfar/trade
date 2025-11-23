@@ -129,6 +129,8 @@ class HybridStrategy(IStrategy):
 
     def populate_features(self, dataframe):
 
+        dataframe['rsi'] = ta.RSI(dataframe['close'], timeperiod=14)
+
         c1 = qtpylib.crossed_above(dataframe['rsi'], 70)
         c2 = qtpylib.crossed_below(dataframe['rsi'], 70)
         dataframe = self.extract_features(dataframe, c1, c2, 'high', "max_high")
@@ -216,7 +218,8 @@ class HybridStrategy(IStrategy):
         if current_profit > 1: return 0.7
 
         dataframe_, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
-        dataframe = dataframe_.copy().ffill()
+        dataframe = dataframe_.copy()
+        dataframe = dataframe.ffill()
         last_candle = dataframe.iloc[-1].squeeze()
         
         if trade.is_short:          
