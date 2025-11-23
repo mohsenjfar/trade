@@ -1,6 +1,7 @@
 import freqtrade.vendor.qtpylib.indicators as qtpylib
 from pandas import DataFrame
 import numpy as np
+import pandas as pd
 import talib.abstract as ta
 from freqtrade.persistence import Trade
 from typing import Dict
@@ -94,28 +95,52 @@ class HybridStrategy(IStrategy):
 
         return dataframe
 
-    def analyze_extrema(self, dataframe):
+    def extract_features(self, df, c1, c2, e, name):
 
-        dataframe['rsi'] = ta.RSI(dataframe['close'], timeperiod=14)
-        max_condition = dataframe['rsi'] >= self.max_rsi.value
-        min_condition = dataframe['rsi'] <= self.min_rsi.value
-        dataframe['above_group'] = (max_condition).astype(int).diff().ne(0).cumsum() * (max_condition)
-        dataframe['below_group'] = (min_condition).astype(int).diff().ne(0).cumsum() * (min_condition)
-        dataframe['max_high'] = dataframe.groupby('above_group')['high'].transform('max')
-        dataframe['min_low'] = dataframe.groupby('below_group')['low'].transform('min')
-        dataframe.loc[dataframe['above_group'] == 0, 'max_high'] = None
-        dataframe.loc[dataframe['below_group'] == 0, 'min_low'] = None
+        highs = df.loc[c1].reset_index().rename(columns={'index':'up_index'})
+        crosses = df.loc[c2].reset_index().rename(columns={'index':'down_index'})
 
-        dataframe.loc[dataframe['max_high'].notna(),"cat"] = 'H'
-        dataframe.loc[dataframe['min_low'].notna(),"cat"] = 'L'
+        if highs.empty or crosses.empty:
+            df[name] = np.nan
+            return df
+
+        pairs = pd.merge_asof(
+            highs.sort_values('up_index'),
+            crosses.sort_values('down_index'),
+            left_on='up_index',
+            right_on='down_index',
+            direction='forward'
+        )
+
+        pairs = pairs[['up_index','down_index']].drop_duplicates('down_index', keep='last').dropna().reset_index(drop=True)
+
+        intervals = pd.IntervalIndex.from_arrays(pairs['up_index'], pairs['down_index'], closed='both')
+        df['range_id'] = pd.cut(df.index, intervals)
+
+        groups = df.groupby('range_id', observed=True)[e]
+        values = groups.max() if e == "high" else groups.min()
+        values = values.reset_index().rename(columns={e: name})
+        values['index'] = intervals.left
+
+        df = df.merge(values, left_on=df.index, right_on='index', how='left')
+
+        return df.drop(['range_id_x','range_id_y','index'],axis=1)
+
+
+    def populate_features(self, dataframe):
+
+        c1 = qtpylib.crossed_above(dataframe['rsi'], 70)
+        c2 = qtpylib.crossed_below(dataframe['rsi'], 70)
+        dataframe = self.extract_features(dataframe, c1, c2, 'high', "max_high")
+
+        c1 = qtpylib.crossed_below(dataframe['rsi'], 30)
+        c2 = qtpylib.crossed_above(dataframe['rsi'], 30)
+        dataframe = self.extract_features(dataframe, c1, c2, 'low', "min_low")
 
         last_min_index = dataframe[dataframe['min_low'].notna()].index.max()
-        last_max_index = dataframe[dataframe['max_high'].notna()].index.max()
-
-        dataframe['iss'] = dataframe.loc[last_max_index:].high.max()
         dataframe['ss'] = dataframe.loc[last_min_index:].high.max()
-        
-        dataframe['isl'] = dataframe.loc[last_min_index:].low.min()
+
+        last_max_index = dataframe[dataframe['max_high'].notna()].index.max()
         dataframe['sl'] = dataframe.loc[last_max_index:].low.min()
 
         return dataframe
@@ -124,14 +149,23 @@ class HybridStrategy(IStrategy):
     @informative('1h')
     def populate_indicators_(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe = self.analyze_extrema(dataframe)
+        dataframe = self.populate_features(dataframe)
 
         return dataframe
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe = self.freqai.start(dataframe, metadata, self)
-        dataframe = self.analyze_extrema(dataframe)
+        
+        dataframe = self.populate_features(dataframe)
+
+        indicies = dataframe[dataframe['max_high'].notna()].index
+        dataframe['sb'] = dataframe['max_high'].iat[indicies[-2]]
+        dataframe['iss'] = dataframe['max_high'].iat[indicies[-1]]
+
+        indicies = dataframe[dataframe['min_low'].notna()].index
+        dataframe['lb'] = dataframe['min_low'].iat[indicies[-2]]
+        dataframe['isl'] = dataframe['min_low'].iat[indicies[-1]]
 
         return dataframe
 
@@ -141,14 +175,14 @@ class HybridStrategy(IStrategy):
             (
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'up') & # Guard
-                (qtpylib.crossed_above(dataframe['close'], dataframe['min_low'].ffill())) # Trigger
+                (qtpylib.crossed_above(dataframe['close'], dataframe['lb'])) # Trigger
             ), "enter_long"] = 1
 
         dataframe.loc[
             (
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'down') & # Guard
-                (qtpylib.crossed_below(dataframe['close'], dataframe['max_high'].ffill())) # Trigger
+                (qtpylib.crossed_below(dataframe['close'], dataframe['sb'])) # Trigger
             ), "enter_short"] = 1
 
         return dataframe
