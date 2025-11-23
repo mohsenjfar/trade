@@ -33,20 +33,6 @@ class HybridStrategy(IStrategy):
 
     max_rsi = IntParameter(low=51, high=100, default=70, space='sell', optimize=True, load=True)
     min_rsi = IntParameter(low=1, high=50, default=30, space='buy', optimize=True, load=True)
-
-    @property
-    def protections(self):
-        return [
-            {
-                "method": "StoplossGuard",
-                "lookback_period": 1440,
-                "trade_limit": 4,
-                "unlock_at":"00:00",
-                "required_profit": 0.0,
-                "only_per_pair": False,
-                "only_per_side": True
-            }
-        ]
     
     def feature_engineering_expand_all(self, dataframe: DataFrame, period: int,
                                        metadata: Dict, **kwargs) -> DataFrame:
