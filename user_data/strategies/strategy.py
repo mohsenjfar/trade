@@ -145,6 +145,9 @@ class HybridStrategy(IStrategy):
         last_max_index = dataframe[dataframe['max_high'].notna()].index.max()
         dataframe['sl'] = dataframe.loc[last_max_index:].low.min()
 
+        dataframe.loc[dataframe['max_high'].notna(),"cat"] = 'H'
+        dataframe.loc[dataframe['min_low'].notna(),"cat"] = 'L'
+
         return dataframe
 
     @informative('15m')
