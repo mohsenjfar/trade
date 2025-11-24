@@ -221,8 +221,7 @@ class HybridStrategy(IStrategy):
         if current_profit > 1: return 0.7
 
         dataframe_, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
-        dataframe = dataframe_.copy()
-        dataframe = dataframe.ffill()
+        dataframe = dataframe_.copy().ffill()
         last_candle = dataframe.iloc[-1].squeeze()
         
         if trade.is_short:          
