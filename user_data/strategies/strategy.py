@@ -266,7 +266,7 @@ class HybridStrategy(IStrategy):
                 )
             
             if trade.get_custom_data(key='risk') is None:
-                risk = abs(last_candle["iss"] / last_candle["close_15m"] - 1)
+                risk = abs(last_candle["iss"] / last_candle["close"] - 1)
                 trade.set_custom_data(key='risk', value=risk)
                 self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
@@ -318,7 +318,7 @@ class HybridStrategy(IStrategy):
                 )
             
             if trade.get_custom_data(key='risk') is None:
-                risk = abs(last_candle["isl"] / last_candle["close_15m"] - 1)
+                risk = abs(last_candle["isl"] / last_candle["close"] - 1)
                 trade.set_custom_data(key='risk', value=risk)
                 self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
