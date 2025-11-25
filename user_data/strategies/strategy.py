@@ -167,9 +167,11 @@ class HybridStrategy(IStrategy):
 
         indicies = dataframe[dataframe['max_high'].notna()].index
         dataframe['sb'] = dataframe['max_high'].iat[indicies[-2]]
+        dataframe['iss'] = dataframe.loc[indicies[-2]:, 'high'].max()
 
         indicies = dataframe[dataframe['min_low'].notna()].index
         dataframe['lb'] = dataframe['min_low'].iat[indicies[-2]]
+        dataframe['isl'] = dataframe.loc[indicies[-2]:, 'low'].min()
 
         return dataframe
 
@@ -203,7 +205,7 @@ class HybridStrategy(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
         total_stake = max_stake + Trade.total_open_trades_stakes()
-        stop = last_candle["high"] if side == "short" else last_candle["low"]
+        stop = last_candle["iss"] if side == "short" else last_candle["isl"]
         risk = abs(stop / last_candle["close"] - 1)
         return min(total_stake * self.trade_max_loss_allowed / risk, max_stake)
 
@@ -213,7 +215,7 @@ class HybridStrategy(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
 
-        stop = last_candle['high'] if trade.is_short else last_candle['low']
+        stop = last_candle['iss'] if trade.is_short else last_candle['isl']
         trade.set_custom_data(key='stop', value=stop)
         risk = abs(stop / last_candle["close"] - 1)
         self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
@@ -228,7 +230,7 @@ class HybridStrategy(IStrategy):
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
-        if current_profit > 1: return 0.7
+        if current_profit > 1: return 0.3
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
         index = trade.get_custom_data('index')
