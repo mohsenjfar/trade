@@ -166,11 +166,9 @@ class HybridStrategy(IStrategy):
 
         indicies = dataframe[dataframe['max_high'].notna()].index
         dataframe['sb'] = dataframe['max_high'].iat[indicies[-2]]
-        dataframe['iss'] = dataframe['max_high'].iat[indicies[-1]]
 
         indicies = dataframe[dataframe['min_low'].notna()].index
         dataframe['lb'] = dataframe['min_low'].iat[indicies[-2]]
-        dataframe['isl'] = dataframe['min_low'].iat[indicies[-1]]
 
         return dataframe
 
@@ -204,7 +202,7 @@ class HybridStrategy(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
         total_stake = max_stake + Trade.total_open_trades_stakes()
-        stop = last_candle["iss"] if side == "short" else last_candle["isl"]
+        stop = last_candle["high"] if side == "short" else last_candle["low"]
         risk = abs(stop / last_candle["close"] - 1)
         return min(total_stake * self.trade_max_loss_allowed / risk, max_stake)
 
@@ -212,6 +210,11 @@ class HybridStrategy(IStrategy):
                            entry_tag: str | None, side: str, **kwargs) -> float:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        last_candle = dataframe.iloc[-1].squeeze()
+        stop = last_candle['high'] if trade.is_short else last_candle['low']
+        trade.set_custom_data(key='stop', value=stop)
+        risk = abs(stop / last_candle["close"] - 1)
+        self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
         return dataframe['close'].iat[-1]
 
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
@@ -263,14 +266,9 @@ class HybridStrategy(IStrategy):
                     is_short=trade.is_short,
                     leverage=trade.leverage
                 )
-            
-            if trade.get_custom_data(key='risk') is None:
-                risk = abs(last_candle["iss"] / last_candle["close"] - 1)
-                trade.set_custom_data(key='risk', value=risk)
-                self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
             return stoploss_from_absolute(
-                last_candle["iss"],
+                trade.get_custom_data('stop'),
                 current_rate,
                 is_short=trade.is_short,
                 leverage=trade.leverage
@@ -315,14 +313,9 @@ class HybridStrategy(IStrategy):
                     is_short=trade.is_short,
                     leverage=trade.leverage
                 )
-            
-            if trade.get_custom_data(key='risk') is None:
-                risk = abs(last_candle["isl"] / last_candle["close"] - 1)
-                trade.set_custom_data(key='risk', value=risk)
-                self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
             return stoploss_from_absolute(
-                last_candle["isl"],
+                trade.get_custom_data('stop'),
                 current_rate,
                 is_short=trade.is_short,
                 leverage=trade.leverage
