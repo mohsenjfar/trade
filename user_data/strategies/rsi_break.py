@@ -95,8 +95,6 @@ class RSIBreak(IStrategy):
         return dataframe
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-
-        dataframe = self.freqai.start(dataframe, metadata, self)
         
         dataframe = self.populate_features(dataframe)
 
