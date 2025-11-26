@@ -86,14 +86,6 @@ class RSIBreak(IStrategy):
 
         return dataframe
 
-    @informative('15m')
-    @informative('1h')
-    def populate_indicators_(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-
-        dataframe = self.populate_features(dataframe)
-
-        return dataframe
-
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         
         dataframe = self.populate_features(dataframe)
@@ -123,6 +115,16 @@ class RSIBreak(IStrategy):
         return dataframe
 
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+        
+        dataframe.loc[
+            (
+                (qtpylib.crossed_below(dataframe['close'], dataframe['lb']))
+            ), "exit_long"] = 1
+
+        dataframe.loc[
+            (
+                (qtpylib.crossed_above(dataframe['close'], dataframe['sb']))
+            ), "exit_short"] = 1
         
         return dataframe
 
@@ -155,38 +157,9 @@ class RSIBreak(IStrategy):
         
         return dataframe['close'].iat[-1]
 
-    def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
-                        current_rate: float, current_profit: float, after_fill: bool, 
-                        **kwargs) -> Optional[float]:
-
-        if current_profit > 1: return 0.3
-
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
-        index = trade.get_custom_data('index')
-        tfs = ['1h', '15m', '']
-
-        if trade.is_short:    
-            for tf in tfs:
-                values = dataframe.loc[
-                    (
-                        (dataframe[f'ss_{tf}'].notna()) &
-                        (dataframe.index >= index)
-                    ),f'ss_{tf}'].values
-                if values.size > 0: break
-            stop = np.append(values, trade.get_custom_data('stop')).min()
-        else:
-            for tf in tfs:
-                values = dataframe.loc[
-                    (
-                        (dataframe[f'sl_{tf}'].notna()) &
-                        (dataframe.index >= index)
-                    ),f'sl_{tf}'].values
-                if values.size > 0: break
-            stop = np.append(values, trade.get_custom_data('stop')).max()
-
-        return stoploss_from_absolute(
-            stop,
-            current_rate,
-            is_short=trade.is_short,
-            leverage=trade.leverage
-        )
+    def bot_loop_start(self, **kwargs) -> None:
+        
+        pairs = self.dp.current_whitelist()
+        for pair in pairs:
+            if self.is_pair_locked(pair):
+                self.unlock_pair(pair)
