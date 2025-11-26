@@ -91,7 +91,7 @@ class HybridStrategy(IStrategy):
     def set_freqai_targets(self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
 
         self.freqai.class_names = ["down", "up"]
-        dataframe['&s-up_or_down'] = np.where(dataframe["close"].shift(-36) > dataframe["close"], 'up', 'down')
+        dataframe['&s-up_or_down'] = np.where(dataframe["close"].shift(-3) > dataframe["close"], 'up', 'down')
 
         return dataframe
 
