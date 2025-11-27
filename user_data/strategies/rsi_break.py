@@ -157,6 +157,19 @@ class RSIBreak(IStrategy):
         
         return dataframe['close'].iat[-1]
 
+    def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
+                        current_rate: float, current_profit: float, after_fill: bool, 
+                        **kwargs) -> Optional[float]:
+
+        if current_profit > 1: return 0.3
+        
+        return stoploss_from_absolute(
+            trade.get_custom_data('stop'),
+            current_rate,
+            is_short=trade.is_short,
+            leverage=trade.leverage
+        )
+
     def bot_loop_start(self, **kwargs) -> None:
         
         pairs = self.dp.current_whitelist()
