@@ -211,16 +211,6 @@ class HybridStrategy(IStrategy):
                            entry_tag: str | None, side: str, **kwargs) -> float:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        last_candle = dataframe.iloc[-1].squeeze()
-
-        stop = last_candle['high'] if trade.is_short else last_candle['low']
-        trade.set_custom_data(key='stop', value=stop)
-        risk = abs(stop / last_candle["close"] - 1)
-        self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
-        
-        trigger = 'max_high' if trade.is_short else 'min_low'
-        index = dataframe[dataframe[trigger].notna()].index[-2]
-        trade.set_custom_data(key='index', value=index)
         
         return dataframe['close'].iat[-1]
 
@@ -231,9 +221,20 @@ class HybridStrategy(IStrategy):
         if current_profit > 1: return 0.3
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
+        
+        if trade.get_custom_data('stop') is None:
+            last_candle = dataframe.iloc[-1].squeeze()
+            stop = last_candle['iss'] if trade.is_short else last_candle['isl']
+            trade.set_custom_data(key='stop', value=stop)
+            risk = abs(stop / last_candle["close"] - 1)
+            self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
+            
+            trigger = 'max_high' if trade.is_short else 'min_low'
+            index = dataframe[dataframe[trigger].notna()].index[-2]
+            trade.set_custom_data(key='index', value=index)
+
         index = trade.get_custom_data('index')
         tfs = ['4h', '1h', '']
-
         if trade.is_short:    
             for tf in tfs:
                 values = dataframe.loc[
