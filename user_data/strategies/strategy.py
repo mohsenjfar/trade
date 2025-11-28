@@ -234,23 +234,23 @@ class HybridStrategy(IStrategy):
             trade.set_custom_data(key='index', value=index)
 
         index = trade.get_custom_data('index')
-        tfs = ['4h', '1h', '']
+        tfs = ['_4h', '_1h', '']
         if trade.is_short:    
             for tf in tfs:
                 values = dataframe.loc[
                     (
-                        (dataframe[f'ss_{tf}'].notna()) &
+                        (dataframe[f'ss{tf}'].notna()) &
                         (dataframe.index >= index)
-                    ),f'ss_{tf}'].values
+                    ),f'ss{tf}'].values
                 if values.size > 0: break
             stop = np.append(values, trade.get_custom_data('stop')).min()
         else:
             for tf in tfs:
                 values = dataframe.loc[
                     (
-                        (dataframe[f'sl_{tf}'].notna()) &
+                        (dataframe[f'sl{tf}'].notna()) &
                         (dataframe.index >= index)
-                    ),f'sl_{tf}'].values
+                    ),f'sl{tf}'].values
                 if values.size > 0: break
             stop = np.append(values, trade.get_custom_data('stop')).max()
 
