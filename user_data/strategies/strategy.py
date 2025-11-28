@@ -152,7 +152,6 @@ class HybridStrategy(IStrategy):
         return dataframe
 
     @informative('1h')
-    @informative('4h')
     def populate_indicators_(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe = self.populate_features(dataframe)
@@ -234,7 +233,7 @@ class HybridStrategy(IStrategy):
             trade.set_custom_data(key='index', value=index)
 
         index = trade.get_custom_data('index')
-        tfs = ['_4h', '_1h', '']
+        tfs = ['_1h', '']
         if trade.is_short:    
             for tf in tfs:
                 values = dataframe.loc[
