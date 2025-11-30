@@ -10,8 +10,8 @@
   "trading_mode": "futures",
   "margin_mode": "isolated",
   "unfilledtimeout": {
-    "entry": 30,
-    "exit": 30,
+    "entry": 5,
+    "exit": 5,
     "exit_timeout_count": 0,
     "unit": "minutes"
   },

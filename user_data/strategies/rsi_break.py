@@ -6,8 +6,7 @@ import talib.abstract as ta
 from freqtrade.persistence import Trade
 from freqtrade.strategy import (
     IStrategy,
-    stoploss_from_absolute,
-    informative
+    stoploss_from_absolute
 )
 from datetime import datetime
 from typing import Optional
@@ -29,6 +28,20 @@ class RSIBreak(IStrategy):
     use_exit_signal = True
 
     use_custom_stoploss = True
+
+    @property
+    def protections(self):
+        return [
+            {
+                "method": "StoplossGuard",
+                "lookback_period_candles": 12,
+                "trade_limit": 1,
+                "stop_duration_candles": 48,
+                "required_profit": 0.0,
+                "only_per_pair": True,
+                "only_per_side": False
+            }
+        ]
 
     def extract_features(self, df, c1, c2, e, col, name):
 
@@ -92,11 +105,9 @@ class RSIBreak(IStrategy):
 
         indicies = dataframe[dataframe['max_high'].notna()].index
         dataframe['sb'] = dataframe['max_high'].iat[indicies[-2]]
-        dataframe['iss'] = dataframe.iloc[indicies[-2]:].high.max()
 
         indicies = dataframe[dataframe['min_low'].notna()].index
         dataframe['lb'] = dataframe['min_low'].iat[indicies[-2]]
-        dataframe['isl'] = dataframe.iloc[indicies[-2]:].low.min()
 
         return dataframe
 
@@ -116,16 +127,6 @@ class RSIBreak(IStrategy):
 
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         
-        dataframe.loc[
-            (
-                (qtpylib.crossed_below(dataframe['close'], dataframe['lb']))
-            ), "exit_long"] = 1
-
-        dataframe.loc[
-            (
-                (qtpylib.crossed_above(dataframe['close'], dataframe['sb']))
-            ), "exit_short"] = 1
-        
         return dataframe
 
     def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
@@ -136,35 +137,23 @@ class RSIBreak(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
         total_stake = max_stake + Trade.total_open_trades_stakes()
-        stop = last_candle["iss"] if side == "short" else last_candle["isl"]
-        risk = abs(stop / last_candle["close"] - 1)
-        return min(total_stake * self.trade_max_loss_allowed / risk, max_stake)
-
-    def custom_entry_price(self, pair: str, trade: Trade | None, current_time: datetime, proposed_rate: float,
-                           entry_tag: str | None, side: str, **kwargs) -> float:
-
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        
-        return dataframe['close'].iat[-1]
+        stop = last_candle["high"] if side == "short" else last_candle["low"]
+        risk = abs(stop / current_rate - 1)
+        return min(total_stake * self.trade_max_loss_allowed / risk, max_stake)\
 
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
-        if current_profit > 1: return 0.3
-
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
 
         if trade.get_custom_data('stop') is None:
             last_candle = dataframe.iloc[-1].squeeze()
-            stop = last_candle['iss'] if trade.is_short else last_candle['isl']
+            stop = last_candle['high'] if trade.is_short else last_candle['low']
             trade.set_custom_data(key='stop', value=stop)
-            risk = abs(stop / last_candle["close"] - 1)
+            risk = abs(stop / trade.open_rate - 1)
+            trade.set_custom_data(key='risk', value=risk)
             self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
-            
-            trigger = 'max_high' if trade.is_short else 'min_low'
-            index = dataframe[dataframe[trigger].notna()].index[-2]
-            trade.set_custom_data(key='index', value=index)
 
         return stoploss_from_absolute(
             trade.get_custom_data('stop'),
@@ -173,9 +162,8 @@ class RSIBreak(IStrategy):
             leverage=trade.leverage
         )
 
-    def bot_loop_start(self, **kwargs) -> None:
+    def custom_exit(self, pair: str, trade: 'Trade', current_time: 'datetime', current_rate: float,
+                    current_profit: float, **kwargs):
         
-        pairs = self.dp.current_whitelist()
-        for pair in pairs:
-            if self.is_pair_locked(pair):
-                self.unlock_pair(pair)
+        risk = trade.get_custom_data('risk')
+        if current_profit > 2 * risk: return "Target hit!"
