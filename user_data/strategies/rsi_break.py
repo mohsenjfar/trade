@@ -34,8 +34,8 @@ class RSIBreak(IStrategy):
         return [
             {
                 "method": "StoplossGuard",
-                "lookback_period_candles": 12,
-                "trade_limit": 1,
+                "lookback_period_candles": 48,
+                "trade_limit": 2,
                 "stop_duration_candles": 48,
                 "required_profit": 0.0,
                 "only_per_pair": True,
@@ -96,6 +96,7 @@ class RSIBreak(IStrategy):
 
         dataframe.loc[dataframe['max_high'].notna(),"cat"] = 'H'
         dataframe.loc[dataframe['min_low'].notna(),"cat"] = 'L'
+        dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-3:]
 
         return dataframe
 
@@ -115,11 +116,13 @@ class RSIBreak(IStrategy):
 
         dataframe.loc[
             (
+                (dataframe['cat']=='LLL') &
                 (qtpylib.crossed_above(dataframe['close'], dataframe['lb']))
             ), "enter_long"] = 1
 
         dataframe.loc[
             (
+                (dataframe['cat']=='HHH') &
                 (qtpylib.crossed_below(dataframe['close'], dataframe['sb']))
             ), "enter_short"] = 1
 
@@ -166,4 +169,4 @@ class RSIBreak(IStrategy):
                     current_profit: float, **kwargs):
         
         risk = trade.get_custom_data('risk')
-        if current_profit > 2 * risk: return "Target hit!"
+        if current_profit > 3 * risk: return "Target hit!"
