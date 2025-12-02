@@ -43,7 +43,7 @@ class RSIBreak(IStrategy):
             }
         ]
 
-    def extract_features(self, df, c1, c2, e, col, name):
+    def extract_features(self, df, c1, c2, e, col, name, direction='forward'):
 
         highs = df.loc[c1].reset_index().rename(columns={'index':'up_index'})
         crosses = df.loc[c2].reset_index().rename(columns={'index':'down_index'})
@@ -57,7 +57,7 @@ class RSIBreak(IStrategy):
             crosses.sort_values('down_index'),
             left_on='up_index',
             right_on='down_index',
-            direction='forward'
+            direction=direction
         )
 
         pairs = pairs[['up_index','down_index']].drop_duplicates('down_index', keep='last').dropna().reset_index(drop=True)
@@ -169,4 +169,4 @@ class RSIBreak(IStrategy):
                     current_profit: float, **kwargs):
         
         risk = trade.get_custom_data('risk')
-        if current_profit > 3 * risk: return "Target hit!"
+        if current_profit > 5 * risk: return "Target hit!"
