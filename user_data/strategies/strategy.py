@@ -22,7 +22,7 @@ class HybridStrategy(IStrategy):
 
     trade_max_loss_allowed = 0.01
 
-    timeframe = '15m'
+    timeframe = '5m'
 
     can_short: bool = True
 
@@ -91,11 +91,11 @@ class HybridStrategy(IStrategy):
     def set_freqai_targets(self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
 
         self.freqai.class_names = ["down", "up"]
-        dataframe['&s-up_or_down'] = np.where(dataframe["close"].shift(-3) > dataframe["close"], 'up', 'down')
+        dataframe['&s-up_or_down'] = np.where(dataframe["close"].shift(-12) > dataframe["close"], 'up', 'down')
 
         return dataframe
 
-    def extract_features(self, df, c1, c2, e, col, name):
+    def extract_features(self, df, c1, c2, e, col, name, direction='forward'):
 
         highs = df.loc[c1].reset_index().rename(columns={'index':'up_index'})
         crosses = df.loc[c2].reset_index().rename(columns={'index':'down_index'})
@@ -109,7 +109,7 @@ class HybridStrategy(IStrategy):
             crosses.sort_values('down_index'),
             left_on='up_index',
             right_on='down_index',
-            direction='forward'
+            direction=direction
         )
 
         pairs = pairs[['up_index','down_index']].drop_duplicates('down_index', keep='last').dropna().reset_index(drop=True)
@@ -151,6 +151,7 @@ class HybridStrategy(IStrategy):
 
         return dataframe
 
+    @informative('15m')
     @informative('1h')
     def populate_indicators_(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
@@ -178,6 +179,7 @@ class HybridStrategy(IStrategy):
             (
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'up') & # Guard
+                (dataframe['cat_15m'].ffill() == "L") & # Guard
                 (qtpylib.crossed_above(dataframe['close'], dataframe['lb'])) # Trigger
             ), "enter_long"] = 1
 
@@ -185,6 +187,7 @@ class HybridStrategy(IStrategy):
             (
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'down') & # Guard
+                (dataframe['cat_15m'].ffill() == "H") & # Guard
                 (qtpylib.crossed_below(dataframe['close'], dataframe['sb'])) # Trigger
             ), "enter_short"] = 1
 
@@ -219,14 +222,21 @@ class HybridStrategy(IStrategy):
             stop = last_candle['high'] if trade.is_short else last_candle['low']
             trade.set_custom_data(key='stop', value=stop)
             risk = abs(stop / trade.open_rate - 1)
+            trade.set_custom_data(key='risk', value=risk)
             self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
             
             trigger = 'max_high' if trade.is_short else 'min_low'
             index = dataframe[dataframe[trigger].notna()].index[-2]
             trade.set_custom_data(key='index', value=index)
+        
+        risk = trade.get_custom_data(key='risk')
+        if current_profit > risk * 4:
+            side = -1 if trade.is_short else 1
+            stop = trade.open_rate * (1 + risk * 2 * side)
+            trade.set_custom_data(key='stop', value=stop)
 
         index = trade.get_custom_data('index')
-        tfs = ['_1h', '']
+        tfs = ['_1h', '_15m']
         if trade.is_short:    
             for tf in tfs:
                 values = dataframe.loc[
@@ -235,7 +245,15 @@ class HybridStrategy(IStrategy):
                         (dataframe.index >= index)
                     ),f'ss{tf}'].values
                 if values.size > 0: break
-            stop = np.append(values, trade.get_custom_data('stop')).min()
+            stop_rate = np.append(values, trade.get_custom_data('stop')).min()
+            
+            return stoploss_from_absolute(
+                stop_rate,
+                current_rate,
+                is_short=trade.is_short,
+                leverage=trade.leverage
+            )
+        
         else:
             for tf in tfs:
                 values = dataframe.loc[
@@ -244,12 +262,13 @@ class HybridStrategy(IStrategy):
                         (dataframe.index >= index)
                     ),f'sl{tf}'].values
                 if values.size > 0: break
-            stop = np.append(values, trade.get_custom_data('stop')).max()
+            stop_rate = np.append(values, trade.get_custom_data('stop')).max()
+            
+            return stoploss_from_absolute(
+                stop_rate,
+                current_rate,
+                is_short=trade.is_short,
+                leverage=trade.leverage
+            )
 
-        return stoploss_from_absolute(
-            stop,
-            current_rate,
-            is_short=trade.is_short,
-            leverage=trade.leverage
-        )
-
+        
