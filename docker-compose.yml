@@ -10,8 +10,8 @@ services:
         - 1.1.1.1
       volumes:
         - "./user_data:/freqtrade/user_data"
-      ports:
-        - "8080:8080"
+      # ports:
+      #   - "8080:8080"
       command: >
         trade
         --logfile /freqtrade/user_data/logs/strategy.log
@@ -28,8 +28,8 @@ services:
         - 1.1.1.1
       volumes:
         - "./user_data:/freqtrade/user_data"
-      # ports:
-      #   - "8080:8080"
+      ports:
+        - "8080:8080"
       command: >
         trade
         --logfile /freqtrade/user_data/logs/rsi_break.log
