@@ -29,6 +29,16 @@ class RSIBreak(IStrategy):
 
     use_custom_stoploss = True
 
+    order_types = {
+        "entry": "limit",
+        "exit": "limit",
+        "emergency_exit": "market",
+        "stoploss": "market",
+        "stoploss_on_exchange": True,
+        "stoploss_on_exchange_interval": 60,
+        "stoploss_on_exchange_limit_ratio": 0.99
+    }
+
     @property
     def protections(self):
         return [

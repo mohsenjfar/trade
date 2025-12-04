@@ -32,6 +32,16 @@ class HybridStrategy(IStrategy):
 
     use_custom_stoploss = True
 
+    order_types = {
+        "entry": "limit",
+        "exit": "limit",
+        "emergency_exit": "market",
+        "stoploss": "market",
+        "stoploss_on_exchange": True,
+        "stoploss_on_exchange_interval": 60,
+        "stoploss_on_exchange_limit_ratio": 0.99
+    }
+
     max_rsi = IntParameter(low=51, high=100, default=70, space='sell', optimize=True, load=True)
     min_rsi = IntParameter(low=1, high=50, default=30, space='buy', optimize=True, load=True)
     
