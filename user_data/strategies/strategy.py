@@ -161,9 +161,9 @@ class HybridStrategy(IStrategy):
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe = self.freqai.start(dataframe, metadata, self)
-        
         dataframe = self.populate_features(dataframe)
+
+        dataframe = self.freqai.start(dataframe, metadata, self)
 
         indicies = dataframe[dataframe['max_high'].notna()].index
         dataframe['sb'] = dataframe['max_high'].iat[indicies[-2]]
