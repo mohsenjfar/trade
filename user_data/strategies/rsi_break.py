@@ -8,7 +8,7 @@ from freqtrade.strategy import (
     IStrategy,
     stoploss_from_absolute
 )
-from datetime import datetime
+from datetime import datetime, date
 from typing import Optional
 
 class RSIBreak(IStrategy):
@@ -152,21 +152,20 @@ class RSIBreak(IStrategy):
         total_stake = max_stake + Trade.total_open_trades_stakes()
         stop = last_candle["high"] if side == "short" else last_candle["low"]
         risk = abs(stop / current_rate - 1)
-        return min(total_stake * self.trade_max_loss_allowed / risk, max_stake)\
+        return min(total_stake * self.trade_max_loss_allowed / risk, max_stake)
 
     def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
                             time_in_force: str, current_time: datetime, entry_tag: Optional[str],
                             side: str, **kwargs) -> bool:
 
-        closed_trades = Trade.get_trades_proxy(is_open=False)
-        last_trade_index = closed_trades[-1].get_custom_data('index')
-        
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        
         trigger = 'max_high' if side == 'short' else 'min_low'
         index = dataframe[dataframe[trigger].notna()].index[-2]
 
-        if last_trade_index == index:
+        closed_trades = Trade.get_trades_proxy(pair=pair, is_open=False, open_date=date.today())
+        indicies = [trade.get_custom_data('index') for trade in closed_trades]
+        
+        if index in indicies:
             return False
 
         return True
