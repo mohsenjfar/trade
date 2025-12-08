@@ -163,6 +163,7 @@ class RSIBreak(IStrategy):
         total_stake = max_stake + Trade.total_open_trades_stakes()
         stop = last_candle["high"] if side == "short" else last_candle["low"]
         risk = abs(stop / current_rate - 1)
+        if risk < 0.002: return 0
         return min(total_stake * self.trade_max_loss_allowed / (risk * leverage), max_stake)
 
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
