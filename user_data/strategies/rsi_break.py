@@ -196,4 +196,4 @@ class RSIBreak(IStrategy):
                     current_profit: float, **kwargs):
         
         risk = trade.get_custom_data('risk')
-        if current_profit > 5 * risk: return "Target hit!"
+        if current_profit > 5 * risk * trade.leverage: return "Target hit!"
