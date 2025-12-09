@@ -30,6 +30,11 @@ class RSIBreak(IStrategy):
 
     use_custom_stoploss = True
 
+    custom_info = {
+        'len': 0,
+        'exclude':[]
+    }
+
     order_types = {
         "entry": "limit",
         "exit": "limit",
@@ -39,20 +44,6 @@ class RSIBreak(IStrategy):
         "stoploss_on_exchange_interval": 60,
         "stoploss_on_exchange_limit_ratio": 0.99
     }
-
-    @property
-    def protections(self):
-        return [
-            {
-                "method": "StoplossGuard",
-                "lookback_period_candles": 48,
-                "trade_limit": 2,
-                "stop_duration_candles": 48,
-                "required_profit": 0.0,
-                "only_per_pair": True,
-                "only_per_side": False
-            }
-        ]
 
     def extract_features(self, df, c1, c2, e, col, name, direction='forward'):
 
@@ -107,13 +98,20 @@ class RSIBreak(IStrategy):
 
         dataframe.loc[dataframe['max_high'].notna(),"cat"] = 'H'
         dataframe.loc[dataframe['min_low'].notna(),"cat"] = 'L'
-        dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-3:]
 
         return dataframe
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         
         dataframe = self.populate_features(dataframe)
+
+        cat = ''.join(dataframe[dataframe.cat.notna()].cat.values)
+        if len(cat) > self.custom_info.get('len'):
+            self.custom_info['len'] = len(cat)
+            self.custom_info['exclude'] = []
+        dataframe.drop(self.custom_info['exclude'])
+
+        dataframe['extrema'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-3:]
 
         indicies = dataframe[dataframe['max_high'].notna()].index
         dataframe['sb'] = dataframe['max_high'].iat[indicies[-2]]
@@ -127,13 +125,13 @@ class RSIBreak(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['cat']=='LLL') &
+                (dataframe['extrema']=='LLL') &
                 (qtpylib.crossed_above(dataframe['close'], dataframe['lb']))
             ), "enter_long"] = 1
 
         dataframe.loc[
             (
-                (dataframe['cat']=='HHH') &
+                (dataframe['extrema']=='HHH') &
                 (qtpylib.crossed_below(dataframe['close'], dataframe['sb']))
             ), "enter_short"] = 1
 
@@ -197,3 +195,14 @@ class RSIBreak(IStrategy):
         
         risk = trade.get_custom_data('risk')
         if current_profit > 5 * risk * trade.leverage: return "Target hit!"
+
+    def confirm_trade_exit(self, pair: str, trade: Trade, order_type: str, amount: float,
+                           rate: float, time_in_force: str, exit_reason: str,
+                           current_time: datetime, **kwargs) -> bool:
+
+        if trade.calc_profit_ratio(rate) < 0:
+            index = trade.get_custom_data('index')
+            self.custom_info['exclude'].append(index)
+            self.dp.send_msg(f"Excluded indicies: {self.custom_info['exclude']}")
+
+        return True
