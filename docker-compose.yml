@@ -30,6 +30,8 @@ services:
         - "./user_data:/freqtrade/user_data"
       ports:
         - "8080:8080"
+      environment:
+        - PYTHONPATH=/freqtrade
       command: >
         trade
         --logfile /freqtrade/user_data/logs/rsi_break.log
