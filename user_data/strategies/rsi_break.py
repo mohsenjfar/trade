@@ -108,7 +108,7 @@ class RSIBreak(IStrategy):
         dataframe = self.populate_features(dataframe)
         
         indicies = [
-            int(dataframe[dataframe[trigger].notna()].index[-1])
+            dataframe[dataframe[trigger].notna()].date.max()
             for trigger in ['max_high', 'min_low']
         ]
         if max(indicies) != self.store['last_index']:
@@ -203,10 +203,9 @@ class RSIBreak(IStrategy):
 
     def order_filled(self, pair: str, trade: Trade, order: Order, current_time: datetime, **kwargs) -> None:
 
-        if not trade.has_open_orders:
-            if trade.close_profit_abs < 0:
-                index = trade.get_custom_data('index')
-                self.store.append('exclude', index)
-                self.dp.send_msg(f"Excluded indicies: {self.store['exclude']}")
+        if (trade.nr_of_successful_exits == 1) and (trade.close_profit_abs < 0):
+            index = trade.get_custom_data('index')
+            self.store.append('exclude', index)
+            self.dp.send_msg(f"Excluded indicies: {self.store['exclude']}")
 
         return None
