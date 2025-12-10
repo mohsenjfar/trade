@@ -111,8 +111,8 @@ class RSIBreak(IStrategy):
             dataframe[dataframe[trigger].notna()].date.max()
             for trigger in ['max_high', 'min_low']
         ]
-        if max(indicies) != self.store['last_index']:
-            self.store['last_index'] = max(indicies)
+        if str(max(indicies)) != self.store['last_index']:
+            self.store['last_index'] = str(max(indicies))
             self.store['exclude'] = []
         dataframe.drop(self.store['exclude'])
 
