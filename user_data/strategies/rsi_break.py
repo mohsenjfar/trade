@@ -114,8 +114,7 @@ class RSIBreak(IStrategy):
         if str(max(indicies)) != self.store['last_index']:
             self.store['last_index'] = str(max(indicies))
             self.store['exclude'] = []
-        exclude = [pd.to_datetime(x) for x in self.store['exclude']]
-        dataframe = dataframe[~pd.to_datetime(dataframe['date']).isin(exclude)]
+        dataframe = dataframe[~dataframe['date'].isin(self.store['exclude'])]
 
         indicies = dataframe[dataframe['max_high'].notna()].index
         dataframe['sb'] = dataframe['max_high'].iat[indicies[-2]]
@@ -186,7 +185,7 @@ class RSIBreak(IStrategy):
             self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
             trigger = 'max_high' if trade.is_short else 'min_low'
-            index = dataframe[dataframe[trigger].notna()].date[-2]
+            index = dataframe[dataframe[trigger].notna()].date.iat[-2]
             trade.set_custom_data(key='index', value=str(index))
 
         return stoploss_from_absolute(
