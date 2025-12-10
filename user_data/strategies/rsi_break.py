@@ -183,7 +183,7 @@ class RSIBreak(IStrategy):
 
             trigger = 'max_high' if trade.is_short else 'min_low'
             index = dataframe[dataframe[trigger].notna()].index[-2]
-            trade.set_custom_data(key='index', value=index)
+            trade.set_custom_data(key='index', value=int(index))
 
         return stoploss_from_absolute(
             trade.get_custom_data('stop'),
