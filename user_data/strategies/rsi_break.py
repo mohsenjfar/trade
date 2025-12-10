@@ -11,6 +11,7 @@ from freqtrade.strategy import (
 from datetime import datetime
 from math import ceil
 from typing import Optional
+from user_data.utils.json_store import JsonStore
 
 class RSIBreak(IStrategy):
 
@@ -30,10 +31,10 @@ class RSIBreak(IStrategy):
 
     use_custom_stoploss = True
 
-    custom_info = {
-        'len': 0,
-        'exclude':[]
-    }
+    store = JsonStore(
+        'custom_info.json',
+        default_data={'len': 0, 'exclude': []}
+    )
 
     order_types = {
         "entry": "limit",
@@ -104,12 +105,12 @@ class RSIBreak(IStrategy):
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         
         dataframe = self.populate_features(dataframe)
-
+        
         cat = ''.join(dataframe[dataframe.cat.notna()].cat.values)
-        if len(cat) > self.custom_info.get('len'):
-            self.custom_info['len'] = len(cat)
-            self.custom_info['exclude'] = []
-        dataframe.drop(self.custom_info['exclude'])
+        if len(cat) > self.store['len']:
+            self.store['len'] = len(cat)
+            self.store['exclude'] = []
+        dataframe.drop(self.store['exclude'])
 
         dataframe['extrema'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-3:]
 
@@ -196,13 +197,11 @@ class RSIBreak(IStrategy):
         risk = trade.get_custom_data('risk')
         if current_profit > 5 * risk * trade.leverage: return "Target hit!"
 
-    def confirm_trade_exit(self, pair: str, trade: Trade, order_type: str, amount: float,
-                           rate: float, time_in_force: str, exit_reason: str,
-                           current_time: datetime, **kwargs) -> bool:
+    def order_filled(self, pair: str, trade: Trade, order: Order, current_time: datetime, **kwargs) -> None:
 
-        if trade.calc_profit_ratio(rate) < 0:
+        if not trade.has_open_orders and (trade.close_profit_abs < 0):
             index = trade.get_custom_data('index')
-            self.custom_info['exclude'].append(index)
-            self.dp.send_msg(f"Excluded indicies: {self.custom_info['exclude']}")
+            self.store.append('exclude', index)
+            self.dp.send_msg(f"Excluded indicies: {self.store['exclude']}
 
-        return True
+        return None
