@@ -115,7 +115,8 @@ class RSIBreak(IStrategy):
             self.store['last_index'] = str(max(indicies))
             self.store['exclude'] = []
         exclude = [pd.to_datetime(x) for x in self.store['exclude']]
-        dataframe = dataframe[~pd.to_datetime(dataframe['date']).isin(exclude)]
+        mask = pd.to_datetime(dataframe['date']).isin(exclude)
+        dataframe.loc[mask, ['max_high','min_low','cat']] = np.nan
 
         indicies = dataframe[dataframe['max_high'].notna()].index
         dataframe['sb'] = dataframe['max_high'].iat[indicies[-2]]
