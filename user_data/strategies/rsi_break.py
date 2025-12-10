@@ -202,6 +202,6 @@ class RSIBreak(IStrategy):
         if not trade.has_open_orders and (trade.close_profit_abs < 0):
             index = trade.get_custom_data('index')
             self.store.append('exclude', index)
-            self.dp.send_msg(f"Excluded indicies: {self.store['exclude']}
+            self.dp.send_msg(f"Excluded indicies: {self.store['exclude']}"
 
         return None
