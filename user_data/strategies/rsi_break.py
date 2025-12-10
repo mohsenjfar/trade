@@ -34,7 +34,7 @@ class RSIBreak(IStrategy):
 
     store = JsonStore(
         '/freqtrade/user_data/custom_info.json',
-        default_data={'len': 0, 'exclude': []}
+        default_data={'last_index': 0, 'exclude': []}
     )
 
     order_types = {
@@ -107,13 +107,14 @@ class RSIBreak(IStrategy):
         
         dataframe = self.populate_features(dataframe)
         
-        cat = ''.join(dataframe[dataframe.cat.notna()].cat.values)
-        if len(cat) > self.store['len']:
-            self.store['len'] = len(cat)
+        indicies = [
+            int(dataframe[dataframe[trigger].notna()].index[-1])
+            for trigger in ['max_high', 'min_low']
+        ]
+        if max(indicies) != self.store['last_index']:
+            self.store['last_index'] = max(indicies)
             self.store['exclude'] = []
         dataframe.drop(self.store['exclude'])
-
-        dataframe['extrema'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-3:]
 
         indicies = dataframe[dataframe['max_high'].notna()].index
         dataframe['sb'] = dataframe['max_high'].iat[indicies[-2]]
@@ -121,19 +122,21 @@ class RSIBreak(IStrategy):
         indicies = dataframe[dataframe['min_low'].notna()].index
         dataframe['lb'] = dataframe['min_low'].iat[indicies[-2]]
 
+        dataframe['extrema'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-2:]
+
         return dataframe
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe.loc[
             (
-                (dataframe['extrema']=='LLL') &
+                (dataframe['extrema']=='LL') &
                 (qtpylib.crossed_above(dataframe['close'], dataframe['lb']))
             ), "enter_long"] = 1
 
         dataframe.loc[
             (
-                (dataframe['extrema']=='HHH') &
+                (dataframe['extrema']=='HH') &
                 (qtpylib.crossed_below(dataframe['close'], dataframe['sb']))
             ), "enter_short"] = 1
 
