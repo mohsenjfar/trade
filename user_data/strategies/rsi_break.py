@@ -33,7 +33,7 @@ class RSIBreak(IStrategy):
     use_custom_stoploss = True
 
     store = JsonStore(
-        'custom_info.json',
+        '/freqtrade/user_data/custom_info.json',
         default_data={'len': 0, 'exclude': []}
     )
 
