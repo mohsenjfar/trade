@@ -11,7 +11,7 @@ from freqtrade.strategy import (
 from datetime import datetime
 from math import ceil
 from typing import Optional
-from utils.json_store import JsonStore
+from user_data.utils.json_store import JsonStore
 
 class RSIBreak(IStrategy):
 
