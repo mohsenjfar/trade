@@ -32,6 +32,10 @@ class JsonStore:
             del self.data[key]
             self._save()
 
+    def append(self, key, value):
+        self.data[key].append(value)
+        self._save()
+
     def __getitem__(self, key):
         return self.data[key]
 
