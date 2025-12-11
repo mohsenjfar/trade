@@ -6,13 +6,11 @@ import talib.abstract as ta
 from freqtrade.strategy import (
     IStrategy,
     Trade,
-    Order,
     stoploss_from_absolute
 )
 from datetime import datetime
 from math import ceil
 from typing import Optional
-from user_data.utils.json_store import JsonStore
 
 class RSIBreak(IStrategy):
 
@@ -31,11 +29,6 @@ class RSIBreak(IStrategy):
     use_exit_signal = True
 
     use_custom_stoploss = True
-
-    store = JsonStore(
-        '/freqtrade/user_data/custom_info.json',
-        default_data={'last_index': 0, 'exclude': []}
-    )
 
     order_types = {
         "entry": "limit",
@@ -86,17 +79,13 @@ class RSIBreak(IStrategy):
         c2_over = qtpylib.crossed_below(dataframe['rsi'], 70)
 
         dataframe = self.extract_features(dataframe, c1_over, c2_over, 'max', "high", "max_high")
-        dataframe = self.extract_features(dataframe, c1_over, c2_over, 'max', "rsi", "max_rsi")
-        dataframe = self.extract_features(dataframe, c2_over, c1_over, 'min', 'low', "sl")
-        dataframe = self.extract_features(dataframe, c2_over, c1_over, 'min', 'rsi', "sl_rsi")
+        dataframe = self.extract_features(dataframe, c1_over, c2_over, 'min', "low", "min_high")
         
         c1_under = qtpylib.crossed_below(dataframe['rsi'], 30)
         c2_under = qtpylib.crossed_above(dataframe['rsi'], 30)
 
         dataframe = self.extract_features(dataframe, c1_under, c2_under, 'min', "low", "min_low")
-        dataframe = self.extract_features(dataframe, c1_under, c2_under, 'min', "rsi", "min_rsi")
-        dataframe = self.extract_features(dataframe, c2_under, c1_under, 'max', "high", "ss")
-        dataframe = self.extract_features(dataframe, c2_under, c1_under, 'max', "rsi", "ss_rsi")
+        dataframe = self.extract_features(dataframe, c1_under, c2_under, 'max', "high", "max_low")
 
         dataframe.loc[dataframe['max_high'].notna(),"cat"] = 'H'
         dataframe.loc[dataframe['min_low'].notna(),"cat"] = 'L'
@@ -106,26 +95,12 @@ class RSIBreak(IStrategy):
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         
         dataframe = self.populate_features(dataframe)
-        
-        indicies = [
-            dataframe[dataframe[trigger].notna()].date.max()
-            for trigger in ['max_high', 'min_low']
-        ]
-        if str(max(indicies)) != self.store['last_index']:
-            self.store['last_index'] = str(max(indicies))
-            self.store['exclude'] = []
-        
-        exclude = [pd.to_datetime(x) for x in self.store['exclude']]
-        mask = pd.to_datetime(dataframe['date']).isin(exclude)
-        dataframe.loc[mask, ['max_high','min_low','cat']] = np.nan
 
-        indicies = dataframe[dataframe['max_high'].notna()].index
-        dataframe['sb'] = dataframe['max_high'].iat[indicies[-2]]
+        index = dataframe[dataframe['min_low'].notna()].index.max()
+        dataframe['sl'] = dataframe.iloc[index:].low.min()
 
-        indicies = dataframe[dataframe['min_low'].notna()].index
-        dataframe['lb'] = dataframe['min_low'].iat[indicies[-2]]
-
-        dataframe['extrema'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-2:]
+        index = dataframe[dataframe['max_high'].notna()].index.max()
+        dataframe['ss'] = dataframe.iloc[index:].high.max()
 
         return dataframe
 
@@ -133,14 +108,12 @@ class RSIBreak(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['extrema']=='LL') &
-                (qtpylib.crossed_above(dataframe['close'], dataframe['lb']))
+                (qtpylib.crossed_above(dataframe['close'], dataframe['max_low']))
             ), "enter_long"] = 1
 
         dataframe.loc[
             (
-                (dataframe['extrema']=='HH') &
-                (qtpylib.crossed_below(dataframe['close'], dataframe['sb']))
+                (qtpylib.crossed_below(dataframe['close'], dataframe['min_high']))
             ), "enter_short"] = 1
 
         return dataframe
@@ -155,7 +128,7 @@ class RSIBreak(IStrategy):
         
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
-        stop = last_candle["high"] if side == "short" else last_candle["low"]
+        stop = last_candle["ss"] if side == "short" else last_candle["sl"]
         risk = abs(stop / current_rate - 1)
         return ceil(self.trade_max_loss_allowed / risk)
 
@@ -167,7 +140,7 @@ class RSIBreak(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
         total_stake = max_stake + Trade.total_open_trades_stakes()
-        stop = last_candle["high"] if side == "short" else last_candle["low"]
+        stop = last_candle["ss"] if side == "short" else last_candle["sl"]
         risk = abs(stop / current_rate - 1)
         if risk < 0.002: return 0
         return min(total_stake * self.trade_max_loss_allowed / (risk * leverage), max_stake)
@@ -180,16 +153,12 @@ class RSIBreak(IStrategy):
             dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
             last_candle = dataframe.iloc[-1].squeeze()
             
-            stop = last_candle['high'] if trade.is_short else last_candle['low']
+            stop = last_candle['ss'] if trade.is_short else last_candle['sl']
             trade.set_custom_data(key='stop', value=stop)
             
             risk = abs(stop / trade.open_rate - 1) * trade.leverage
             trade.set_custom_data(key='risk', value=risk)
             self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
-
-            trigger = 'max_high' if trade.is_short else 'min_low'
-            index = dataframe[dataframe[trigger].notna()].date.iat[-2]
-            trade.set_custom_data(key='index', value=str(index))
 
         return stoploss_from_absolute(
             trade.get_custom_data('stop'),
@@ -203,11 +172,3 @@ class RSIBreak(IStrategy):
         
         risk = trade.get_custom_data('risk')
         if current_profit > 5 * risk * trade.leverage: return "Target hit!"
-
-    def order_filled(self, pair: str, trade: Trade, order: Order, current_time: datetime, **kwargs) -> None:
-
-        if trade.close_profit_abs and (not trade.has_open_orders) and (trade.close_profit_abs < 0):
-            index = trade.get_custom_data('index')
-            self.store.append('exclude', index)
-
-        return None
