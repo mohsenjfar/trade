@@ -80,7 +80,7 @@ class RSIBreak(IStrategy):
         dataframe = self.extract_features(dataframe, c1_over, c2_over, "high", "max_high")
         dataframe = self.extract_features(dataframe, c1_over, c2_over, "low", "min_high")
 
-        mask = dataframe[dataframe['min_high'].notna()]
+        mask = dataframe['min_high'].notna()
         dataframe.loc[mask,'hlt'] = dataframe.loc[mask, 'high']
         dataframe.loc[mask,'hst'] = dataframe.loc[mask, 'low']
         
@@ -89,7 +89,7 @@ class RSIBreak(IStrategy):
         dataframe = self.extract_features(dataframe, c1_under, c2_under, "low" ,"min_low")
         dataframe = self.extract_features(dataframe, c1_under, c2_under, "high", "max_low")
 
-        mask = dataframe[dataframe['max_low'].notna()]
+        mask = dataframe['max_low'].notna()
         dataframe.loc[mask,'llt'] = dataframe.loc[mask, 'high']
         dataframe.loc[mask,'lst'] = dataframe.loc[mask, 'low']
 
