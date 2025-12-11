@@ -8,7 +8,7 @@ from freqtrade.strategy import (
     Trade,
     stoploss_from_absolute
 )
-from datetime import datetime
+from datetime import datetime, date
 from math import ceil
 from typing import Optional
 
@@ -39,7 +39,7 @@ class RSIBreak(IStrategy):
         "stoploss_on_exchange_interval": 60,
         "stoploss_on_exchange_limit_ratio": 0.99
     }
-
+    
     def extract_features(self, df, c1, c2, e, col, name, direction='forward'):
 
         highs = df.loc[c1].reset_index().rename(columns={'index':'up_index'})
@@ -96,12 +96,6 @@ class RSIBreak(IStrategy):
         
         dataframe = self.populate_features(dataframe)
 
-        index = dataframe[dataframe['min_low'].notna()].index.max()
-        dataframe['sl'] = dataframe.iloc[index:].low.min()
-
-        index = dataframe[dataframe['max_high'].notna()].index.max()
-        dataframe['ss'] = dataframe.iloc[index:].high.max()
-
         return dataframe
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
@@ -128,7 +122,7 @@ class RSIBreak(IStrategy):
         
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
-        stop = last_candle["ss"] if side == "short" else last_candle["sl"]
+        stop = last_candle["high"] if side == "short" else last_candle["low"]
         risk = abs(stop / current_rate - 1)
         return ceil(self.trade_max_loss_allowed / risk)
 
@@ -137,10 +131,14 @@ class RSIBreak(IStrategy):
                             leverage: float, entry_tag: Optional[str], side: str,
                             **kwargs) -> float:
 
+        trades = Trade.get_trades_proxy(is_open=False, open_date=date.today())
+        losses = [trade.close_profit_abs for trade in trades if trade.close_profit_abs < 0]
+        if len(losses) == 4: return 0
+
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
         total_stake = max_stake + Trade.total_open_trades_stakes()
-        stop = last_candle["ss"] if side == "short" else last_candle["sl"]
+        stop = last_candle["high"] if side == "short" else last_candle["low"]
         risk = abs(stop / current_rate - 1)
         if risk < 0.002: return 0
         return min(total_stake * self.trade_max_loss_allowed / (risk * leverage), max_stake)
@@ -153,7 +151,7 @@ class RSIBreak(IStrategy):
             dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
             last_candle = dataframe.iloc[-1].squeeze()
             
-            stop = last_candle['ss'] if trade.is_short else last_candle['sl']
+            stop = last_candle['high'] if trade.is_short else last_candle['low']
             trade.set_custom_data(key='stop', value=stop)
             
             risk = abs(stop / trade.open_rate - 1) * trade.leverage
@@ -171,4 +169,14 @@ class RSIBreak(IStrategy):
                     current_profit: float, **kwargs):
         
         risk = trade.get_custom_data('risk')
-        if current_profit > 5 * risk * trade.leverage: return "Target hit!"
+        if current_profit > 4 * risk * trade.leverage: return "Target hit!"
+
+    def custom_exit_price(self, pair: str, trade: Trade,
+                          current_time: datetime, proposed_rate: float,
+                          current_profit: float, exit_tag: str | None, **kwargs) -> float:
+
+        risk = trade.get_custom_data('risk')
+        side = -1 if trade.is_short else 1
+        return trade.open_rate * (1 + 5 * risk * trade.leverage * side)
+    
+
