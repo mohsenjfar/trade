@@ -79,19 +79,11 @@ class RSIBreak(IStrategy):
         c2_over = qtpylib.crossed_below(dataframe['rsi'], 70)
         dataframe = self.extract_features(dataframe, c1_over, c2_over, "high", "max_high")
         dataframe = self.extract_features(dataframe, c1_over, c2_over, "low", "min_high")
-
-        mask = dataframe['min_high'].notna()
-        dataframe.loc[mask,'hlt'] = dataframe.loc[mask, 'high']
-        dataframe.loc[mask,'hst'] = dataframe.loc[mask, 'low']
         
         c1_under = qtpylib.crossed_below(dataframe['rsi'], 30)
         c2_under = qtpylib.crossed_above(dataframe['rsi'], 30)
         dataframe = self.extract_features(dataframe, c1_under, c2_under, "low" ,"min_low")
         dataframe = self.extract_features(dataframe, c1_under, c2_under, "high", "max_low")
-
-        mask = dataframe['max_low'].notna()
-        dataframe.loc[mask,'llt'] = dataframe.loc[mask, 'high']
-        dataframe.loc[mask,'lst'] = dataframe.loc[mask, 'low']
 
         dataframe.loc[dataframe['max_high'].notna(),"cat"] = 'H'
         dataframe.loc[dataframe['min_low'].notna(),"cat"] = 'L'
@@ -102,29 +94,25 @@ class RSIBreak(IStrategy):
         
         dataframe = self.populate_features(dataframe)
 
+        index = dataframe[dataframe['max_high'].notna()].index.max()
+        dataframe['ss'] = dataframe.iloc[index:].high.max()
+
+        index = dataframe[dataframe['min_low'].notna()].index.max()
+        dataframe['sl'] = dataframe.iloc[index:].low.min()
+
         return dataframe
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe.loc[
             (
-                (qtpylib.crossed_above(dataframe['close'], dataframe['hlt'].ffill()))
-            ), ["enter_long","enter_tag"]] = (1, 'high_long_trigger')
+                (qtpylib.crossed_above(dataframe['close'], dataframe['max_low'].ffill()))
+            ), "enter_long"] = 1
         
         dataframe.loc[
             (
-                (qtpylib.crossed_below(dataframe['close'], dataframe['hst'].ffill()))
-            ), ["enter_short","enter_tag"]] = (1, 'high_short_trigger')
-
-        dataframe.loc[
-            (
-                (qtpylib.crossed_below(dataframe['close'], dataframe['llt'].ffill()))
-            ), ["enter_long","enter_tag"]] = (1, 'low_long_trigger')
-    
-        dataframe.loc[
-            (
-                (qtpylib.crossed_below(dataframe['close'], dataframe['lst'].ffill()))
-            ), ["enter_short","enter_tag"]] = (1, 'low_short_trigger')
+                (qtpylib.crossed_below(dataframe['close'], dataframe['min_high'].ffill()))
+            ), "enter_short"] = 1
 
         return dataframe
 
@@ -138,7 +126,7 @@ class RSIBreak(IStrategy):
         
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
-        stop = last_candle["high"] if side == "short" else last_candle["low"]
+        stop = last_candle["ss"] if side == "short" else last_candle["sl"]
         risk = abs(stop / current_rate - 1)
         return ceil(self.trade_max_loss_allowed / risk)
 
@@ -154,7 +142,7 @@ class RSIBreak(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
         total_stake = max_stake + Trade.total_open_trades_stakes()
-        stop = last_candle["high"] if side == "short" else last_candle["low"]
+        stop = last_candle["ss"] if side == "short" else last_candle["sl"]
         risk = abs(stop / current_rate - 1)
         if risk < 0.002: return 0
         return min(total_stake * self.trade_max_loss_allowed / (risk * leverage), max_stake)
@@ -167,7 +155,7 @@ class RSIBreak(IStrategy):
             dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
             last_candle = dataframe.iloc[-1].squeeze()
             
-            stop = last_candle['high'] if trade.is_short else last_candle['low']
+            stop = last_candle['ss'] if trade.is_short else last_candle['sl']
             trade.set_custom_data(key='stop', value=stop)
             
             risk = abs(stop / trade.open_rate - 1) * trade.leverage
