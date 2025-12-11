@@ -40,7 +40,7 @@ class RSIBreak(IStrategy):
         "stoploss_on_exchange_limit_ratio": 0.99
     }
     
-    def extract_features(self, df, c1, c2, e, col, name, direction='forward'):
+    def extract_features(self, df, c1, c2, e, name, direction='forward'):
 
         highs = df.loc[c1].reset_index().rename(columns={'index':'up_index'})
         crosses = df.loc[c2].reset_index().rename(columns={'index':'down_index'})
@@ -62,9 +62,9 @@ class RSIBreak(IStrategy):
         intervals = pd.IntervalIndex.from_arrays(pairs['up_index'], pairs['down_index'], closed='both')
         df['range_id'] = pd.cut(df.index, intervals)
 
-        groups = df.groupby('range_id', observed=True)[col]
+        groups = df.groupby('range_id', observed=True)['date']
         values = groups.max() if e == "max" else groups.min()
-        values = values.reset_index().rename(columns={col: name})
+        values = values.reset_index().rename(columns={'date': name})
         values['index'] = intervals.left
 
         df = df.merge(values, left_on=df.index, right_on='index', how='left')
@@ -77,15 +77,21 @@ class RSIBreak(IStrategy):
 
         c1_over = qtpylib.crossed_above(dataframe['rsi'], 70)
         c2_over = qtpylib.crossed_below(dataframe['rsi'], 70)
+        dataframe = self.extract_features(dataframe, c1_over, c2_over, 'max', "max_high")
+        dataframe = self.extract_features(dataframe, c1_over, c2_over, 'min', "min_high")
 
-        dataframe = self.extract_features(dataframe, c1_over, c2_over, 'max', "high", "max_high")
-        dataframe = self.extract_features(dataframe, c1_over, c2_over, 'min', "low", "min_high")
+        mask = dataframe[dataframe['min_high'].notna()]
+        dataframe.loc[mask,'hlt'] = dataframe.loc[mask, 'high']
+        dataframe.loc[mask,'hst'] = dataframe.loc[mask, 'low']
         
         c1_under = qtpylib.crossed_below(dataframe['rsi'], 30)
         c2_under = qtpylib.crossed_above(dataframe['rsi'], 30)
+        dataframe = self.extract_features(dataframe, c1_under, c2_under, 'min', "min_low")
+        dataframe = self.extract_features(dataframe, c1_under, c2_under, 'max', "max_low")
 
-        dataframe = self.extract_features(dataframe, c1_under, c2_under, 'min', "low", "min_low")
-        dataframe = self.extract_features(dataframe, c1_under, c2_under, 'max', "high", "max_low")
+        mask = dataframe[dataframe['max_low'].notna()]
+        dataframe.loc[mask,'llt'] = dataframe.loc[mask, 'high']
+        dataframe.loc[mask,'lst'] = dataframe.loc[mask, 'low']
 
         dataframe.loc[dataframe['max_high'].notna(),"cat"] = 'H'
         dataframe.loc[dataframe['min_low'].notna(),"cat"] = 'L'
@@ -102,13 +108,23 @@ class RSIBreak(IStrategy):
 
         dataframe.loc[
             (
-                (qtpylib.crossed_above(dataframe['close'], dataframe['max_low']))
-            ), "enter_long"] = 1
+                (qtpylib.crossed_above(dataframe['close'], dataframe['hlt'].ffill()))
+            ), ["enter_long","enter_tag"]] = (1, 'high_long_trigger')
+        
+        dataframe.loc[
+            (
+                (qtpylib.crossed_below(dataframe['close'], dataframe['hst'].ffill()))
+            ), ["enter_short","enter_tag"]] = (1, 'high_short_trigger')
 
         dataframe.loc[
             (
-                (qtpylib.crossed_below(dataframe['close'], dataframe['min_high']))
-            ), "enter_short"] = 1
+                (qtpylib.crossed_below(dataframe['close'], dataframe['llt'].ffill()))
+            ), ["enter_long","enter_tag"]] = (1, 'low_long_trigger')
+    
+        dataframe.loc[
+            (
+                (qtpylib.crossed_below(dataframe['close'], dataframe['lst'].ffill()))
+            ), ["enter_short","enter_tag"]] = (1, 'low_short_trigger')
 
         return dataframe
 
