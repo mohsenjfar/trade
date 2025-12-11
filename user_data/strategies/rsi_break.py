@@ -19,6 +19,7 @@ class RSIBreak(IStrategy):
     stoploss = -1
 
     trade_max_loss_allowed = 0.005
+    max_allowed_daily_loss = 2
 
     timeframe = '5m'
 
@@ -137,7 +138,7 @@ class RSIBreak(IStrategy):
 
         trades = Trade.get_trades_proxy(is_open=False, open_date=date.today())
         losses = [trade.close_profit_abs for trade in trades if trade.close_profit_abs < 0]
-        if len(losses) == 4: return 0
+        if len(losses) == self.max_allowed_daily_loss: return 0
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
@@ -173,14 +174,6 @@ class RSIBreak(IStrategy):
                     current_profit: float, **kwargs):
         
         risk = trade.get_custom_data('risk')
-        if current_profit > 4 * risk * trade.leverage: return "Target hit!"
-
-    def custom_exit_price(self, pair: str, trade: Trade,
-                          current_time: datetime, proposed_rate: float,
-                          current_profit: float, exit_tag: str | None, **kwargs) -> float:
-
-        risk = trade.get_custom_data('risk')
-        side = -1 if trade.is_short else 1
-        return trade.open_rate * (1 + 5 * risk * trade.leverage * side)
+        if current_profit > 5 * risk * trade.leverage: return "Target hit!"
     
 
