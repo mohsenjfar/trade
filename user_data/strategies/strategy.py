@@ -101,7 +101,7 @@ class HybridStrategy(IStrategy):
     def set_freqai_targets(self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
 
         self.freqai.class_names = ["down", "up"]
-        dataframe['&s-up_or_down'] = np.where(dataframe["close"].shift(-3) > dataframe["close"], 'up', 'down')
+        dataframe['&s-up_or_down'] = np.where(dataframe["close"].shift(-24) > dataframe["close"], 'up', 'down')
 
         return dataframe
 
@@ -167,6 +167,9 @@ class HybridStrategy(IStrategy):
 
         dataframe = self.populate_features(dataframe)
 
+        dataframe['isl'] = dataframe['min_low'].ffill()
+        dataframe['iss'] = dataframe['max_high'].ffill()
+
         return dataframe
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
@@ -174,12 +177,6 @@ class HybridStrategy(IStrategy):
         dataframe = self.freqai.start(dataframe, metadata, self)
         
         dataframe = self.populate_features(dataframe)
-
-        indicies = dataframe[dataframe['max_high'].notna()].index
-        dataframe['sb'] = dataframe['max_high'].iat[indicies[-2]]
-
-        indicies = dataframe[dataframe['min_low'].notna()].index
-        dataframe['lb'] = dataframe['min_low'].iat[indicies[-2]]
 
         return dataframe
 
@@ -189,14 +186,16 @@ class HybridStrategy(IStrategy):
             (
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'up') & # Guard
-                (qtpylib.crossed_above(dataframe['close'], dataframe['lb'])) # Trigger
+                (dataframe['rsi_1h'] < 40) & # Guard
+                (qtpylib.crossed_above(dataframe['rsi'], 30)) # Trigger
             ), "enter_long"] = 1
 
         dataframe.loc[
             (
                 (dataframe['do_predict'] == 1) & # Guard
                 (dataframe['&s-up_or_down'] == 'down') & # Guard
-                (qtpylib.crossed_below(dataframe['close'], dataframe['sb'])) # Trigger
+                (dataframe['rsi_1h'] > 60) & # Guard
+                (qtpylib.crossed_below(dataframe['rsi'], 70)) # Trigger
             ), "enter_short"] = 1
 
         return dataframe
@@ -213,26 +212,10 @@ class HybridStrategy(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
         total_stake = max_stake + Trade.total_open_trades_stakes()
-        stop = last_candle["high"] if side == "short" else last_candle["low"]
+        stop = last_candle["iss"] if side == "short" else last_candle["isl"]
         risk = abs(stop / current_rate - 1)
         return min(total_stake * self.trade_max_loss_allowed / risk, max_stake)
 
-    def confirm_trade_entry(self, pair: str, order_type: str, amount: float, rate: float,
-                            time_in_force: str, current_time: datetime, entry_tag: Optional[str],
-                            side: str, **kwargs) -> bool:
-
-        closed_trades = Trade.get_trades_proxy(is_open=False)
-        last_trade_index = closed_trades[-1].get_custom_data('index')
-        
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        
-        trigger = 'max_high' if side == 'short' else 'min_low'
-        index = dataframe[dataframe[trigger].notna()].index[-2]
-
-        if last_trade_index == index:
-            return False
-
-        return True
 
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
                         current_rate: float, current_profit: float, after_fill: bool, 
@@ -244,7 +227,7 @@ class HybridStrategy(IStrategy):
         
         if trade.get_custom_data('stop') is None:
             last_candle = dataframe.iloc[-1].squeeze()
-            stop = last_candle['high'] if trade.is_short else last_candle['low']
+            stop = last_candle['iss'] if trade.is_short else last_candle['isl']
             trade.set_custom_data(key='stop', value=stop)
             risk = abs(stop / trade.open_rate - 1)
             trade.set_custom_data(key='risk', value=risk)
