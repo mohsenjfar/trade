@@ -11,7 +11,7 @@ from freqtrade.strategy import (
     IntParameter,
     informative
 )
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Optional
 
 class HybridStrategy(IStrategy):
@@ -20,9 +20,9 @@ class HybridStrategy(IStrategy):
 
     stoploss = -1
 
-    trade_max_loss_allowed = 0.01
+    trade_max_loss_allowed = 0.005
 
-    timeframe = '5m'
+    timeframe = '1h'
 
     can_short: bool = True
 
@@ -41,6 +41,69 @@ class HybridStrategy(IStrategy):
         "stoploss_on_exchange_interval": 60,
         "stoploss_on_exchange_limit_ratio": 0.99
     }
+
+    max_rsi = IntParameter(low=51, high=100, default=70, space='sell', optimize=True, load=True)
+    min_rsi = IntParameter(low=1, high=50, default=30, space='buy', optimize=True, load=True)
+    
+    def feature_engineering_expand_all(self, dataframe: DataFrame, period: int,
+                                       metadata: Dict, **kwargs) -> DataFrame:
+
+        dataframe["%-rsi-period"] = ta.RSI(dataframe, timeperiod=period)
+        dataframe["%-mfi-period"] = ta.MFI(dataframe, timeperiod=period)
+        dataframe["%-adx-period"] = ta.ADX(dataframe, timeperiod=period)
+        dataframe["%-sma-period"] = ta.SMA(dataframe, timeperiod=period)
+        dataframe["%-ema-period"] = ta.EMA(dataframe, timeperiod=period)
+
+        bollinger = qtpylib.bollinger_bands(
+            qtpylib.typical_price(dataframe), window=period, stds=2.2
+        )
+        dataframe["bb_lowerband-period"] = bollinger["lower"]
+        dataframe["bb_middleband-period"] = bollinger["mid"]
+        dataframe["bb_upperband-period"] = bollinger["upper"]
+
+        dataframe["%-bb_width-period"] = (
+            dataframe["bb_upperband-period"]
+            - dataframe["bb_lowerband-period"]
+        ) / dataframe["bb_middleband-period"]
+        dataframe["%-close-bb_lower-period"] = (
+            dataframe["close"] / dataframe["bb_lowerband-period"]
+        )
+
+        dataframe["%-roc-period"] = ta.ROC(dataframe, timeperiod=period)
+
+        dataframe["%-relative_volume-period"] = (
+            dataframe["volume"] / dataframe["volume"].rolling(period).mean()
+        )
+
+        return dataframe
+
+    def feature_engineering_expand_basic(self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
+
+        dataframe["%-pct-change"] = dataframe["close"].pct_change()
+        dataframe['%-price_change'] = dataframe['close'] - dataframe['open']
+        dataframe['%-range'] = dataframe['high'] - dataframe['low']
+        dataframe['%-close_open_ratio'] = dataframe['close'] / dataframe['open']
+        dataframe['%-high_close_ratio'] = dataframe['high'] / dataframe['close']
+        dataframe['%-is_bullish'] = (dataframe['close'] > dataframe['open']).astype(int)
+        dataframe["%-raw_volume"] = dataframe["volume"]
+        dataframe["%-raw_price"] = dataframe["close"]
+        dataframe['%-volume_price_ratio'] = dataframe['volume'] / (dataframe['high'] - dataframe['low']).replace(0, np.nan)
+        dataframe['%-volume_change'] = dataframe['volume'] / dataframe['volume'].shift(1)
+
+        return dataframe
+
+    def feature_engineering_standard(self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
+
+        dataframe["%-day_of_week"] = dataframe["date"].dt.dayofweek
+        dataframe["%-hour_of_day"] = dataframe["date"].dt.hour
+        return dataframe
+
+    def set_freqai_targets(self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
+
+        self.freqai.class_names = ["down", "up"]
+        dataframe['&s-up_or_down'] = np.where(dataframe["close"].shift(-4) > dataframe["close"], 'up', 'down')
+
+        return dataframe
 
     def extract_features(self, df, c1, c2, e, col, name, direction='forward'):
 
@@ -96,12 +159,8 @@ class HybridStrategy(IStrategy):
         dataframe.loc[dataframe['max_high'].notna(),"cat"] = 'H'
         dataframe.loc[dataframe['min_low'].notna(),"cat"] = 'L'
 
-        dataframe['market'] = ''.join(dataframe.loc[dataframe['cat'].notna(), 'cat'].values)[-2:]
-
         return dataframe
 
-    @informative('15m')
-    @informative('1h')
     @informative('4h')
     def populate_indicators_(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
@@ -110,11 +169,16 @@ class HybridStrategy(IStrategy):
         return dataframe
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+
+        dataframe = self.freqai.start(dataframe, metadata, self)
         
         dataframe = self.populate_features(dataframe)
 
-        dataframe['isl'] = dataframe['min_low'].ffill()
-        dataframe['iss'] = dataframe['max_high'].ffill()
+        mask = qtpylib.crossed_above(dataframe['close'], 30)
+        dataframe["long_trigger"] = np.where(mask, dataframe["high"].shift(1), np.nan)
+
+        mask = qtpylib.crossed_below(dataframe['close'], 70)
+        dataframe["short_trigger"] = np.where(mask, dataframe["low"].shift(1), np.nan)
 
         return dataframe
 
@@ -122,39 +186,19 @@ class HybridStrategy(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['market_4h'] == 'HH') & # Guard
-                (dataframe['rsi_1h'] < 40) & # Guard
-                (dataframe['rsi_15m'] < 40) & # Guard
-                (qtpylib.crossed_above(dataframe['rsi'], 30)) # Trigger
-            ), ["enter_long",'enter_tag']] = (1,'up_trend')
+                qtpylib.crossed_below(dataframe['rsi'], 70)
+            ), ["exit_long"]] = 1
 
         dataframe.loc[
             (
-                (dataframe['market_4h'] == 'LH') & # Guard
-                (dataframe['rsi_1h'] < 40) & # Guard
-                (dataframe['rsi_15m'] < 40) & # Guard
-                (qtpylib.crossed_above(dataframe['rsi'], 30)) # Trigger
-            ), ["enter_long",'enter_tag']] = (1,'Range')
-        
-        dataframe.loc[
-            (
-                (dataframe['market_4h'] == 'LL') & # Guard
-                (dataframe['rsi_1h'] > 60) & # Guard
-                (dataframe['rsi_15m'] > 60) & # Guard
-                (qtpylib.crossed_below(dataframe['rsi'], 70)) # Trigger
-            ), ["enter_short",'enter_tag']] = (1,'down_trend')
+                qtpylib.crossed_above(dataframe['rsi'], 30)
+            ), ["exit_short"]] = 1
 
-        dataframe.loc[
-            (
-                (dataframe['market_4h'] == 'HL') & # Guard
-                (dataframe['rsi_1h'] > 60) & # Guard
-                (dataframe['rsi_15m'] > 60) & # Guard
-                (qtpylib.crossed_below(dataframe['rsi'], 70)) # Trigger
-            ), ["enter_short",'enter_tag']] = (1,'Range')
-        
         return dataframe
 
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+
+
         
         return dataframe
 
@@ -166,7 +210,7 @@ class HybridStrategy(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
         total_stake = max_stake + Trade.total_open_trades_stakes()
-        stop = last_candle["iss"] if side == "short" else last_candle["isl"]
+        stop = last_candle["high"] if side == "short" else last_candle["low"]
         risk = abs(stop / current_rate - 1)
         return min(total_stake * self.trade_max_loss_allowed / risk, max_stake)
 
@@ -177,60 +221,27 @@ class HybridStrategy(IStrategy):
 
         if current_profit > 1: return 0.3
 
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
-        
         if trade.get_custom_data('stop') is None:
+            dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
             last_candle = dataframe.iloc[-1].squeeze()
-            stop = last_candle['iss'] if trade.is_short else last_candle['isl']
+            stop = last_candle['high'] if trade.is_short else last_candle['low']
             trade.set_custom_data(key='stop', value=stop)
+            
             risk = abs(stop / trade.open_rate - 1)
             trade.set_custom_data(key='risk', value=risk)
             self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
             
-            trigger = 'max_high' if trade.is_short else 'min_low'
-            index = dataframe[dataframe[trigger].notna()].index[-2]
-            trade.set_custom_data(key='index', value=index)
-        
+        return stoploss_from_absolute(
+            trade.get_custom_data('stop'),
+            current_rate,
+            is_short=trade.is_short,
+            leverage=trade.leverage
+        )
+
+    def custom_exit(self, pair: str, trade: Trade, current_time: datetime, 
+                    current_rate: float, current_profit: float, **kwargs) -> str:
+
         risk = trade.get_custom_data(key='risk')
-        if current_profit > risk * 4:
-            side = -1 if trade.is_short else 1
-            stop = trade.open_rate * (1 + risk * 2 * side)
-            trade.set_custom_data(key='stop', value=stop)
-
-        index = trade.get_custom_data('index')
-        tfs = ['_4h', '_1h', '_15m']
-        if trade.is_short:    
-            for tf in tfs:
-                values = dataframe.loc[
-                    (
-                        (dataframe[f'ss{tf}'].notna()) &
-                        (dataframe.index >= index)
-                    ),f'ss{tf}'].values
-                if values.size > 0: break
-            stop_rate = np.append(values, trade.get_custom_data('stop')).min()
-            
-            return stoploss_from_absolute(
-                stop_rate,
-                current_rate,
-                is_short=trade.is_short,
-                leverage=trade.leverage
-            )
-        
-        else:
-            for tf in tfs:
-                values = dataframe.loc[
-                    (
-                        (dataframe[f'sl{tf}'].notna()) &
-                        (dataframe.index >= index)
-                    ),f'sl{tf}'].values
-                if values.size > 0: break
-            stop_rate = np.append(values, trade.get_custom_data('stop')).max()
-            
-            return stoploss_from_absolute(
-                stop_rate,
-                current_rate,
-                is_short=trade.is_short,
-                leverage=trade.leverage
-            )
-
-        
+        conditions_1 = (current_time - timedelta(hours=4) > trade.open_date_utc) and (current_profit < 0)
+        conditions_2 = (current_time - timedelta(hours=24) > trade.open_date_utc) and (current_profit < risk * 2)
+        if conditions_1 or conditions_2: return 'Trade expired!'
