@@ -1,45 +1,10 @@
 ---
 version: '3'
 services:
-  # freqtrade:
-  #     image: freqtradeorg/freqtrade:develop_freqai
-  #     restart: unless-stopped
-  #     container_name: Trader
-  #     dns:
-  #       - 8.8.8.8
-  #       - 1.1.1.1
-  #     volumes:
-  #       - "./user_data:/freqtrade/user_data"
-  #     # ports:
-  #     #   - "8080:8080"
-  #     command: >
-  #       trade
-  #       --logfile /freqtrade/user_data/logs/strategy.log
-  #       --db-url sqlite:////freqtrade/user_data/db.sqlite
-  #       --config /freqtrade/user_data/config.json
-  #       --strategy HybridStrategy
-  #       --freqaimodel XGBoostClassifier
   freqtrade:
-      image: freqtradeorg/freqtrade:stable
+      image: freqtradeorg/freqtrade:develop_freqai
       restart: unless-stopped
       container_name: Trader
-      dns:
-        - 8.8.8.8
-        - 1.1.1.1
-      volumes:
-        - "./user_data:/freqtrade/user_data"
-      # ports:
-      #   - "8080:8080"
-      command: >
-        trade
-        --logfile /freqtrade/user_data/logs/strategy.log
-        --db-url sqlite:////freqtrade/user_data/db.sqlite
-        --config /freqtrade/user_data/config.json
-        --strategy HybridStrategy
-  freqtrade2:
-      image: freqtradeorg/freqtrade:stable
-      restart: unless-stopped
-      container_name: RSIBreak
       dns:
         - 8.8.8.8
         - 1.1.1.1
@@ -51,7 +16,8 @@ services:
         - PYTHONPATH=/freqtrade
       command: >
         trade
-        --logfile /freqtrade/user_data/logs/rsi_break.log
-        --db-url sqlite:////freqtrade/user_data/rsi_break.sqlite
-        --config /freqtrade/user_data/config_rsi_break.json
-        --strategy RSIBreak
+        --logfile /freqtrade/user_data/logs/strategy.log
+        --db-url sqlite:////freqtrade/user_data/db.sqlite
+        --config /freqtrade/user_data/config.json
+        --strategy HybridStrategy
+        --freqaimodel XGBoostClassifier
