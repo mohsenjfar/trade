@@ -8,6 +8,7 @@ from typing import Dict
 from freqtrade.strategy import (
     IStrategy,
     stoploss_from_absolute,
+    stoploss_from_open,
     IntParameter,
     informative
 )
@@ -186,19 +187,31 @@ class HybridStrategy(IStrategy):
 
         dataframe.loc[
             (
-                qtpylib.crossed_below(dataframe['rsi'], 70)
-            ), ["exit_long"]] = 1
+                (dataframe['do_predict'] == 1) & # Guard
+                (dataframe['&s-up_or_down'] == 'up') & # Guard
+                (qtpylib.crossed_above(dataframe['close'], dataframe['long_trigger'].ffill())) # Trigger
+            ), "enter_long"] = 1
 
         dataframe.loc[
             (
-                qtpylib.crossed_above(dataframe['rsi'], 30)
-            ), ["exit_short"]] = 1
+                (dataframe['do_predict'] == 1) & # Guard
+                (dataframe['&s-up_or_down'] == 'down') & # Guard
+                (qtpylib.crossed_below(dataframe['close'], dataframe['short_trigger'].ffill())) # Trigger
+            ), "enter_short"] = 1
 
         return dataframe
 
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
+        dataframe.loc[
+            (
+                (qtpylib.crossed_below(dataframe['rsi'], 70))
+            ), "exit_long"] = 1
 
+        dataframe.loc[
+            (
+                (qtpylib.crossed_above(dataframe['rsi'], 30))
+            ), "exit_short"] = 1
         
         return dataframe
 
@@ -220,6 +233,16 @@ class HybridStrategy(IStrategy):
                         **kwargs) -> Optional[float]:
 
         if current_profit > 1: return 0.3
+
+        risk = trade.get_custom_data('risk')
+        if risk:
+            if current_profit > 4 * risk:
+                return stoploss_from_open(
+                    risk * 2,
+                    current_profit,
+                    is_short=trade.is_short,
+                    leverage=trade.leverage
+                ) 
 
         if trade.get_custom_data('stop') is None:
             dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
