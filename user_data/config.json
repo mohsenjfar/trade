@@ -37,7 +37,7 @@
     "key": "",
     "secret": "",
     "pair_whitelist": [
-      "WIF/USDT:USDT"
+      "BTC/USDT:USDT"
     ],
     "pair_blacklist": [
     ]
