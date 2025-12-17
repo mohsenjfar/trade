@@ -29,6 +29,7 @@ class HybridStrategy(IStrategy):
     use_exit_signal = True
     use_custom_stoploss = True
 
+
     order_types = {
         "entry": "limit",
         "exit": "limit",
@@ -112,14 +113,14 @@ class HybridStrategy(IStrategy):
         dataframe["high_label"] = np.where(
             dataframe["sig_pivot_high"].notna(),
             np.where(dataframe["sig_pivot_high"] > prev_high, "HH", "LH"),
-            np.nan,
+            None,
         )
 
         prev_low = dataframe["sig_pivot_low"].ffill().shift(1)
         dataframe["low_label"] = np.where(
             dataframe["sig_pivot_low"].notna(),
             np.where(dataframe["sig_pivot_low"] < prev_low, "LL", "HL"),
-            np.nan,
+            None,
         )
         return dataframe
 
