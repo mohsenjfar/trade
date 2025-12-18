@@ -22,7 +22,7 @@ class RSICycleEngine(IStrategy):
 
     trade_max_loss_allowed = 0.005
 
-    timeframe = '1h'
+    timeframe = '15m'
     can_short: bool = True
     process_only_new_candles = True
 
@@ -42,7 +42,7 @@ class RSICycleEngine(IStrategy):
     max_rsi = IntParameter(low=51, high=100, default=70, space="sell", optimize=True, load=True)
     min_rsi = IntParameter(low=1, high=50, default=30, space="buy", optimize=True, load=True)
 
-    def extract_features(self, df, c1, c2, e, col, name, direction="forward"):
+    def extract_features(self, df, c1, c2, col, name, direction="forward"):
 
         highs = df.loc[c1].reset_index().rename(columns={"index": "up_index"})
         crosses = df.loc[c2].reset_index().rename(columns={"index": "down_index"})
@@ -72,7 +72,7 @@ class RSICycleEngine(IStrategy):
         df["range_id"] = pd.cut(df.index, intervals)
 
         groups = df.groupby("range_id", observed=True)[col]
-        values = groups.max() if e == "max" else groups.min()
+        values = groups.max() if col == "high" else groups.min()
         values = values.reset_index().rename(columns={col: name})
         values["index"] = intervals.left
 
@@ -86,42 +86,17 @@ class RSICycleEngine(IStrategy):
 
         c1_over = qtpylib.crossed_above(dataframe["rsi"], 70)
         c2_over = qtpylib.crossed_below(dataframe["rsi"], 70)
-
-        dataframe = self.extract_features(
-            dataframe, c1_over, c2_over, "max", "high", "max_high"
-        )
-        dataframe = self.extract_features(
-            dataframe, c1_over, c2_over, "max", "rsi", "max_rsi"
-        )
-        dataframe = self.extract_features(
-            dataframe, c2_over, c1_over, "min", "low", "sl"
-        )
-        dataframe = self.extract_features(
-            dataframe, c2_over, c1_over, "min", "rsi", "sl_rsi"
-        )
+        dataframe = self.extract_features(dataframe, c1_over, c2_over, "high", "max_long")
+        dataframe = self.extract_features(dataframe, c2_over, c1_over, "low", "min_long")
 
         c1_under = qtpylib.crossed_below(dataframe["rsi"], 30)
         c2_under = qtpylib.crossed_above(dataframe["rsi"], 30)
-
-        dataframe = self.extract_features(
-            dataframe, c1_under, c2_under, "min", "low", "min_low"
-        )
-        dataframe = self.extract_features(
-            dataframe, c1_under, c2_under, "min", "rsi", "min_rsi"
-        )
-        dataframe = self.extract_features(
-            dataframe, c2_under, c1_under, "max", "high", "ss"
-        )
-        dataframe = self.extract_features(
-            dataframe, c2_under, c1_under, "max", "rsi", "ss_rsi"
-        )
-
-        dataframe.loc[dataframe["max_high"].notna(), "cat"] = "H"
-        dataframe.loc[dataframe["min_low"].notna(), "cat"] = "L"
-        dataframe["label"] = ''.join(dataframe[dataframe.cat.notna()].cat[-2:])
+        dataframe = self.extract_features(dataframe, c1_under, c2_under, "low", "min_short")
+        dataframe = self.extract_features(dataframe, c2_under, c1_under, "high", "max_short")
 
         return dataframe
 
+    @informative("1h")
     @informative("4h")
     def populate_indicators_(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
@@ -140,10 +115,10 @@ class RSICycleEngine(IStrategy):
         mask = qtpylib.crossed_below(dataframe["rsi"], self.max_rsi.value)
         dataframe["short_trigger"] = np.where(mask, dataframe["low"].shift(1), np.nan)
 
-        index = dataframe[dataframe['min_low'].notna()].index.max()
+        index = dataframe[dataframe['min_short'].notna()].index.max()
         dataframe['sl'] = dataframe.iloc[index:].low.min()
 
-        index = dataframe[dataframe['max_high'].notna()].index.max()
+        index = dataframe[dataframe['max_long'].notna()].index.max()
         dataframe['ss'] = dataframe.iloc[index:].high.max()
 
         return dataframe
@@ -153,14 +128,16 @@ class RSICycleEngine(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe["label_4h"] == 'HH') &
+                (dataframe["close_4h"] > dataframe["min_long_4h"]) &
+                (dataframe["rsi_1h"] < 40) &
                 (qtpylib.crossed_above(dataframe["close"], dataframe["long_trigger"].ffill()))
             ),
             "enter_long"] = 1
 
         dataframe.loc[
             (
-                (dataframe["label_4h"] == 'LL') &
+                (dataframe["close_4h"] < dataframe["max_short_4h"]) &
+                (dataframe["rsi_1h"] > 60) &
                 (qtpylib.crossed_below(dataframe["close"], dataframe["short_trigger"].ffill()))
             ),
             "enter_short"] = 1
@@ -168,18 +145,6 @@ class RSICycleEngine(IStrategy):
         return dataframe
 
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-
-        dataframe.loc[
-            (
-                (qtpylib.crossed_below(dataframe["rsi"], self.max_rsi.value))
-            ),
-            "exit_long"] = 1
-
-        dataframe.loc[
-            (
-                (qtpylib.crossed_above(dataframe["rsi"], self.min_rsi.value))
-            ),
-            "exit_short"] = 1
 
         return dataframe
 
@@ -210,21 +175,45 @@ class RSICycleEngine(IStrategy):
                         current_rate: float, current_profit: float, after_fill: bool, 
                         **kwargs) -> Optional[float]:
 
-        if current_profit > 1:
-            return 0.3
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
+        last_candle = dataframe.iloc[-1].squeeze()
 
-        if trade.get_custom_data("stop") is None:
-            dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
-            last_candle = dataframe.iloc[-1].squeeze()
-            stop = last_candle["ss"] if trade.is_short else last_candle["sl"]
-            trade.set_custom_data(key="stop", value=stop)
+        stop = trade.get_custom_data("stop")
+
+        if stop is None:
+            base_stop = last_candle["ss"] if trade.is_short else last_candle["sl"]
+            if np.isnan(base_stop):
+                return None
+            stop = base_stop
+            trade.set_custom_data("stop", stop)
 
             risk = abs(stop / trade.open_rate - 1)
-            trade.set_custom_data(key="risk", value=risk)
+            trade.set_custom_data("risk", risk)
             self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
+        if stop is not None and not np.isnan(stop):
+            if trade.is_short:
+                ss_15m = last_candle.get("max_long")
+                if ss_15m is not None and not np.isnan(ss_15m):
+                    stop = min(stop, ss_15m)
+
+                ss_1h = last_candle.get("max_long_1h")
+                if ss_1h is not None and not np.isnan(ss_1h):
+                    stop = min(stop, ss_1h)
+
+            else:
+                sl_15m = last_candle.get("min_short")
+                if sl_15m is not None and not np.isnan(sl_15m):
+                    stop = max(stop, sl_15m)
+
+                sl_1h = last_candle.get("min_short_1h")
+                if sl_1h is not None and not np.isnan(sl_1h):
+                    stop = max(stop, sl_1h)
+
+            trade.set_custom_data("stop", stop)
+
         return stoploss_from_absolute(
-            trade.get_custom_data("stop"),
+            stop,
             current_rate,
             is_short=trade.is_short,
             leverage=trade.leverage,
@@ -233,7 +222,6 @@ class RSICycleEngine(IStrategy):
     def custom_exit(self, pair: str, trade: 'Trade', current_time: 'datetime', current_rate: float,
                     current_profit: float, **kwargs):
 
-        risk = trade.get_custom_data(key="risk")
-        conditions_1 = (current_time - timedelta(hours=24) > trade.open_date_utc)
-        conditions_2 = (current_profit < risk * 2 * trade.leverage)
+        conditions_1 = (current_time - timedelta(hours=8) > trade.open_date_utc)
+        conditions_2 = (current_profit < 0)
         if conditions_1 and conditions_2: return "Trade expired!"
