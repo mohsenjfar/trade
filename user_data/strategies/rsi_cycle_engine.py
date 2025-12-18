@@ -130,7 +130,7 @@ class RSICycleEngine(IStrategy):
             (
                 (dataframe["close_4h"] > dataframe["min_long_4h"].ffill()) &
                 (dataframe["rsi_1h"] < 40) &
-                (qtpylib.crossed_above(dataframe["close"], dataframe["long_trigger"].ffill()))
+                (qtpylib.crossed_above(dataframe["rsi"], 30))
             ),
             "enter_long"] = 1
 
@@ -138,7 +138,7 @@ class RSICycleEngine(IStrategy):
             (
                 (dataframe["close_4h"] < dataframe["max_short_4h"].ffill()) &
                 (dataframe["rsi_1h"] > 60) &
-                (qtpylib.crossed_below(dataframe["close"], dataframe["short_trigger"].ffill()))
+                (qtpylib.crossed_below(dataframe["rsi"], 70))
             ),
             "enter_short"] = 1
 
@@ -154,7 +154,7 @@ class RSICycleEngine(IStrategy):
         
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
-        stop = last_candle["high"] if side == "short" else last_candle["low"]
+        stop = last_candle["max_long"] if side == "short" else last_candle["min_short"]
         risk = abs(stop / current_rate - 1)
         return ceil(self.trade_max_loss_allowed / risk)
 
@@ -166,7 +166,7 @@ class RSICycleEngine(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
         total_stake = max_stake + Trade.total_open_trades_stakes()
-        stop = last_candle["high"] if side == "short" else last_candle["low"]
+        stop = last_candle["max_long"] if side == "short" else last_candle["min_short"]
         risk = abs(stop / current_rate - 1)
         if risk < 0.002: return 0
         return min(total_stake * self.trade_max_loss_allowed / (risk * leverage), max_stake)
@@ -181,7 +181,7 @@ class RSICycleEngine(IStrategy):
         stop = trade.get_custom_data("stop")
 
         if stop is None:
-            base_stop = last_candle["high"] if trade.is_short else last_candle["low"]
+            base_stop = last_candle["max_long"] if trade.is_short else last_candle["min_short"]
             if np.isnan(base_stop):
                 return None
             stop = base_stop
