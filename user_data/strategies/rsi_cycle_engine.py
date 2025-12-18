@@ -234,6 +234,6 @@ class RSICycleEngine(IStrategy):
                     current_profit: float, **kwargs):
 
         risk = trade.get_custom_data(key="risk")
-        conditions_1 = (current_time - timedelta(hours=4) > trade.open_date_utc) and (current_profit < 0)
-        conditions_2 = (current_time - timedelta(hours=24) > trade.open_date_utc) and (current_profit < risk * 2 * trade.leverage)
-        if conditions_1 or conditions_2: return "Trade expired!"
+        conditions_1 = (current_time - timedelta(hours=24) > trade.open_date_utc)
+        conditions_2 = (current_profit < risk * 2 * trade.leverage)
+        if conditions_1 and conditions_2: return "Trade expired!"
