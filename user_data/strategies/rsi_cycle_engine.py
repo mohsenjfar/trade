@@ -152,11 +152,12 @@ class RSICycleEngine(IStrategy):
                  proposed_leverage: float, max_leverage: float, entry_tag: Optional[str], side: str,
                  **kwargs) -> float:
         
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        last_candle = dataframe.iloc[-1].squeeze()
-        stop = last_candle["max_long"] if side == "short" else last_candle["min_short"]
-        risk = abs(stop / current_rate - 1)
-        return ceil(self.trade_max_loss_allowed / risk)
+        # dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        # last_candle = dataframe.iloc[-1].squeeze()
+        # stop = last_candle["max_long"] if side == "short" else last_candle["min_short"]
+        # risk = abs(stop / current_rate - 1)
+        # return ceil(self.trade_max_loss_allowed / risk)
+        return 1
 
     def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
                             proposed_stake: float, min_stake: Optional[float], max_stake: float,
