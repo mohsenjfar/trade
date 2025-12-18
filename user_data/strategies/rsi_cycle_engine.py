@@ -14,7 +14,6 @@ from freqtrade.strategy import (
 from datetime import datetime, timedelta
 from typing import Optional
 
-
 class RSICycleEngine(IStrategy):
 
     INTERFACE_VERSION = 3
@@ -119,6 +118,7 @@ class RSICycleEngine(IStrategy):
 
         dataframe.loc[dataframe["max_high"].notna(), "cat"] = "H"
         dataframe.loc[dataframe["min_low"].notna(), "cat"] = "L"
+        dataframe["label"] = ''.join(dataframe[dataframe.cat.notna()].cat[-2:])
 
         return dataframe
 
@@ -153,14 +153,14 @@ class RSICycleEngine(IStrategy):
 
         dataframe.loc[
             (
-                # (dataframe["close"] > dataframe["max_high_4h"]) &
+                (dataframe["label_4h"] == 'HH') &
                 (qtpylib.crossed_above(dataframe["close"], dataframe["long_trigger"].ffill()))
             ),
             "enter_long"] = 1
 
         dataframe.loc[
             (
-                # (dataframe["close"] < dataframe["min_low_4h"]) &
+                (dataframe["label_4h"] == 'LL') &
                 (qtpylib.crossed_below(dataframe["close"], dataframe["short_trigger"].ffill()))
             ),
             "enter_short"] = 1
