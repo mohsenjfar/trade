@@ -198,7 +198,8 @@ class RSICycleEngine(IStrategy):
     def custom_exit(self, pair: str, trade: 'Trade', current_time: datetime,
                     current_rate: float, current_profit: float, **kwargs):
 
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
+        dataframe_, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
+        dataframe = dataframe_.copy()
         dataframe["max_high"] = dataframe["max_high"].ffill()
         dataframe["min_low"] = dataframe["min_low"].ffill()
         last = dataframe.iloc[-1].squeeze()
