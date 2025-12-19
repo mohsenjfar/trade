@@ -1,0 +1,1081 @@
+2025-12-18 09:17:32,190 - freqtrade.loggers - INFO - Enabling colorized output.
+2025-12-18 09:17:32,192 - freqtrade.loggers - INFO - Logfile configured
+2025-12-18 09:17:32,193 - freqtrade.loggers - INFO - Verbosity set to 0
+2025-12-18 09:17:32,194 - freqtrade.configuration.configuration - INFO - Runmode set to live.
+2025-12-18 09:17:32,195 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2025-12-18 09:17:32,196 - freqtrade.configuration.configuration - WARNING - `force_entry_enable` RPC message enabled.
+2025-12-18 09:17:32,197 - freqtrade.configuration.configuration - INFO - Dry run is disabled
+2025-12-18 09:17:32,197 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/rsi_cycle_engine.sqlite"
+2025-12-18 09:17:32,198 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 1 ...
+2025-12-18 09:17:32,325 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2025-12-18 09:17:32,328 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/bybit ...
+2025-12-18 09:17:32,332 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2025-12-18 09:17:32,360 - freqtrade.exchange.check_exchange - INFO - Exchange "bybit" is officially supported by the Freqtrade development team.
+2025-12-18 09:17:32,362 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2025-12-18 09:17:32,364 - freqtrade.exchange.exchange - INFO - Using CCXT 4.5.2
+2025-12-18 09:17:32,365 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-12-18 09:17:32,388 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-12-18 09:17:32,419 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-12-18 09:17:32,447 - freqtrade.exchange.exchange - INFO - Using Exchange "Bybit"
+2025-12-18 09:17:36,940 - freqtrade.exchange.bybit - INFO - Bybit: Unified account. Assuming dedicated subaccount for this bot.
+2025-12-18 09:17:36,942 - freqtrade.resolvers.exchange_resolver - INFO - Using resolved exchange 'Bybit'...
+2025-12-18 09:17:37,936 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy RSICycleEngine from '/freqtrade/user_data/strategies/rsi_cycle_engine.py'...
+2025-12-18 09:17:37,938 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2025-12-18 09:17:37,940 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: USDT.
+2025-12-18 09:17:37,942 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: unlimited.
+2025-12-18 09:17:37,943 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 5, 'exit': 5, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2025-12-18 09:17:37,945 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 1.
+2025-12-18 09:17:37,946 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {}
+2025-12-18 09:17:37,950 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 1h
+2025-12-18 09:17:37,952 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -1
+2025-12-18 09:17:37,954 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2025-12-18 09:17:37,956 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2025-12-18 09:17:37,958 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2025-12-18 09:17:37,959 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: True
+2025-12-18 09:17:37,961 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2025-12-18 09:17:37,963 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'limit', 'exit': 'limit', 'emergency_exit': 'market', 'stoploss': 'market', 'stoploss_on_exchange': True, 'stoploss_on_exchange_interval': 60, 'stoploss_on_exchange_limit_ratio': 0.99}
+2025-12-18 09:17:37,965 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2025-12-18 09:17:37,967 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: USDT
+2025-12-18 09:17:37,970 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: unlimited
+2025-12-18 09:17:37,971 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 0
+2025-12-18 09:17:37,973 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 5, 'exit': 5, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2025-12-18 09:17:37,975 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2025-12-18 09:17:37,976 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2025-12-18 09:17:37,977 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2025-12-18 09:17:37,985 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2025-12-18 09:17:37,986 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2025-12-18 09:17:37,988 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2025-12-18 09:17:37,989 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2025-12-18 09:17:37,992 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2025-12-18 09:17:37,993 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 1
+2025-12-18 09:17:37,995 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2025-12-18 09:17:38,662 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 09:17:38,979 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.telegram ...
+2025-12-18 09:17:39,413 - freqtrade.rpc.telegram - INFO - using custom keyboard from config.json: [['/status table', '/reload_config'], ['/forcelong', '/forceshort', '/forceexit'], ['/stop', '/start', '/profit', '/logs']]
+2025-12-18 09:17:39,415 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.api_server
+2025-12-18 09:17:40,133 - freqtrade.rpc.telegram - INFO - rpc.telegram is listening for following commands: [['status'], ['profit'], ['balance'], ['start'], ['stop'], ['forceexit', 'forcesell', 'fx'], ['forcebuy', 'forcelong'], ['forceshort'], ['reload_trade'], ['trades'], ['delete'], ['cancel_open_order', 'coo'], ['performance'], ['buys', 'entries'], ['exits', 'sells'], ['mix_tags'], ['stats'], ['daily'], ['weekly'], ['monthly'], ['count'], ['locks'], ['delete_locks', 'unlock'], ['reload_conf', 'reload_config'], ['show_conf', 'show_config'], ['pause', 'stopbuy', 'stopentry'], ['whitelist'], ['blacklist'], ['bl_delete', 'blacklist_delete'], ['logs'], ['health'], ['help'], ['version'], ['marketdir'], ['order'], ['list_custom_data'], ['tg_info'], ['profit_long'], ['profit_short']]
+2025-12-18 09:17:40,162 - freqtrade.rpc.api_server.webserver - INFO - Starting HTTP Server at 0.0.0.0:8080
+2025-12-18 09:17:40,163 - freqtrade.rpc.api_server.webserver - INFO - Starting Local Rest Server.
+2025-12-18 09:17:40,216 - uvicorn.error - INFO - Started server process [1]
+2025-12-18 09:17:40,217 - uvicorn.error - INFO - Waiting for application startup.
+2025-12-18 09:17:40,219 - uvicorn.error - INFO - Application startup complete.
+2025-12-18 09:17:40,220 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2025-12-18 09:17:40,254 - freqtrade.resolvers.iresolver - INFO - Using resolved pairlist StaticPairList from '/freqtrade/freqtrade/plugins/pairlist/StaticPairList.py'...
+2025-12-18 09:17:40,256 - freqtrade.freqtradebot - INFO - Starting initial pairlist refresh
+2025-12-18 09:17:40,280 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['WIF/USDT:USDT']
+2025-12-18 09:17:40,285 - freqtrade.freqtradebot - INFO - Initial Pairlist refresh took 0.03s
+2025-12-18 09:17:40,289 - freqtrade.strategy.hyper - INFO - No params for buy found, using default values.
+2025-12-18 09:17:40,291 - freqtrade.strategy.hyper - INFO - Strategy Parameter(default): min_rsi = 30
+2025-12-18 09:17:40,294 - freqtrade.strategy.hyper - INFO - No params for sell found, using default values.
+2025-12-18 09:17:40,295 - freqtrade.strategy.hyper - INFO - Strategy Parameter(default): max_rsi = 70
+2025-12-18 09:17:40,296 - freqtrade.strategy.hyper - INFO - No params for protection found, using default values.
+2025-12-18 09:17:40,298 - freqtrade.plugins.protectionmanager - INFO - No protection Handlers defined.
+2025-12-18 09:17:40,299 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'running'}
+2025-12-18 09:17:40,300 - freqtrade.worker - INFO - Changing state to: RUNNING
+2025-12-18 09:17:40,349 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': '*Exchange:* `bybit`\n*Stake per trade:* `unlimited USDT`\n*Minimum ROI:* `{}`\n*Stoploss:* `-1`\n*Position adjustment:* `Off`\n*Timeframe:* `1h`\n*Strategy:* `RSICycleEngine`'}
+2025-12-18 09:17:40,354 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': "Searching for USDT pairs to buy and sell based on [{'StaticPairList': 'StaticPairList'}]"}
+2025-12-18 09:17:40,370 - telegram.ext.Application - INFO - Application started
+2025-12-18 09:17:40,391 - freqtrade.freqtradebot - INFO - Updating 0 open orders.
+2025-12-18 09:17:44,638 - telegram.ext.Updater - ERROR - Exception happened while polling for updates.
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_utils/networkloop.py", line 115, in network_retry_loop
+    if not await do_action():
+           ^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_utils/networkloop.py", line 108, in do_action
+    return action_cb_task.result()
+           ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_updater.py", line 340, in polling_action_cb
+    updates = await self.bot.get_updates(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_extbot.py", line 670, in get_updates
+    updates = await super().get_updates(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/_bot.py", line 4611, in get_updates
+    await self._post(
+    ^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    ),
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/_bot.py", line 698, in _post
+    return await self._do_post(
+           ^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_extbot.py", line 370, in _do_post
+    return await super()._do_post(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/_bot.py", line 727, in _do_post
+    result = await request.post(
+             ^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/request/_baserequest.py", line 197, in post
+    result = await self._request_wrapper(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/request/_baserequest.py", line 374, in _request_wrapper
+    raise exception
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2025-12-18 09:17:45,394 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:17:50,280 - telegram.ext.Updater - ERROR - Exception happened while polling for updates.
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_utils/networkloop.py", line 115, in network_retry_loop
+    if not await do_action():
+           ^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_utils/networkloop.py", line 108, in do_action
+    return action_cb_task.result()
+           ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_updater.py", line 340, in polling_action_cb
+    updates = await self.bot.get_updates(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_extbot.py", line 670, in get_updates
+    updates = await super().get_updates(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/_bot.py", line 4611, in get_updates
+    await self._post(
+    ^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    ),
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/_bot.py", line 698, in _post
+    return await self._do_post(
+           ^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_extbot.py", line 370, in _do_post
+    return await super()._do_post(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/_bot.py", line 727, in _do_post
+    result = await request.post(
+             ^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/request/_baserequest.py", line 197, in post
+    result = await self._request_wrapper(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/request/_baserequest.py", line 374, in _request_wrapper
+    raise exception
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2025-12-18 09:17:57,221 - telegram.ext.Updater - ERROR - Exception happened while polling for updates.
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_utils/networkloop.py", line 115, in network_retry_loop
+    if not await do_action():
+           ^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_utils/networkloop.py", line 108, in do_action
+    return action_cb_task.result()
+           ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_updater.py", line 340, in polling_action_cb
+    updates = await self.bot.get_updates(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_extbot.py", line 670, in get_updates
+    updates = await super().get_updates(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/_bot.py", line 4611, in get_updates
+    await self._post(
+    ^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    ),
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/_bot.py", line 698, in _post
+    return await self._do_post(
+           ^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_extbot.py", line 370, in _do_post
+    return await super()._do_post(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/_bot.py", line 727, in _do_post
+    result = await request.post(
+             ^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/request/_baserequest.py", line 197, in post
+    result = await self._request_wrapper(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/request/_baserequest.py", line 374, in _request_wrapper
+    raise exception
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2025-12-18 09:18:02,318 - freqtrade.commands.trade_commands - INFO - worker found ... calling exit
+2025-12-18 09:18:02,321 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'process died'}
+2025-12-18 09:18:02,328 - freqtrade.freqtradebot - INFO - Cleaning up modules ...
+2025-12-18 09:18:02,337 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc modules ...
+2025-12-18 09:18:02,338 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc.apiserver ...
+2025-12-18 09:18:02,357 - freqtrade.rpc.api_server.webserver - INFO - Stopping API Server
+2025-12-18 09:18:02,382 - uvicorn.error - INFO - Shutting down
+2025-12-18 09:18:02,492 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-12-18 09:18:02,495 - uvicorn.error - INFO - Application shutdown complete.
+2025-12-18 09:18:02,498 - uvicorn.error - INFO - Finished server process [1]
+2025-12-18 09:18:02,500 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc.telegram ...
+2025-12-18 09:18:02,635 - telegram.ext.Application - INFO - Application is stopping. This might take a moment.
+2025-12-18 09:18:02,639 - telegram.ext.Application - INFO - Application.stop() complete
+2025-12-18 09:18:02,642 - freqtrade.rpc.telegram - WARNING - Telegram NetworkError: httpx.ReadError: ! Trying one more time.
+2025-12-18 09:18:02,644 - freqtrade.rpc.telegram - WARNING - TelegramError: Unknown error in HTTP implementation: RuntimeError('This HTTPXRequest is not initialized!')! Giving up on that message.
+2025-12-18 09:18:10,454 - freqtrade.exchange.exchange_ws - INFO - Resetting WS connections.
+2025-12-18 09:18:10,456 - freqtrade.exchange.exchange_ws - INFO - WIF/USDT:USDT, 1h, futures - Task finished - cancelled
+2025-12-18 09:18:10,457 - freqtrade.exchange.exchange_ws - INFO - WIF/USDT:USDT, 4h, futures - Task finished - cancelled
+2025-12-18 09:18:10,463 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-12-18 09:18:10,470 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-12-18 09:18:11,312 - freqtrade - INFO - SIGINT received, aborting ...
+2025-12-18 09:20:44,845 - freqtrade.loggers - INFO - Enabling colorized output.
+2025-12-18 09:20:44,846 - freqtrade.loggers - INFO - Logfile configured
+2025-12-18 09:20:44,847 - freqtrade.loggers - INFO - Verbosity set to 0
+2025-12-18 09:20:44,848 - freqtrade.configuration.configuration - INFO - Runmode set to live.
+2025-12-18 09:20:44,848 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2025-12-18 09:20:44,849 - freqtrade.configuration.configuration - WARNING - `force_entry_enable` RPC message enabled.
+2025-12-18 09:20:44,850 - freqtrade.configuration.configuration - INFO - Dry run is disabled
+2025-12-18 09:20:44,850 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/rsi_cycle_engine.sqlite"
+2025-12-18 09:20:44,851 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 1 ...
+2025-12-18 09:20:44,875 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2025-12-18 09:20:44,878 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/bybit ...
+2025-12-18 09:20:44,881 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2025-12-18 09:20:44,912 - freqtrade.exchange.check_exchange - INFO - Exchange "bybit" is officially supported by the Freqtrade development team.
+2025-12-18 09:20:44,914 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2025-12-18 09:20:44,916 - freqtrade.exchange.exchange - INFO - Using CCXT 4.5.2
+2025-12-18 09:20:44,918 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-12-18 09:20:44,943 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-12-18 09:20:44,974 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-12-18 09:20:44,995 - freqtrade.exchange.exchange - INFO - Using Exchange "Bybit"
+2025-12-18 09:20:50,347 - freqtrade.exchange.bybit - INFO - Bybit: Unified account. Assuming dedicated subaccount for this bot.
+2025-12-18 09:20:50,349 - freqtrade.resolvers.exchange_resolver - INFO - Using resolved exchange 'Bybit'...
+2025-12-18 09:20:51,342 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy RSICycleEngine from '/freqtrade/user_data/strategies/rsi_cycle_engine.py'...
+2025-12-18 09:20:51,343 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2025-12-18 09:20:51,344 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: USDT.
+2025-12-18 09:20:51,345 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: unlimited.
+2025-12-18 09:20:51,346 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 5, 'exit': 5, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2025-12-18 09:20:51,346 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 1.
+2025-12-18 09:20:51,347 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {}
+2025-12-18 09:20:51,348 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 1h
+2025-12-18 09:20:51,348 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -1
+2025-12-18 09:20:51,349 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2025-12-18 09:20:51,350 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2025-12-18 09:20:51,351 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2025-12-18 09:20:51,351 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: True
+2025-12-18 09:20:51,352 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2025-12-18 09:20:51,353 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'limit', 'exit': 'limit', 'emergency_exit': 'market', 'stoploss': 'market', 'stoploss_on_exchange': True, 'stoploss_on_exchange_interval': 60, 'stoploss_on_exchange_limit_ratio': 0.99}
+2025-12-18 09:20:51,354 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2025-12-18 09:20:51,355 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: USDT
+2025-12-18 09:20:51,355 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: unlimited
+2025-12-18 09:20:51,356 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 0
+2025-12-18 09:20:51,357 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 5, 'exit': 5, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2025-12-18 09:20:51,358 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2025-12-18 09:20:51,359 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2025-12-18 09:20:51,359 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2025-12-18 09:20:51,360 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2025-12-18 09:20:51,361 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2025-12-18 09:20:51,362 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2025-12-18 09:20:51,362 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2025-12-18 09:20:51,363 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2025-12-18 09:20:51,364 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 1
+2025-12-18 09:20:51,365 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2025-12-18 09:20:51,781 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 09:20:52,118 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.telegram ...
+2025-12-18 09:20:52,478 - freqtrade.rpc.telegram - INFO - using custom keyboard from config.json: [['/status table', '/reload_config'], ['/forcelong', '/forceshort', '/forceexit'], ['/stop', '/start', '/profit', '/logs']]
+2025-12-18 09:20:52,482 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.api_server
+2025-12-18 09:20:53,023 - freqtrade.rpc.api_server.webserver - INFO - Starting HTTP Server at 0.0.0.0:8080
+2025-12-18 09:20:53,024 - freqtrade.rpc.api_server.webserver - INFO - Starting Local Rest Server.
+2025-12-18 09:20:53,062 - uvicorn.error - INFO - Started server process [1]
+2025-12-18 09:20:53,063 - uvicorn.error - INFO - Waiting for application startup.
+2025-12-18 09:20:53,067 - uvicorn.error - INFO - Application startup complete.
+2025-12-18 09:20:53,069 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2025-12-18 09:20:53,088 - freqtrade.rpc.telegram - INFO - rpc.telegram is listening for following commands: [['status'], ['profit'], ['balance'], ['start'], ['stop'], ['forceexit', 'forcesell', 'fx'], ['forcebuy', 'forcelong'], ['forceshort'], ['reload_trade'], ['trades'], ['delete'], ['cancel_open_order', 'coo'], ['performance'], ['buys', 'entries'], ['exits', 'sells'], ['mix_tags'], ['stats'], ['daily'], ['weekly'], ['monthly'], ['count'], ['locks'], ['delete_locks', 'unlock'], ['reload_conf', 'reload_config'], ['show_conf', 'show_config'], ['pause', 'stopbuy', 'stopentry'], ['whitelist'], ['blacklist'], ['bl_delete', 'blacklist_delete'], ['logs'], ['health'], ['help'], ['version'], ['marketdir'], ['order'], ['list_custom_data'], ['tg_info'], ['profit_long'], ['profit_short']]
+2025-12-18 09:20:53,125 - freqtrade.resolvers.iresolver - INFO - Using resolved pairlist StaticPairList from '/freqtrade/freqtrade/plugins/pairlist/StaticPairList.py'...
+2025-12-18 09:20:53,126 - freqtrade.freqtradebot - INFO - Starting initial pairlist refresh
+2025-12-18 09:20:53,139 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['WIF/USDT:USDT']
+2025-12-18 09:20:53,140 - freqtrade.freqtradebot - INFO - Initial Pairlist refresh took 0.01s
+2025-12-18 09:20:53,144 - freqtrade.strategy.hyper - INFO - No params for buy found, using default values.
+2025-12-18 09:20:53,146 - freqtrade.strategy.hyper - INFO - Strategy Parameter(default): min_rsi = 30
+2025-12-18 09:20:53,148 - freqtrade.strategy.hyper - INFO - No params for sell found, using default values.
+2025-12-18 09:20:53,151 - freqtrade.strategy.hyper - INFO - Strategy Parameter(default): max_rsi = 70
+2025-12-18 09:20:53,153 - freqtrade.strategy.hyper - INFO - No params for protection found, using default values.
+2025-12-18 09:20:53,155 - freqtrade.plugins.protectionmanager - INFO - No protection Handlers defined.
+2025-12-18 09:20:53,156 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'running'}
+2025-12-18 09:20:53,157 - freqtrade.worker - INFO - Changing state to: RUNNING
+2025-12-18 09:20:53,176 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': '*Exchange:* `bybit`\n*Stake per trade:* `unlimited USDT`\n*Minimum ROI:* `{}`\n*Stoploss:* `-1`\n*Position adjustment:* `Off`\n*Timeframe:* `1h`\n*Strategy:* `RSICycleEngine`'}
+2025-12-18 09:20:53,178 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': "Searching for USDT pairs to buy and sell based on [{'StaticPairList': 'StaticPairList'}]"}
+2025-12-18 09:20:53,201 - freqtrade.freqtradebot - INFO - Updating 0 open orders.
+2025-12-18 09:20:53,307 - telegram.ext.Application - INFO - Application started
+2025-12-18 09:20:58,204 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:21:58,214 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:22:58,229 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:23:58,238 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:24:58,253 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:25:58,267 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:26:58,276 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:27:58,285 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:28:58,293 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:29:58,299 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:30:58,308 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:31:03,919 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 09:31:58,319 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:32:58,326 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:33:58,333 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:34:58,352 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:35:58,360 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:36:58,370 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:37:58,390 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:38:58,400 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:39:58,407 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:40:33,412 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'reload_config'}
+2025-12-18 09:40:33,416 - freqtrade.worker - INFO - Changing state from RUNNING to: RELOAD_CONFIG
+2025-12-18 09:40:33,420 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RELOAD_CONFIG'
+2025-12-18 09:40:33,423 - freqtrade.freqtradebot - INFO - Cleaning up modules ...
+2025-12-18 09:40:33,432 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc modules ...
+2025-12-18 09:40:33,435 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc.apiserver ...
+2025-12-18 09:40:33,437 - freqtrade.rpc.api_server.webserver - INFO - Stopping API Server
+2025-12-18 09:40:33,511 - uvicorn.error - INFO - Shutting down
+2025-12-18 09:40:33,614 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-12-18 09:40:33,617 - uvicorn.error - INFO - Application shutdown complete.
+2025-12-18 09:40:33,619 - uvicorn.error - INFO - Finished server process [1]
+2025-12-18 09:40:33,623 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc.telegram ...
+2025-12-18 09:40:33,884 - freqtrade.exchange.exchange_ws - INFO - Resetting WS connections.
+2025-12-18 09:40:33,886 - freqtrade.exchange.exchange_ws - INFO - WIF/USDT:USDT, 1h, futures - Task finished - cancelled
+2025-12-18 09:40:33,890 - freqtrade.exchange.exchange_ws - INFO - WIF/USDT:USDT, 4h, futures - Task finished - cancelled
+2025-12-18 09:40:33,896 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-12-18 09:40:33,915 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-12-18 09:40:34,752 - freqtrade.configuration.load_config - INFO - Using config: /freqtrade/user_data/rsi_cycle_engine.json ...
+2025-12-18 09:40:34,769 - freqtrade.loggers - INFO - Enabling colorized output.
+2025-12-18 09:40:34,772 - freqtrade.loggers - INFO - Logfile configured
+2025-12-18 09:40:34,774 - freqtrade.loggers - INFO - Verbosity set to 0
+2025-12-18 09:40:34,776 - freqtrade.configuration.configuration - INFO - Runmode set to live.
+2025-12-18 09:40:34,777 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2025-12-18 09:40:34,778 - freqtrade.configuration.configuration - WARNING - `force_entry_enable` RPC message enabled.
+2025-12-18 09:40:34,780 - freqtrade.configuration.configuration - INFO - Dry run is disabled
+2025-12-18 09:40:34,782 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/rsi_cycle_engine.sqlite"
+2025-12-18 09:40:34,783 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 1 ...
+2025-12-18 09:40:34,806 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2025-12-18 09:40:34,812 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/bybit ...
+2025-12-18 09:40:34,813 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2025-12-18 09:40:34,850 - freqtrade.exchange.check_exchange - INFO - Exchange "bybit" is officially supported by the Freqtrade development team.
+2025-12-18 09:40:34,852 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2025-12-18 09:40:34,855 - freqtrade.exchange.exchange - INFO - Using CCXT 4.5.2
+2025-12-18 09:40:34,856 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-12-18 09:40:34,881 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-12-18 09:40:34,907 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-12-18 09:40:34,940 - freqtrade.exchange.exchange - INFO - Using Exchange "Bybit"
+2025-12-18 09:40:39,591 - freqtrade.exchange.bybit - INFO - Bybit: Unified account. Assuming dedicated subaccount for this bot.
+2025-12-18 09:40:39,594 - freqtrade.resolvers.exchange_resolver - INFO - Using resolved exchange 'Bybit'...
+2025-12-18 09:40:39,618 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy RSICycleEngine from '/freqtrade/user_data/strategies/rsi_cycle_engine.py'...
+2025-12-18 09:40:39,620 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2025-12-18 09:40:39,622 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: USDT.
+2025-12-18 09:40:39,624 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: unlimited.
+2025-12-18 09:40:39,625 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 5, 'exit': 5, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2025-12-18 09:40:39,626 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 1.
+2025-12-18 09:40:39,627 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {}
+2025-12-18 09:40:39,629 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 1h
+2025-12-18 09:40:39,630 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -1
+2025-12-18 09:40:39,631 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2025-12-18 09:40:39,633 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2025-12-18 09:40:39,634 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2025-12-18 09:40:39,635 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: True
+2025-12-18 09:40:39,636 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2025-12-18 09:40:39,637 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'limit', 'exit': 'limit', 'emergency_exit': 'market', 'stoploss': 'market', 'stoploss_on_exchange': True, 'stoploss_on_exchange_interval': 60, 'stoploss_on_exchange_limit_ratio': 0.99}
+2025-12-18 09:40:39,638 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2025-12-18 09:40:39,640 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: USDT
+2025-12-18 09:40:39,641 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: unlimited
+2025-12-18 09:40:39,642 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 0
+2025-12-18 09:40:39,643 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 5, 'exit': 5, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2025-12-18 09:40:39,644 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2025-12-18 09:40:39,645 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2025-12-18 09:40:39,646 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2025-12-18 09:40:39,648 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2025-12-18 09:40:39,649 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2025-12-18 09:40:39,650 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2025-12-18 09:40:39,652 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2025-12-18 09:40:39,653 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2025-12-18 09:40:39,656 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 1
+2025-12-18 09:40:39,658 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2025-12-18 09:40:40,092 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 09:40:40,408 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.telegram ...
+2025-12-18 09:40:40,410 - freqtrade.rpc.telegram - INFO - using custom keyboard from config.json: [['/status table', '/reload_config'], ['/forcelong', '/forceshort', '/forceexit'], ['/stop', '/start', '/profit', '/logs']]
+2025-12-18 09:40:40,413 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.api_server
+2025-12-18 09:40:40,590 - freqtrade.rpc.api_server.webserver - INFO - Starting HTTP Server at 0.0.0.0:8080
+2025-12-18 09:40:40,592 - freqtrade.rpc.api_server.webserver - INFO - Starting Local Rest Server.
+2025-12-18 09:40:40,596 - uvicorn.error - INFO - Started server process [1]
+2025-12-18 09:40:40,598 - uvicorn.error - INFO - Waiting for application startup.
+2025-12-18 09:40:40,601 - uvicorn.error - INFO - Application startup complete.
+2025-12-18 09:40:40,606 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2025-12-18 09:40:40,630 - freqtrade.resolvers.iresolver - INFO - Using resolved pairlist StaticPairList from '/freqtrade/freqtrade/plugins/pairlist/StaticPairList.py'...
+2025-12-18 09:40:40,633 - freqtrade.rpc.telegram - INFO - rpc.telegram is listening for following commands: [['status'], ['profit'], ['balance'], ['start'], ['stop'], ['forceexit', 'forcesell', 'fx'], ['forcebuy', 'forcelong'], ['forceshort'], ['reload_trade'], ['trades'], ['delete'], ['cancel_open_order', 'coo'], ['performance'], ['buys', 'entries'], ['exits', 'sells'], ['mix_tags'], ['stats'], ['daily'], ['weekly'], ['monthly'], ['count'], ['locks'], ['delete_locks', 'unlock'], ['reload_conf', 'reload_config'], ['show_conf', 'show_config'], ['pause', 'stopbuy', 'stopentry'], ['whitelist'], ['blacklist'], ['bl_delete', 'blacklist_delete'], ['logs'], ['health'], ['help'], ['version'], ['marketdir'], ['order'], ['list_custom_data'], ['tg_info'], ['profit_long'], ['profit_short']]
+2025-12-18 09:40:40,636 - freqtrade.freqtradebot - INFO - Starting initial pairlist refresh
+2025-12-18 09:40:40,676 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['WIF/USDT:USDT']
+2025-12-18 09:40:40,678 - freqtrade.freqtradebot - INFO - Initial Pairlist refresh took 0.04s
+2025-12-18 09:40:40,682 - freqtrade.strategy.hyper - INFO - No params for buy found, using default values.
+2025-12-18 09:40:40,683 - freqtrade.strategy.hyper - INFO - Strategy Parameter(default): min_rsi = 30
+2025-12-18 09:40:40,685 - freqtrade.strategy.hyper - INFO - No params for sell found, using default values.
+2025-12-18 09:40:40,686 - freqtrade.strategy.hyper - INFO - Strategy Parameter(default): max_rsi = 70
+2025-12-18 09:40:40,688 - freqtrade.strategy.hyper - INFO - No params for protection found, using default values.
+2025-12-18 09:40:40,689 - freqtrade.plugins.protectionmanager - INFO - No protection Handlers defined.
+2025-12-18 09:40:40,691 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'running after config reloaded'}
+2025-12-18 09:40:40,692 - freqtrade.worker - INFO - Changing state from RELOAD_CONFIG to: RUNNING
+2025-12-18 09:40:40,722 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': '*Exchange:* `bybit`\n*Stake per trade:* `unlimited USDT`\n*Minimum ROI:* `{}`\n*Stoploss:* `-1`\n*Position adjustment:* `Off`\n*Timeframe:* `1h`\n*Strategy:* `RSICycleEngine`'}
+2025-12-18 09:40:40,725 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': "Searching for USDT pairs to buy and sell based on [{'StaticPairList': 'StaticPairList'}]"}
+2025-12-18 09:40:40,762 - freqtrade.freqtradebot - INFO - Updating 0 open orders.
+2025-12-18 09:40:40,809 - telegram.ext.Application - INFO - Application started
+2025-12-18 09:40:45,768 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:41:45,780 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:42:45,791 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:43:45,799 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:44:45,808 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:45:45,815 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:46:45,823 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:47:45,830 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:48:45,838 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:49:45,846 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:50:45,852 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:51:45,861 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:52:45,867 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:53:45,874 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:54:45,883 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:55:45,892 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:56:45,897 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:57:45,906 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:58:45,913 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:59:45,923 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:00:46,010 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:01:06,605 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 10:01:46,019 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:01:50,917 - uvicorn.error - WARNING - Invalid HTTP request received.
+2025-12-18 10:02:46,027 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:03:46,043 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:04:46,049 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:05:46,066 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:06:46,075 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:07:46,084 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:08:46,090 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:09:46,097 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:10:46,107 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:11:46,116 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:12:46,123 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:13:46,135 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:14:46,141 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:15:46,147 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:16:46,156 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:17:36,162 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'reload_config'}
+2025-12-18 10:17:36,168 - freqtrade.worker - INFO - Changing state from RUNNING to: RELOAD_CONFIG
+2025-12-18 10:17:36,171 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RELOAD_CONFIG'
+2025-12-18 10:17:36,175 - freqtrade.freqtradebot - INFO - Cleaning up modules ...
+2025-12-18 10:17:36,178 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc modules ...
+2025-12-18 10:17:36,179 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc.apiserver ...
+2025-12-18 10:17:36,181 - freqtrade.rpc.api_server.webserver - INFO - Stopping API Server
+2025-12-18 10:17:36,260 - uvicorn.error - INFO - Shutting down
+2025-12-18 10:17:36,363 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-12-18 10:17:36,367 - uvicorn.error - INFO - Application shutdown complete.
+2025-12-18 10:17:36,368 - uvicorn.error - INFO - Finished server process [1]
+2025-12-18 10:17:36,373 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc.telegram ...
+2025-12-18 10:17:36,496 - telegram.ext.Application - INFO - Application is stopping. This might take a moment.
+2025-12-18 10:17:36,497 - telegram.ext.Application - INFO - Application.stop() complete
+2025-12-18 10:17:41,878 - freqtrade.exchange.exchange_ws - INFO - Resetting WS connections.
+2025-12-18 10:17:41,881 - freqtrade.exchange.exchange_ws - INFO - WIF/USDT:USDT, 4h, futures - Task finished - cancelled
+2025-12-18 10:17:41,884 - freqtrade.exchange.exchange_ws - INFO - WIF/USDT:USDT, 1h, futures - Task finished - cancelled
+2025-12-18 10:17:41,888 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-12-18 10:17:41,896 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-12-18 10:17:42,735 - freqtrade.configuration.load_config - INFO - Using config: /freqtrade/user_data/rsi_cycle_engine.json ...
+2025-12-18 10:17:42,752 - freqtrade.loggers - INFO - Enabling colorized output.
+2025-12-18 10:17:42,754 - freqtrade.loggers - INFO - Logfile configured
+2025-12-18 10:17:42,755 - freqtrade.loggers - INFO - Verbosity set to 0
+2025-12-18 10:17:42,756 - freqtrade.configuration.configuration - INFO - Runmode set to live.
+2025-12-18 10:17:42,758 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2025-12-18 10:17:42,759 - freqtrade.configuration.configuration - WARNING - `force_entry_enable` RPC message enabled.
+2025-12-18 10:17:42,760 - freqtrade.configuration.configuration - INFO - Dry run is disabled
+2025-12-18 10:17:42,762 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/rsi_cycle_engine.sqlite"
+2025-12-18 10:17:42,763 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 1 ...
+2025-12-18 10:17:42,794 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2025-12-18 10:17:42,796 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/bybit ...
+2025-12-18 10:17:42,797 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2025-12-18 10:17:42,832 - freqtrade.exchange.check_exchange - INFO - Exchange "bybit" is officially supported by the Freqtrade development team.
+2025-12-18 10:17:42,834 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2025-12-18 10:17:42,837 - freqtrade.exchange.exchange - INFO - Using CCXT 4.5.2
+2025-12-18 10:17:42,839 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-12-18 10:17:42,862 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-12-18 10:17:42,889 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-12-18 10:17:42,919 - freqtrade.exchange.exchange - INFO - Using Exchange "Bybit"
+2025-12-18 10:17:48,167 - freqtrade.exchange.bybit - INFO - Bybit: Unified account. Assuming dedicated subaccount for this bot.
+2025-12-18 10:17:48,169 - freqtrade.resolvers.exchange_resolver - INFO - Using resolved exchange 'Bybit'...
+2025-12-18 10:17:48,189 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy RSICycleEngine from '/freqtrade/user_data/strategies/rsi_cycle_engine.py'...
+2025-12-18 10:17:48,191 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2025-12-18 10:17:48,194 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: USDT.
+2025-12-18 10:17:48,195 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: unlimited.
+2025-12-18 10:17:48,196 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 5, 'exit': 5, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2025-12-18 10:17:48,198 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 1.
+2025-12-18 10:17:48,199 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {}
+2025-12-18 10:17:48,200 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 1h
+2025-12-18 10:17:48,202 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -1
+2025-12-18 10:17:48,203 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2025-12-18 10:17:48,204 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2025-12-18 10:17:48,205 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2025-12-18 10:17:48,206 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: True
+2025-12-18 10:17:48,208 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2025-12-18 10:17:48,209 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'limit', 'exit': 'limit', 'emergency_exit': 'market', 'stoploss': 'market', 'stoploss_on_exchange': True, 'stoploss_on_exchange_interval': 60, 'stoploss_on_exchange_limit_ratio': 0.99}
+2025-12-18 10:17:48,210 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2025-12-18 10:17:48,211 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: USDT
+2025-12-18 10:17:48,213 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: unlimited
+2025-12-18 10:17:48,214 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 0
+2025-12-18 10:17:48,215 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 5, 'exit': 5, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2025-12-18 10:17:48,216 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2025-12-18 10:17:48,217 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2025-12-18 10:17:48,219 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2025-12-18 10:17:48,220 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2025-12-18 10:17:48,221 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2025-12-18 10:17:48,222 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2025-12-18 10:17:48,224 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2025-12-18 10:17:48,225 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2025-12-18 10:17:48,226 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 1
+2025-12-18 10:17:48,228 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2025-12-18 10:17:48,947 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 10:17:49,295 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.telegram ...
+2025-12-18 10:17:49,297 - freqtrade.rpc.telegram - INFO - using custom keyboard from config.json: [['/status table', '/reload_config'], ['/forcelong', '/forceshort', '/forceexit'], ['/stop', '/start', '/profit', '/logs']]
+2025-12-18 10:17:49,299 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.api_server
+2025-12-18 10:17:49,505 - freqtrade.rpc.api_server.webserver - INFO - Starting HTTP Server at 0.0.0.0:8080
+2025-12-18 10:17:49,506 - freqtrade.rpc.api_server.webserver - INFO - Starting Local Rest Server.
+2025-12-18 10:17:49,510 - uvicorn.error - INFO - Started server process [1]
+2025-12-18 10:17:49,512 - uvicorn.error - INFO - Waiting for application startup.
+2025-12-18 10:17:49,514 - uvicorn.error - INFO - Application startup complete.
+2025-12-18 10:17:49,517 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2025-12-18 10:17:49,550 - freqtrade.resolvers.iresolver - INFO - Using resolved pairlist StaticPairList from '/freqtrade/freqtrade/plugins/pairlist/StaticPairList.py'...
+2025-12-18 10:17:49,552 - freqtrade.freqtradebot - INFO - Starting initial pairlist refresh
+2025-12-18 10:17:49,579 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['WIF/USDT:USDT']
+2025-12-18 10:17:49,581 - freqtrade.freqtradebot - INFO - Initial Pairlist refresh took 0.03s
+2025-12-18 10:17:49,584 - freqtrade.strategy.hyper - INFO - No params for buy found, using default values.
+2025-12-18 10:17:49,587 - freqtrade.strategy.hyper - INFO - Strategy Parameter(default): min_rsi = 30
+2025-12-18 10:17:49,588 - freqtrade.strategy.hyper - INFO - No params for sell found, using default values.
+2025-12-18 10:17:49,591 - freqtrade.strategy.hyper - INFO - Strategy Parameter(default): max_rsi = 70
+2025-12-18 10:17:49,593 - freqtrade.strategy.hyper - INFO - No params for protection found, using default values.
+2025-12-18 10:17:49,597 - freqtrade.rpc.telegram - INFO - rpc.telegram is listening for following commands: [['status'], ['profit'], ['balance'], ['start'], ['stop'], ['forceexit', 'forcesell', 'fx'], ['forcebuy', 'forcelong'], ['forceshort'], ['reload_trade'], ['trades'], ['delete'], ['cancel_open_order', 'coo'], ['performance'], ['buys', 'entries'], ['exits', 'sells'], ['mix_tags'], ['stats'], ['daily'], ['weekly'], ['monthly'], ['count'], ['locks'], ['delete_locks', 'unlock'], ['reload_conf', 'reload_config'], ['show_conf', 'show_config'], ['pause', 'stopbuy', 'stopentry'], ['whitelist'], ['blacklist'], ['bl_delete', 'blacklist_delete'], ['logs'], ['health'], ['help'], ['version'], ['marketdir'], ['order'], ['list_custom_data'], ['tg_info'], ['profit_long'], ['profit_short']]
+2025-12-18 10:17:49,598 - freqtrade.plugins.protectionmanager - INFO - No protection Handlers defined.
+2025-12-18 10:17:49,606 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'running after config reloaded'}
+2025-12-18 10:17:49,608 - freqtrade.worker - INFO - Changing state from RELOAD_CONFIG to: RUNNING
+2025-12-18 10:17:49,632 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': '*Exchange:* `bybit`\n*Stake per trade:* `unlimited USDT`\n*Minimum ROI:* `{}`\n*Stoploss:* `-1`\n*Position adjustment:* `Off`\n*Timeframe:* `1h`\n*Strategy:* `RSICycleEngine`'}
+2025-12-18 10:17:49,635 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': "Searching for USDT pairs to buy and sell based on [{'StaticPairList': 'StaticPairList'}]"}
+2025-12-18 10:17:49,661 - freqtrade.freqtradebot - INFO - Updating 0 open orders.
+2025-12-18 10:17:49,751 - telegram.ext.Application - INFO - Application started
+2025-12-18 10:17:54,666 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:18:54,672 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:19:54,679 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:20:54,690 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:21:54,706 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:22:54,736 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:23:54,742 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:24:54,753 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:25:54,767 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:26:54,778 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:27:54,786 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:28:54,794 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:29:28,273 - uvicorn.error - WARNING - Invalid HTTP request received.
+2025-12-18 10:29:54,805 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:30:54,812 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:31:05,416 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 10:31:54,820 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:32:54,830 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:33:54,839 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:34:54,845 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:35:54,855 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:36:54,864 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:37:54,870 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:38:54,878 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:39:54,889 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:40:54,896 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:41:54,902 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:42:54,908 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:43:54,916 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:44:54,924 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:45:54,929 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:46:54,940 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:47:54,949 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:48:54,959 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:49:54,967 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:50:54,976 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:51:54,983 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:52:54,995 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:53:55,028 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:54:55,043 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:55:55,057 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:56:55,064 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:57:55,073 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:58:55,087 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:59:55,096 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:00:56,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:01:06,635 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 11:01:56,014 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:02:56,027 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:03:56,036 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:04:56,043 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:05:56,052 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:06:56,065 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:07:56,071 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:08:56,081 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:09:56,087 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:10:56,096 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:11:56,108 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:12:56,115 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:13:56,123 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:14:56,132 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:15:56,138 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:16:56,148 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:17:56,077 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['WIF/USDT:USDT']
+2025-12-18 11:17:56,156 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:18:56,162 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:19:56,169 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:20:56,182 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:21:56,188 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:22:56,196 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:23:56,204 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:24:56,210 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:25:56,221 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:26:56,229 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:27:56,240 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:28:56,250 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:29:56,256 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:30:56,262 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:31:07,159 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 11:31:56,269 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:32:56,276 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:33:56,282 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:34:56,295 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:35:56,309 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:36:56,316 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:37:56,327 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:38:56,337 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:39:56,346 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:40:56,355 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:41:56,365 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:42:56,379 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:43:56,388 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:44:56,394 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:45:56,403 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:46:56,411 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:47:56,419 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:48:56,431 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:49:56,441 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:50:56,447 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:51:56,454 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:52:56,462 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:53:56,470 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:54:56,477 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:55:56,485 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:56:56,491 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:57:56,504 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:58:56,514 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:59:56,521 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:01:01,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:01:06,652 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 12:02:01,027 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:03:01,036 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:04:01,046 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:05:01,055 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:06:01,062 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:07:01,093 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:08:01,104 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:09:01,130 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:10:01,137 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:11:01,143 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:12:01,152 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:13:01,157 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:14:01,166 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:15:01,185 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:16:01,196 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:17:01,201 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:18:00,924 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['WIF/USDT:USDT']
+2025-12-18 12:18:01,208 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:19:01,214 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:20:01,222 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:21:01,233 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:22:01,241 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:23:01,249 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:24:01,260 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:25:01,267 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:26:01,275 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:27:01,282 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:28:01,289 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:29:01,302 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:30:01,308 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:31:01,318 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:31:06,989 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 12:32:01,325 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:33:01,333 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:34:01,344 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:35:01,354 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:36:01,367 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:37:01,382 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:38:01,388 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:39:01,400 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:40:01,410 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:41:01,416 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:42:01,423 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:43:01,438 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:44:01,451 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:45:01,463 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:46:01,469 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:47:01,479 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:48:01,489 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:49:01,496 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:50:01,505 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:51:01,510 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:52:01,517 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:53:01,524 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:54:01,531 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:54:59,982 - uvicorn.error - WARNING - Invalid HTTP request received.
+2025-12-18 12:55:01,540 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:56:01,545 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:57:01,551 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:58:01,560 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:59:01,567 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:00:06,000 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:01:06,008 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:01:06,608 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 13:02:06,017 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:03:06,035 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:04:06,045 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:04:42,432 - uvicorn.error - WARNING - Invalid HTTP request received.
+2025-12-18 13:05:06,055 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:05:21,869 - uvicorn.error - WARNING - Invalid HTTP request received.
+2025-12-18 13:05:21,983 - uvicorn.error - WARNING - Invalid HTTP request received.
+2025-12-18 13:06:06,065 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:07:06,079 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:08:06,091 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:09:06,101 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:10:06,113 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:11:06,119 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:12:06,124 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:13:06,132 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:14:06,142 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:15:06,149 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:16:06,157 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:17:06,164 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:18:05,789 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['WIF/USDT:USDT']
+2025-12-18 13:18:06,174 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:19:06,180 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:20:06,193 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:21:06,201 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:22:06,207 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:23:06,214 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:24:06,220 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:25:06,231 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:26:06,242 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:27:06,249 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:28:06,258 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:29:06,266 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:30:06,272 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:31:06,283 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:31:07,037 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 13:32:06,291 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:33:06,296 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:34:06,306 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:35:06,314 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:36:06,326 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:37:06,332 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:38:06,345 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:39:06,354 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:40:06,365 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:41:06,371 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:42:06,379 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:43:06,389 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:44:06,395 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:45:06,401 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:46:06,409 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:47:06,415 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:48:06,426 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:49:06,437 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:50:06,443 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:51:06,451 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:52:06,457 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:53:06,465 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:54:06,475 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:55:06,483 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:56:06,489 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:57:06,495 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:58:06,504 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:59:06,509 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:00:11,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:01:06,488 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 14:01:11,011 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:02:11,016 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:03:11,023 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:04:11,032 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:05:11,037 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:06:11,048 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:07:11,055 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:08:11,065 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:09:11,074 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:10:11,081 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:11:11,086 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:12:11,092 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:13:11,100 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:14:11,107 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:15:11,116 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:16:11,123 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:17:11,134 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:18:12,348 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['WIF/USDT:USDT']
+2025-12-18 14:18:12,362 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:19:12,368 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:20:12,378 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:21:12,383 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:22:12,390 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:23:12,402 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:24:12,416 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:25:12,422 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:26:12,430 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:27:12,438 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:28:12,444 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:29:12,452 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:30:12,458 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:31:03,137 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 14:31:12,467 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:32:12,482 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:33:12,494 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:34:12,503 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:35:12,510 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:36:12,518 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:37:12,529 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:38:12,537 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:39:12,545 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:40:12,550 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:41:12,557 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:42:12,566 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:43:12,575 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:44:12,583 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:45:12,589 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:46:12,597 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:47:12,603 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:48:12,613 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:49:12,622 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:50:12,627 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:51:12,633 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:52:12,642 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:53:12,650 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:53:40,216 - uvicorn.error - WARNING - Invalid HTTP request received.
+2025-12-18 14:54:12,657 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:55:12,667 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:56:12,674 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:57:12,683 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:58:12,688 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:59:12,695 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:00:16,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:01:06,759 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 15:01:16,015 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:02:16,028 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:03:16,034 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:04:16,046 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:05:16,053 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:06:16,062 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:07:16,068 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:08:16,077 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:09:16,086 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:10:16,095 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:11:16,104 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:12:16,111 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:13:16,117 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:14:16,127 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:15:16,134 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:16:16,142 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:17:16,147 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:18:16,154 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:18:20,972 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['WIF/USDT:USDT']
+2025-12-18 15:19:16,163 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:20:16,169 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:21:16,179 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:22:16,184 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:23:16,192 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:24:16,198 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:25:16,211 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:26:16,219 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:27:16,226 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:28:16,235 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:29:16,241 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:30:16,249 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:31:06,868 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 15:31:16,256 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:32:16,265 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:33:16,270 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:34:16,277 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:35:16,286 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:36:16,292 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:37:16,300 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:38:16,305 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:39:16,311 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:40:16,320 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:41:16,328 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:42:16,334 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:43:16,344 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:44:16,349 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:45:16,358 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:46:16,366 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:47:16,373 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:48:16,384 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:49:16,390 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:50:16,398 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:51:16,406 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:52:16,424 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:53:16,431 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:54:16,442 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:55:16,449 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:56:16,456 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:57:16,464 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:58:16,471 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:59:16,481 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:00:21,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:01:06,424 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 16:01:21,008 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:02:21,021 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:03:21,031 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:04:21,040 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:05:21,051 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:06:21,057 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:07:21,067 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:08:21,075 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:09:21,081 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:10:21,089 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:11:21,097 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:12:21,104 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:13:21,111 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:14:21,121 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:15:21,128 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:16:21,136 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:17:21,142 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:18:21,149 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:18:25,867 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['WIF/USDT:USDT']
+2025-12-18 16:19:21,157 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:20:21,164 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:21:21,172 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:22:21,177 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:22:41,810 - freqtrade.commands.trade_commands - INFO - worker found ... calling exit
+2025-12-18 16:22:41,814 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'process died'}
+2025-12-18 16:22:41,816 - freqtrade.freqtradebot - INFO - Cleaning up modules ...
+2025-12-18 16:22:41,824 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc modules ...
+2025-12-18 16:22:41,825 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc.apiserver ...
+2025-12-18 16:22:41,826 - freqtrade.rpc.api_server.webserver - INFO - Stopping API Server
+2025-12-18 16:22:41,844 - uvicorn.error - INFO - Shutting down
+2025-12-18 16:22:41,948 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-12-18 16:22:41,951 - uvicorn.error - INFO - Application shutdown complete.
+2025-12-18 16:22:41,952 - uvicorn.error - INFO - Finished server process [1]
+2025-12-18 16:22:41,955 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc.telegram ...
+2025-12-18 16:22:42,074 - telegram.ext.Application - INFO - Application is stopping. This might take a moment.
+2025-12-18 16:22:42,076 - telegram.ext.Application - INFO - Application.stop() complete
+2025-12-18 16:22:42,081 - freqtrade.rpc.telegram - WARNING - Telegram NetworkError: httpx.ReadError: ! Trying one more time.
+2025-12-18 16:22:42,083 - freqtrade.rpc.telegram - WARNING - TelegramError: Unknown error in HTTP implementation: RuntimeError('This HTTPXRequest is not initialized!')! Giving up on that message.
+2025-12-18 16:22:48,236 - freqtrade.exchange.exchange_ws - INFO - Resetting WS connections.
+2025-12-18 16:22:48,238 - freqtrade.exchange.exchange_ws - INFO - WIF/USDT:USDT, 1h, futures - Task finished - cancelled
+2025-12-18 16:22:48,240 - freqtrade.exchange.exchange_ws - INFO - WIF/USDT:USDT, 4h, futures - Task finished - cancelled
+2025-12-18 16:22:48,243 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-12-18 16:22:48,249 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-12-18 16:22:49,099 - freqtrade - INFO - SIGINT received, aborting ...

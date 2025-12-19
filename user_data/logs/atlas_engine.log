@@ -1,0 +1,1638 @@
+2025-12-18 09:17:32,194 - freqtrade.loggers - INFO - Enabling colorized output.
+2025-12-18 09:17:32,196 - freqtrade.loggers - INFO - Logfile configured
+2025-12-18 09:17:32,197 - freqtrade.loggers - INFO - Verbosity set to 0
+2025-12-18 09:17:32,199 - freqtrade.configuration.configuration - INFO - Runmode set to dry_run.
+2025-12-18 09:17:32,200 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2025-12-18 09:17:32,201 - freqtrade.configuration.configuration - WARNING - `force_entry_enable` RPC message enabled.
+2025-12-18 09:17:32,202 - freqtrade.configuration.configuration - INFO - Dry run is enabled
+2025-12-18 09:17:32,203 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/atlas_engine.sqlite"
+2025-12-18 09:17:32,204 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 1 ...
+2025-12-18 09:17:32,325 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2025-12-18 09:17:32,327 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/bybit ...
+2025-12-18 09:17:32,332 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2025-12-18 09:17:32,358 - freqtrade.exchange.check_exchange - INFO - Exchange "bybit" is officially supported by the Freqtrade development team.
+2025-12-18 09:17:32,360 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2025-12-18 09:17:32,362 - freqtrade.exchange.exchange - INFO - Instance is running with dry_run enabled
+2025-12-18 09:17:32,363 - freqtrade.exchange.exchange - INFO - Using CCXT 4.5.2
+2025-12-18 09:17:32,364 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-12-18 09:17:32,387 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-12-18 09:17:32,414 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-12-18 09:17:32,442 - freqtrade.exchange.exchange - INFO - Using Exchange "Bybit"
+2025-12-18 09:17:35,051 - freqtrade.resolvers.exchange_resolver - INFO - Using resolved exchange 'Bybit'...
+2025-12-18 09:17:37,928 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy AtlasEngine from '/freqtrade/user_data/strategies/atlas_engine.py'...
+2025-12-18 09:17:37,930 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2025-12-18 09:17:37,932 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: USDT.
+2025-12-18 09:17:37,933 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: unlimited.
+2025-12-18 09:17:37,934 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 5, 'exit': 5, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2025-12-18 09:17:37,936 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 1.
+2025-12-18 09:17:37,937 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {}
+2025-12-18 09:17:37,939 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 15m
+2025-12-18 09:17:37,940 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -1
+2025-12-18 09:17:37,941 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2025-12-18 09:17:37,943 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2025-12-18 09:17:37,944 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2025-12-18 09:17:37,945 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: True
+2025-12-18 09:17:37,947 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2025-12-18 09:17:37,948 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'limit', 'exit': 'limit', 'emergency_exit': 'market', 'stoploss': 'market', 'stoploss_on_exchange': True, 'stoploss_on_exchange_interval': 60, 'stoploss_on_exchange_limit_ratio': 0.99}
+2025-12-18 09:17:37,949 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2025-12-18 09:17:37,951 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: USDT
+2025-12-18 09:17:37,953 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: unlimited
+2025-12-18 09:17:37,954 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 0
+2025-12-18 09:17:37,955 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 5, 'exit': 5, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2025-12-18 09:17:37,956 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2025-12-18 09:17:37,957 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2025-12-18 09:17:37,958 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2025-12-18 09:17:37,960 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2025-12-18 09:17:37,961 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2025-12-18 09:17:37,962 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2025-12-18 09:17:37,963 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2025-12-18 09:17:37,964 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2025-12-18 09:17:37,966 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 1
+2025-12-18 09:17:37,967 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2025-12-18 09:17:38,277 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 09:17:38,583 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.telegram ...
+2025-12-18 09:17:39,410 - freqtrade.rpc.telegram - INFO - using custom keyboard from config.json: [['/status table', '/reload_config'], ['/forcelong', '/forceshort', '/forceexit'], ['/stop', '/start', '/profit', '/logs']]
+2025-12-18 09:17:39,412 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.api_server
+2025-12-18 09:17:40,177 - freqtrade.rpc.telegram - INFO - rpc.telegram is listening for following commands: [['status'], ['profit'], ['balance'], ['start'], ['stop'], ['forceexit', 'forcesell', 'fx'], ['forcebuy', 'forcelong'], ['forceshort'], ['reload_trade'], ['trades'], ['delete'], ['cancel_open_order', 'coo'], ['performance'], ['buys', 'entries'], ['exits', 'sells'], ['mix_tags'], ['stats'], ['daily'], ['weekly'], ['monthly'], ['count'], ['locks'], ['delete_locks', 'unlock'], ['reload_conf', 'reload_config'], ['show_conf', 'show_config'], ['pause', 'stopbuy', 'stopentry'], ['whitelist'], ['blacklist'], ['bl_delete', 'blacklist_delete'], ['logs'], ['health'], ['help'], ['version'], ['marketdir'], ['order'], ['list_custom_data'], ['tg_info'], ['profit_long'], ['profit_short']]
+2025-12-18 09:17:40,199 - freqtrade.rpc.api_server.webserver - INFO - Starting HTTP Server at 0.0.0.0:8080
+2025-12-18 09:17:40,200 - freqtrade.rpc.api_server.webserver - INFO - Starting Local Rest Server.
+2025-12-18 09:17:40,221 - uvicorn.error - INFO - Started server process [1]
+2025-12-18 09:17:40,222 - uvicorn.error - INFO - Waiting for application startup.
+2025-12-18 09:17:40,223 - uvicorn.error - INFO - Application startup complete.
+2025-12-18 09:17:40,225 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2025-12-18 09:17:40,255 - freqtrade.resolvers.iresolver - INFO - Using resolved pairlist StaticPairList from '/freqtrade/freqtrade/plugins/pairlist/StaticPairList.py'...
+2025-12-18 09:17:40,257 - freqtrade.freqtradebot - INFO - Starting initial pairlist refresh
+2025-12-18 09:17:40,279 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['BTC/USDT:USDT']
+2025-12-18 09:17:40,280 - freqtrade.freqtradebot - INFO - Initial Pairlist refresh took 0.02s
+2025-12-18 09:17:40,282 - freqtrade.strategy.hyper - INFO - No params for buy found, using default values.
+2025-12-18 09:17:40,283 - freqtrade.strategy.hyper - INFO - No params for sell found, using default values.
+2025-12-18 09:17:40,283 - freqtrade.strategy.hyper - INFO - No params for protection found, using default values.
+2025-12-18 09:17:40,284 - freqtrade.plugins.protectionmanager - INFO - No protection Handlers defined.
+2025-12-18 09:17:40,285 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'running'}
+2025-12-18 09:17:40,287 - freqtrade.worker - INFO - Changing state to: RUNNING
+2025-12-18 09:17:40,315 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': warning, 'status': 'Dry run is enabled. All trades are simulated.'}
+2025-12-18 09:17:40,317 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': '*Exchange:* `bybit`\n*Stake per trade:* `unlimited USDT`\n*Minimum ROI:* `{}`\n*Stoploss:* `-1`\n*Position adjustment:* `Off`\n*Timeframe:* `15m`\n*Strategy:* `AtlasEngine`'}
+2025-12-18 09:17:40,321 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': "Searching for USDT pairs to buy and sell based on [{'StaticPairList': 'StaticPairList'}]"}
+2025-12-18 09:17:40,344 - telegram.ext.Application - INFO - Application started
+2025-12-18 09:17:40,566 - telegram.ext.Updater - ERROR - Exception happened while polling for updates.
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_utils/networkloop.py", line 115, in network_retry_loop
+    if not await do_action():
+           ^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_utils/networkloop.py", line 108, in do_action
+    return action_cb_task.result()
+           ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_updater.py", line 340, in polling_action_cb
+    updates = await self.bot.get_updates(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_extbot.py", line 670, in get_updates
+    updates = await super().get_updates(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/_bot.py", line 4611, in get_updates
+    await self._post(
+    ^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    ),
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/_bot.py", line 698, in _post
+    return await self._do_post(
+           ^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_extbot.py", line 370, in _do_post
+    return await super()._do_post(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/_bot.py", line 727, in _do_post
+    result = await request.post(
+             ^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/request/_baserequest.py", line 197, in post
+    result = await self._request_wrapper(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/request/_baserequest.py", line 374, in _request_wrapper
+    raise exception
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2025-12-18 09:17:45,335 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:17:45,691 - telegram.ext.Updater - ERROR - Exception happened while polling for updates.
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_utils/networkloop.py", line 115, in network_retry_loop
+    if not await do_action():
+           ^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_utils/networkloop.py", line 108, in do_action
+    return action_cb_task.result()
+           ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_updater.py", line 340, in polling_action_cb
+    updates = await self.bot.get_updates(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_extbot.py", line 670, in get_updates
+    updates = await super().get_updates(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/_bot.py", line 4611, in get_updates
+    await self._post(
+    ^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    ),
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/_bot.py", line 698, in _post
+    return await self._do_post(
+           ^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_extbot.py", line 370, in _do_post
+    return await super()._do_post(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/_bot.py", line 727, in _do_post
+    result = await request.post(
+             ^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/request/_baserequest.py", line 197, in post
+    result = await self._request_wrapper(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/request/_baserequest.py", line 374, in _request_wrapper
+    raise exception
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2025-12-18 09:17:51,872 - telegram.ext.Updater - ERROR - Exception happened while polling for updates.
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_utils/networkloop.py", line 115, in network_retry_loop
+    if not await do_action():
+           ^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_utils/networkloop.py", line 108, in do_action
+    return action_cb_task.result()
+           ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_updater.py", line 340, in polling_action_cb
+    updates = await self.bot.get_updates(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_extbot.py", line 670, in get_updates
+    updates = await super().get_updates(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/_bot.py", line 4611, in get_updates
+    await self._post(
+    ^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    ),
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/_bot.py", line 698, in _post
+    return await self._do_post(
+           ^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_extbot.py", line 370, in _do_post
+    return await super()._do_post(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/_bot.py", line 727, in _do_post
+    result = await request.post(
+             ^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/request/_baserequest.py", line 197, in post
+    result = await self._request_wrapper(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/request/_baserequest.py", line 374, in _request_wrapper
+    raise exception
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2025-12-18 09:17:59,559 - telegram.ext.Updater - ERROR - Exception happened while polling for updates.
+Traceback (most recent call last):
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_utils/networkloop.py", line 115, in network_retry_loop
+    if not await do_action():
+           ^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_utils/networkloop.py", line 108, in do_action
+    return action_cb_task.result()
+           ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_updater.py", line 340, in polling_action_cb
+    updates = await self.bot.get_updates(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_extbot.py", line 670, in get_updates
+    updates = await super().get_updates(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/_bot.py", line 4611, in get_updates
+    await self._post(
+    ^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    ),
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/_bot.py", line 698, in _post
+    return await self._do_post(
+           ^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/ext/_extbot.py", line 370, in _do_post
+    return await super()._do_post(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/_bot.py", line 727, in _do_post
+    result = await request.post(
+             ^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/request/_baserequest.py", line 197, in post
+    result = await self._request_wrapper(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    )
+    ^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/telegram/request/_baserequest.py", line 374, in _request_wrapper
+    raise exception
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2025-12-18 09:18:02,327 - freqtrade.commands.trade_commands - INFO - worker found ... calling exit
+2025-12-18 09:18:02,332 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'process died'}
+2025-12-18 09:18:02,336 - freqtrade.freqtradebot - INFO - Cleaning up modules ...
+2025-12-18 09:18:02,352 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc modules ...
+2025-12-18 09:18:02,355 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc.apiserver ...
+2025-12-18 09:18:02,361 - freqtrade.rpc.api_server.webserver - INFO - Stopping API Server
+2025-12-18 09:18:02,373 - uvicorn.error - INFO - Shutting down
+2025-12-18 09:18:02,479 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-12-18 09:18:02,482 - uvicorn.error - INFO - Application shutdown complete.
+2025-12-18 09:18:02,484 - uvicorn.error - INFO - Finished server process [1]
+2025-12-18 09:18:02,486 - freqtrade.rpc.rpc_manager - INFO - Cleaning up rpc.telegram ...
+2025-12-18 09:18:05,990 - telegram.ext.Application - INFO - Application is stopping. This might take a moment.
+2025-12-18 09:18:05,992 - telegram.ext.Application - INFO - Application.stop() complete
+2025-12-18 09:18:10,429 - freqtrade.exchange.exchange_ws - INFO - Resetting WS connections.
+2025-12-18 09:18:10,431 - freqtrade.exchange.exchange_ws - INFO - BTC/USDT:USDT, 1h, futures - Task finished - cancelled
+2025-12-18 09:18:10,432 - freqtrade.exchange.exchange_ws - INFO - BTC/USDT:USDT, 4h, futures - Task finished - cancelled
+2025-12-18 09:18:10,433 - freqtrade.exchange.exchange_ws - INFO - BTC/USDT:USDT, 15m, futures - Task finished - cancelled
+2025-12-18 09:18:10,437 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-12-18 09:18:10,447 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-12-18 09:18:10,451 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connection closed by remote server, closing code 1006
+2025-12-18 09:18:11,291 - freqtrade - INFO - SIGINT received, aborting ...
+2025-12-18 09:20:44,522 - freqtrade.loggers - INFO - Enabling colorized output.
+2025-12-18 09:20:44,523 - freqtrade.loggers - INFO - Logfile configured
+2025-12-18 09:20:44,524 - freqtrade.loggers - INFO - Verbosity set to 0
+2025-12-18 09:20:44,525 - freqtrade.configuration.configuration - INFO - Runmode set to dry_run.
+2025-12-18 09:20:44,525 - freqtrade.configuration.configuration - INFO - Parameter --db-url detected ...
+2025-12-18 09:20:44,526 - freqtrade.configuration.configuration - WARNING - `force_entry_enable` RPC message enabled.
+2025-12-18 09:20:44,527 - freqtrade.configuration.configuration - INFO - Dry run is enabled
+2025-12-18 09:20:44,527 - freqtrade.configuration.configuration - INFO - Using DB: "sqlite:////freqtrade/user_data/atlas_engine.sqlite"
+2025-12-18 09:20:44,528 - freqtrade.configuration.configuration - INFO - Using max_open_trades: 1 ...
+2025-12-18 09:20:44,561 - freqtrade.configuration.configuration - INFO - Using user-data directory: /freqtrade/user_data ...
+2025-12-18 09:20:44,562 - freqtrade.configuration.configuration - INFO - Using data directory: /freqtrade/user_data/data/bybit ...
+2025-12-18 09:20:44,565 - freqtrade.exchange.check_exchange - INFO - Checking exchange...
+2025-12-18 09:20:44,581 - freqtrade.exchange.check_exchange - INFO - Exchange "bybit" is officially supported by the Freqtrade development team.
+2025-12-18 09:20:44,582 - freqtrade.configuration.configuration - INFO - Using pairlist from configuration.
+2025-12-18 09:20:44,584 - freqtrade.exchange.exchange - INFO - Instance is running with dry_run enabled
+2025-12-18 09:20:44,585 - freqtrade.exchange.exchange - INFO - Using CCXT 4.5.2
+2025-12-18 09:20:44,585 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-12-18 09:20:44,599 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-12-18 09:20:44,617 - freqtrade.exchange.exchange - INFO - Applying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2025-12-18 09:20:44,638 - freqtrade.exchange.exchange - INFO - Using Exchange "Bybit"
+2025-12-18 09:20:48,431 - freqtrade.resolvers.exchange_resolver - INFO - Using resolved exchange 'Bybit'...
+2025-12-18 09:20:49,376 - freqtrade.resolvers.iresolver - INFO - Using resolved strategy AtlasEngine from '/freqtrade/user_data/strategies/atlas_engine.py'...
+2025-12-18 09:20:49,377 - freqtrade.strategy.hyper - INFO - Found no parameter file.
+2025-12-18 09:20:49,378 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_currency' with value in config file: USDT.
+2025-12-18 09:20:49,379 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'stake_amount' with value in config file: unlimited.
+2025-12-18 09:20:49,380 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'unfilledtimeout' with value in config file: {'entry': 5, 'exit': 5, 'exit_timeout_count': 0, 'unit': 'minutes'}.
+2025-12-18 09:20:49,380 - freqtrade.resolvers.strategy_resolver - INFO - Override strategy 'max_open_trades' with value in config file: 1.
+2025-12-18 09:20:49,381 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using minimal_roi: {}
+2025-12-18 09:20:49,381 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using timeframe: 15m
+2025-12-18 09:20:49,382 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stoploss: -1
+2025-12-18 09:20:49,382 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop: False
+2025-12-18 09:20:49,383 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_stop_positive_offset: 0.0
+2025-12-18 09:20:49,384 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using trailing_only_offset_is_reached: False
+2025-12-18 09:20:49,384 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_custom_stoploss: True
+2025-12-18 09:20:49,385 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using process_only_new_candles: True
+2025-12-18 09:20:49,385 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_types: {'entry': 'limit', 'exit': 'limit', 'emergency_exit': 'market', 'stoploss': 'market', 'stoploss_on_exchange': True, 'stoploss_on_exchange_interval': 60, 'stoploss_on_exchange_limit_ratio': 0.99}
+2025-12-18 09:20:49,386 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2025-12-18 09:20:49,386 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_currency: USDT
+2025-12-18 09:20:49,387 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using stake_amount: unlimited
+2025-12-18 09:20:49,388 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using startup_candle_count: 0
+2025-12-18 09:20:49,388 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using unfilledtimeout: {'entry': 5, 'exit': 5, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2025-12-18 09:20:49,389 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using use_exit_signal: True
+2025-12-18 09:20:49,389 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_only: False
+2025-12-18 09:20:49,390 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_roi_if_entry_signal: False
+2025-12-18 09:20:49,390 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using exit_profit_offset: 0.0
+2025-12-18 09:20:49,391 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using disable_dataframe_checks: False
+2025-12-18 09:20:49,391 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using ignore_buying_expired_candle_after: 0
+2025-12-18 09:20:49,392 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using position_adjustment_enable: False
+2025-12-18 09:20:49,392 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_entry_position_adjustment: -1
+2025-12-18 09:20:49,393 - freqtrade.resolvers.strategy_resolver - INFO - Strategy using max_open_trades: 1
+2025-12-18 09:20:49,394 - freqtrade.configuration.config_validation - INFO - Validating configuration ...
+2025-12-18 09:20:49,450 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 09:20:49,670 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.telegram ...
+2025-12-18 09:20:49,875 - freqtrade.rpc.telegram - INFO - using custom keyboard from config.json: [['/status table', '/reload_config'], ['/forcelong', '/forceshort', '/forceexit'], ['/stop', '/start', '/profit', '/logs']]
+2025-12-18 09:20:49,877 - freqtrade.rpc.rpc_manager - INFO - Enabling rpc.api_server
+2025-12-18 09:20:50,644 - freqtrade.rpc.api_server.webserver - INFO - Starting HTTP Server at 0.0.0.0:8080
+2025-12-18 09:20:50,645 - freqtrade.rpc.api_server.webserver - INFO - Starting Local Rest Server.
+2025-12-18 09:20:50,681 - uvicorn.error - INFO - Started server process [1]
+2025-12-18 09:20:50,682 - uvicorn.error - INFO - Waiting for application startup.
+2025-12-18 09:20:50,684 - uvicorn.error - INFO - Application startup complete.
+2025-12-18 09:20:50,685 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2025-12-18 09:20:50,714 - freqtrade.resolvers.iresolver - INFO - Using resolved pairlist StaticPairList from '/freqtrade/freqtrade/plugins/pairlist/StaticPairList.py'...
+2025-12-18 09:20:50,716 - freqtrade.freqtradebot - INFO - Starting initial pairlist refresh
+2025-12-18 09:20:50,731 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['BTC/USDT:USDT']
+2025-12-18 09:20:50,733 - freqtrade.freqtradebot - INFO - Initial Pairlist refresh took 0.02s
+2025-12-18 09:20:50,735 - freqtrade.strategy.hyper - INFO - No params for buy found, using default values.
+2025-12-18 09:20:50,737 - freqtrade.strategy.hyper - INFO - No params for sell found, using default values.
+2025-12-18 09:20:50,738 - freqtrade.strategy.hyper - INFO - No params for protection found, using default values.
+2025-12-18 09:20:50,740 - freqtrade.plugins.protectionmanager - INFO - No protection Handlers defined.
+2025-12-18 09:20:50,741 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': status, 'status': 'running'}
+2025-12-18 09:20:50,742 - freqtrade.worker - INFO - Changing state to: RUNNING
+2025-12-18 09:20:50,757 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': warning, 'status': 'Dry run is enabled. All trades are simulated.'}
+2025-12-18 09:20:50,760 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': '*Exchange:* `bybit`\n*Stake per trade:* `unlimited USDT`\n*Minimum ROI:* `{}`\n*Stoploss:* `-1`\n*Position adjustment:* `Off`\n*Timeframe:* `15m`\n*Strategy:* `AtlasEngine`'}
+2025-12-18 09:20:50,763 - freqtrade.rpc.rpc_manager - INFO - Sending rpc message: {'type': startup, 'status': "Searching for USDT pairs to buy and sell based on [{'StaticPairList': 'StaticPairList'}]"}
+2025-12-18 09:20:50,767 - freqtrade.rpc.telegram - INFO - rpc.telegram is listening for following commands: [['status'], ['profit'], ['balance'], ['start'], ['stop'], ['forceexit', 'forcesell', 'fx'], ['forcebuy', 'forcelong'], ['forceshort'], ['reload_trade'], ['trades'], ['delete'], ['cancel_open_order', 'coo'], ['performance'], ['buys', 'entries'], ['exits', 'sells'], ['mix_tags'], ['stats'], ['daily'], ['weekly'], ['monthly'], ['count'], ['locks'], ['delete_locks', 'unlock'], ['reload_conf', 'reload_config'], ['show_conf', 'show_config'], ['pause', 'stopbuy', 'stopentry'], ['whitelist'], ['blacklist'], ['bl_delete', 'blacklist_delete'], ['logs'], ['health'], ['help'], ['version'], ['marketdir'], ['order'], ['list_custom_data'], ['tg_info'], ['profit_long'], ['profit_short']]
+2025-12-18 09:20:50,997 - telegram.ext.Application - INFO - Application started
+2025-12-18 09:20:55,783 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:21:55,791 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:22:55,802 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:23:55,809 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:24:55,819 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:25:55,832 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:26:55,845 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:27:55,857 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:28:55,863 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:29:55,874 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:30:56,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:31:06,052 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 09:31:56,012 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:32:56,024 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:33:56,034 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:34:56,044 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:35:56,054 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:36:56,061 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:37:56,075 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:38:56,087 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:39:56,100 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:40:56,107 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:41:56,116 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:42:56,124 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:43:56,130 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:44:56,137 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:46:01,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:47:01,013 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:48:01,020 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:49:01,037 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:50:01,046 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:51:01,055 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:52:01,067 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:53:01,073 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:54:01,082 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:55:01,092 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:56:01,100 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:57:01,106 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:58:01,112 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 09:59:01,122 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:00:06,000 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:01:06,015 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:01:06,060 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 10:02:06,030 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:03:06,041 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:04:06,052 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:05:06,059 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:06:06,076 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:07:06,082 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:08:06,090 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:09:06,098 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:10:06,105 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:11:06,115 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:12:06,123 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:13:06,129 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:14:06,138 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:15:11,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:16:11,014 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:17:11,025 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:18:11,039 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:19:11,046 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:20:11,054 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:20:54,739 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['BTC/USDT:USDT']
+2025-12-18 10:21:11,062 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:22:11,069 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:23:11,079 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:24:11,087 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:25:11,096 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:26:11,103 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:27:11,113 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:28:11,120 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:29:11,128 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:30:16,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:31:06,053 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 10:31:16,010 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:32:16,022 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:33:16,032 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:34:16,040 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:35:16,053 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:36:16,065 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:37:16,077 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:38:16,084 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:39:16,094 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:40:16,102 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:41:16,109 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:42:16,115 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:43:16,123 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:44:16,132 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:45:21,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:46:21,016 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:47:21,028 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:48:21,039 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:49:21,047 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:50:21,054 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:51:21,064 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:52:21,071 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:53:21,080 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:54:21,089 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:55:21,101 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:56:21,107 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:57:21,114 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:58:21,128 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 10:59:21,140 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:00:26,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:01:06,081 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 11:01:26,011 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:02:26,021 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:03:26,039 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:04:26,047 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:05:26,055 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:06:26,071 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:07:26,081 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:08:26,087 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:09:26,095 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:10:26,101 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:11:26,109 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:12:26,118 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:13:26,125 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:14:26,131 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:15:31,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:16:31,013 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:17:31,026 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:18:31,034 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:19:31,042 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:20:31,054 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:20:59,353 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['BTC/USDT:USDT']
+2025-12-18 11:21:31,060 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:22:31,068 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:23:31,081 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:24:31,092 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:25:31,098 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:26:31,107 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:27:31,116 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:28:31,125 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:29:31,134 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:30:36,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:31:06,078 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 11:31:36,020 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:32:36,029 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:33:36,039 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:34:36,054 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:35:36,063 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:36:36,074 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:37:36,083 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:38:36,092 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:39:36,101 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:40:36,110 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:41:36,119 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:42:36,128 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:43:36,134 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:44:36,142 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:45:41,007 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:46:41,024 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:47:41,035 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:48:41,042 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:49:41,052 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:50:41,066 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:51:41,074 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:52:41,085 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:53:41,091 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:54:41,099 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:55:41,107 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:56:41,113 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:57:41,120 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:58:41,129 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 11:59:41,136 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:00:46,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:01:06,088 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 12:01:46,015 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:02:46,022 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:03:46,034 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:04:46,044 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:05:46,056 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:06:46,070 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:07:46,078 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:08:46,085 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:09:46,093 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:10:46,100 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:11:46,110 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:12:46,118 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:13:46,125 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:14:46,137 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:15:51,007 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:16:51,014 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:17:51,021 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:18:51,034 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:19:51,043 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:20:51,052 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:21:04,905 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['BTC/USDT:USDT']
+2025-12-18 12:21:51,060 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:22:51,072 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:23:51,081 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:24:51,090 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:25:51,100 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:26:51,105 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:27:51,115 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:28:51,126 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:29:51,133 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:30:56,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:31:06,055 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 12:31:56,013 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:32:56,022 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:33:56,041 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:34:56,052 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:35:56,061 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:36:56,069 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:37:56,074 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:38:56,082 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:39:56,090 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:40:56,097 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:41:56,103 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:42:56,114 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:43:56,123 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:44:56,137 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:46:01,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:47:01,014 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:48:01,025 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:49:01,036 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:50:01,048 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:51:01,055 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:52:01,062 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:53:01,074 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:54:01,083 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:55:01,092 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:56:01,098 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:57:01,105 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:58:01,113 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 12:59:01,120 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:00:06,000 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:01:06,009 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:01:06,053 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 13:02:06,021 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:03:06,027 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:04:06,036 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:05:06,047 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:06:06,063 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:07:06,076 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:08:06,093 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:09:06,103 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:10:06,113 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:11:06,123 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:12:06,128 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:13:06,137 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:14:06,145 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:15:11,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:16:11,012 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:17:11,018 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:18:11,026 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:19:11,037 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:20:11,050 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:21:09,428 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['BTC/USDT:USDT']
+2025-12-18 13:21:11,056 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:22:11,063 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:23:11,071 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:24:11,078 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:25:11,088 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:26:11,095 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:27:11,102 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:28:11,112 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:29:11,122 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:30:16,025 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:31:06,081 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 13:31:16,039 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:32:16,047 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:33:16,054 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:34:16,061 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:35:16,067 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:36:16,074 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:37:16,080 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:38:16,089 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:39:16,097 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:40:16,103 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:41:16,111 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:42:16,121 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:43:16,130 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:44:16,136 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:45:21,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:46:21,011 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:47:21,018 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:48:21,029 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:49:21,038 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:50:21,046 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:51:21,057 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:52:21,063 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:53:21,069 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:54:21,079 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:55:21,088 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:56:21,093 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:57:21,101 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:58:21,110 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 13:59:21,116 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:00:26,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:01:06,064 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 14:01:26,015 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:02:26,022 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:03:26,031 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:04:26,045 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:05:26,051 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:06:26,059 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:07:26,068 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:08:26,074 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:09:26,083 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:10:26,092 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:11:26,098 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:12:26,106 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:13:26,112 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:14:26,118 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:15:31,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:16:31,012 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:17:31,018 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:18:31,033 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:19:31,042 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:20:31,053 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:21:14,587 - freqtrade.exchange.exchange - INFO - Cached leverage tiers are outdated. Will update.
+2025-12-18 14:21:43,807 - freqtrade.misc - INFO - dumping json to "/freqtrade/user_data/data/bybit/futures/leverage_tiers_USDT.json"
+2025-12-18 14:21:44,047 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['BTC/USDT:USDT']
+2025-12-18 14:21:44,078 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:22:44,092 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:23:44,101 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:24:44,107 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:25:44,113 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:26:44,121 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:27:44,127 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:28:44,135 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:29:44,141 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:30:46,007 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:31:06,055 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 14:31:46,018 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:32:46,024 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:33:46,034 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:34:46,043 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:35:46,049 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:36:46,057 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:37:46,068 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:38:46,076 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:39:46,084 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:40:46,093 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:41:46,099 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:42:46,105 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:43:46,114 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:44:46,123 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:45:51,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:46:51,012 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:47:51,020 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:48:51,029 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:49:51,037 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:50:51,045 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:51:51,055 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:52:51,066 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:53:51,072 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:54:51,079 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:55:51,093 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:56:51,104 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:57:51,109 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:58:51,119 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 14:59:51,128 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:00:56,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:01:06,080 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 15:01:56,017 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:02:56,026 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:03:56,037 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:04:56,044 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:05:56,054 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:06:56,060 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:07:56,067 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:08:56,079 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:09:56,085 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:10:56,092 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:11:56,100 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:12:56,106 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:13:56,115 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:14:56,121 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:16:01,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:17:01,018 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:18:01,027 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:19:01,043 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:20:01,057 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:21:01,068 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:21:46,096 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['BTC/USDT:USDT']
+2025-12-18 15:22:01,074 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:23:01,084 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:24:01,090 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:25:01,097 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:26:01,105 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:27:01,111 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:28:01,120 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:29:01,127 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:30:06,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:31:06,008 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:31:06,063 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 15:32:06,017 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:33:06,025 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:34:06,031 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:35:06,040 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:36:06,050 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:37:06,058 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:38:06,066 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:39:06,072 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:40:06,082 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:41:06,096 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:42:06,103 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:43:06,116 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:44:06,122 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:45:11,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:46:11,012 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:47:11,020 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:48:11,031 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:49:11,039 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:50:11,050 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:51:11,060 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:52:11,069 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:53:11,075 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:54:11,083 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:55:11,091 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:56:11,098 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:57:11,106 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:58:11,112 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 15:59:11,120 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:00:16,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:01:06,066 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 16:01:16,018 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:02:16,031 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:03:16,040 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:04:16,046 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:05:16,055 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:06:16,061 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:07:16,070 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:08:16,083 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:09:16,089 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:10:16,101 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:11:16,108 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:12:16,115 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:13:16,122 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:14:16,130 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:15:21,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:16:21,017 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:17:21,023 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:18:21,034 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:19:21,041 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:20:21,052 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:21:21,058 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:21:51,088 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['BTC/USDT:USDT']
+2025-12-18 16:22:21,064 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:23:21,073 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:24:21,082 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:25:21,089 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:26:21,097 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:27:21,107 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:28:21,113 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:29:21,123 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:30:26,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:31:06,049 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 16:31:26,011 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:32:26,020 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:33:26,029 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:34:26,039 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:35:26,049 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:36:26,059 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:37:26,066 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:38:26,075 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:39:26,081 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:40:26,090 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:41:26,096 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:42:26,105 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:43:26,111 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:44:26,122 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:45:31,007 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:46:31,017 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:47:31,025 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:48:31,035 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:49:31,044 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:50:31,052 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:51:31,061 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:52:31,072 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:53:31,083 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:54:31,091 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:55:31,098 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:56:31,106 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:57:31,115 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:58:31,122 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 16:59:31,131 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:00:36,007 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:01:06,074 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 17:01:36,023 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:02:36,029 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:03:36,036 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:04:36,046 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:05:36,055 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:06:36,061 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:07:36,071 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:08:36,080 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:09:36,087 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:10:36,094 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:11:36,104 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:12:36,112 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:13:36,118 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:14:36,128 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:15:41,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:16:41,011 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:17:41,023 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:18:41,036 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:19:41,051 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:20:41,057 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:21:41,064 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:21:51,096 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['BTC/USDT:USDT']
+2025-12-18 17:22:41,075 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:23:41,083 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:24:41,097 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:25:41,103 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:26:41,111 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:27:41,118 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:28:41,126 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:29:41,135 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:30:46,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:31:06,046 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 17:31:46,012 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:32:46,020 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:33:46,031 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:34:46,041 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:35:46,050 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:36:46,061 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:37:46,069 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:38:46,074 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:39:46,082 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:40:46,091 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:41:46,099 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:42:46,105 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:43:46,113 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:44:46,120 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:45:51,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:46:51,014 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:47:51,022 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:48:51,034 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:49:51,046 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:50:51,055 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:51:51,062 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:52:51,071 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:53:51,080 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:54:51,085 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:55:51,092 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:56:51,101 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:57:51,107 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:58:51,114 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 17:59:51,122 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:00:56,007 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:01:06,054 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 18:01:56,019 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:02:56,026 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:03:56,034 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:04:56,040 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:05:56,049 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:06:56,063 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:07:56,073 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:08:56,086 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:09:56,092 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:10:56,100 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:11:56,109 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:12:56,117 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:13:56,124 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:14:56,133 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:16:01,009 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:17:01,019 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:18:01,035 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:19:01,042 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:20:01,051 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:21:01,064 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:21:56,091 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['BTC/USDT:USDT']
+2025-12-18 18:22:01,069 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:23:01,076 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:24:01,085 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:25:01,092 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:26:01,104 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:27:01,110 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:28:01,117 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:29:01,125 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:30:06,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:31:06,013 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:31:06,064 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 18:32:06,021 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:33:06,027 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:34:06,037 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:35:06,043 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:36:06,052 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:37:06,100 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:38:06,107 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:39:06,114 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:40:06,122 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:41:06,128 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:42:06,136 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:43:06,142 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:44:06,149 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:45:11,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:46:11,012 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:47:11,022 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:48:11,033 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:49:11,042 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:50:11,049 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:51:11,055 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:52:11,063 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:53:11,071 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:54:11,080 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:55:11,086 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:56:11,095 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:57:11,103 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:58:11,113 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 18:59:11,122 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:00:16,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:01:06,053 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 19:01:16,010 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:02:16,019 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:03:16,031 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:04:16,043 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:05:16,050 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:06:16,057 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:07:16,063 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:08:16,072 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:09:16,085 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:10:16,094 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:11:16,101 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:12:16,110 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:13:16,116 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:14:16,125 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:15:21,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:16:21,008 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:17:21,020 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:18:21,034 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:19:21,047 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:20:21,058 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:21:21,066 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:21:56,103 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['BTC/USDT:USDT']
+2025-12-18 19:22:21,076 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:23:21,082 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:24:21,088 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:25:21,097 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:26:21,126 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:27:21,133 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:28:21,144 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:29:21,151 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:30:26,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:31:06,053 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 19:31:26,019 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:32:26,025 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:33:26,031 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:34:26,041 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:35:26,052 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:36:26,063 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:37:26,074 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:38:26,080 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:39:26,093 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:40:26,100 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:41:26,111 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:42:26,123 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:43:26,128 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:44:26,139 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:45:31,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:46:31,011 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:47:31,018 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:48:31,027 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:49:31,033 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:50:31,042 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:51:31,052 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:52:31,058 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:53:31,068 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:54:31,075 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:55:31,086 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:56:31,092 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:57:31,098 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:58:31,110 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 19:59:31,115 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:00:36,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:01:06,056 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 20:01:36,014 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:02:36,022 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:03:36,029 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:04:36,035 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:05:36,043 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:06:36,055 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:07:36,063 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:08:36,071 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:09:36,083 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:10:36,090 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:11:36,098 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:12:36,103 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:13:36,111 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:14:36,123 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:15:41,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:16:41,013 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:17:41,023 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:18:41,029 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:19:41,038 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:20:41,047 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:21:41,054 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:22:01,085 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['BTC/USDT:USDT']
+2025-12-18 20:22:41,066 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:23:41,075 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:24:41,081 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:25:41,091 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:26:41,100 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:27:41,109 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:28:41,117 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:29:41,127 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:30:46,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:31:06,056 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 20:31:46,014 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:32:46,022 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:33:46,040 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:34:46,052 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:35:46,058 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:36:46,067 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:37:46,076 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:38:46,082 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:39:46,089 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:40:46,097 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:41:46,103 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:42:46,112 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:43:46,118 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:44:46,125 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:45:51,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:46:51,015 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:47:51,023 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:48:51,034 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:49:51,043 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:50:51,054 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:51:51,061 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:52:51,069 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:53:51,078 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:54:51,090 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:55:51,099 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:56:51,105 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:57:51,111 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:58:51,121 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 20:59:51,130 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:00:56,008 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:01:06,059 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 21:01:56,020 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:02:56,027 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:03:56,036 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:04:56,043 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:05:56,051 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:06:56,060 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:07:56,066 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:08:56,080 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:09:56,090 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:10:56,097 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:11:56,104 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:12:56,112 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:13:56,119 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:14:56,129 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:16:01,007 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:17:01,014 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:18:01,024 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:19:01,031 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:20:01,039 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:21:01,050 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:22:01,059 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:22:01,109 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['BTC/USDT:USDT']
+2025-12-18 21:23:01,069 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:24:01,078 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:25:01,084 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:26:01,093 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:27:01,099 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:28:01,108 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:29:01,116 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:30:06,000 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:31:06,014 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:31:06,079 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 21:32:06,030 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:33:06,036 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:34:06,044 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:35:06,052 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:36:06,062 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:37:06,072 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:38:06,078 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:39:06,085 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:40:06,096 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:41:06,104 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:42:06,110 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:43:06,119 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:44:06,126 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:45:11,000 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:46:11,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:47:11,016 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:48:11,029 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:49:11,045 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:50:11,054 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:51:11,063 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:52:11,070 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:53:11,082 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:54:11,093 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:55:11,099 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:56:11,107 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:57:11,115 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:58:11,123 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 21:59:11,132 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:00:16,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:01:06,054 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 22:01:16,010 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:02:16,018 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:03:16,027 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:04:16,039 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:05:16,051 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:06:16,057 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:07:16,064 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:08:16,072 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:09:16,080 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:10:16,090 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:11:16,095 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:12:16,102 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:13:16,111 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:14:16,116 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:15:21,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:16:21,013 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:17:21,019 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:18:21,028 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:19:21,035 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:20:21,046 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:21:21,068 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:22:06,094 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['BTC/USDT:USDT']
+2025-12-18 22:22:21,073 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:23:21,083 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:24:21,092 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:25:21,098 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:26:21,108 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:27:21,123 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:28:21,129 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:29:21,140 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:30:26,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:31:06,052 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 22:31:26,009 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:32:26,020 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:33:26,029 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:34:26,038 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:35:26,050 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:36:26,057 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:37:26,070 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:38:26,079 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:39:26,086 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:40:26,095 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:41:26,100 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:42:26,110 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:43:26,120 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:44:26,131 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:45:31,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:46:31,014 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:47:31,019 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:48:31,027 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:49:31,040 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:50:31,048 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:51:31,055 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:52:31,065 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:53:31,071 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:54:31,080 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:55:31,085 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:56:31,092 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:57:31,100 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:58:31,106 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 22:59:31,119 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:00:36,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:01:06,049 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 23:01:36,008 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:02:36,016 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:03:36,024 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:04:36,030 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:05:36,041 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:06:36,048 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:07:36,056 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:08:36,065 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:09:36,072 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:10:36,083 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:11:36,091 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:12:36,098 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:13:36,106 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:14:36,113 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:15:41,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:16:41,013 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:17:41,021 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:18:41,029 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:19:41,036 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:20:41,049 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:21:41,058 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:22:11,089 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['BTC/USDT:USDT']
+2025-12-18 23:22:41,068 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:23:41,074 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:24:41,084 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:25:41,090 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:26:41,096 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:27:41,103 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:28:41,110 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:29:41,120 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:30:46,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:31:06,072 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-18 23:31:46,040 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:32:46,050 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:33:46,068 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:34:46,076 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:35:46,082 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:36:46,088 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:37:46,096 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:38:46,103 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:39:46,112 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:40:46,117 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:41:46,123 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:42:46,131 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:43:46,137 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:44:46,147 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:45:51,003 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:46:51,011 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:47:51,021 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:48:51,028 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:49:51,035 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:50:51,044 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:51:51,051 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:52:51,060 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:53:51,067 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:54:51,077 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:55:51,086 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:56:51,095 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:57:51,102 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:58:51,112 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-18 23:59:51,120 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:00:56,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:01:06,060 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-19 00:01:56,014 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:02:01,076 - freqtrade.exchange.exchange_ws - INFO - Resetting WS connections.
+2025-12-19 00:02:01,083 - freqtrade.exchange.exchange_ws - INFO - BTC/USDT:USDT, 1h, futures - Task finished - cancelled
+2025-12-19 00:02:01,085 - freqtrade.exchange.exchange_ws - INFO - BTC/USDT:USDT, 4h, futures - Task finished - cancelled
+2025-12-19 00:02:01,087 - freqtrade.exchange.exchange_ws - INFO - BTC/USDT:USDT, 15m, futures - Task finished - cancelled
+2025-12-19 00:02:01,273 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connector is closed.
+2025-12-19 00:02:01,287 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connector is closed.
+2025-12-19 00:02:01,291 - freqtrade.exchange.exchange_ws - ERROR - Exception in _unwatch_ohlcv
+Traceback (most recent call last):
+  File "/freqtrade/freqtrade/exchange/exchange_ws.py", line 144, in _unwatch_ohlcv
+    await self._ccxt_object.un_watch_ohlcv_for_symbols([[pair, timeframe]])
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 723, in un_watch_ohlcv_for_symbols
+    return await self.un_watch_topics(url, 'ohlcv', symbols, messageHashes, subMessageHashes, rawHashes, params, subExtension)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ftuser/.local/lib/python3.13/site-packages/ccxt/pro/bybit.py", line 2132, in un_watch_topics
+    return await self.watch_multiple(url, messageHashes, message, messageHashes, self.extend(subscription, subExtension))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ccxt.base.errors.NetworkError: Connector is closed.
+2025-12-19 00:02:56,025 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:03:56,032 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:04:56,039 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:05:56,048 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:06:56,055 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:07:56,062 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:08:56,070 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:09:56,080 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:10:56,088 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:11:56,094 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:12:56,103 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:13:56,110 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:14:56,120 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:15:01,026 - freqtrade.exchange.exchange - INFO - Couldn't reuse watch for BTC/USDT:USDT, 15m, falling back to REST api. False, 1766103300000, 0, 2025-12-19T00:15:00, 1970-01-01T00:00:00 
+2025-12-19 00:16:01,006 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:17:01,015 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:18:01,020 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:19:01,027 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:20:01,042 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:21:01,049 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:22:01,057 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:22:16,088 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['BTC/USDT:USDT']
+2025-12-19 00:23:01,064 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:24:01,073 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:25:01,079 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:26:01,089 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:27:01,099 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:28:01,107 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:29:01,113 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:30:06,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:31:06,010 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:31:06,059 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-19 00:32:06,017 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:33:06,025 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:34:06,033 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:35:06,049 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:36:06,057 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:37:06,062 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:38:06,072 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:39:06,080 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:40:06,086 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:41:06,096 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:42:06,103 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:43:06,109 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:44:06,120 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:45:11,000 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:46:11,007 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:47:11,018 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:48:11,028 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:49:11,035 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:50:11,053 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:51:11,080 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:52:11,085 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:53:11,093 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:54:11,101 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:55:11,109 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:56:11,118 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:57:11,126 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:58:11,134 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 00:59:11,140 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:00:01,026 - freqtrade.exchange.exchange - INFO - Couldn't reuse watch for BTC/USDT:USDT, 1h, falling back to REST api. False, 1766106000000, 0, 2025-12-19T01:00:00, 1970-01-01T00:00:00 
+2025-12-19 01:00:16,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:01:06,052 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-19 01:01:16,009 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:02:16,017 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:03:16,026 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:04:16,032 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:05:16,044 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:06:16,052 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:07:16,058 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:08:16,064 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:09:16,074 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:10:16,082 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:11:16,089 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:12:16,097 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:13:16,104 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:14:16,119 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:15:21,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:16:21,014 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:17:21,025 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:18:21,033 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:19:21,043 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:20:21,049 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:21:21,057 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:22:21,064 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:22:21,091 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['BTC/USDT:USDT']
+2025-12-19 01:23:21,071 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:24:21,078 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:25:21,087 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:26:21,095 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:27:21,102 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:28:21,110 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:29:21,118 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:30:26,004 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:31:06,053 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-19 01:31:26,009 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:32:26,016 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:33:26,031 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:34:26,043 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:35:26,049 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:36:26,057 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:37:26,063 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:38:26,069 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:39:26,076 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:40:26,082 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:41:26,092 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:42:26,097 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:43:26,104 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:44:26,113 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:45:31,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:46:31,008 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:47:31,017 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:48:31,026 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:49:31,031 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:50:31,038 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:51:31,047 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:52:31,053 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:53:31,061 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:54:31,067 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:55:31,075 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:56:31,083 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:57:31,089 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:58:31,097 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 01:59:31,103 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:00:36,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:01:06,048 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-19 02:01:36,010 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:02:36,019 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:03:36,028 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:04:36,036 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:05:36,046 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:06:36,055 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:07:36,061 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:08:36,067 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:09:36,076 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:10:36,083 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:11:36,091 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:12:36,099 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:13:36,105 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:14:36,122 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:15:41,002 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:16:41,010 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:17:41,019 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:18:41,025 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:19:41,031 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:20:41,040 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:21:41,049 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:22:26,079 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['BTC/USDT:USDT']
+2025-12-19 02:22:41,054 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:23:41,061 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:24:41,069 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:25:41,075 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:26:41,086 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:27:41,097 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:28:41,107 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:29:41,115 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:30:46,008 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:31:06,061 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-19 02:31:46,017 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:32:46,023 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:33:46,030 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:34:46,047 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:35:46,053 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:36:46,065 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:37:46,072 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:38:46,086 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:39:46,097 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:40:46,103 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:41:46,110 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:42:46,118 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:43:46,128 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:44:46,147 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:45:51,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:46:51,020 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:47:51,025 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:48:51,033 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:49:51,044 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:50:51,054 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:51:51,059 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:52:51,065 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:53:51,074 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:54:51,080 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:55:51,088 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:56:51,095 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:57:51,106 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:58:51,112 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 02:59:51,121 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:00:56,010 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:01:06,059 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-19 03:01:56,021 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:02:56,029 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:03:56,043 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:04:56,049 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:05:56,059 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:06:56,070 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:07:56,075 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:08:56,083 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:09:56,094 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:10:56,103 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:11:56,109 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:12:56,118 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:13:56,124 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:14:56,133 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:16:01,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:17:01,012 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:18:01,020 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:19:01,029 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:20:01,039 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:21:01,045 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:22:01,052 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:22:26,118 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 1 pairs: ['BTC/USDT:USDT']
+2025-12-19 03:23:01,060 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:24:01,066 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:25:01,072 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:26:01,081 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:27:01,090 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:28:01,096 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:29:01,107 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:30:06,000 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:31:06,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:31:06,035 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-19 03:32:06,013 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:33:06,022 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:34:06,029 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:35:06,037 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:36:06,045 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:37:06,053 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:38:06,059 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:39:06,065 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:40:06,074 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:41:06,083 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:42:06,092 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:43:06,100 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:44:06,105 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:45:11,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:46:11,009 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:47:11,015 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:48:11,024 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:49:11,033 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:50:11,042 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:51:11,052 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:52:11,061 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:53:11,068 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:54:11,074 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:55:11,083 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:56:11,094 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:57:11,100 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:58:11,106 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 03:59:11,112 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 04:00:01,023 - freqtrade.exchange.exchange - INFO - Couldn't reuse watch for BTC/USDT:USDT, 4h, falling back to REST api. False, 1766116800000, 0, 2025-12-19T04:00:00, 1970-01-01T00:00:00 
+2025-12-19 04:00:16,001 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 04:01:06,049 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-19 04:01:16,007 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 04:02:16,014 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 04:03:16,032 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 04:04:16,042 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 04:05:16,056 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 04:06:16,067 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 04:07:16,073 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 04:08:16,080 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 04:09:16,086 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
+2025-12-19 04:10:16,098 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='2025.8', state='RUNNING'
