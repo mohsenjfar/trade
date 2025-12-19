@@ -24,7 +24,7 @@ class RSICycleEngine(IStrategy):
 
     trade_max_loss_allowed = 0.005  # 0.5% of equity per trade
 
-    timeframe = '15m'
+    timeframe = '1h'
     can_short: bool = True
     process_only_new_candles = True
 
@@ -82,6 +82,7 @@ class RSICycleEngine(IStrategy):
         values["index"] = intervals.left
 
         df = df.merge(values, left_on=df.index, right_on="index", how="left")
+        df[name] = np.where(df[col]==df[name].ffill(), df[col], np.nan)
 
         return df.drop(["range_id_x", "range_id_y", "index"], axis=1)
 
@@ -92,14 +93,12 @@ class RSICycleEngine(IStrategy):
         # Overbought cycle (RSI > 70 then back below)
         c1_over = qtpylib.crossed_above(dataframe["rsi"], 70)
         c2_over = qtpylib.crossed_below(dataframe["rsi"], 70)
-        dataframe = self.extract_features(dataframe, c1_over, c2_over, "high", "max_long")
-        dataframe = self.extract_features(dataframe, c2_over, c1_over, "low", "min_long")
+        dataframe = self.extract_features(dataframe, c1_over, c2_over, "high", "max_high")
 
         # Oversold cycle (RSI < 30 then back above)
         c1_under = qtpylib.crossed_below(dataframe["rsi"], 30)
         c2_under = qtpylib.crossed_above(dataframe["rsi"], 30)
-        dataframe = self.extract_features(dataframe, c1_under, c2_under, "low", "min_short")
-        dataframe = self.extract_features(dataframe, c2_under, c1_under, "high", "max_short")
+        dataframe = self.extract_features(dataframe, c1_under, c2_under, "low", "min_low")
 
         return dataframe
 
@@ -108,11 +107,6 @@ class RSICycleEngine(IStrategy):
     # ------------------------------------------------------------------
     @informative("4h")
     def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        dataframe = self.populate_features(dataframe)
-        return dataframe
-
-    @informative("1h")
-    def populate_indicators_1h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         dataframe = self.populate_features(dataframe)
         return dataframe
 
@@ -141,27 +135,15 @@ class RSICycleEngine(IStrategy):
     # ------------------------------------------------------------------
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        # LONG:
-        # - 4h in bullish phase (price above last 4h min_long)
-        # - 1h RSI in deep reactive phase (true oversold on 1h)
-        # - 15m price breaks structural long_trigger up
         dataframe.loc[
             (
-                (dataframe["close_4h"] > dataframe["min_long_4h"].ffill()) &
-                (dataframe["rsi_1h"] < 30) &
                 (qtpylib.crossed_above(dataframe["close"], dataframe["long_trigger"]))
             ),
             "enter_long"
         ] = 1
 
-        # SHORT:
-        # - 4h in bearish phase (price below last 4h max_short)
-        # - 1h RSI in deep reactive phase (true overbought on 1h)
-        # - 15m price breaks structural short_trigger down
         dataframe.loc[
             (
-                (dataframe["close_4h"] < dataframe["max_short_4h"].ffill()) &
-                (dataframe["rsi_1h"] > 70) &
                 (qtpylib.crossed_below(dataframe["close"], dataframe["short_trigger"]))
             ),
             "enter_short"
@@ -170,12 +152,9 @@ class RSICycleEngine(IStrategy):
         return dataframe
 
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        # exits fully handled by custom_stoploss (structural trailing)
+
         return dataframe
 
-    # ------------------------------------------------------------------
-    # Risk: leverage and stake
-    # ------------------------------------------------------------------
     def leverage(self, pair: str, current_time: datetime, current_rate: float,
                  proposed_leverage: float, max_leverage: float, entry_tag: Optional[str], side: str,
                  **kwargs) -> float:
@@ -183,7 +162,7 @@ class RSICycleEngine(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
 
-        stop = last_candle["max_long"] if side == "short" else last_candle["min_short"]
+        stop = last_candle["max_high"] if side == "short" else last_candle["min_low"]
 
         if stop is None or np.isnan(stop):
             return 1.0
@@ -203,7 +182,7 @@ class RSICycleEngine(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
 
-        stop = last_candle["max_long"] if side == "short" else last_candle["min_short"]
+        stop = last_candle["max_high"] if side == "short" else last_candle["min_low"]
 
         if stop is None or np.isnan(stop):
             return 0
@@ -225,13 +204,14 @@ class RSICycleEngine(IStrategy):
                         **kwargs) -> Optional[float]:
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
+        dataframe["min_short"] = dataframe["min_short"].ffill()
+        dataframe["max_long"] = dataframe["max_long"].ffill()
         last_candle = dataframe.iloc[-1].squeeze()
 
         stop = trade.get_custom_data("stop")
 
-        # Initialize structural stop at opposite RSI cycle extreme
         if stop is None:
-            base_stop = last_candle["max_long"] if trade.is_short else last_candle["min_short"]
+            base_stop = last_candle["max_high"] if trade.is_short else last_candle["min_low"]
             if base_stop is None or np.isnan(base_stop):
                 return None
 
@@ -242,7 +222,7 @@ class RSICycleEngine(IStrategy):
             trade.set_custom_data("risk", risk)
             self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
-        # Structural trailing
+
         if stop is not None and not np.isnan(stop):
             if trade.is_short:
                 # SHORT: trail down to newer cycle highs
