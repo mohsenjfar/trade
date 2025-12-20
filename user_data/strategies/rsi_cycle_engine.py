@@ -72,9 +72,9 @@ class RSICycleEngine(IStrategy):
         e = 'max' if col == 'high' else 'min'
         df[name] = df.groupby("range_id", observed=True)[col].transform(e)
         if col == "high":
-            idx = df.groupby("range_id")["high"].idxmax()
+            idx = df.dropna(subset=["range_id", "high"]).groupby("range_id")["high"].idxmax()
         else:
-            idx = df.groupby("range_id")["low"].idxmin()
+            idx = df.dropna(subset=["range_id", "low"]).groupby("range_id")["low"].idxmin()
 
         df[name] = None
         df.loc[idx, name] = df.loc[idx, col]
