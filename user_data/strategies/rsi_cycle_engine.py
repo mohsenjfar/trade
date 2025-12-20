@@ -200,8 +200,6 @@ class RSICycleEngine(IStrategy):
 
         dataframe_, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
         dataframe = dataframe_.copy()
-        dataframe["max_high"] = dataframe["max_high"].ffill()
-        dataframe["min_low"] = dataframe["min_low"].ffill()
         last = dataframe.iloc[-1].squeeze()
 
         last_extreme = trade.get_custom_data("last_extreme")
