@@ -190,7 +190,7 @@ class RSICycleEngine(IStrategy):
 
 
         risk =  trade.get_custom_data("risk")
-        if current_profit > 10 * risk * trade.leverage: return "Target hit"
+        if current_profit > 20 * risk * trade.leverage: return "Target hit"
 
         # dataframe_, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
         # dataframe = dataframe_.copy()
