@@ -164,54 +164,54 @@ class RSICycleEngine(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
 
-        stop = trade.get_custom_data("stop")
+        # stop = trade.get_custom_data("stop")
 
-        if stop is None:
-            base_stop = last_candle["ss"] if trade.is_short else last_candle["sl"]
-            if base_stop is None or np.isnan(base_stop):
-                return None
+        # if stop is None:
+        stop = last_candle["ss"] if trade.is_short else last_candle["sl"]
+            # if base_stop is None or np.isnan(base_stop):
+            #     return None
 
-            stop = float(base_stop)
-            trade.set_custom_data("stop", stop)
+            # stop = float(base_stop)
+            # trade.set_custom_data("stop", stop)
 
-            risk = abs(stop / trade.open_rate - 1)
-            trade.set_custom_data("risk", risk)
-            self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
+            # risk = abs(stop / trade.open_rate - 1)
+            # trade.set_custom_data("risk", risk)
+            # self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
         return stoploss_from_absolute(
-            stop,
+            float(stop),
             current_rate,
             is_short=trade.is_short,
             leverage=trade.leverage,
         )
     
-    def custom_exit(self, pair: str, trade: 'Trade', current_time: datetime,
-                    current_rate: float, current_profit: float, **kwargs):
+    # def custom_exit(self, pair: str, trade: 'Trade', current_time: datetime,
+    #                 current_rate: float, current_profit: float, **kwargs):
 
-        dataframe_, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
-        dataframe = dataframe_.copy()
-        last = dataframe.iloc[-1].squeeze()
+    #     dataframe_, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
+    #     dataframe = dataframe_.copy()
+    #     last = dataframe.iloc[-1].squeeze()
 
-        last_extreme = trade.get_custom_data("last_extreme")
+    #     last_extreme = trade.get_custom_data("last_extreme")
 
-        if trade.is_short:
-            new_extreme = float(last["min_low"])
-            if new_extreme is not None and not np.isnan(new_extreme):
-                if last_extreme is None:
-                    trade.set_custom_data("last_extreme", new_extreme)
-                elif new_extreme < last_extreme:
-                    trade.set_custom_data("last_extreme", new_extreme)
-                else:
-                    return "exit_cycle_reversal"
-        else:
-            new_extreme = float(last["max_high"])
-            if new_extreme is not None and not np.isnan(new_extreme):
-                if last_extreme is None:
-                    trade.set_custom_data("last_extreme", new_extreme)
-                elif new_extreme > last_extreme:
-                    trade.set_custom_data("last_extreme", new_extreme)
-                else:
-                    return "exit_cycle_reversal"
+    #     if trade.is_short:
+    #         new_extreme = float(last["min_low"])
+    #         if new_extreme is not None and not np.isnan(new_extreme):
+    #             if last_extreme is None:
+    #                 trade.set_custom_data("last_extreme", new_extreme)
+    #             elif new_extreme < last_extreme:
+    #                 trade.set_custom_data("last_extreme", new_extreme)
+    #             else:
+    #                 return "exit_cycle_reversal"
+    #     else:
+    #         new_extreme = float(last["max_high"])
+    #         if new_extreme is not None and not np.isnan(new_extreme):
+    #             if last_extreme is None:
+    #                 trade.set_custom_data("last_extreme", new_extreme)
+    #             elif new_extreme > last_extreme:
+    #                 trade.set_custom_data("last_extreme", new_extreme)
+    #             else:
+    #                 return "exit_cycle_reversal"
 
-        return None
+    #     return None
 
