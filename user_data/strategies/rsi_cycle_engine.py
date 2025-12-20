@@ -113,6 +113,7 @@ class RSICycleEngine(IStrategy):
 
         dataframe.loc[
             (
+                (dataframe['rsi_4h'] < 40) &
                 (qtpylib.crossed_above(dataframe["close"], dataframe["long_trigger"]))
             ),
             "enter_long"
@@ -120,6 +121,7 @@ class RSICycleEngine(IStrategy):
 
         dataframe.loc[
             (
+                (dataframe['rsi_4h'] > 60) &
                 (qtpylib.crossed_below(dataframe["close"], dataframe["short_trigger"]))
             ),
             "enter_short"
