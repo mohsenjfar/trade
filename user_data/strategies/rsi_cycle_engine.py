@@ -45,42 +45,33 @@ class RSICycleEngine(IStrategy):
 
     def extract_features(self, df, c1, c2, col, name, direction="forward"):
 
-        highs = df.loc[c1].reset_index().rename(columns={"index": "up_index"})
-        crosses = df.loc[c2].reset_index().rename(columns={"index": "down_index"})
+        starts = df.loc[c1].reset_index().rename(columns={"index": "start"})
+        ends = df.loc[c2].reset_index().rename(columns={"index": "end"})
 
-        if highs.empty or crosses.empty:
+        if starts.empty or ends.empty:
             df[name] = np.nan
             return df
 
         pairs = pd.merge_asof(
-            highs.sort_values("up_index"),
-            crosses.sort_values("down_index"),
-            left_on="up_index",
-            right_on="down_index",
+            starts.sort_values("start"),
+            ends.sort_values("end"),
+            left_on="start",
+            right_on="end",
             direction=direction,
-        )
+        ).dropna()[["start", "end"]]
 
-        pairs = (
-            pairs[["up_index", "down_index"]]
-            .drop_duplicates("down_index", keep="last")
-            .dropna()
-            .reset_index(drop=True)
-        )
-
-        intervals = pd.IntervalIndex.from_arrays(
-            pairs["up_index"], pairs["down_index"], closed="both"
-        )
+        if pairs.empty:
+            df[name] = np.nan
+            return df
+        
+        intervals = pd.IntervalIndex.from_arrays(pairs["start"], pairs["end"], closed="both")
         df["range_id"] = pd.cut(df.index, intervals)
-
-        groups = df.groupby("range_id", observed=True)[col]
-        values = groups.max() if col == "high" else groups.min()
-        values = values.reset_index().rename(columns={col: name})
-        values["index"] = intervals.left
-
-        df = df.merge(values, left_on=df.index, right_on="index", how="left")
+        e = 'max' if col == "high" else 'min'
+        df[name] = df.groupby("range_id", observed=True)[col].transform(e)
         df[name] = np.where(df[col]==df[name].ffill(), df[col], np.nan)
+        
+        return df.drop(columns=["range_id"])
 
-        return df.drop(["range_id_x", "range_id_y", "index"], axis=1)
 
     def populate_features(self, dataframe: DataFrame) -> DataFrame:
 
