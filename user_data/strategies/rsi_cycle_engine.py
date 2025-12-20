@@ -24,7 +24,7 @@ class RSICycleEngine(IStrategy):
     trade_max_loss_allowed = 0.005
 
     timeframe = '1h'
-    can_short: bool = False
+    can_short: bool = True
     process_only_new_candles = True
 
     use_exit_signal = True
@@ -71,13 +71,7 @@ class RSICycleEngine(IStrategy):
 
         e = 'max' if col == 'high' else 'min'
         df[name] = df.groupby("range_id", observed=True)[col].transform(e)
-        if col == "high":
-            idx = df.dropna(subset=["range_id", "high"]).groupby("range_id")["high"].idxmax()
-        else:
-            idx = df.dropna(subset=["range_id", "low"]).groupby("range_id")["low"].idxmin()
-
-        df[name] = None
-        df.loc[idx, name] = df.loc[idx, col]
+        df[name] = np.where(df[col] == df[name], df[col], np.nan)
 
         return dataframe.merge(df[[name]], left_index=True, right_index=True, how="left")
 
@@ -113,20 +107,26 @@ class RSICycleEngine(IStrategy):
         dataframe["long_trigger"] = dataframe["long_trigger"].ffill()
         dataframe["short_trigger"] = dataframe["short_trigger"].ffill()
 
+        dataframe["ema_fast"] = ta.EMA(dataframe["close"], timeperiod=20)
+        dataframe["ema_slow"] = ta.EMA(dataframe["close"], timeperiod=50)
+
+
         return dataframe
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe.loc[
             (
-                (qtpylib.crossed_above(dataframe["close"], dataframe["long_trigger"]))
+                (qtpylib.crossed_above(dataframe["close"], dataframe["long_trigger"])) &
+                (dataframe["ema_fast"] > dataframe["ema_slow"])
             ),
             "enter_long"
         ] = 1
 
         dataframe.loc[
             (
-                (qtpylib.crossed_below(dataframe["close"], dataframe["short_trigger"]))
+                (qtpylib.crossed_below(dataframe["close"], dataframe["short_trigger"])) &
+                (dataframe["ema_fast"] < dataframe["ema_slow"])
             ),
             "enter_short"
         ] = 1
@@ -210,22 +210,17 @@ class RSICycleEngine(IStrategy):
                     trade.set_custom_data("last_extreme", new_extreme)
                 elif new_extreme < last_extreme:
                     trade.set_custom_data("last_extreme", new_extreme)
-                elif new_extreme > last_extreme:
-                    trade.set_custom_data("last_extreme", new_extreme)
                 else:
                     return "exit_cycle_reversal"
-
         else:
             new_extreme = float(last["max_high"])
             if new_extreme is not None and not np.isnan(new_extreme):
                 if last_extreme is None:
                     trade.set_custom_data("last_extreme", new_extreme)
-            elif new_extreme < last_extreme:
-                trade.set_custom_data("last_extreme", new_extreme)
-            elif new_extreme > last_extreme:
-                trade.set_custom_data("last_extreme", new_extreme)
-            else:
-                return "exit_cycle_reversal"
+                elif new_extreme > last_extreme:
+                    trade.set_custom_data("last_extreme", new_extreme)
+                else:
+                    return "exit_cycle_reversal"
 
         return None
 
