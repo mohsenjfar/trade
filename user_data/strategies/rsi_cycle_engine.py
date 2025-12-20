@@ -23,7 +23,7 @@ class RSICycleEngine(IStrategy):
 
     trade_max_loss_allowed = 0.005
 
-    timeframe = '1h'
+    timeframe = '15m'
     can_short: bool = True
     process_only_new_candles = True
 
@@ -98,14 +98,11 @@ class RSICycleEngine(IStrategy):
 
         dataframe = self.populate_features(dataframe)
 
-        mask_long = qtpylib.crossed_above(dataframe["rsi"], self.min_rsi.value)
-        dataframe["long_trigger"] = np.where(mask_long, dataframe["high"].shift(1), np.nan)
+        index = dataframe[dataframe['max_high'].notna()].index.max()
+        dataframe['sl'] = dataframe[index:].low.min()
 
-        mask_short = qtpylib.crossed_below(dataframe["rsi"], self.max_rsi.value)
-        dataframe["short_trigger"] = np.where(mask_short, dataframe["low"].shift(1), np.nan)
-
-        dataframe["long_trigger"] = dataframe["long_trigger"].ffill()
-        dataframe["short_trigger"] = dataframe["short_trigger"].ffill()
+        index = dataframe[dataframe['min_low'].notna()].index.max()
+        dataframe['ss'] = dataframe[index:].high.max()
 
         return dataframe
 
@@ -113,16 +110,14 @@ class RSICycleEngine(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['rsi_4h'] < 30) &
-                (qtpylib.crossed_above(dataframe["close"], dataframe["long_trigger"]))
+                (qtpylib.crossed_above(dataframe["close"], dataframe["max_high"]))
             ),
             "enter_long"
         ] = 1
 
         dataframe.loc[
             (
-                (dataframe['rsi_4h'] > 70) &
-                (qtpylib.crossed_below(dataframe["close"], dataframe["short_trigger"]))
+                (qtpylib.crossed_below(dataframe["close"], dataframe["min_low"]))
             ),
             "enter_short"
         ] = 1
@@ -140,7 +135,7 @@ class RSICycleEngine(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
 
-        stop = last_candle["high"] if side == "short" else last_candle["low"]
+        stop = last_candle["ss"] if side == "short" else last_candle["sl"]
         if stop is None or np.isnan(stop): return 1.0
         risk = abs(stop / current_rate - 1)
         if risk == 0: return 1.0
@@ -154,7 +149,7 @@ class RSICycleEngine(IStrategy):
 
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
-        stop = last_candle["high"] if side == "short" else last_candle["low"]
+        stop = last_candle["ss"] if side == "short" else last_candle["sl"]
         if stop is None or np.isnan(stop): return 0
         risk = abs(stop / current_rate - 1)
         if risk == 0 or risk < 0.002: return 0
@@ -172,7 +167,7 @@ class RSICycleEngine(IStrategy):
         stop = trade.get_custom_data("stop")
 
         if stop is None:
-            base_stop = last_candle["high"] if trade.is_short else last_candle["low"]
+            base_stop = last_candle["ss"] if trade.is_short else last_candle["sl"]
             if base_stop is None or np.isnan(base_stop):
                 return None
 
