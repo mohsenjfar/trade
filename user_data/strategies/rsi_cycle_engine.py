@@ -133,14 +133,14 @@ class RSICycleEngine(IStrategy):
 
         dataframe.loc[
             (
-                (qtpylib.crossed_below(dataframe["rsi"], 70))
+                (qtpylib.crossed_below(dataframe["rsi_4h"], 70))
             ),
             "exit_long"
         ] = 1
 
         dataframe.loc[
             (
-                (qtpylib.crossed_above(dataframe["rsi"], 30))
+                (qtpylib.crossed_above(dataframe["rsi_4h"], 30))
             ),
             "exit_short"
         ] = 1
