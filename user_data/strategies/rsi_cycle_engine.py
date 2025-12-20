@@ -171,7 +171,7 @@ class RSICycleEngine(IStrategy):
             if base_stop is None or np.isnan(base_stop):
                 return None
 
-            stop = base_stop
+            stop = float(base_stop)
             trade.set_custom_data("stop", stop)
 
             risk = abs(stop / trade.open_rate - 1)
