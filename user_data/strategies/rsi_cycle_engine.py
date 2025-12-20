@@ -23,7 +23,7 @@ class RSICycleEngine(IStrategy):
 
     trade_max_loss_allowed = 0.005
 
-    timeframe = '4h'
+    timeframe = '15m'
     can_short: bool = True
     process_only_new_candles = True
 
@@ -107,26 +107,20 @@ class RSICycleEngine(IStrategy):
         dataframe["long_trigger"] = dataframe["long_trigger"].ffill()
         dataframe["short_trigger"] = dataframe["short_trigger"].ffill()
 
-        dataframe["ema_fast"] = ta.EMA(dataframe["close"], timeperiod=20)
-        dataframe["ema_slow"] = ta.EMA(dataframe["close"], timeperiod=50)
-
-
         return dataframe
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe.loc[
             (
-                (qtpylib.crossed_above(dataframe["close"], dataframe["long_trigger"])) &
-                (dataframe["ema_fast"] > dataframe["ema_slow"])
+                (qtpylib.crossed_above(dataframe["close"], dataframe["long_trigger"]))
             ),
             "enter_long"
         ] = 1
 
         dataframe.loc[
             (
-                (qtpylib.crossed_below(dataframe["close"], dataframe["short_trigger"])) &
-                (dataframe["ema_fast"] < dataframe["ema_slow"])
+                (qtpylib.crossed_below(dataframe["close"], dataframe["short_trigger"]))
             ),
             "enter_short"
         ] = 1
