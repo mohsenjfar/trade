@@ -203,10 +203,8 @@ class RSICycleEngine(IStrategy):
                 if last_extreme is None:
                     trade.set_custom_data("last_extreme", new_extreme)
                 elif new_extreme < last_extreme:
-                    # کف جدید پایین‌تر → ادامه معامله
                     trade.set_custom_data("last_extreme", new_extreme)
                 else:
-                    # کف جدید بالاتر یا مساوی → خروج
                     return "exit_cycle_reversal"
         else:
             new_extreme = float(last["max_high"])
@@ -214,10 +212,8 @@ class RSICycleEngine(IStrategy):
                 if last_extreme is None:
                     trade.set_custom_data("last_extreme", new_extreme)
                 elif new_extreme > last_extreme:
-                    # سقف جدید بالاتر → ادامه معامله
                     trade.set_custom_data("last_extreme", new_extreme)
                 else:
-                    # سقف جدید پایین‌تر یا مساوی → خروج
                     return "exit_cycle_reversal"
 
         return None
