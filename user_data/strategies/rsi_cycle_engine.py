@@ -23,7 +23,7 @@ class RSICycleEngine(IStrategy):
 
     trade_max_loss_allowed = 0.005
 
-    timeframe = '15m'
+    timeframe = '4h'
     can_short: bool = True
     process_only_new_candles = True
 
