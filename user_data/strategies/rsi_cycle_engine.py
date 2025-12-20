@@ -43,14 +43,16 @@ class RSICycleEngine(IStrategy):
     max_rsi = IntParameter(low=51, high=100, default=70, space="sell", optimize=True, load=True)
     min_rsi = IntParameter(low=1, high=50, default=30, space="buy", optimize=True, load=True)
 
-    def extract_features(self, df, c1, c2, col, name, direction="forward"):
+    def extract_features(self, dataframe, c1, c2, col, name, direction="forward"):
 
-        starts = df.loc[c1].reset_index().rename(columns={"index": "start"})
-        ends = df.loc[c2].reset_index().rename(columns={"index": "end"})
+        df = dataframe.copy()
+
+        starts = df.loc[c1].reset_index().rename(columns={"index": "start"})[['start']]
+        ends   = df.loc[c2].reset_index().rename(columns={"index": "end"})[['end']]
 
         if starts.empty or ends.empty:
-            df[name] = np.nan
-            return df
+            dataframe[name] = np.nan
+            return dataframe
 
         pairs = pd.merge_asof(
             starts.sort_values("start"),
@@ -61,17 +63,17 @@ class RSICycleEngine(IStrategy):
         ).dropna()[["start", "end"]]
 
         if pairs.empty:
-            df[name] = np.nan
-            return df
-        
+            dataframe[name] = np.nan
+            return dataframe
+
         intervals = pd.IntervalIndex.from_arrays(pairs["start"], pairs["end"], closed="both")
         df["range_id"] = pd.cut(df.index, intervals)
-        e = 'max' if col == "high" else 'min'
-        df[name] = df.groupby("range_id", observed=True)[col].transform(e)
-        df[name] = np.where(df[col]==df[name].ffill(), df[col], np.nan)
-        
-        return df.drop(columns=["range_id"])
 
+        e = 'max' if col == 'high' else 'min'
+        df[name] = df.groupby("range_id", observed=True)[col].transform(e)
+        df[name] = np.where(df[col] == df[name], df[col], np.nan)
+
+        return dataframe.merge(df[[name]], left_index=True, right_index=True, how="left")
 
     def populate_features(self, dataframe: DataFrame) -> DataFrame:
 
@@ -191,8 +193,6 @@ class RSICycleEngine(IStrategy):
 
         dataframe_, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
         dataframe = dataframe_.copy()
-        dataframe['max_high'] = dataframe['max_high'].ffill()
-        dataframe['min_low'] = dataframe['min_low'].ffill()
         last = dataframe.iloc[-1].squeeze()
 
         last_extreme = trade.get_custom_data("last_extreme")
