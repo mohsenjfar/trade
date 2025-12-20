@@ -207,7 +207,7 @@ class RSICycleEngine(IStrategy):
         last_extreme = trade.get_custom_data("last_extreme")
 
         if trade.is_short:
-            new_extreme = last["min_low"]
+            new_extreme = float(last["min_low"])
             if new_extreme is not None and not np.isnan(new_extreme):
                 if last_extreme is None:
                     trade.set_custom_data("last_extreme", new_extreme)
@@ -218,7 +218,7 @@ class RSICycleEngine(IStrategy):
                     # کف جدید بالاتر یا مساوی → خروج
                     return "exit_cycle_reversal"
         else:
-            new_extreme = last["max_high"]
+            new_extreme = float(last["max_high"])
             if new_extreme is not None and not np.isnan(new_extreme):
                 if last_extreme is None:
                     trade.set_custom_data("last_extreme", new_extreme)
