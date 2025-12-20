@@ -71,7 +71,13 @@ class RSICycleEngine(IStrategy):
 
         e = 'max' if col == 'high' else 'min'
         df[name] = df.groupby("range_id", observed=True)[col].transform(e)
-        df[name] = np.where(df[col] == df[name], df[col], np.nan)
+        if col == "high":
+            idx = df.groupby("range_id")["high"].idxmax()
+        else:
+            idx = df.groupby("range_id")["low"].idxmin()
+
+        df[name] = None
+        df.loc[idx, name] = df.loc[idx, col]
 
         return dataframe.merge(df[[name]], left_index=True, right_index=True, how="left")
 
@@ -204,17 +210,22 @@ class RSICycleEngine(IStrategy):
                     trade.set_custom_data("last_extreme", new_extreme)
                 elif new_extreme < last_extreme:
                     trade.set_custom_data("last_extreme", new_extreme)
+                elif new_extreme > last_extreme:
+                    trade.set_custom_data("last_extreme", new_extreme)
                 else:
                     return "exit_cycle_reversal"
+
         else:
             new_extreme = float(last["max_high"])
             if new_extreme is not None and not np.isnan(new_extreme):
                 if last_extreme is None:
                     trade.set_custom_data("last_extreme", new_extreme)
-                elif new_extreme > last_extreme:
-                    trade.set_custom_data("last_extreme", new_extreme)
-                else:
-                    return "exit_cycle_reversal"
+            elif new_extreme < last_extreme:
+                trade.set_custom_data("last_extreme", new_extreme)
+            elif new_extreme > last_extreme:
+                trade.set_custom_data("last_extreme", new_extreme)
+            else:
+                return "exit_cycle_reversal"
 
         return None
 
