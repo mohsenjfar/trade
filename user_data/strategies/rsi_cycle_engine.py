@@ -19,7 +19,7 @@ class RSICycleEngine(IStrategy):
 
     INTERFACE_VERSION = 3
 
-    stoploss = -0.01
+    stoploss = -1
 
     trade_max_loss_allowed = 0.005
 
@@ -28,7 +28,7 @@ class RSICycleEngine(IStrategy):
     process_only_new_candles = True
 
     use_exit_signal = True
-    use_custom_stoploss = False
+    use_custom_stoploss = True
 
     order_types = {
         "entry": "limit",
