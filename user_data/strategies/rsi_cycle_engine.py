@@ -23,7 +23,7 @@ class RSICycleEngine(IStrategy):
 
     trade_max_loss_allowed = 0.005
 
-    timeframe = '15m'
+    timeframe = '1h'
     can_short: bool = True
     process_only_new_candles = True
 
@@ -99,7 +99,7 @@ class RSICycleEngine(IStrategy):
 
         return dataframe
 
-    @informative("1h")
+    # @informative("1h")
     @informative("4h")
     def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
@@ -118,7 +118,7 @@ class RSICycleEngine(IStrategy):
         dataframe.loc[
             (
                 (dataframe['close'] > dataframe['max_low_4h'].ffill()) &
-                (qtpylib.crossed_above(dataframe["close_1h"], dataframe["long_trigger_1h"].ffill()))
+                (qtpylib.crossed_above(dataframe["close"], dataframe["long_trigger"].ffill()))
             ),
             "enter_long"
         ] = 1
@@ -126,7 +126,7 @@ class RSICycleEngine(IStrategy):
         dataframe.loc[
             (
                 (dataframe['close'] < dataframe['min_high_4h'].ffill()) &
-                (qtpylib.crossed_below(dataframe["close_1h"], dataframe["short_trigger_1h"].ffill()))
+                (qtpylib.crossed_below(dataframe["close"], dataframe["short_trigger"].ffill()))
             ),
             "enter_short"
         ] = 1
