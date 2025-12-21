@@ -117,7 +117,7 @@ class RSICycleEngine(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['close'] > dataframe['max_low_4h']) &
+                (dataframe['close'] > dataframe['max_low_4h'].ffill()) &
                 (qtpylib.crossed_above(dataframe["close_1h"], dataframe["long_trigger_1h"].ffill()))
             ),
             "enter_long"
@@ -125,7 +125,7 @@ class RSICycleEngine(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['close'] < dataframe['min_high_4h']) &
+                (dataframe['close'] < dataframe['min_high_4h'].ffill()) &
                 (qtpylib.crossed_below(dataframe["close_1h"], dataframe["short_trigger_1h"].ffill()))
             ),
             "enter_short"
