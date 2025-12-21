@@ -30,7 +30,7 @@ class RSICycleEngine(IStrategy):
     use_exit_signal = True
     use_custom_stoploss = True
 
-    position_adjustment_enable = True
+    position_adjustment_enable = False
 
     order_types = {
         "entry": "limit",
