@@ -156,7 +156,10 @@ class RSICycleEngine(IStrategy):
                             leverage: float, entry_tag: Optional[str], side: str,
                             **kwargs) -> float:
 
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        dataframe_, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        dataframe = dataframe_.copy()
+        dataframe['max_high'] = dataframe['max_high'].ffill()
+        dataframe['min_low'] = dataframe['min_low'].ffill()
         last_candle = dataframe.iloc[-1].squeeze()
         stop = last_candle["max_high"] if side == "short" else last_candle["min_low"]
         if stop is None or np.isnan(stop): return 0
@@ -181,7 +184,10 @@ class RSICycleEngine(IStrategy):
                         current_rate: float, current_profit: float, after_fill: bool,
                         **kwargs) -> Optional[float]:
 
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
+        dataframe_, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        dataframe = dataframe_.copy()
+        dataframe['max_high'] = dataframe['max_high'].ffill()
+        dataframe['min_low'] = dataframe['min_low'].ffill()
         last_candle = dataframe.iloc[-1].squeeze()
 
         stop = trade.get_custom_data("stop")
