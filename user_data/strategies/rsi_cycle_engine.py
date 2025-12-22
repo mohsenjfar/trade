@@ -21,7 +21,7 @@ class RSICycleEngine(IStrategy):
 
     stoploss = -1
 
-    trade_max_loss_allowed = 0.05
+    trade_max_loss_allowed = 0.02
 
     timeframe = '15m'
     can_short: bool = True

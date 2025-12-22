@@ -1,7 +1,6 @@
 .venv
 __pycache__
 hyperopts
-backtest_results
 .env
 *.sqlite*
 models
