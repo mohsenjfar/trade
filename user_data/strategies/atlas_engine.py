@@ -96,6 +96,11 @@ class AtlasEngine(IStrategy):
 
         dataframe.loc[dataframe['max_high'].notna(),"cat"] = 'H'
         dataframe.loc[dataframe['min_low'].notna(),"cat"] = 'L'
+        
+        dataframe['max_high'] = dataframe['max_high'].ffill()
+        dataframe['min_high'] = dataframe['min_high'].ffill()
+        dataframe['min_low'] = dataframe['min_low'].ffill()
+        dataframe['max_low'] = dataframe['max_low'].ffill()
         dataframe['cat'] = dataframe['cat'].ffill()
 
         return dataframe
@@ -125,7 +130,8 @@ class AtlasEngine(IStrategy):
         dataframe.loc[
             (
                 (dataframe['cat'] == "L") &
-                (qtpylib.crossed_above(dataframe["close"], dataframe["max_low"].ffill()))
+                (dataframe['rsi_4h'] > 50) &
+                (qtpylib.crossed_above(dataframe["close"], dataframe["max_low"]))
             ),
             "enter_long"
         ] = 1
@@ -133,7 +139,8 @@ class AtlasEngine(IStrategy):
         dataframe.loc[
             (
                 (dataframe['cat'] == "H") &
-                (qtpylib.crossed_below(dataframe["close"], dataframe["min_high"].ffill()))
+                (dataframe['rsi_4h'] < 50) &
+                (qtpylib.crossed_below(dataframe["close"], dataframe["min_high"]))
             ),
             "enter_short"
         ] = 1
@@ -144,19 +151,18 @@ class AtlasEngine(IStrategy):
 
         return dataframe
     
-    # def leverage(self, pair: str, current_time: datetime, current_rate: float,
-    #              proposed_leverage: float, max_leverage: float, entry_tag: Optional[str], side: str,
-    #              **kwargs) -> float:
+    def leverage(self, pair: str, current_time: datetime, current_rate: float,
+                 proposed_leverage: float, max_leverage: float, entry_tag: Optional[str], side: str,
+                 **kwargs) -> float:
 
-    #     dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-    #     last_candle = dataframe.iloc[-1].squeeze()
-
-    #     stop = last_candle["max_high"] if side == "short" else last_candle["min_low"]
-    #     if stop is None or np.isnan(stop): return 1.0
-    #     risk = abs(stop / current_rate - 1)
-    #     if risk == 0: return 1.0
-    #     lev = self.trade_max_loss_allowed / risk
-    #     return float(max(1, min(ceil(lev), max_leverage)))
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        last_candle = dataframe.iloc[-1].squeeze()
+        stop = last_candle["max_high"] if side == "short" else last_candle["min_low"]
+        if stop is None or np.isnan(stop): return 1.0
+        risk = abs(stop / current_rate - 1)
+        if risk == 0: return 1.0
+        lev = self.trade_max_loss_allowed / risk
+        return float(max(1, min(ceil(lev), max_leverage)))
 
     def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
                             proposed_stake: float, min_stake: Optional[float], max_stake: float,
@@ -165,8 +171,6 @@ class AtlasEngine(IStrategy):
 
         dataframe_, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         dataframe = dataframe_.copy()
-        dataframe['max_high'] = dataframe['max_high'].ffill()
-        dataframe['min_low'] = dataframe['min_low'].ffill()
         last_candle = dataframe.iloc[-1].squeeze()
         stop = last_candle["max_high"] if side == "short" else last_candle["min_low"]
         if stop is None or np.isnan(stop): return 0
@@ -183,18 +187,19 @@ class AtlasEngine(IStrategy):
                               **kwargs
                               ) -> float | None | tuple[float | None, str | None]:
 
-        risk = trade.get_custom_data(key='risk')
-        if (current_profit > risk) and (trade.nr_of_successful_exits == 0):
-            return - trade.stake_amount / 2
+        stop = trade.get_custom_data("stop")
+        if (stop is not None) and (trade.nr_of_successful_exits == 0):
+            risk = abs(stop / trade.open_rate - 1)
+            c1 = current_profit > 2 * risk
+            c2 = trade.is_short and stop < trade.open_rate
+            c3 = not trade.is_short and stop > trade.open_rate
+            if c1 or c2 or c3: return - trade.stake_amount * 0.3
 
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
                         current_rate: float, current_profit: float, after_fill: bool,
                         **kwargs) -> Optional[float]:
 
-        dataframe_, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        dataframe = dataframe_.copy()
-        dataframe['max_high'] = dataframe['max_high'].ffill()
-        dataframe['min_low'] = dataframe['min_low'].ffill()
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
 
         stop = trade.get_custom_data("stop")
@@ -202,18 +207,22 @@ class AtlasEngine(IStrategy):
         if stop is None:
             stop = last_candle["max_high"] if trade.is_short else last_candle["min_low"]
             trade.set_custom_data("stop", float(stop))
-
             risk = abs(stop / trade.open_rate - 1)
-            trade.set_custom_data("risk", risk)
             self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
         if trade.is_short and stop is not None and not np.isnan(stop):
-            if (last_candle['max_low'] < stop) and last_candle['cat'] == 'L':
-                trade.set_custom_data("stop", float(last_candle['max_low']))
+            low = float(last_candle['max_low_1h'])
+            c1 = low < stop
+            c2 = last_candle['cat_1h'] == 'L'
+            c3 = low < trade.open_rate
+            if c1 and c2 and c3: trade.set_custom_data("stop", low)
 
         if not trade.is_short and stop is not None and not np.isnan(stop):
-            if (last_candle['min_high'] > stop) and last_candle['cat'] == 'H':
-                trade.set_custom_data("stop", float(last_candle['min_high']))
+            high = float(last_candle['min_high_1h'])
+            c1 = high > stop
+            c2 = last_candle['cat_1h'] == 'H'
+            c3 = high > trade.open_rate
+            if c1 and c2 and c3: trade.set_custom_data("stop", high)
 
         return stoploss_from_absolute(
             trade.get_custom_data("stop"),
