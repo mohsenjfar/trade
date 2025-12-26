@@ -190,10 +190,8 @@ class AtlasEngine(IStrategy):
         stop = trade.get_custom_data("stop")
         if (stop is not None) and (trade.nr_of_successful_exits == 0):
             risk = abs(stop / trade.open_rate - 1)
-            c1 = current_profit > 2 * risk
-            c2 = trade.is_short and stop < trade.open_rate
-            c3 = not trade.is_short and stop > trade.open_rate
-            if c1 or c2 or c3: return - trade.stake_amount * 0.3
+            if current_profit > risk:
+                return - trade.stake_amount * 0.5
 
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
                         current_rate: float, current_profit: float, after_fill: bool,
