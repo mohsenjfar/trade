@@ -33,7 +33,7 @@ class AtlasEngine(IStrategy):
 
     use_custom_stoploss = True
 
-    position_adjustment_enable = False
+    position_adjustment_enable = True
 
     order_types = {
         "entry": "limit",
