@@ -13,7 +13,7 @@ from datetime import datetime
 from typing import Optional
 
 
-class AtlasEngine(IStrategy):
+class AtlasEnginePlus(IStrategy):
 
     INTERFACE_VERSION = 3
 
