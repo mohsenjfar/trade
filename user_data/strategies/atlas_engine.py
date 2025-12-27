@@ -96,11 +96,6 @@ class AtlasEngine(IStrategy):
 
         dataframe.loc[dataframe['max_high'].notna(),"cat"] = 'H'
         dataframe.loc[dataframe['min_low'].notna(),"cat"] = 'L'
-        
-        dataframe['max_high'] = dataframe['max_high'].ffill()
-        dataframe['min_high'] = dataframe['min_high'].ffill()
-        dataframe['min_low'] = dataframe['min_low'].ffill()
-        dataframe['max_low'] = dataframe['max_low'].ffill()
         dataframe['cat'] = dataframe['cat'].ffill()
 
         return dataframe
@@ -131,7 +126,7 @@ class AtlasEngine(IStrategy):
             (
                 (dataframe['cat'] == "L") &
                 (dataframe['rsi_4h'] > 50) &
-                (qtpylib.crossed_above(dataframe["close"], dataframe["max_low"]))
+                (qtpylib.crossed_above(dataframe["close"], dataframe["max_low"].ffill()))
             ),
             "enter_long"
         ] = 1
@@ -140,7 +135,7 @@ class AtlasEngine(IStrategy):
             (
                 (dataframe['cat'] == "H") &
                 (dataframe['rsi_4h'] < 50) &
-                (qtpylib.crossed_below(dataframe["close"], dataframe["min_high"]))
+                (qtpylib.crossed_below(dataframe["close"], dataframe["min_high"].ffill()))
             ),
             "enter_short"
         ] = 1
@@ -155,7 +150,10 @@ class AtlasEngine(IStrategy):
                  proposed_leverage: float, max_leverage: float, entry_tag: Optional[str], side: str,
                  **kwargs) -> float:
 
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        dataframe_, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        dataframe = dataframe_.copy()
+        dataframe["max_high"] = dataframe["max_high"].ffill()
+        dataframe["min_low"] = dataframe["min_low"].ffill()
         last_candle = dataframe.iloc[-1].squeeze()
         stop = last_candle["max_high"] if side == "short" else last_candle["min_low"]
         if stop is None or np.isnan(stop): return 1.0
@@ -171,6 +169,8 @@ class AtlasEngine(IStrategy):
 
         dataframe_, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         dataframe = dataframe_.copy()
+        dataframe["max_high"] = dataframe["max_high"].ffill()
+        dataframe["min_low"] = dataframe["min_low"].ffill()
         last_candle = dataframe.iloc[-1].squeeze()
         stop = last_candle["max_high"] if side == "short" else last_candle["min_low"]
         if stop is None or np.isnan(stop): return 0
@@ -203,6 +203,10 @@ class AtlasEngine(IStrategy):
         stop = trade.get_custom_data("stop")
 
         if stop is None:
+            dataframe_ = dataframe.copy()
+            dataframe_["max_high"] = dataframe_["max_high"].ffill()
+            dataframe_["min_low"] = dataframe_["min_low"].ffill()
+            last_candle = dataframe_.iloc[-1].squeeze()
             stop = last_candle["max_high"] if trade.is_short else last_candle["min_low"]
             trade.set_custom_data("stop", float(stop))
             risk = abs(stop / trade.open_rate - 1)
