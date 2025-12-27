@@ -33,7 +33,7 @@ class AtlasEnginePlus(IStrategy):
 
     use_custom_stoploss = True
 
-    position_adjustment_enable = True
+    position_adjustment_enable = False
 
     order_types = {
         "entry": "limit",
@@ -96,7 +96,7 @@ class AtlasEnginePlus(IStrategy):
 
         dataframe.loc[dataframe['max_high'].notna(),"cat"] = 'H'
         dataframe.loc[dataframe['min_low'].notna(),"cat"] = 'L'
-        dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-2:]
+        # dataframe['cat'] = ''.join(dataframe[dataframe.cat.notna()].cat.values)[-2:]
 
         return dataframe
     
@@ -117,16 +117,16 @@ class AtlasEnginePlus(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['cat_4h'] == "HH") &
-                (qtpylib.crossed_above(dataframe["rsi"], 30))
+                (dataframe['cat'].ffill().iat[-1] == "H") &
+                (qtpylib.crossed_above(dataframe["close"], dataframe["max_high"].ffill()))
             ),
             "enter_long"
         ] = 1
 
         dataframe.loc[
             (
-                (dataframe['cat_4h'] == "LL") &
-                (qtpylib.crossed_below(dataframe["rsi"], 70))
+                (dataframe['cat'].ffill().iat[-1] == "L") &
+                (qtpylib.crossed_below(dataframe["close"], dataframe["min_low"].ffill()))
             ),
             "enter_short"
         ] = 1
@@ -160,10 +160,10 @@ class AtlasEnginePlus(IStrategy):
 
         dataframe_, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         dataframe = dataframe_.copy()
-        dataframe["max_high"] = dataframe["max_high"].ffill()
-        dataframe["min_low"] = dataframe["min_low"].ffill()
+        dataframe["min_high"] = dataframe["max_high"].ffill()
+        dataframe["max_low"] = dataframe["min_low"].ffill()
         last_candle = dataframe.iloc[-1].squeeze()
-        stop = last_candle["max_high"] if side == "short" else last_candle["min_low"]
+        stop = last_candle["max_low"] if side == "short" else last_candle["min_high"]
         if stop is None or np.isnan(stop): return 0
         risk = abs(stop / current_rate - 1)
         total_stake = max_stake + Trade.total_open_trades_stakes()
@@ -195,10 +195,10 @@ class AtlasEnginePlus(IStrategy):
 
         if stop is None:
             dataframe_ = dataframe.copy()
-            dataframe_["max_high"] = dataframe_["max_high"].ffill()
-            dataframe_["min_low"] = dataframe_["min_low"].ffill()
+            dataframe_["max_low"] = dataframe_["max_low"].ffill()
+            dataframe_["min_high"] = dataframe_["min_high"].ffill()
             last_candle = dataframe_.iloc[-1].squeeze()
-            stop = last_candle["max_high"] if trade.is_short else last_candle["min_low"]
+            stop = last_candle["max_low"] if trade.is_short else last_candle["min_high"]
             trade.set_custom_data("stop", float(stop))
             risk = abs(stop / trade.open_rate - 1)
             self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
