@@ -22,4 +22,5 @@ services:
       image: freqtradeorg/freqtrade:develop_freqai
       restart: unless-stopped
       container_name: AtlasEngine
-
+      volumes:
+        - "./user_data:/freqtrade/user_data"
