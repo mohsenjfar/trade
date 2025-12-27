@@ -23,7 +23,7 @@ class AtlasEnginePlus(IStrategy):
 
     trade_max_loss_allowed = 0.005
 
-    timeframe = '1h'
+    timeframe = '15m'
 
     can_short: bool = True
 
