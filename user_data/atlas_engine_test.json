@@ -37,7 +37,7 @@
     "key": "",
     "secret": "",
     "pair_whitelist": [
-      "SOL/USDT:USDT"
+      "WIF/USDT:USDT"
     ],
     "pair_blacklist": [
     ]
