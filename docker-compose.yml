@@ -21,6 +21,12 @@ services:
   atlas_engine_test:
       image: freqtradeorg/freqtrade:develop_freqai
       restart: unless-stopped
-      container_name: AtlasEngine
+      container_name: AtlasEnginePlus
       volumes:
         - "./user_data:/freqtrade/user_data"
+      command: >
+        trade
+        --logfile /freqtrade/user_data/logs/atlas_engine_plus.log
+        --db-url sqlite:////freqtrade/user_data/atlas_engine_plus.sqlite
+        --config /freqtrade/user_data/atlas_engine_test.json
+        --strategy AtlasEnginePlus
