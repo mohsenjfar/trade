@@ -164,15 +164,26 @@ class AtlasEngine(IStrategy):
         dataframe["last_sig_low"] = dataframe["sig_pivot_low_dist"].ffill()
         dataframe["last_sig_high"] = dataframe["sig_pivot_high_dist"].ffill()
 
-        k = 2.0  # یا بهینه‌سازی‌پذیر
-        reward_long  = k * dataframe["ATR"]
-        reward_short = k * dataframe["ATR"]
+        # توجه: برای سرعت باید به صورت برداری/rolling بازنویسی شود.
+        next_high = []
+        next_low  = []
+        for i in range(len(dataframe)):
+            s_high = dataframe["sig_pivot_high_dist"].iloc[:i+1]
+            s_low  = dataframe["sig_pivot_low_dist"].iloc[:i+1]
+            c      = dataframe["close"].iloc[i]
+            next_high.append(next_level_up_past_only(s_high, c))
+            next_low.append(next_level_down_past_only(s_low, c))
 
-        risk_long  = dataframe["close"] - dataframe["last_sig_low"]
-        risk_short = dataframe["last_sig_high"] - dataframe["close"]
+        dataframe["next_sig_high"] = np.array(next_high)
+        dataframe["next_sig_low"]  = np.array(next_low)
 
-        dataframe["rr_long"]  = np.where((risk_long  > 0), reward_long  / risk_long,  np.nan)
-        dataframe["rr_short"] = np.where((risk_short > 0), reward_short / risk_short, np.nan)
+        # سپس R:R مثل قبل:
+        risk_long    = dataframe["close"] - dataframe["last_sig_low"]
+        reward_long  = dataframe["next_sig_high"] - dataframe["close"]
+        risk_short   = dataframe["last_sig_high"] - dataframe["close"]
+        reward_short = dataframe["close"] - dataframe["next_sig_low"]
+        dataframe["rr_long"]  = np.where((risk_long  > 0) & (reward_long  > 0), reward_long  / risk_long,  np.nan)
+        dataframe["rr_short"] = np.where((risk_short > 0) & (reward_short > 0), reward_short / risk_short, np.nan)
 
         # اولین pivot مهم بعدی (نقدینگی LTF)
         # dataframe["next_sig_high"] = dataframe["sig_pivot_high_dist"][::-1].ffill()[::-1]
@@ -366,3 +377,12 @@ class AtlasEngine(IStrategy):
             is_short=trade.is_short,
             leverage=trade.leverage,
         )
+
+
+def next_level_up_past_only(series, close):
+    mask = series.notna() & (series > close)
+    return series[mask].iloc[-1] if mask.any() else np.nan
+
+def next_level_down_past_only(series, close):
+    mask = series.notna() & (series < close)
+    return series[mask].iloc[-1] if mask.any() else np.nan
