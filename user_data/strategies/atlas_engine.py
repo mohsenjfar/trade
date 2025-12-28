@@ -175,26 +175,26 @@ class AtlasEngine(IStrategy):
         dataframe["rr_short"] = np.where((risk_short > 0), reward_short / risk_short, np.nan)
 
         # اولین pivot مهم بعدی (نقدینگی LTF)
-        dataframe["next_sig_high"] = dataframe["sig_pivot_high_dist"][::-1].ffill()[::-1]
-        dataframe["next_sig_low"] = dataframe["sig_pivot_low_dist"][::-1].ffill()[::-1]
+        # dataframe["next_sig_high"] = dataframe["sig_pivot_high_dist"][::-1].ffill()[::-1]
+        # dataframe["next_sig_low"] = dataframe["sig_pivot_low_dist"][::-1].ffill()[::-1]
 
-        # --- R:R لانگ ---
-        risk_long = dataframe["close"] - dataframe["last_sig_low"]
-        reward_long = dataframe["next_sig_high"] - dataframe["close"]
-        dataframe["rr_long"] = np.where(
-            (risk_long > 0) & (reward_long > 0),
-            reward_long / risk_long,
-            np.nan,
-        )
+        # # --- R:R لانگ ---
+        # risk_long = dataframe["close"] - dataframe["last_sig_low"]
+        # reward_long = dataframe["next_sig_high"] - dataframe["close"]
+        # dataframe["rr_long"] = np.where(
+        #     (risk_long > 0) & (reward_long > 0),
+        #     reward_long / risk_long,
+        #     np.nan,
+        # )
 
-        # --- R:R شورت ---
-        risk_short = dataframe["last_sig_high"] - dataframe["close"]
-        reward_short = dataframe["close"] - dataframe["next_sig_low"]
-        dataframe["rr_short"] = np.where(
-            (risk_short > 0) & (reward_short > 0),
-            reward_short / risk_short,
-            np.nan,
-        )
+        # # --- R:R شورت ---
+        # risk_short = dataframe["last_sig_high"] - dataframe["close"]
+        # reward_short = dataframe["close"] - dataframe["next_sig_low"]
+        # dataframe["rr_short"] = np.where(
+        #     (risk_short > 0) & (reward_short > 0),
+        #     reward_short / risk_short,
+        #     np.nan,
+        # )
 
         # فقط چیزهایی که منطقاً باید ffill شوند:
         ffill_cols = [
@@ -203,7 +203,7 @@ class AtlasEngine(IStrategy):
             "high_label_1h", "low_label_1h",
             "sig_pivot_high_dist", "sig_pivot_low_dist",
             "last_sig_low", "last_sig_high",
-            "next_sig_high", "next_sig_low",
+            # "next_sig_high", "next_sig_low",
             "rr_long", "rr_short",
         ]
         for col in ffill_cols:
