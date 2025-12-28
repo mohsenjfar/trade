@@ -164,57 +164,36 @@ class AtlasEngine(IStrategy):
         dataframe["last_sig_low"] = dataframe["sig_pivot_low_dist"].ffill()
         dataframe["last_sig_high"] = dataframe["sig_pivot_high_dist"].ffill()
 
-        # توجه: برای سرعت باید به صورت برداری/rolling بازنویسی شود.
-        next_high = []
-        next_low  = []
-        for i in range(len(dataframe)):
-            s_high = dataframe["sig_pivot_high_dist"].iloc[:i+1]
-            s_low  = dataframe["sig_pivot_low_dist"].iloc[:i+1]
-            c      = dataframe["close"].iloc[i]
-            next_high.append(next_level_up_past_only(s_high, c))
-            next_low.append(next_level_down_past_only(s_low, c))
+        dataframe["tgt_long"]  = dataframe["sig_pivot_high_dist_4h"].where(
+            dataframe["sig_pivot_high_dist_4h"] > dataframe["close"]
+        ).ffill()
+        dataframe["tgt_short"] = dataframe["sig_pivot_low_dist_4h"].where(
+            dataframe["sig_pivot_low_dist_4h"] < dataframe["close"]
+        ).ffill()
 
-        dataframe["next_sig_high"] = np.array(next_high)
-        dataframe["next_sig_low"]  = np.array(next_low)
+        risk_long = dataframe["close"] - dataframe["last_sig_low"]
+        reward_long  = dataframe["tgt_long"] - dataframe["close"]
+        dataframe["rr_long"] = np.where(
+            (risk_long > 0) & (reward_long > 0),
+            reward_long / risk_long,
+            np.nan,
+        )
 
-        # سپس R:R مثل قبل:
-        risk_long    = dataframe["close"] - dataframe["last_sig_low"]
-        reward_long  = dataframe["next_sig_high"] - dataframe["close"]
-        risk_short   = dataframe["last_sig_high"] - dataframe["close"]
-        reward_short = dataframe["close"] - dataframe["next_sig_low"]
-        dataframe["rr_long"]  = np.where((risk_long  > 0) & (reward_long  > 0), reward_long  / risk_long,  np.nan)
-        dataframe["rr_short"] = np.where((risk_short > 0) & (reward_short > 0), reward_short / risk_short, np.nan)
+        risk_short = dataframe["last_sig_high"] - dataframe["close"]
+        reward_short = dataframe["close"] - dataframe["tgt_short"]
+        dataframe["rr_short"] = np.where(
+            (risk_short > 0) & (reward_short > 0),
+            reward_short / risk_short,
+            np.nan,
+        )
 
-        # اولین pivot مهم بعدی (نقدینگی LTF)
-        # dataframe["next_sig_high"] = dataframe["sig_pivot_high_dist"][::-1].ffill()[::-1]
-        # dataframe["next_sig_low"] = dataframe["sig_pivot_low_dist"][::-1].ffill()[::-1]
-
-        # # --- R:R لانگ ---
-        # risk_long = dataframe["close"] - dataframe["last_sig_low"]
-        # reward_long = dataframe["next_sig_high"] - dataframe["close"]
-        # dataframe["rr_long"] = np.where(
-        #     (risk_long > 0) & (reward_long > 0),
-        #     reward_long / risk_long,
-        #     np.nan,
-        # )
-
-        # # --- R:R شورت ---
-        # risk_short = dataframe["last_sig_high"] - dataframe["close"]
-        # reward_short = dataframe["close"] - dataframe["next_sig_low"]
-        # dataframe["rr_short"] = np.where(
-        #     (risk_short > 0) & (reward_short > 0),
-        #     reward_short / risk_short,
-        #     np.nan,
-        # )
-
-        # فقط چیزهایی که منطقاً باید ffill شوند:
         ffill_cols = [
             "high_label", "low_label",
             "high_label_4h", "low_label_4h",
             "high_label_1h", "low_label_1h",
             "sig_pivot_high_dist", "sig_pivot_low_dist",
             "last_sig_low", "last_sig_high",
-            # "next_sig_high", "next_sig_low",
+            "next_sig_high", "next_sig_low",
             "rr_long", "rr_short",
         ]
         for col in ffill_cols:
@@ -266,9 +245,6 @@ class AtlasEngine(IStrategy):
 
         return dataframe
 
-    # ---------------------------------------------------------
-    # Exit Logic (فعلاً خالی، تکیه بر استاپ داینامیک)
-    # ---------------------------------------------------------
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         return dataframe
 
@@ -377,12 +353,3 @@ class AtlasEngine(IStrategy):
             is_short=trade.is_short,
             leverage=trade.leverage,
         )
-
-
-def next_level_up_past_only(series, close):
-    mask = series.notna() & (series > close)
-    return series[mask].iloc[-1] if mask.any() else np.nan
-
-def next_level_down_past_only(series, close):
-    mask = series.notna() & (series < close)
-    return series[mask].iloc[-1] if mask.any() else np.nan
