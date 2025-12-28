@@ -160,6 +160,10 @@ class AtlasEngine(IStrategy):
         dataframe = self.filter_pivots_distance(dataframe, min_distance=0.003)
         dataframe = self.label_structure(dataframe)
 
+        # آخرین pivot مهم LTF (برای استاپ و R:R)
+        dataframe["last_sig_low"] = dataframe["sig_pivot_low_dist"].ffill()
+        dataframe["last_sig_high"] = dataframe["sig_pivot_high_dist"].ffill()
+
         k = 2.0  # یا بهینه‌سازی‌پذیر
         reward_long  = k * dataframe["ATR"]
         reward_short = k * dataframe["ATR"]
@@ -169,10 +173,6 @@ class AtlasEngine(IStrategy):
 
         dataframe["rr_long"]  = np.where((risk_long  > 0), reward_long  / risk_long,  np.nan)
         dataframe["rr_short"] = np.where((risk_short > 0), reward_short / risk_short, np.nan)
-
-        # آخرین pivot مهم LTF (برای استاپ و R:R)
-        dataframe["last_sig_low"] = dataframe["sig_pivot_low_dist"].ffill()
-        dataframe["last_sig_high"] = dataframe["sig_pivot_high_dist"].ffill()
 
         # اولین pivot مهم بعدی (نقدینگی LTF)
         dataframe["next_sig_high"] = dataframe["sig_pivot_high_dist"][::-1].ffill()[::-1]
