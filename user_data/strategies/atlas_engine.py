@@ -225,7 +225,7 @@ class AtlasEngine(IStrategy):
             (hl1 == "HH") & (ll1 == "HL") &        # Guard 1h
             (ll == "HL") &                         # Guard LTF
             qtpylib.crossed_above(dataframe["close"], sig_high_ltf) & # Trigger
-            (dataframe["rr_long"] >= 5.0)          # Guard R:R
+            (dataframe["rr_long"] >= 2.0)          # Guard R:R
         )
 
         dataframe.loc[long_cond, "enter_long"] = 1
@@ -238,7 +238,7 @@ class AtlasEngine(IStrategy):
             (hl1 == "LH") & (ll1 == "LL") &        # Guard 1h
             (lh == "LH") &                         # Guard LTF
             qtpylib.crossed_below(dataframe["close"], sig_low_ltf) &  # Trigger
-            (dataframe["rr_short"] >= 5.0)         # Guard R:R
+            (dataframe["rr_short"] >= 2.0)         # Guard R:R
         )
 
         dataframe.loc[short_cond, "enter_short"] = 1
@@ -304,9 +304,9 @@ class AtlasEngine(IStrategy):
 
         # pivot مرجع برای trailing: آخرین sig_pivot_*_dist
         if trade.is_short:
-            raw_pivot = last_candle["last_sig_high"]
+            raw_pivot = last_candle["last_sig_high_1h"]
         else:
-            raw_pivot = last_candle["last_sig_low"]
+            raw_pivot = last_candle["last_sig_low_1h"]
 
         # اگر pivot نداریم، برگرد به استاپ پیش‌فرض
         if np.isnan(raw_pivot):
@@ -314,6 +314,10 @@ class AtlasEngine(IStrategy):
 
         # استاپ اولیه فقط یک‌بار تنظیم می‌شود
         if trade.get_custom_data("stop") is None:
+            if trade.is_short:
+                raw_pivot = last_candle["last_sig_high"]
+            else:
+                raw_pivot = last_candle["last_sig_low"]
             # offset بر اساس ATR
             atr = last_candle.get("ATR", np.nan)
             if np.isnan(atr):
