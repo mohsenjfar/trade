@@ -224,8 +224,8 @@ class AtlasEngine(IStrategy):
             (hl4 == "HH") & (ll4 == "HL") &        # Guard 4h
             (hl1 == "HH") & (ll1 == "HL") &        # Guard 1h
             (ll == "HL") &                         # Guard LTF
-            qtpylib.crossed_above(dataframe["close"], sig_high_ltf) &  # Trigger
-            (dataframe["rr_long"] >= 2.0)          # Guard R:R
+            qtpylib.crossed_above(dataframe["close"], sig_high_ltf) # Trigger
+            # (dataframe["rr_long"] >= 2.0)          # Guard R:R
         )
 
         dataframe.loc[long_cond, "enter_long"] = 1
@@ -237,8 +237,8 @@ class AtlasEngine(IStrategy):
             (hl4 == "LH") & (ll4 == "LL") &        # Guard 4h
             (hl1 == "LH") & (ll1 == "LL") &        # Guard 1h
             (lh == "LH") &                         # Guard LTF
-            qtpylib.crossed_below(dataframe["close"], sig_low_ltf) &  # Trigger
-            (dataframe["rr_short"] >= 2.0)         # Guard R:R
+            qtpylib.crossed_below(dataframe["close"], sig_low_ltf)  # Trigger
+            # (dataframe["rr_short"] >= 2.0)         # Guard R:R
         )
 
         dataframe.loc[short_cond, "enter_short"] = 1
