@@ -160,6 +160,16 @@ class AtlasEngine(IStrategy):
         dataframe = self.filter_pivots_distance(dataframe, min_distance=0.003)
         dataframe = self.label_structure(dataframe)
 
+        k = 2.0  # یا بهینه‌سازی‌پذیر
+        reward_long  = k * dataframe["ATR"]
+        reward_short = k * dataframe["ATR"]
+
+        risk_long  = dataframe["close"] - dataframe["last_sig_low"]
+        risk_short = dataframe["last_sig_high"] - dataframe["close"]
+
+        dataframe["rr_long"]  = np.where((risk_long  > 0), reward_long  / risk_long,  np.nan)
+        dataframe["rr_short"] = np.where((risk_short > 0), reward_short / risk_short, np.nan)
+
         # آخرین pivot مهم LTF (برای استاپ و R:R)
         dataframe["last_sig_low"] = dataframe["sig_pivot_low_dist"].ffill()
         dataframe["last_sig_high"] = dataframe["sig_pivot_high_dist"].ffill()
@@ -224,8 +234,8 @@ class AtlasEngine(IStrategy):
             (hl4 == "HH") & (ll4 == "HL") &        # Guard 4h
             (hl1 == "HH") & (ll1 == "HL") &        # Guard 1h
             (ll == "HL") &                         # Guard LTF
-            qtpylib.crossed_above(dataframe["close"], sig_high_ltf) # Trigger
-            # (dataframe["rr_long"] >= 2.0)          # Guard R:R
+            qtpylib.crossed_above(dataframe["close"], sig_high_ltf) & # Trigger
+            (dataframe["rr_long"] >= 2.0)          # Guard R:R
         )
 
         dataframe.loc[long_cond, "enter_long"] = 1
@@ -237,8 +247,8 @@ class AtlasEngine(IStrategy):
             (hl4 == "LH") & (ll4 == "LL") &        # Guard 4h
             (hl1 == "LH") & (ll1 == "LL") &        # Guard 1h
             (lh == "LH") &                         # Guard LTF
-            qtpylib.crossed_below(dataframe["close"], sig_low_ltf)  # Trigger
-            # (dataframe["rr_short"] >= 2.0)         # Guard R:R
+            qtpylib.crossed_below(dataframe["close"], sig_low_ltf) &  # Trigger
+            (dataframe["rr_short"] >= 2.0)         # Guard R:R
         )
 
         dataframe.loc[short_cond, "enter_short"] = 1
