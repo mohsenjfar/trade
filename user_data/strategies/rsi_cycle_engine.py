@@ -151,7 +151,7 @@ class RSICycleEngine(IStrategy):
         dataframe['max_high'] = dataframe['max_high'].ffill()
         dataframe['min_low'] = dataframe['min_low'].ffill()
         last_candle = dataframe.iloc[-1].squeeze()
-        stop = last_candle["max_high"] if side == "short" else last_candle["min_low"]
+        stop = last_candle["high"] if side == "short" else last_candle["low"]
         if stop is None or np.isnan(stop): return 0
         risk = abs(stop / current_rate - 1)
         total_stake = max_stake + Trade.total_open_trades_stakes()
@@ -183,7 +183,7 @@ class RSICycleEngine(IStrategy):
         stop = trade.get_custom_data("stop")
 
         if stop is None:
-            stop = last_candle["max_high"] if trade.is_short else last_candle["min_low"]
+            stop = last_candle["high"] if trade.is_short else last_candle["low"]
             trade.set_custom_data("stop", float(stop))
 
             risk = abs(stop / trade.open_rate - 1)
