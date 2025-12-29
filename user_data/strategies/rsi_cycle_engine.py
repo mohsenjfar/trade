@@ -23,7 +23,7 @@ class RSICycleEngine(IStrategy):
 
     trade_max_loss_allowed = 0.02
 
-    timeframe = '15m'
+    timeframe = '1d'
     can_short: bool = True
     process_only_new_candles = True
 
@@ -99,14 +99,6 @@ class RSICycleEngine(IStrategy):
 
         return dataframe
 
-    # @informative("1h")
-    @informative("1h")
-    def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-
-        dataframe = self.populate_features(dataframe)
-
-        return dataframe
-
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe = self.populate_features(dataframe)
@@ -117,16 +109,14 @@ class RSICycleEngine(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['close'] > dataframe['max_low_1h'].ffill()) &
-                (qtpylib.crossed_above(dataframe["close"], dataframe["long_trigger"].ffill()))
+                (qtpylib.crossed_above(dataframe["rsi"], 30))
             ),
             "enter_long"
         ] = 1
 
         dataframe.loc[
             (
-                (dataframe['close'] < dataframe['min_high_1h'].ffill()) &
-                (qtpylib.crossed_below(dataframe["close"], dataframe["short_trigger"].ffill()))
+                (qtpylib.crossed_below(dataframe["rsi"], 70))
             ),
             "enter_short"
         ] = 1
@@ -168,17 +158,17 @@ class RSICycleEngine(IStrategy):
         stake = total_stake * self.trade_max_loss_allowed / (risk * leverage)
         return float(min(stake, max_stake))
 
-    def adjust_trade_position(self, trade: Trade, current_time: datetime,
-                              current_rate: float, current_profit: float,
-                              min_stake: float | None, max_stake: float,
-                              current_entry_rate: float, current_exit_rate: float,
-                              current_entry_profit: float, current_exit_profit: float,
-                              **kwargs
-                              ) -> float | None | tuple[float | None, str | None]:
+    # def adjust_trade_position(self, trade: Trade, current_time: datetime,
+    #                           current_rate: float, current_profit: float,
+    #                           min_stake: float | None, max_stake: float,
+    #                           current_entry_rate: float, current_exit_rate: float,
+    #                           current_entry_profit: float, current_exit_profit: float,
+    #                           **kwargs
+    #                           ) -> float | None | tuple[float | None, str | None]:
 
-        risk = trade.get_custom_data(key='risk')
-        if (current_profit > risk) and (trade.nr_of_successful_exits == 0):
-            return - trade.stake_amount / 2
+    #     risk = trade.get_custom_data(key='risk')
+    #     if (current_profit > risk) and (trade.nr_of_successful_exits == 0):
+    #         return - trade.stake_amount / 2
 
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
                         current_rate: float, current_profit: float, after_fill: bool,
