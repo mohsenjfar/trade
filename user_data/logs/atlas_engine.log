@@ -4386,3 +4386,25 @@ telegram.error.NetworkError: Bad Gateway
 2025-12-29 14:17:31,032 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
 2025-12-29 14:18:31,039 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
 2025-12-29 14:19:31,052 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-12-29 14:20:31,061 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-12-29 14:20:41,095 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 20 pairs: ['SOL/USDT:USDT', 'XRP/USDT:USDT', 'ZBT/USDT:USDT', 'ZEC/USDT:USDT', 'FARTCOIN/USDT:USDT', 'HYPE/USDT:USDT', 'DOGE/USDT:USDT', 'FLOW/USDT:USDT', 'BEAT/USDT:USDT', 'BCH/USDT:USDT', 'ADA/USDT:USDT', 'SUI/USDT:USDT', 'WIF/USDT:USDT', '1000PEPE/USDT:USDT', 'XAUT/USDT:USDT', 'AT/USDT:USDT', 'LINK/USDT:USDT', 'SQD/USDT:USDT', 'BNB/USDT:USDT', 'ONT/USDT:USDT']
+2025-12-29 14:20:46,746 - freqtrade.plugins.pairlistmanager - INFO - Whitelist with 20 pairs: ['SOL/USDT:USDT', 'XRP/USDT:USDT', 'ZBT/USDT:USDT', 'ZEC/USDT:USDT', 'FARTCOIN/USDT:USDT', 'HYPE/USDT:USDT', 'DOGE/USDT:USDT', 'FLOW/USDT:USDT', 'BEAT/USDT:USDT', 'BCH/USDT:USDT', 'XAUT/USDT:USDT', 'WIF/USDT:USDT', 'ADA/USDT:USDT', 'SUI/USDT:USDT', '1000PEPE/USDT:USDT', 'AT/USDT:USDT', 'LINK/USDT:USDT', 'SQD/USDT:USDT', 'BNB/USDT:USDT', 'ONT/USDT:USDT']
+2025-12-29 14:21:31,067 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-12-29 14:22:31,073 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-12-29 14:23:31,080 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-12-29 14:24:31,089 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-12-29 14:25:31,098 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-12-29 14:26:31,104 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-12-29 14:27:31,110 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-12-29 14:28:31,121 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-12-29 14:29:31,131 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-12-29 14:30:01,032 - freqtrade.exchange.exchange_ws - INFO - Removing ('NEAR/USDT:USDT', '4h', <CandleType.FUTURES: 'futures'>) from websocket watchlist.
+2025-12-29 14:30:01,034 - freqtrade.exchange.exchange_ws - INFO - Removal done: new watch list (60)
+2025-12-29 14:30:01,418 - freqtrade.exchange.exchange_ws - INFO - NEAR/USDT:USDT, 4h, futures - Task finished - done
+2025-12-29 14:30:36,005 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-12-29 14:31:06,222 - freqtrade.wallets - INFO - Wallets synced.
+2025-12-29 14:31:36,013 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-12-29 14:32:36,030 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-12-29 14:33:36,038 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-12-29 14:34:36,046 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
+2025-12-29 14:35:36,055 - freqtrade.worker - INFO - Bot heartbeat. PID=1, version='docker-2025.9-dev-5f1d9cba', state='RUNNING'
