@@ -1,37 +1,36 @@
-# -*- coding: utf-8 -*-
-# AtlasEngine v3 — High R:R Focus (Long-only)
-# کلیدها:
-# - Long-only در رژیم ترنددار قوی (EMA200 صعودی + ADX>25)
-# - شکست معتبر + برگشت (retest) برای ورود با استاپ نزدیک و منطقی
-# - فیلتر حجم و ولتیلیتی (BB squeeze-break)
-# - محاسبه‌ی R:R واقع‌گرایانه: فقط سیگنال‌هایی که R:R >= 3 را عبور می‌دهند
-# - استاپ اولیه کوچک (بر پایه‌ی سوئینگ اخیر + 0.5×ATR) و تریلینگ فقط پس از BE
-# - خروج‌ها توسط تریلینگ/ROI پله‌ای مدیریت می‌شوند
-
-import numpy as np
-import talib.abstract as ta
+import freqtrade.vendor.qtpylib.indicators as qtpylib
 from pandas import DataFrame
-from scipy.signal import argrelextrema
+import numpy as np
+import pandas as pd
+import talib.abstract as ta
+from freqtrade.persistence import Trade
+from math import ceil
+from freqtrade.strategy import (
+    IStrategy,
+    stoploss_from_absolute,
+    IntParameter,
+    informative
+)
 from datetime import datetime
 from typing import Optional
 
-import freqtrade.vendor.qtpylib.indicators as qtpylib
-from freqtrade.persistence import Trade
-from freqtrade.strategy import (
-    IStrategy,
-    informative,
-    stoploss_from_absolute,
-)
 
 class AtlasEngine(IStrategy):
 
     INTERFACE_VERSION = 3
 
+    stoploss = -1
+
+    trade_max_loss_allowed = 0.005
+
     timeframe = '15m'
-    can_short: bool = False  # Long-only برای تمرکز بر R:R بالا
+    can_short: bool = True
     process_only_new_candles = True
+
     use_exit_signal = True
     use_custom_stoploss = True
+
+    position_adjustment_enable = False
 
     order_types = {
         "entry": "limit",
@@ -43,329 +42,212 @@ class AtlasEngine(IStrategy):
         "stoploss_on_exchange_limit_ratio": 0.99,
     }
 
-    startup_candle_count = 300
+    max_rsi = IntParameter(low=51, high=100, default=70, space="sell", optimize=True, load=True)
+    min_rsi = IntParameter(low=1, high=50, default=30, space="buy", optimize=True, load=True)
 
-    # مدیریت ریسک حساب
-    stoploss = -1
-    trade_max_loss_allowed = 0.005  # 0.5% از موجودی آزاد هر معامله
+    def extract_features(self, dataframe, c1, c2, col, name, tt=0, pt=0, d="forward"):
+        
+        df = dataframe.copy()
 
-    # هسته‌ی Pivot
-    kernel = 2
+        starts = df.loc[c1].reset_index().rename(columns={"index": "start"})[['start']]
+        ends   = df.loc[c2].reset_index().rename(columns={"index": "end"})[['end']]
 
-    # ---------------------------------------------------------
-    # Pivot Detection
-    # ---------------------------------------------------------
-    def detect_pivots(self, dataframe: DataFrame, kernel: int = 2) -> DataFrame:
-        dataframe["pivot_high"] = np.nan
-        dataframe["pivot_low"] = np.nan
+        if starts.empty or ends.empty:
+            dataframe[name+"_max"] = np.nan
+            dataframe[name+"_index_dist"] = np.nan
+            dataframe[name+"_price_dist"] = np.nan
+            return dataframe
 
-        highs = dataframe["high"].values
-        lows = dataframe["low"].values
+        pairs = pd.merge_asof(
+            starts.sort_values("start"),
+            ends.sort_values("end"),
+            left_on="start",
+            right_on="end",
+            direction=d,
+        ).dropna()[["start", "end"]]
 
-        max_peaks = argrelextrema(highs, np.greater_equal, order=kernel)[0]
-        min_peaks = argrelextrema(lows, np.less_equal, order=kernel)[0]
+        if pairs.empty:
+            dataframe[name+"_max"] = np.nan
+            dataframe[name+"_index_dist"] = np.nan
+            dataframe[name+"_price_dist"] = np.nan
+            return dataframe
 
-        dataframe.loc[dataframe.index.isin(max_peaks), "pivot_high"] = dataframe["high"]
-        dataframe.loc[dataframe.index.isin(min_peaks), "pivot_low"] = dataframe["low"]
+        intervals = pd.IntervalIndex.from_arrays(pairs["start"], pairs["end"], closed="both")
+        df["range_id"] = pd.cut(df.index, intervals)
+
+        e = 'max' if col == 'high' else 'min'
+        group = df.groupby("range_id", observed=True)
+        df[name] = group[col].transform(e)
+
+        df[f"{name}_index_dist"] = group.cumcount() + 1
+        df[f"{name}_index_dist"] = group[f"{name}_index_dist"].transform('max')
+
+        hi = group['high'].transform('max')
+        lo = group['low'].transform('min')
+        df[f"{name}_price_dist"] = np.abs(hi - lo)
+
+        df.loc[
+            (df[col] != df[name]),
+            [name, f"{name}_index_dist", f"{name}_price_dist"]
+        ] = np.nan
+
+        dataframe = dataframe.merge(df[[name, f"{name}_index_dist", f"{name}_price_dist"]],
+                            left_index=True, right_index=True, how="left")
+
+        c1 = (dataframe[f'{name}_index_dist'] >= tt)
+        price_threshold = dataframe[f'{name}_price_dist'].quantile(pt)
+        c2 = (dataframe[f'{name}_price_dist'] >= price_threshold)
+        dataframe[f'{name}_filtered'] = np.where((c1 & c2), dataframe[name], np.nan)
+
+        dataframe[name] = dataframe[name].ffill()
+        
+        return dataframe
+
+    def populate_features(self, dataframe, rsi_high=70, rsi_low=30, tt=0, pt=0):
+
+        dataframe["rsi"] = ta.RSI(dataframe["close"], timeperiod=14)
+
+        c1 = qtpylib.crossed_above(dataframe["rsi"], rsi_high)
+        c2 = qtpylib.crossed_below(dataframe["rsi"], rsi_high)
+        dataframe = self.extract_features(dataframe, c1, c2, "high", "max_high", tt=tt, pt=pt)
+        dataframe = self.extract_features(dataframe, c2, c1, "low", "min_high", tt=tt, pt=pt)
+
+        c1 = qtpylib.crossed_below(dataframe["rsi"], rsi_low)
+        c2 = qtpylib.crossed_above(dataframe["rsi"], rsi_low)
+        dataframe = self.extract_features(dataframe, c1, c2, "low", "min_low", tt=tt, pt=pt)
+        dataframe = self.extract_features(dataframe, c2, c1, "high", "max_low", tt=tt, pt=pt)
+
+        dataframe.loc[dataframe['max_high'].notna(),"cat"] = 'H'
+        dataframe.loc[dataframe['min_low'].notna(),"cat"] = 'L'
+        dataframe['cat'] = dataframe['cat'].ffill()
 
         return dataframe
 
-    # ---------------------------------------------------------
-    # ATR Filter → sig_pivot_high / sig_pivot_low
-    # ---------------------------------------------------------
-    def filter_pivots_atr(self, dataframe: DataFrame, atr_mult: float = 1.0) -> DataFrame:
-        if "ATR" not in dataframe.columns:
-            dataframe["ATR"] = ta.ATR(dataframe, timeperiod=14)
-
-        dataframe["sig_pivot_high"] = np.where(
-            (dataframe["pivot_high"].notna()) &
-            ((dataframe["pivot_high"] - dataframe["pivot_high"].shift(1).ffill()).abs() >
-             atr_mult * dataframe["ATR"]),
-            dataframe["pivot_high"],
-            np.nan,
-        )
-
-        dataframe["sig_pivot_low"] = np.where(
-            (dataframe["pivot_low"].notna()) &
-            ((dataframe["pivot_low"] - dataframe["pivot_low"].shift(1).ffill()).abs() >
-             atr_mult * dataframe["ATR"]),
-            dataframe["pivot_low"],
-            np.nan,
-        )
-        return dataframe
-
-    # ---------------------------------------------------------
-    # Distance Filter
-    # ---------------------------------------------------------
-    def filter_pivots_distance(self, dataframe: DataFrame, min_distance: float = 0.004) -> DataFrame:
-        dataframe["sig_pivot_high_dist"] = np.where(
-            (dataframe["sig_pivot_high"].notna()) &
-            ((dataframe["sig_pivot_high"] - dataframe["sig_pivot_high"].shift(1).ffill()).abs() >
-             dataframe["close"] * min_distance),
-            dataframe["sig_pivot_high"],
-            np.nan,
-        )
-
-        dataframe["sig_pivot_low_dist"] = np.where(
-            (dataframe["sig_pivot_low"].notna()) &
-            ((dataframe["sig_pivot_low"] - dataframe["sig_pivot_low"].shift(1).ffill()).abs() >
-             dataframe["close"] * min_distance),
-            dataframe["sig_pivot_low"],
-            np.nan,
-        )
-        return dataframe
-
-    # ---------------------------------------------------------
-    # Structure Labeling
-    # ---------------------------------------------------------
-    def label_structure(self, dataframe: DataFrame) -> DataFrame:
-        prev_high = dataframe["sig_pivot_high"].ffill().shift(1)
-        dataframe["high_label"] = np.where(
-            dataframe["sig_pivot_high"].notna(),
-            np.where(dataframe["sig_pivot_high"] > prev_high, "HH", "LH"),
-            None,
-        )
-
-        prev_low = dataframe["sig_pivot_low"].ffill().shift(1)
-        dataframe["low_label"] = np.where(
-            dataframe["sig_pivot_low"].notna(),
-            np.where(dataframe["sig_pivot_low"] < prev_low, "LL", "HL"),
-            None,
-        )
-        return dataframe
-
-    # ---------------------------------------------------------
-    # Informative 4H — ساختار و ولتیلیتی
-    # ---------------------------------------------------------
-    @informative('4h')
-    def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        dataframe = self.detect_pivots(dataframe, kernel=2)
-        dataframe["ATR"] = ta.ATR(dataframe, timeperiod=14)
-        dataframe = self.filter_pivots_atr(dataframe, atr_mult=1.0)
-        dataframe = self.filter_pivots_distance(dataframe, min_distance=0.004)
-        dataframe = self.label_structure(dataframe)
-        # Bollinger برای ارزیابی رژیم ولتیلیتی
-        bb = ta.BBANDS(dataframe['close'], timeperiod=20, nbdevup=2, nbdevdn=2)
-        dataframe['bb_upper'] = bb['upperband']
-        dataframe['bb_middle'] = bb['middleband']
-        dataframe['bb_lower'] = bb['lowerband']
-        dataframe['bb_width'] = (dataframe['bb_upper'] - dataframe['bb_lower']) / dataframe['bb_middle']
-        return dataframe
-
-    # ---------------------------------------------------------
-    # Informative 1H — روند و قدرت
-    # ---------------------------------------------------------
     @informative('1h')
     def populate_indicators_1h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        dataframe = self.detect_pivots(dataframe, kernel=2)
-        dataframe["ATR"] = ta.ATR(dataframe, timeperiod=14)
-        dataframe = self.filter_pivots_atr(dataframe, atr_mult=1.0)
-        dataframe = self.label_structure(dataframe)
 
-        dataframe['ema200'] = ta.EMA(dataframe, timeperiod=200)
-        dataframe['adx'] = ta.ADX(dataframe, timeperiod=14)
-        dataframe['trend_up'] = ((dataframe['close'] > dataframe['ema200']) & (dataframe['ema200'].diff() > 0)).astype(int)
-        dataframe['trend_strength'] = (dataframe['adx'] > 25).astype(int)
+        dataframe = self.populate_features(dataframe, rsi_high=70, rsi_low=30, tt=3, pt=0.7)
+
+        return dataframe
+    
+    @informative('4h')
+    def populate_indicators_1h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+
+        dataframe = self.populate_features(dataframe, rsi_high=70, rsi_low=30, tt=3, pt=0.7)
+
         return dataframe
 
-    # ---------------------------------------------------------
-    # 15m — اندیکاتورها و مقدمات ورود
-    # ---------------------------------------------------------
+    @informative('1d')
+    def populate_indicators_1h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+
+        dataframe = self.populate_features(dataframe, rsi_high=70, rsi_low=30, tt=2, pt=0.6)
+
+        return dataframe
+    
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        dataframe["ATR"] = ta.ATR(dataframe, timeperiod=14)
-        dataframe["ema20"] = ta.EMA(dataframe, timeperiod=20)
-        dataframe["ema50"] = ta.EMA(dataframe, timeperiod=50)
-        dataframe["vol_ma20"] = ta.SMA(dataframe["volume"], timeperiod=20)
 
-        # BB برای ارزیابی شکست‌ها
-        bb = ta.BBANDS(dataframe['close'], timeperiod=20, nbdevup=2, nbdevdn=2)
-        dataframe['bb_upper'] = bb['upperband']
-        dataframe['bb_middle'] = bb['middleband']
-        dataframe['bb_lower'] = bb['lowerband']
-        dataframe['bb_width'] = (dataframe['bb_upper'] - dataframe['bb_lower']) / dataframe['bb_middle']
-
-        dataframe = self.detect_pivots(dataframe, kernel=self.kernel)
-        dataframe = self.filter_pivots_atr(dataframe, atr_mult=1.0)
-        dataframe = self.filter_pivots_distance(dataframe, min_distance=0.004)
-        dataframe = self.label_structure(dataframe)
-
-        # آخرین سطوح
-        dataframe["last_sig_low"] = dataframe["sig_pivot_low_dist"].ffill()
-        dataframe["last_sig_high"] = dataframe["sig_pivot_high_dist"].ffill()
-
-        # محاسبه‌ی R:R هدف (Target ≈ 2.5×ATR تا 3×ATR)
-        cost_buf = 0.0005
-        dataframe["risk_base"] = (dataframe["close"] - dataframe["last_sig_low"]).clip(lower=1e-9)
-        dataframe["reward_base"] = (2.7 * dataframe["ATR"] - cost_buf * dataframe["close"]).clip(lower=0)
-        dataframe["rr_long"] = (dataframe["reward_base"] / dataframe["risk_base"]).where(
-            (dataframe["reward_base"] > 0) & (dataframe["risk_base"] > 0)
-        )
-
-        for col in [
-            "high_label", "low_label",
-            "high_label_4h", "low_label_4h",
-            "high_label_1h", "low_label_1h",
-            "trend_up_1h", "trend_strength_1h",
-            "sig_pivot_high_dist", "sig_pivot_low_dist",
-            "last_sig_low", "last_sig_high",
-            "rr_long", "vol_ma20", "bb_width", "bb_width_4h",
-        ]:
-            if col in dataframe.columns:
-                dataframe[col] = dataframe[col].ffill()
+        dataframe = self.populate_features(dataframe, rsi_high=70, rsi_low=30, tt=3, pt=0.8)
 
         return dataframe
 
-    # ---------------------------------------------------------
-    # Entry Logic — شکست معتبر + Retest برای استاپ کوچک
-    # ---------------------------------------------------------
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        # ساختارهای مولتی‌تایم‌فریم
-        hl4 = dataframe["high_label_4h"].ffill()
-        ll4 = dataframe["low_label_4h"].ffill()
-        hl1 = dataframe["high_label_1h"].ffill()
-        ll1 = dataframe["low_label_1h"].ffill()
-        ll = dataframe["low_label"].ffill()
 
-        # روند و قدرت
-        trend_up = dataframe['trend_up_1h'].ffill()
-        trend_str = dataframe['trend_strength_1h'].ffill()
+        dataframe.loc[
+            (   (dataframe['min_low'] > dataframe['min_low_4h']) & # Guard
+                (qtpylib.crossed_above(dataframe["rsi"], 30)) # Trigger
+            ),
+            "enter_long"
+        ] = 1
 
-        # سطوح و حجم
-        lvl_high = dataframe["sig_pivot_high_dist"].ffill()
-        vol_ma = dataframe["vol_ma20"].ffill()
-
-        # شرایط شکست معتبر (دو کلوز + حجم)
-        break_up = (
-            (dataframe['close'] > lvl_high) &
-            (dataframe['close'].shift(1) > lvl_high) &
-            (dataframe['volume'] > vol_ma)
-        )
-
-        # Retest: برگشت قیمت به سطحِ شکست (برای استاپ نزدیک و منطقی)
-        retest = (
-            (dataframe['low'] <= lvl_high * 1.0005) &  # لمس سطح با کمی بافر
-            (dataframe['close'] >= lvl_high)           # کلوز بالای سطح
-        )
-
-        # رژیم ولتیلیتی: BB در 4h خیلی بسته نباشد (شکست‌های کاذب کمتر)
-        bb_ok = (dataframe.get('bb_width_4h', dataframe['bb_width']) > 0.02)
-
-        long_cond = (
-            (hl4 == "HH") & (ll4 == "HL") &
-            (hl1 == "HH") & (ll1 == "HL") &
-            (ll == "HL") &
-            (trend_up == 1) & (trend_str == 1) &
-            break_up & retest & bb_ok &
-            (dataframe["rr_long"] >= 3.0)  # R:R بسیار بالا
-        )
-
-        dataframe.loc[long_cond, "enter_long"] = 1
-        dataframe.loc[long_cond, "enter_tag"] = "break_retest_highRR"
+        dataframe.loc[
+            (
+                (dataframe['max_high'] < dataframe['max_high_4h']) & # Guard
+                (qtpylib.crossed_below(dataframe["rsi"], 70)) # Trigger
+            ),
+            "enter_short"
+        ] = 1
 
         return dataframe
 
-    # ---------------------------------------------------------
-    # Exit Logic — مدیریت با استاپ داینامیک و ROI پله‌ای
-    # ---------------------------------------------------------
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        # خروج‌ها با custom_stoploss مدیریت می‌شوند؛
-        # در صورت نیاز می‌توان سیگنال‌های خروج اضافه کرد.
+
         return dataframe
 
-    # ---------------------------------------------------------
-    # Position Sizing — 0.5% از موجودی آزاد با توجه به ریسک واقعی
-    # ---------------------------------------------------------
-    def custom_stake_amount(
-        self,
-        pair: str,
-        current_time: datetime,
-        current_rate: float,
-        proposed_stake: float,
-        min_stake: Optional[float],
-        max_stake: float,
-        leverage: float,
-        entry_tag: Optional[str],
-        side: str,
-        **kwargs,
-    ) -> float:
-
+    def get_initial_stop(self, pair, side):
+        
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        last = dataframe.iloc[-1].squeeze()
+        last_candle = dataframe.iloc[-1].squeeze()
+        name = "max_high" if side == "short" else "min_low"
+        return float(last_candle[name])
 
-        stop_level = float(last.get("last_sig_low", np.nan))
-        try:
-            free = float(self.wallets.get_free(pair=pair))
-        except Exception:
-            free = max_stake
+    def leverage(self, pair: str, current_time: datetime, current_rate: float,
+                 proposed_leverage: float, max_leverage: float, entry_tag: Optional[str], side: str,
+                 **kwargs) -> float:
 
-        if np.isnan(stop_level) or stop_level == 0 or free <= 0:
-            return float(min(proposed_stake, max_stake))
+        stop = self.get_initial_stop(pair, side)
+        if stop is None or np.isnan(stop): return 1.0
+        risk = abs(stop / current_rate - 1)
+        if risk == 0: return 1.0
+        lev = self.trade_max_loss_allowed / risk
+        return float(max(1, min(ceil(lev), max_leverage)))
 
-        risk = abs(stop_level / current_rate - 1)
-        allowed_loss = free * self.trade_max_loss_allowed
-        stake = allowed_loss / max(risk, 1e-9)
+    def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
+                            proposed_stake: float, min_stake: Optional[float], max_stake: float,
+                            leverage: float, entry_tag: Optional[str], side: str,
+                            **kwargs) -> float:
 
-        return float(max(min(stake, free, max_stake), min_stake or 0.0))
+        stop = self.get_initial_stop(pair, side)
+        if stop is None or np.isnan(stop): return 0
+        risk = abs(stop / current_rate - 1)
+        total_stake = max_stake + Trade.total_open_trades_stakes()
+        stake = total_stake * self.trade_max_loss_allowed / (risk * leverage)
+        return float(min(stake, max_stake))
 
-    # ---------------------------------------------------------
-    # Custom Stoploss — استاپ اولیه کوچک + تریلینگ پس از BE
-    # ---------------------------------------------------------
-    def custom_stoploss(
-        self,
-        pair: str,
-        trade: Trade,
-        current_time: datetime,
-        current_rate: float,
-        current_profit: float,
-        after_fill: bool,
-        **kwargs,
-    ) -> Optional[float]:
+    def adjust_trade_position(self, trade: Trade, current_time: datetime,
+                              current_rate: float, current_profit: float,
+                              min_stake: float | None, max_stake: float,
+                              current_entry_rate: float, current_exit_rate: float,
+                              current_entry_profit: float, current_exit_profit: float,
+                              **kwargs
+                              ) -> float | None | tuple[float | None, str | None]:
 
+        risk = trade.get_custom_data(key='risk')
+        if (current_profit > 2 * risk) and (trade.nr_of_successful_exits == 0):
+            return - trade.stake_amount * 0.3
+
+    def get_trailing_stop(self, pair, side, tf):
+        
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        last = dataframe.iloc[-1].squeeze()
+        last_candle = dataframe.iloc[-1].squeeze()
+        name = f"min_high_{tf}" if side == "short" else f"min_high_{tf}"
+        return float(last_candle[name]), last_candle[f'cat_{tf}']
+    
+    def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
+                        current_rate: float, current_profit: float, after_fill: bool,
+                        **kwargs) -> Optional[float]:
 
-        raw_pivot = float(last.get("last_sig_low", np.nan))
-        if np.isnan(raw_pivot):
-            return 0.02  #fallback
+        stop = trade.get_custom_data("stop")
+        if stop is None:
+            stop = self.get_initial_stop(pair, trade.entry_side)
+            trade.set_custom_data("stop", float(stop))
 
-        current_stop = trade.get_custom_data("stop")
-        if current_stop is None:
-            atr = float(last.get("ATR", np.nan))
-            offset = (0.5 * atr) if not np.isnan(atr) else (current_rate * 0.003)  # کوچک اما منطقی
+            risk = abs(stop / trade.open_rate - 1)
+            trade.set_custom_data("risk", risk)
+            self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
-            # استاپ زیر سوئینگ لو + آفست
-            stop = raw_pivot - offset
-            trade.set_custom_data(key="stop", value=stop)
+        if trade.is_short and stop is not None and not np.isnan(stop):
+            trailing_stop, cat = self.get_trailing_stop(pair, trade.entry_side, '1h')
+            if (trailing_stop < stop) and cat == 'L':
+                trade.set_custom_data("stop", trailing_stop)
 
-            init_risk = abs(stop / trade.open_rate - 1)
-            trade.set_custom_data(key="risk", value=init_risk)
+        if not trade.is_short and stop is not None and not np.isnan(stop):
+            trailing_stop, cat = self.get_trailing_stop(pair, trade.entry_side, '1h')
+            if (trailing_stop > stop) and cat == 'H':
+                trade.set_custom_data("stop", trailing_stop)
 
-            current_stop = stop
-
-        # تا قبل از BE + 0.4% تریل نکن
-        be_threshold = 0.004
-        if current_profit < be_threshold:
-            final_stop = trade.get_custom_data("stop")
-            return stoploss_from_absolute(
-                final_stop,
-                current_rate,
-                is_short=False,
-                leverage=trade.leverage,
-            )
-
-        # پس از BE: تریل روی max(EMA20, آخرین سوئینگ لو جدید) — محافظه‌کار
-        ema20 = float(last.get("ema20", np.nan))
-        trail_ref = raw_pivot
-        if not np.isnan(ema20):
-            trail_ref = max(trail_ref, ema20)
-
-        if trail_ref > current_stop:
-            trade.set_custom_data(key="stop", value=trail_ref)
-
-        final_stop = trade.get_custom_data("stop")
         return stoploss_from_absolute(
-            final_stop,
+            trade.get_custom_data("stop"),
             current_rate,
-            is_short=False,
+            is_short=trade.is_short,
             leverage=trade.leverage,
         )
