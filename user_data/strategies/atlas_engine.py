@@ -53,9 +53,9 @@ class AtlasEngine(IStrategy):
         ends   = df.loc[c2].reset_index().rename(columns={"index": "end"})[['end']]
 
         if starts.empty or ends.empty:
-            dataframe[name+"_max"] = np.nan
-            dataframe[name+"_index_dist"] = np.nan
-            dataframe[name+"_price_dist"] = np.nan
+            dataframe[name] = np.nan
+            dataframe[f"{name}_index_dist"] = np.nan
+            dataframe[f"{name}_price_dist"] = np.nan
             return dataframe
 
         pairs = pd.merge_asof(
@@ -67,9 +67,9 @@ class AtlasEngine(IStrategy):
         ).dropna()[["start", "end"]]
 
         if pairs.empty:
-            dataframe[name+"_max"] = np.nan
-            dataframe[name+"_index_dist"] = np.nan
-            dataframe[name+"_price_dist"] = np.nan
+            dataframe[name] = np.nan
+            dataframe[f"{name}_index_dist"] = np.nan
+            dataframe[f"{name}_price_dist"] = np.nan
             return dataframe
 
         intervals = pd.IntervalIndex.from_arrays(pairs["start"], pairs["end"], closed="both")
