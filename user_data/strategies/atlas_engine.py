@@ -49,8 +49,8 @@ class AtlasEngine(IStrategy):
         
         df = dataframe.copy()
 
-        starts = df.loc[c1].reset_index().rename(columns={"index": "start"})[['start']]
-        ends   = df.loc[c2].reset_index().rename(columns={"index": "end"})[['end']]
+        starts = df.loc[c1].reset_index().rename(columns={"index": "start"})
+        ends   = df.loc[c2].reset_index().rename(columns={"index": "end"})
 
         if starts.empty or ends.empty:
             dataframe[name] = np.nan
@@ -59,8 +59,8 @@ class AtlasEngine(IStrategy):
             return dataframe
 
         pairs = pd.merge_asof(
-            starts.sort_values("start"),
-            ends.sort_values("end"),
+            starts[['start']].sort_values("start"),
+            ends[['end']].sort_values("end"),
             left_on="start",
             right_on="end",
             direction=d,
@@ -228,20 +228,20 @@ class AtlasEngine(IStrategy):
 
         stop = trade.get_custom_data("stop")
         if stop is None:
-            stop = self.get_initial_stop(pair, trade.entry_side)
+            stop = self.get_initial_stop(pair, trade.trade_direction)
             trade.set_custom_data("stop", stop)
             risk = abs(stop / trade.open_rate - 1)
             trade.set_custom_data("risk", risk)
             self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
         if trade.is_short and stop is not None and not np.isnan(stop):
-            trailing_stop, cat = self.get_trailing_stop(pair, trade.entry_side, '1h')
-            if (trailing_stop < stop) and cat == 'L':
+            trailing_stop, cat = self.get_trailing_stop(pair, trade.trade_direction, '1h')
+            if (trailing_stop < stop) and cat == 'L' and (current_rate < trailing_stop):
                 trade.set_custom_data("stop", trailing_stop)
 
         if not trade.is_short and stop is not None and not np.isnan(stop):
-            trailing_stop, cat = self.get_trailing_stop(pair, trade.entry_side, '1h')
-            if (trailing_stop > stop) and cat == 'H':
+            trailing_stop, cat = self.get_trailing_stop(pair, trade.trade_direction, '1h')
+            if (trailing_stop > stop) and cat == 'H' and (current_rate > trailing_stop):
                 trade.set_custom_data("stop", trailing_stop)
 
         return stoploss_from_absolute(
