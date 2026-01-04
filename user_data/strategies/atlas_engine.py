@@ -219,7 +219,7 @@ class AtlasEngine(IStrategy):
         
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
-        name = f"min_high_{tf}" if side == "short" else f"min_high_{tf}"
+        name = f"max_low_{tf}" if side == "short" else f"min_high_{tf}"
         return float(last_candle[name]), last_candle[f'cat_{tf}']
     
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
@@ -229,8 +229,7 @@ class AtlasEngine(IStrategy):
         stop = trade.get_custom_data("stop")
         if stop is None:
             stop = self.get_initial_stop(pair, trade.entry_side)
-            trade.set_custom_data("stop", float(stop))
-
+            trade.set_custom_data("stop", stop)
             risk = abs(stop / trade.open_rate - 1)
             trade.set_custom_data("risk", risk)
             self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
