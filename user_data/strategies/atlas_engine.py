@@ -243,7 +243,7 @@ class AtlasEngine(IStrategy):
             trailing_stop, cat = self.get_trailing_stop(pair, trade.entry_side, '1h')
             if (trailing_stop > stop) and cat == 'H':
                 trade.set_custom_data("stop", trailing_stop)
-        print(trade.get_custom_data("stop"))
+        self.dp.send_msg(trade.get_custom_data("stop"))
         return stoploss_from_absolute(
             trade.get_custom_data("stop"),
             current_rate,
