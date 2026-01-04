@@ -37,7 +37,7 @@ class AtlasEngine(IStrategy):
         "exit": "limit",
         "emergency_exit": "market",
         "stoploss": "market",
-        "stoploss_on_exchange": True,
+        "stoploss_on_exchange": False,
         "stoploss_on_exchange_interval": 60,
         "stoploss_on_exchange_limit_ratio": 0.99,
     }
