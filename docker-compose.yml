@@ -2,7 +2,7 @@
 version: '3'
 services:
   atlas_engine:
-      image: freqtradeorg/freqtrade:develop_freqai
+      image: freqtradeorg/freqtrade:stable
       restart: unless-stopped
       container_name: AtlasEngine
       dns:
