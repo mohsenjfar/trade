@@ -236,12 +236,12 @@ class AtlasEngine(IStrategy):
 
         if trade.is_short and stop is not None and not np.isnan(stop):
             trailing_stop, cat = self.get_trailing_stop(pair, trade.trade_direction, '1h')
-            if (trailing_stop < stop) and cat == 'L' and (current_rate < trailing_stop):
+            if (trailing_stop < stop) and cat == 'L':
                 trade.set_custom_data("stop", trailing_stop)
 
         if not trade.is_short and stop is not None and not np.isnan(stop):
             trailing_stop, cat = self.get_trailing_stop(pair, trade.trade_direction, '1h')
-            if (trailing_stop > stop) and cat == 'H' and (current_rate > trailing_stop):
+            if (trailing_stop > stop) and cat == 'H':
                 trade.set_custom_data("stop", trailing_stop)
 
         return stoploss_from_absolute(
