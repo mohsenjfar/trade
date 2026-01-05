@@ -155,7 +155,9 @@ class AtlasEngine(IStrategy):
         dataframe.loc[
             (   (dataframe['min_low'] > dataframe['min_low_1d']) & # Guard
                 (dataframe['cat_1d'] == "L") & # Guard
-                (qtpylib.crossed_above(dataframe["rsi"], 30)) # Trigger
+                (dataframe['cat'] == "L") & # Guard
+                (dataframe['rsi'] > 30) & # Guard
+                (qtpylib.crossed_above(dataframe["close"], dataframe['max_high'])) # Trigger
             ),
             "enter_long"
         ] = 1
@@ -164,7 +166,9 @@ class AtlasEngine(IStrategy):
             (
                 (dataframe['max_high'] < dataframe['max_high_1d']) & # Guard
                 (dataframe['cat_1d'] == "H") & # Guard
-                (qtpylib.crossed_below(dataframe["rsi"], 70)) # Trigger
+                (dataframe['cat'] == "H") & # Guard
+                (dataframe['rsi'] < 70) & # Guard
+                (qtpylib.crossed_below(dataframe["close"], dataframe['max_high'])) # Trigger
             ),
             "enter_short"
         ] = 1
@@ -237,12 +241,12 @@ class AtlasEngine(IStrategy):
             self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
         if trade.is_short and stop is not None and not np.isnan(stop):
-            trailing_stop, cat, rsi = self.get_trailing_stop(pair, trade.trade_direction, '4h')
+            trailing_stop, cat, rsi = self.get_trailing_stop(pair, trade.trade_direction, '1h')
             if (trailing_stop < stop) and cat == 'L' and (trailing_stop > current_rate) and rsi < 30:
                 trade.set_custom_data("stop", trailing_stop)
 
         if not trade.is_short and stop is not None and not np.isnan(stop):
-            trailing_stop, cat, rsi = self.get_trailing_stop(pair, trade.trade_direction, '4h')
+            trailing_stop, cat, rsi = self.get_trailing_stop(pair, trade.trade_direction, '1h')
             if (trailing_stop > stop) and cat == 'H' and (trailing_stop < current_rate) and rsi > 70:
                 trade.set_custom_data("stop", trailing_stop)
 
