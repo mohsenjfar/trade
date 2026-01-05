@@ -1,5 +1,5 @@
 {
-  "max_open_trades": 1,
+  "max_open_trades": 4,
   "stake_currency": "USDT",
   "stake_amount": "unlimited",
   "tradable_balance_ratio": 0.99,
@@ -38,10 +38,10 @@
     "secret": "",
     "pair_whitelist": [
       "BTC/USDT:USDT",
-      // "ETH/USDT:USDT",
-      // "BNB/USDT:USDT",
-      // "WIF/USDT:USDT",
-      // "SOL/USDT:USDT"
+      "ETH/USDT:USDT",
+      "BNB/USDT:USDT",
+      "WIF/USDT:USDT",
+      "SOL/USDT:USDT"
     ],
     "pair_blacklist": [
     ]
