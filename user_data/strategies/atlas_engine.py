@@ -153,20 +153,20 @@ class AtlasEngine(IStrategy):
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe.loc[
-            (   (dataframe['min_low'] > dataframe['min_low_1d']) & # Guard
-                (dataframe['rsi_1h'] > 50) & # Guard
+            (   (dataframe['min_low_1h'] > dataframe['min_low_1d']) & # Guard
+                # (dataframe['rsi_1h'] > 50) & # Guard
                 (dataframe['cat_1d'] == "L") & # Guard
-                (qtpylib.crossed_above(dataframe["rsi"], 30)) # Trigger
+                (qtpylib.crossed_above(dataframe["rsi_1h"], 30)) # Trigger
             ),
             "enter_long"
         ] = 1
 
         dataframe.loc[
             (
-                (dataframe['min_low'] < dataframe['max_high_1d']) & # Guard
-                (dataframe['rsi_1h'] < 50) & # Guard
+                (dataframe['min_low_1h'] < dataframe['max_high_1d']) & # Guard
+                # (dataframe['rsi_1h'] < 50) & # Guard
                 (dataframe['cat_1d'] == "H") & # Guard
-                (qtpylib.crossed_below(dataframe["rsi"], 70)) # Trigger
+                (qtpylib.crossed_below(dataframe["rsi_1h"], 70)) # Trigger
             ),
             "enter_short"
         ] = 1
