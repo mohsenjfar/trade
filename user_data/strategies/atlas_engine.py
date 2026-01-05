@@ -153,8 +153,8 @@ class AtlasEngine(IStrategy):
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe.loc[
-            (   (dataframe['min_low'] > dataframe['min_low_4h']) & # Guard
-                (dataframe['cat_4h'] == "L") & # Guard
+            (   (dataframe['min_low'] > dataframe['min_low_1d']) & # Guard
+                (dataframe['cat_1d'] == "L") & # Guard
                 (qtpylib.crossed_above(dataframe["rsi"], 30)) # Trigger
             ),
             "enter_long"
@@ -162,8 +162,8 @@ class AtlasEngine(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['max_high'] < dataframe['max_high_4h']) & # Guard
-                (dataframe['cat_4h'] == "H") & # Guard
+                (dataframe['max_high'] < dataframe['max_high_1d']) & # Guard
+                (dataframe['cat_1d'] == "H") & # Guard
                 (qtpylib.crossed_below(dataframe["rsi"], 70)) # Trigger
             ),
             "enter_short"
@@ -237,12 +237,12 @@ class AtlasEngine(IStrategy):
             self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
         if trade.is_short and stop is not None and not np.isnan(stop):
-            trailing_stop, cat, rsi = self.get_trailing_stop(pair, trade.trade_direction, '1h')
+            trailing_stop, cat, rsi = self.get_trailing_stop(pair, trade.trade_direction, '4h')
             if (trailing_stop < stop) and cat == 'L' and (trailing_stop > current_rate) and rsi < 30:
                 trade.set_custom_data("stop", trailing_stop)
 
         if not trade.is_short and stop is not None and not np.isnan(stop):
-            trailing_stop, cat, rsi = self.get_trailing_stop(pair, trade.trade_direction, '1h')
+            trailing_stop, cat, rsi = self.get_trailing_stop(pair, trade.trade_direction, '4h')
             if (trailing_stop > stop) and cat == 'H' and (trailing_stop < current_rate) and rsi > 70:
                 trade.set_custom_data("stop", trailing_stop)
 
