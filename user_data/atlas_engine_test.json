@@ -52,7 +52,7 @@
     }
   ],
   "telegram": {
-    "enabled": true,
+    "enabled": false,
     "token": "",
     "chat_id": "",
     "keyboard": [
@@ -68,7 +68,7 @@
     "process_throttle_secs": 5
   },
   "api_server": {
-    "enabled": true,
+    "enabled": false,
     "listen_ip_address": "0.0.0.0",
     "listen_port": 8080,
     "verbosity": "error",

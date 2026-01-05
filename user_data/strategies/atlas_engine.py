@@ -222,7 +222,7 @@ class AtlasEngine(IStrategy):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
         name = f"max_low_{tf}" if side == "short" else f"min_high_{tf}"
-        return float(last_candle[name]), last_candle[f'cat_{tf}']
+        return float(last_candle[name]), last_candle[f'cat_{tf}'], last_candle[f'rsi_{tf}']
     
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
                         current_rate: float, current_profit: float, after_fill: bool,
@@ -237,13 +237,13 @@ class AtlasEngine(IStrategy):
             self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
         if trade.is_short and stop is not None and not np.isnan(stop):
-            trailing_stop, cat = self.get_trailing_stop(pair, trade.trade_direction, '1h')
-            if (trailing_stop < stop) and cat == 'L' and (trailing_stop > current_rate):
+            trailing_stop, cat, rsi = self.get_trailing_stop(pair, trade.trade_direction, '1h')
+            if (trailing_stop < stop) and cat == 'L' and (trailing_stop > current_rate) and rsi < 30:
                 trade.set_custom_data("stop", trailing_stop)
 
         if not trade.is_short and stop is not None and not np.isnan(stop):
-            trailing_stop, cat = self.get_trailing_stop(pair, trade.trade_direction, '1h')
-            if (trailing_stop > stop) and cat == 'H' and (trailing_stop < current_rate):
+            trailing_stop, cat, rsi = self.get_trailing_stop(pair, trade.trade_direction, '1h')
+            if (trailing_stop > stop) and cat == 'H' and (trailing_stop < current_rate) and rsi > 70:
                 trade.set_custom_data("stop", trailing_stop)
 
         return stoploss_from_absolute(
