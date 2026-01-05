@@ -97,7 +97,7 @@ class AtlasEngine(IStrategy):
         c1 = (dataframe[f'{name}_index_dist'] >= tt)
         price_threshold = dataframe[f'{name}_price_dist'].quantile(pt)
         c2 = (dataframe[f'{name}_price_dist'] >= price_threshold)
-        dataframe[f'{name}_filtered'] = np.where((c1 & c2), dataframe[name], np.nan)
+        dataframe[name] = np.where((c1 & c2), dataframe[name], np.nan)
 
         dataframe[name] = dataframe[name].ffill()
         
