@@ -157,7 +157,7 @@ class AtlasEngine(IStrategy):
                 (dataframe['cat_1d'] == "L") & # Guard
                 (dataframe['cat'] == "L") & # Guard
                 (dataframe['rsi'] > 30) & # Guard
-                (qtpylib.crossed_above(dataframe["close"], dataframe['max_high'])) # Trigger
+                (qtpylib.crossed_above(dataframe["close"], dataframe['min_low'])) # Trigger
             ),
             "enter_long"
         ] = 1
