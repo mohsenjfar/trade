@@ -135,16 +135,16 @@ class AtlasEngine(IStrategy):
 
     #     return dataframe
 
-    @informative('1d')
-    def populate_indicators_1d(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+    # @informative('1d')
+    # def populate_indicators_1d(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe = self.populate_features(dataframe, rsi_high=70, rsi_low=30, tt=2, pt=0.6)
+    #     dataframe = self.populate_features(dataframe, rsi_high=70, rsi_low=30, tt=2, pt=0)
 
-        return dataframe
+    #     return dataframe
     
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe = self.populate_features(dataframe, rsi_high=70, rsi_low=30, tt=3, pt=0.8)
+        dataframe = self.populate_features(dataframe, rsi_high=70, rsi_low=30, tt=2, pt=0)
 
         return dataframe
 
