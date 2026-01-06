@@ -98,8 +98,6 @@ class AtlasEngine(IStrategy):
         price_threshold = dataframe[f'{name}_price_dist'].quantile(pt)
         c2 = (dataframe[f'{name}_price_dist'] >= price_threshold)
         dataframe[name] = np.where((c1 & c2), dataframe[name], np.nan)
-
-        dataframe[name] = dataframe[name].ffill()
         
         return dataframe
 
@@ -123,19 +121,19 @@ class AtlasEngine(IStrategy):
 
         return dataframe
 
-    @informative('1h')
-    def populate_indicators_1h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+    # @informative('1h')
+    # def populate_indicators_1h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe = self.populate_features(dataframe, rsi_high=70, rsi_low=30, tt=3, pt=0.7)
+    #     dataframe = self.populate_features(dataframe, rsi_high=70, rsi_low=30, tt=3, pt=0.7)
 
-        return dataframe
+    #     return dataframe
     
-    @informative('4h')
-    def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+    # @informative('4h')
+    # def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe = self.populate_features(dataframe, rsi_high=70, rsi_low=30, tt=3, pt=0.7)
+    #     dataframe = self.populate_features(dataframe, rsi_high=70, rsi_low=30, tt=3, pt=0.7)
 
-        return dataframe
+    #     return dataframe
 
     @informative('1d')
     def populate_indicators_1d(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
@@ -153,22 +151,18 @@ class AtlasEngine(IStrategy):
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe.loc[
-            (   (dataframe['min_low'] > dataframe['min_low_1d']) & # Guard
+            (   (dataframe['min_low'].ffill() > dataframe['min_low_1d'].ffill()) & # Guard
                 (dataframe['cat_1d'] == "L") & # Guard
-                (dataframe['cat'] == "L") & # Guard
-                (dataframe['rsi'] > 30) & # Guard
-                (qtpylib.crossed_above(dataframe["close"], dataframe['min_low'])) # Trigger
+                (qtpylib.crossed_above(dataframe["rsi"], 30)) # Trigger
             ),
             "enter_long"
         ] = 1
 
         dataframe.loc[
             (
-                (dataframe['max_high'] < dataframe['max_high_1d']) & # Guard
+                (dataframe['max_high'].ffill() < dataframe['max_high_1d'].ffill()) & # Guard
                 (dataframe['cat_1d'] == "H") & # Guard
-                (dataframe['cat'] == "H") & # Guard
-                (dataframe['rsi'] < 70) & # Guard
-                (qtpylib.crossed_below(dataframe["close"], dataframe['max_high'])) # Trigger
+                (qtpylib.crossed_below(dataframe["rsi"], 70)) # Trigger
             ),
             "enter_short"
         ] = 1
@@ -181,9 +175,11 @@ class AtlasEngine(IStrategy):
 
     def get_initial_stop(self, pair, side):
         
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        last_candle = dataframe.iloc[-1].squeeze()
+        dataframe_, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        dataframe = dataframe_.copy()
         name = "max_high" if side == "short" else "min_low"
+        dataframe[name] = dataframe[name].ffill()
+        last_candle = dataframe.iloc[-1].squeeze()
         return float(last_candle[name])
 
     def leverage(self, pair: str, current_time: datetime, current_rate: float,
@@ -221,12 +217,14 @@ class AtlasEngine(IStrategy):
         if (current_profit > 2 * risk) and (trade.nr_of_successful_exits == 0):
             return - trade.stake_amount * 0.3
 
-    def get_trailing_stop(self, pair, side, tf):
+    def get_trailing_stop(self, pair, side, tf=''):
         
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        dataframe_, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        dataframe = dataframe_.copy()
+        name = f"max_low{tf}" if side == "short" else f"min_high{tf}"
+        dataframe[name] = dataframe[name].ffill()
         last_candle = dataframe.iloc[-1].squeeze()
-        name = f"max_low_{tf}" if side == "short" else f"min_high_{tf}"
-        return float(last_candle[name]), last_candle[f'cat_{tf}'], last_candle[f'rsi_{tf}']
+        return float(last_candle[name]), last_candle[f'cat{tf}'], last_candle[f'rsi{tf}']
     
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
                         current_rate: float, current_profit: float, after_fill: bool,
@@ -241,12 +239,12 @@ class AtlasEngine(IStrategy):
             self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
         if trade.is_short and stop is not None and not np.isnan(stop):
-            trailing_stop, cat, rsi = self.get_trailing_stop(pair, trade.trade_direction, '1h')
+            trailing_stop, cat, rsi = self.get_trailing_stop(pair, trade.trade_direction)
             if (trailing_stop < stop) and cat == 'L' and (trailing_stop > current_rate) and rsi < 30:
                 trade.set_custom_data("stop", trailing_stop)
 
         if not trade.is_short and stop is not None and not np.isnan(stop):
-            trailing_stop, cat, rsi = self.get_trailing_stop(pair, trade.trade_direction, '1h')
+            trailing_stop, cat, rsi = self.get_trailing_stop(pair, trade.trade_direction)
             if (trailing_stop > stop) and cat == 'H' and (trailing_stop < current_rate) and rsi > 70:
                 trade.set_custom_data("stop", trailing_stop)
 
