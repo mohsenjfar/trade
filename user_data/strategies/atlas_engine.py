@@ -121,26 +121,26 @@ class AtlasEngine(IStrategy):
 
         return dataframe
 
-    # @informative('1h')
-    # def populate_indicators_1h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+    @informative('1h')
+    def populate_indicators_1h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-    #     dataframe = self.populate_features(dataframe, rsi_high=70, rsi_low=30, tt=3, pt=0.7)
+        dataframe = self.populate_features(dataframe, rsi_high=70, rsi_low=30, tt=3, pt=0.7)
 
-    #     return dataframe
+        return dataframe
     
-    # @informative('4h')
-    # def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+    @informative('4h')
+    def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-    #     dataframe = self.populate_features(dataframe, rsi_high=70, rsi_low=30, tt=3, pt=0.7)
+        dataframe = self.populate_features(dataframe, rsi_high=70, rsi_low=30, tt=3, pt=0.7)
 
-    #     return dataframe
+        return dataframe
 
-    # @informative('1d')
-    # def populate_indicators_1d(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+    @informative('1d')
+    def populate_indicators_1d(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-    #     dataframe = self.populate_features(dataframe, rsi_high=70, rsi_low=30, tt=2, pt=0)
+        dataframe = self.populate_features(dataframe, rsi_high=70, rsi_low=30, tt=2, pt=0)
 
-    #     return dataframe
+        return dataframe
     
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
@@ -151,7 +151,7 @@ class AtlasEngine(IStrategy):
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe.loc[
-            (   
+            (   (dataframe["rsi_4h"] > 50) &
                 (qtpylib.crossed_above(dataframe["close"], dataframe["max_high"].ffill())) # Trigger
             ),
             "enter_long"
@@ -159,6 +159,7 @@ class AtlasEngine(IStrategy):
 
         dataframe.loc[
             (
+                (dataframe["rsi_4h"] < 50) &
                 (qtpylib.crossed_below(dataframe["close"], dataframe["min_low"].ffill())) # Trigger
             ),
             "enter_short"
@@ -236,12 +237,12 @@ class AtlasEngine(IStrategy):
             self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
         if trade.is_short and stop is not None and not np.isnan(stop):
-            trailing_stop, cat, rsi = self.get_trailing_stop(pair, trade.trade_direction)
+            trailing_stop, cat, rsi = self.get_trailing_stop(pair, trade.trade_direction, "_4h")
             if (trailing_stop < stop) and cat == 'L' and (trailing_stop > current_rate) and rsi < 30:
                 trade.set_custom_data("stop", trailing_stop)
 
         if not trade.is_short and stop is not None and not np.isnan(stop):
-            trailing_stop, cat, rsi = self.get_trailing_stop(pair, trade.trade_direction)
+            trailing_stop, cat, rsi = self.get_trailing_stop(pair, trade.trade_direction, "_4h")
             if (trailing_stop > stop) and cat == 'H' and (trailing_stop < current_rate) and rsi > 70:
                 trade.set_custom_data("stop", trailing_stop)
 
