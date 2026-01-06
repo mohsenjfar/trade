@@ -47,16 +47,16 @@ class AtlasEngine(IStrategy):
     buy_max_rsi = IntParameter(low=51, high=100, default=70, optimize=True, load=True)
     buy_min_rsi = IntParameter(low=1, high=50, default=30, optimize=True, load=True)
     
-    buy_long_pt = DecimalParameter(low=0.01, high=0.9,default=0.05, decimals=2, optimize=True, load=True)
+    buy_long_pt = DecimalParameter(low=0.01, high=0.9,default=0.01, decimals=2, optimize=True, load=True)
     buy_long_tt = IntParameter(low=1, high=10, default=2, optimize=True, load=True)
 
-    buy_short_pt = DecimalParameter(low=0.01, high=0.9,default=0.05, decimals=2, optimize=True, load=True)
+    buy_short_pt = DecimalParameter(low=0.01, high=0.9,default=0.01, decimals=2, optimize=True, load=True)
     buy_short_tt = IntParameter(low=1, high=10, default=2, optimize=True, load=True)
 
-    sell_long_pt = DecimalParameter(low=0.01, high=0.9,default=0.05, decimals=2, optimize=True, load=True)
+    sell_long_pt = DecimalParameter(low=0.01, high=0.9,default=0.01, decimals=2, optimize=True, load=True)
     sell_long_tt = IntParameter(low=1, high=10, default=2, optimize=True, load=True)
 
-    sell_short_pt = DecimalParameter(low=0.01, high=0.9,default=0.05, decimals=2, optimize=True, load=True)
+    sell_short_pt = DecimalParameter(low=0.01, high=0.9,default=0.01, decimals=2, optimize=True, load=True)
     sell_short_tt = IntParameter(low=1, high=10, default=2, optimize=True, load=True)
 
     def extract_features(self, dataframe, c1, c2, col, name, tt=0, pt=0, d="forward"):
