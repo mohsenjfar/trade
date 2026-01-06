@@ -9,6 +9,7 @@ from freqtrade.strategy import (
     IStrategy,
     stoploss_from_absolute,
     IntParameter,
+    DecimalParameter,
     informative
 )
 from datetime import datetime
@@ -43,8 +44,20 @@ class AtlasEngine(IStrategy):
         "stoploss_on_exchange_limit_ratio": 0.99,
     }
 
-    max_rsi = IntParameter(low=51, high=100, default=70, space="sell", optimize=True, load=True)
-    min_rsi = IntParameter(low=1, high=50, default=30, space="buy", optimize=True, load=True)
+    buy_max_rsi = IntParameter(low=51, high=100, default=70, optimize=True, load=True)
+    buy_min_rsi = IntParameter(low=1, high=50, default=30, optimize=True, load=True)
+    
+    buy_long_pt = DecimalParameter(low=0.01, high=0.9,default=0.05, decimals=2, optimize=True, load=True)
+    buy_long_tt = IntParameter(low=1, high=10, default=2, optimize=True, load=True)
+
+    buy_short_pt = DecimalParameter(low=0.01, high=0.9,default=0.05, decimals=2, optimize=True, load=True)
+    buy_short_tt = IntParameter(low=1, high=10, default=2, optimize=True, load=True)
+
+    sell_long_pt = DecimalParameter(low=0.01, high=0.9,default=0.05, decimals=2, optimize=True, load=True)
+    sell_long_tt = IntParameter(low=1, high=10, default=2, optimize=True, load=True)
+
+    sell_short_pt = DecimalParameter(low=0.01, high=0.9,default=0.05, decimals=2, optimize=True, load=True)
+    sell_short_tt = IntParameter(low=1, high=10, default=2, optimize=True, load=True)
 
     def extract_features(self, dataframe, c1, c2, col, name, tt=0, pt=0, d="forward"):
         
@@ -96,56 +109,61 @@ class AtlasEngine(IStrategy):
                             left_index=True, right_index=True, how="left")
 
         c1 = (dataframe[f'{name}_index_dist'] >= tt)
-        price_threshold = dataframe[f'{name}_price_dist'].quantile(pt)
-        c2 = (dataframe[f'{name}_price_dist'] >= price_threshold)
+        c2 = (dataframe[f'{name}_price_dist'] >= dataframe['close'] * pt)
         dataframe[name] = np.where((c1 & c2), dataframe[name], np.nan)
         
         return dataframe
 
-    def populate_features(self, dataframe, rsi_high=70, rsi_low=30, tt=0, pt=0):
+    def populate_features(self, dataframe):
 
         dataframe["rsi"] = ta.RSI(dataframe["close"], timeperiod=14)
 
-        c1 = qtpylib.crossed_above(dataframe["rsi"], rsi_high)
-        c2 = qtpylib.crossed_below(dataframe["rsi"], rsi_high)
-        dataframe = self.extract_features(dataframe, c1, c2, "high", "max_high", tt=tt, pt=pt)
-        dataframe = self.extract_features(dataframe, c2, c1, "low", "min_high", tt=tt, pt=pt)
-
-        c1 = qtpylib.crossed_below(dataframe["rsi"], rsi_low)
-        c2 = qtpylib.crossed_above(dataframe["rsi"], rsi_low)
-        dataframe = self.extract_features(dataframe, c1, c2, "low", "min_low", tt=tt, pt=pt)
-        dataframe = self.extract_features(dataframe, c2, c1, "high", "max_low", tt=tt, pt=pt)
-
+        c1 = qtpylib.crossed_above(dataframe["rsi"], self.buy_max_rsi.value)
+        c2 = qtpylib.crossed_below(dataframe["rsi"], self.buy_max_rsi.value)
+        dataframe = self.extract_features(dataframe, c1, c2, "high", "max_high", 
+                                          tt=self.buy_long_tt.value, 
+                                          pt=self.buy_long_pt.value)
+        dataframe = self.extract_features(dataframe, c2, c1, "low", "min_high", 
+                                          tt=self.sell_long_tt.value,
+                                          pt=self.sell_long_pt.value)
+        c1 = qtpylib.crossed_below(dataframe["rsi"], self.buy_min_rsi.value)
+        c2 = qtpylib.crossed_above(dataframe["rsi"], self.buy_min_rsi.value)
+        dataframe = self.extract_features(dataframe, c1, c2, "low", "min_low", 
+                                          tt=self.buy_short_tt.value, 
+                                          pt=self.buy_short_pt.value)
+        dataframe = self.extract_features(dataframe, c2, c1, "high", "max_low", 
+                                          tt=self.sell_short_tt.value,
+                                          pt=self.sell_short_pt.value)
         dataframe.loc[dataframe['max_high']==dataframe['high'],"cat"] = 'H'
         dataframe.loc[dataframe['min_low']==dataframe['low'],"cat"] = 'L'
         dataframe['cat'] = dataframe['cat'].ffill()
 
         return dataframe
 
-    @informative('1h')
-    def populate_indicators_1h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+    # @informative('1h')
+    # def populate_indicators_1h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe = self.populate_features(dataframe, rsi_high=70, rsi_low=30, tt=1, pt=0)
+    #     dataframe = self.populate_features(dataframe, rsi_high=70, rsi_low=30, tt=1, pt=0)
 
-        return dataframe
+    #     return dataframe
     
-    @informative('4h')
-    def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+    # @informative('4h')
+    # def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe = self.populate_features(dataframe, rsi_high=70, rsi_low=30, tt=0, pt=0)
+    #     dataframe = self.populate_features(dataframe, rsi_high=70, rsi_low=30, tt=0, pt=0)
 
-        return dataframe
+    #     return dataframe
 
-    @informative('1d')
-    def populate_indicators_1d(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+    # @informative('1d')
+    # def populate_indicators_1d(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe = self.populate_features(dataframe, rsi_high=70, rsi_low=30, tt=2, pt=0)
+    #     dataframe = self.populate_features(dataframe, rsi_high=70, rsi_low=30, tt=2, pt=0)
 
-        return dataframe
+    #     return dataframe
     
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe = self.populate_features(dataframe, rsi_high=70, rsi_low=30, tt=2, pt=0)
+        dataframe = self.populate_features(dataframe)
 
         return dataframe
 
@@ -153,8 +171,6 @@ class AtlasEngine(IStrategy):
 
         dataframe.loc[
             (   
-                (dataframe[f"rsi_1d"] < 50) &
-                (dataframe[f"rsi{self.tf}"] > 50) &
                 (qtpylib.crossed_above(dataframe["close"], dataframe["max_high"].ffill())) # Trigger
             ),
             "enter_long"
@@ -162,8 +178,6 @@ class AtlasEngine(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe[f"rsi_1d"] > 50) &
-                (dataframe[f"rsi{self.tf}"] < 50) &
                 (qtpylib.crossed_below(dataframe["close"], dataframe["min_low"].ffill())) # Trigger
             ),
             "enter_short"
