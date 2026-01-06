@@ -153,7 +153,7 @@ class AtlasEngine(IStrategy):
 
         dataframe.loc[
             (   
-                (dataframe[f"rsi_1d"] > 60) &
+                (dataframe[f"rsi_1d"] < 50) &
                 (dataframe[f"rsi{self.tf}"] > 50) &
                 (qtpylib.crossed_above(dataframe["close"], dataframe["max_high"].ffill())) # Trigger
             ),
@@ -162,7 +162,7 @@ class AtlasEngine(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe[f"rsi_1d"] < 40) &
+                (dataframe[f"rsi_1d"] > 50) &
                 (dataframe[f"rsi{self.tf}"] < 50) &
                 (qtpylib.crossed_below(dataframe["close"], dataframe["min_low"].ffill())) # Trigger
             ),
