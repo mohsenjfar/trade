@@ -151,18 +151,15 @@ class AtlasEngine(IStrategy):
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe.loc[
-            (   (dataframe['min_low'].ffill() > dataframe['min_low_1d'].ffill()) & # Guard
-                (dataframe['cat_1d'] == "L") & # Guard
-                (qtpylib.crossed_above(dataframe["rsi"], 30)) # Trigger
+            (   
+                (qtpylib.crossed_above(dataframe["close"], dataframe["max_high"].ffill())) # Trigger
             ),
             "enter_long"
         ] = 1
 
         dataframe.loc[
             (
-                (dataframe['max_high'].ffill() < dataframe['max_high_1d'].ffill()) & # Guard
-                (dataframe['cat_1d'] == "H") & # Guard
-                (qtpylib.crossed_below(dataframe["rsi"], 70)) # Trigger
+                (qtpylib.crossed_below(dataframe["close"], dataframe["min_low"].ffill())) # Trigger
             ),
             "enter_short"
         ] = 1
@@ -177,7 +174,7 @@ class AtlasEngine(IStrategy):
         
         dataframe_, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         dataframe = dataframe_.copy()
-        name = "max_high" if side == "short" else "min_low"
+        name = "max_low" if side == "short" else "min_high"
         dataframe[name] = dataframe[name].ffill()
         last_candle = dataframe.iloc[-1].squeeze()
         return float(last_candle[name])
