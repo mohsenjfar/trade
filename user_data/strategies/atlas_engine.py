@@ -125,7 +125,7 @@ class AtlasEngine(IStrategy):
     @informative('1h')
     def populate_indicators_1h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe = self.populate_features(dataframe, rsi_high=70, rsi_low=30, tt=3, pt=0.7)
+        dataframe = self.populate_features(dataframe, rsi_high=70, rsi_low=30, tt=1, pt=0)
 
         return dataframe
     
