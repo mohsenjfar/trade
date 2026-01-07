@@ -163,7 +163,27 @@ class AtlasEngine(IStrategy):
     
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe = self.populate_features(dataframe)
+        dataframe["rsi"] = ta.RSI(dataframe["close"], timeperiod=14)
+
+        c1 = qtpylib.crossed_above(dataframe["rsi"], self.buy_max_rsi.value)
+        c2 = qtpylib.crossed_below(dataframe["rsi"], self.buy_max_rsi.value)
+        dataframe = self.extract_features(dataframe, c1, c2, "high", "max_high", 
+                                          tt=self.buy_long_tt.value, 
+                                          pt=self.buy_long_pt.value)
+        dataframe = self.extract_features(dataframe, c2, c1, "low", "min_high", 
+                                          tt=self.sell_long_tt.value,
+                                          pt=self.sell_long_pt.value)
+        c1 = qtpylib.crossed_below(dataframe["rsi"], self.buy_min_rsi.value)
+        c2 = qtpylib.crossed_above(dataframe["rsi"], self.buy_min_rsi.value)
+        dataframe = self.extract_features(dataframe, c1, c2, "low", "min_low", 
+                                          tt=self.buy_short_tt.value, 
+                                          pt=self.buy_short_pt.value)
+        dataframe = self.extract_features(dataframe, c2, c1, "high", "max_low", 
+                                          tt=self.sell_short_tt.value,
+                                          pt=self.sell_short_pt.value)
+        dataframe.loc[dataframe['max_high']==dataframe['high'],"cat"] = 'H'
+        dataframe.loc[dataframe['min_low']==dataframe['low'],"cat"] = 'L'
+        dataframe['cat'] = dataframe['cat'].ffill()
 
         return dataframe
 
