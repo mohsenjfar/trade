@@ -22,7 +22,7 @@ class AtlasEngine(IStrategy):
 
     stoploss = -1
 
-    trade_max_loss_allowed = 0.005
+    trade_max_loss_allowed = 0.02
 
     timeframe = '15m'
     tf = ""
