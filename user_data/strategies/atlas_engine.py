@@ -136,13 +136,10 @@ class AtlasEngine(IStrategy):
         dataframe["rsi"] = ta.RSI(dataframe["close"], timeperiod=14)
         dataframe['sma_5'] = ta.SMA(dataframe["close"], timeperiod=5)
 
-        c1 = qtpylib.crossed_above(dataframe["rsi"], 70)
-        c2 = qtpylib.crossed_below(dataframe["rsi"], 70)
+        c1 = qtpylib.crossed_above(dataframe["sma_200"], dataframe["sma_200_1h"])
+        c2 = qtpylib.crossed_below(dataframe["sma_200"], dataframe["sma_200_1h"])
         dataframe = self.extract_features(dataframe, c1, c2, "high", "max_high")
-
-        c1 = qtpylib.crossed_below(dataframe["rsi"], 30)
-        c2 = qtpylib.crossed_above(dataframe["rsi"], 30)
-        dataframe = self.extract_features(dataframe, c1, c2, "low", "min_low")
+        dataframe = self.extract_features(dataframe, c2, c1, "low", "min_low")
 
         return dataframe
 
@@ -170,14 +167,14 @@ class AtlasEngine(IStrategy):
 
         dataframe.loc[
             (   
-                (qtpylib.crossed_below(dataframe["sma_5"], dataframe["sma_200_1h"]))
+                (qtpylib.crossed_below(dataframe["sma_200_1h"], dataframe["sma_200_4h"]))
             ),
             "exit_long"
         ] = 1
 
         dataframe.loc[
             (
-                (qtpylib.crossed_above(dataframe["sma_5"], dataframe["sma_200_1h"]))
+                (qtpylib.crossed_above(dataframe["sma_200_1h"], dataframe["sma_200_4h"]))
             ),
             "exit_short"
         ] = 1
