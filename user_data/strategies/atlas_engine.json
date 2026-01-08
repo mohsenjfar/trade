@@ -1,0 +1,34 @@
+{
+  "strategy_name": "AtlasEngine",
+  "params": {
+    "roi": {},
+    "stoploss": {
+      "stoploss": -1.0
+    },
+    "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+    },
+    "max_open_trades": {
+      "max_open_trades": 1
+    },
+    "buy": {
+      "buy_long_pt": 0.49,
+      "buy_long_tt": 5,
+      "buy_max_rsi": 74,
+      "buy_min_rsi": 37,
+      "buy_short_pt": 0.4,
+      "buy_short_tt": 4
+    },
+    "sell": {
+      "sell_long_pt": 0.22,
+      "sell_long_tt": 9,
+      "sell_short_pt": 0.43,
+      "sell_short_tt": 8
+    }
+  },
+  "ft_stratparam_v": 1,
+  "export_time": "2026-01-06 22:05:43.694388+00:00"
+}
