@@ -59,7 +59,61 @@ class AtlasEngine(IStrategy):
     # sell_short_pt = DecimalParameter(low=0.01, high=0.1,default=0.01, decimals=2, optimize=True, load=True)
     # sell_short_tt = IntParameter(low=1, high=10, default=2, optimize=True, load=True)
 
+    def extract_features(self, dataframe, c1, c2, col, name, tt=0, pt=0, d="forward"):
+        
+        df = dataframe.copy()
 
+        starts = df.loc[c1].reset_index().rename(columns={"index": "start"})
+        ends   = df.loc[c2].reset_index().rename(columns={"index": "end"})
+
+        if starts.empty or ends.empty:
+            dataframe[name] = np.nan
+            dataframe[f"{name}_index_dist"] = np.nan
+            dataframe[f"{name}_price_dist"] = np.nan
+            return dataframe
+
+        pairs = pd.merge_asof(
+            starts[['start']].sort_values("start"),
+            ends[['end']].sort_values("end"),
+            left_on="start",
+            right_on="end",
+            direction=d,
+        ).dropna()[["start", "end"]]
+
+        if pairs.empty:
+            dataframe[name] = np.nan
+            dataframe[f"{name}_index_dist"] = np.nan
+            dataframe[f"{name}_price_dist"] = np.nan
+            return dataframe
+
+        intervals = pd.IntervalIndex.from_arrays(pairs["start"], pairs["end"], closed="both")
+        df["range_id"] = pd.cut(df.index, intervals)
+
+        e = 'max' if col == 'high' else 'min'
+        group = df.groupby("range_id", observed=True)
+        df[name] = group[col].transform(e)
+
+        df[f"{name}_index_dist"] = group.cumcount() + 1
+        df[f"{name}_index_dist"] = group[f"{name}_index_dist"].transform('max')
+
+        hi = group['high'].transform('max')
+        lo = group['low'].transform('min')
+        df[f"{name}_price_dist"] = np.abs(hi - lo)
+
+        df.loc[
+            (df[col] != df[name]),
+            [name, f"{name}_index_dist", f"{name}_price_dist"]
+        ] = np.nan
+
+        dataframe = dataframe.merge(df[[name, f"{name}_index_dist", f"{name}_price_dist"]],
+                            left_index=True, right_index=True, how="left")
+
+        c1 = (dataframe[f'{name}_index_dist'] >= tt)
+        c2 = (dataframe[f'{name}_price_dist'] >= dataframe['close'] * pt)
+        dataframe[name] = np.where((c1 & c2), dataframe[name], np.nan)
+        
+        return dataframe
+    
     @informative('1h')
     def populate_indicators_1h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
@@ -81,6 +135,14 @@ class AtlasEngine(IStrategy):
         
         dataframe["rsi"] = ta.RSI(dataframe["close"], timeperiod=14)
         dataframe['sma_5'] = ta.SMA(dataframe["close"], timeperiod=5)
+
+        c1 = qtpylib.crossed_above(dataframe["rsi"], 70)
+        c2 = qtpylib.crossed_below(dataframe["rsi"], 70)
+        dataframe = self.extract_features(dataframe, c1, c2, "high", "max_high")
+
+        c1 = qtpylib.crossed_below(dataframe["rsi"], 30)
+        c2 = qtpylib.crossed_above(dataframe["rsi"], 30)
+        dataframe = self.extract_features(dataframe, c1, c2, "low", "min_low")
 
         return dataframe
 
