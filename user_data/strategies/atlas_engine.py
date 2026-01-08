@@ -134,7 +134,7 @@ class AtlasEngine(IStrategy):
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         
         dataframe["rsi"] = ta.RSI(dataframe["close"], timeperiod=14)
-        dataframe['sma_5'] = ta.SMA(dataframe["close"], timeperiod=5)
+        dataframe['sma_200'] = ta.SMA(dataframe["close"], timeperiod=200)
 
         c1 = qtpylib.crossed_above(dataframe["sma_200"], dataframe["sma_200_1h"])
         c2 = qtpylib.crossed_below(dataframe["sma_200"], dataframe["sma_200_1h"])
