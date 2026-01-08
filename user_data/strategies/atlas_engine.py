@@ -88,7 +88,7 @@ class AtlasEngine(IStrategy):
 
         dataframe.loc[
             (   
-                (dataframe['sma_200_1h'] > dataframe['sma_200_4h']) # Guard
+                (dataframe['sma_200_1h'] > dataframe['sma_200_4h']) & # Guard
                 (qtpylib.crossed_above(dataframe["rsi"], 30)) # Trigger
             ),
             "enter_long"
@@ -96,7 +96,7 @@ class AtlasEngine(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['sma_200_1h'] < dataframe['sma_200_4h']) # Guard
+                (dataframe['sma_200_1h'] < dataframe['sma_200_4h']) & # Guard
                 (qtpylib.crossed_below(dataframe["rsi"], 70)) # Trigger
             ),
             "enter_short"
