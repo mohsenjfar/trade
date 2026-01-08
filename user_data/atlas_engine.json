@@ -34,13 +34,9 @@
     "name": "bybit",
     "ccxt_config": {},
     "ccxt_async_config": {},
-    "key": "",
-    "secret": "",
     "pair_whitelist": [
     ],
     "pair_blacklist": [
-      // "BTC/USDT:USDT",
-      // "ETH/USDT:USDT"
     ]
   },
   "pairlists": [
