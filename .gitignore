@@ -4,5 +4,5 @@ hyperopts
 .env
 *.sqlite*
 models
-hyperopt_results
+# hyperopt_results
 *.csv
