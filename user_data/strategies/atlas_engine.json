@@ -1,0 +1,25 @@
+{
+  "strategy_name": "AtlasEngine",
+  "params": {
+    "roi": {},
+    "stoploss": {
+      "stoploss": -1.0
+    },
+    "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+    },
+    "max_open_trades": {
+      "max_open_trades": 1
+    },
+    "buy": {
+      "high": 108,
+      "low": 39,
+      "medium": 128
+    }
+  },
+  "ft_stratparam_v": 1,
+  "export_time": "2026-01-23 10:11:20.001993+00:00"
+}
