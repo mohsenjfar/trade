@@ -22,3 +22,5 @@ epochs=1000
 
 docker-compose run --rm $service hyperopt --hyperopt-loss $func --spaces $spaces --strategy $strategy --config $config -e $epochs --analyze-per-epoch
 git add . && git commit -m "optimize" && git push
+
+exit
