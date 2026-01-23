@@ -142,7 +142,7 @@ class AtlasEngine(IStrategy):
 
         dataframe.loc[
             (
-                dataframe[f"sma_{medium}_1h"] < dataframe[f"sma_{high}_4h"]) & # Guard
+                (dataframe[f"sma_{medium}_1h"] < dataframe[f"sma_{high}_4h"]) & # Guard
                 (qtpylib.crossed_below(dataframe[f"sma_{low}"], dataframe[f"sma_{medium}_1h"])) # Trigger
             ),
             "enter_short"
