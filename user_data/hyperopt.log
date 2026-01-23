@@ -1,0 +1,72 @@
+2026-01-23 05:23:14,079 - freqtrade - INFO - freqtrade 2025.12
+2026-01-23 05:23:14,943 - numexpr.utils - INFO - NumExpr defaulting to 4 threads.
+2026-01-23 05:23:17,115 - freqtrade.configuration.load_config - INFO - Using config: user_data/atlas_engine_test.json ...
+2026-01-23 05:23:17,119 - freqtrade.loggers - INFO - Enabling colorized output.
+2026-01-23 05:23:17,120[90m - [0m[95mfreqtrade.loggers[0m[90m - [0m[34mINFO[0m[90m - [0mLogfile configured
+2026-01-23 05:23:17,120[90m - [0m[95mfreqtrade.loggers[0m[90m - [0m[34mINFO[0m[90m - [0mVerbosity set to 0
+2026-01-23 05:23:17,121[90m - [0m[95mfreqtrade.configuration.configuration[0m[90m - [0m[33mWARNING[0m[90m - [0m`force_entry_enable` RPC message enabled.
+2026-01-23 05:23:17,122[90m - [0m[95mfreqtrade.configuration.configuration[0m[90m - [0m[34mINFO[0m[90m - [0mUsing max_open_trades: 1 ...
+2026-01-23 05:23:17,150[90m - [0m[95mfreqtrade.configuration.configuration[0m[90m - [0m[34mINFO[0m[90m - [0mUsing user-data directory: /freqtrade/user_data ...
+2026-01-23 05:23:17,152[90m - [0m[95mfreqtrade.configuration.configuration[0m[90m - [0m[34mINFO[0m[90m - [0mUsing data directory: /freqtrade/user_data/data/bybit ...
+2026-01-23 05:23:17,153[90m - [0m[95mfreqtrade.configuration.configuration[0m[90m - [0m[34mINFO[0m[90m - [0mParameter --epochs detected ... Will run Hyperopt with for 1000 epochs ...
+2026-01-23 05:23:17,155[90m - [0m[95mfreqtrade.configuration.configuration[0m[90m - [0m[34mINFO[0m[90m - [0mParameter -s/--spaces detected: ['buy', 'sell']
+2026-01-23 05:23:17,156[90m - [0m[95mfreqtrade.configuration.configuration[0m[90m - [0m[34mINFO[0m[90m - [0mParameter --analyze-per-epoch detected.
+2026-01-23 05:23:17,157[90m - [0m[95mfreqtrade.configuration.configuration[0m[90m - [0m[34mINFO[0m[90m - [0mParameter -j/--job-workers detected: -1
+2026-01-23 05:23:17,158[90m - [0m[95mfreqtrade.configuration.configuration[0m[90m - [0m[34mINFO[0m[90m - [0mParameter --min-trades detected: 1
+2026-01-23 05:23:17,159[90m - [0m[95mfreqtrade.configuration.configuration[0m[90m - [0m[34mINFO[0m[90m - [0mUsing Hyperopt loss class name: SharpeHyperOptLossDaily
+2026-01-23 05:23:17,162[90m - [0m[95mfreqtrade.exchange.check_exchange[0m[90m - [0m[34mINFO[0m[90m - [0mChecking exchange...
+2026-01-23 05:23:17,188[90m - [0m[95mfreqtrade.exchange.check_exchange[0m[90m - [0m[34mINFO[0m[90m - [0mExchange "bybit" is officially supported by the Freqtrade development team.
+2026-01-23 05:23:17,190[90m - [0m[95mfreqtrade.configuration.configuration[0m[90m - [0m[34mINFO[0m[90m - [0mUsing pairlist from configuration.
+2026-01-23 05:23:17,191[90m - [0m[95mfreqtrade.configuration.config_validation[0m[90m - [0m[34mINFO[0m[90m - [0mValidating configuration ...
+2026-01-23 05:23:17,199[90m - [0m[95mfreqtrade.commands.optimize_commands[0m[90m - [0m[34mINFO[0m[90m - [0mStarting freqtrade in Hyperopt mode
+2026-01-23 05:23:17,202[90m - [0m[95mfreqtrade.optimize.hyperopt.hyperopt[0m[90m - [0m[34mINFO[0m[90m - [0mRemoving `/freqtrade/user_data/hyperopt_results/hyperopt_tickerdata.pkl`.
+2026-01-23 05:23:17,214[90m - [0m[95mfreqtrade.exchange.exchange[0m[90m - [0m[34mINFO[0m[90m - [0mInstance is running with dry_run enabled
+2026-01-23 05:23:17,216[90m - [0m[95mfreqtrade.exchange.exchange[0m[90m - [0m[34mINFO[0m[90m - [0mUsing CCXT 4.5.29
+2026-01-23 05:23:17,217[90m - [0m[95mfreqtrade.exchange.exchange[0m[90m - [0m[34mINFO[0m[90m - [0mApplying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2026-01-23 05:23:17,241[90m - [0m[95mfreqtrade.exchange.exchange[0m[90m - [0m[34mINFO[0m[90m - [0mApplying additional ccxt config: {'options': {'defaultType': 'swap', 'defaultSettle': 'USDT'}}
+2026-01-23 05:23:17,272[90m - [0m[95mfreqtrade.exchange.exchange[0m[90m - [0m[34mINFO[0m[90m - [0mUsing Exchange "Bybit"
+2026-01-23 05:23:19,090[90m - [0m[95mfreqtrade.resolvers.exchange_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mUsing resolved exchange 'Bybit'...
+2026-01-23 05:23:19,123[90m - [0m[95mfreqtrade.resolvers.iresolver[0m[90m - [0m[34mINFO[0m[90m - [0mUsing resolved strategy AtlasEngine from '/freqtrade/user_data/strategies/atlas_engine.py'...
+2026-01-23 05:23:19,124[90m - [0m[95mfreqtrade.strategy.hyper[0m[90m - [0m[34mINFO[0m[90m - [0mFound no parameter file.
+2026-01-23 05:23:19,125[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mOverride strategy 'stake_currency' with value from the configuration: USDT.
+2026-01-23 05:23:19,126[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mOverride strategy 'stake_amount' with value from the configuration: unlimited.
+2026-01-23 05:23:19,126[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mOverride strategy 'unfilledtimeout' with value from the configuration: {'entry': 5, 'exit': 5, 'exit_timeout_count': 0, 'unit':
+'minutes'}.
+2026-01-23 05:23:19,127[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mOverride strategy 'use_exit_signal' with value from the configuration: True.
+2026-01-23 05:23:19,128[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mOverride strategy 'max_open_trades' with value from the configuration: 1.
+2026-01-23 05:23:19,128[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mStrategy using minimal_roi: {}
+2026-01-23 05:23:19,129[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mStrategy using timeframe: 15m
+2026-01-23 05:23:19,129[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mStrategy using stoploss: -1
+2026-01-23 05:23:19,130[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mStrategy using trailing_stop: False
+2026-01-23 05:23:19,130[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mStrategy using trailing_stop_positive_offset: 0.0
+2026-01-23 05:23:19,131[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mStrategy using trailing_only_offset_is_reached: False
+2026-01-23 05:23:19,131[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mStrategy using use_custom_stoploss: True
+2026-01-23 05:23:19,132[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mStrategy using process_only_new_candles: True
+2026-01-23 05:23:19,132[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mStrategy using order_types: {'entry': 'limit', 'exit': 'limit', 'emergency_exit': 'market', 'stoploss': 'market', 
+'stoploss_on_exchange': False, 'stoploss_on_exchange_interval': 60, 'stoploss_on_exchange_limit_ratio': 0.99}
+2026-01-23 05:23:19,133[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mStrategy using order_time_in_force: {'entry': 'GTC', 'exit': 'GTC'}
+2026-01-23 05:23:19,134[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mStrategy using stake_currency: USDT
+2026-01-23 05:23:19,134[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mStrategy using stake_amount: unlimited
+2026-01-23 05:23:19,135[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mStrategy using startup_candle_count: 0
+2026-01-23 05:23:19,135[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mStrategy using unfilledtimeout: {'entry': 5, 'exit': 5, 'exit_timeout_count': 0, 'unit': 'minutes'}
+2026-01-23 05:23:19,136[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mStrategy using use_exit_signal: True
+2026-01-23 05:23:19,136[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mStrategy using exit_profit_only: False
+2026-01-23 05:23:19,137[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mStrategy using ignore_roi_if_entry_signal: False
+2026-01-23 05:23:19,138[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mStrategy using exit_profit_offset: 0.0
+2026-01-23 05:23:19,138[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mStrategy using disable_dataframe_checks: False
+2026-01-23 05:23:19,139[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mStrategy using ignore_buying_expired_candle_after: 0
+2026-01-23 05:23:19,139[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mStrategy using position_adjustment_enable: True
+2026-01-23 05:23:19,140[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mStrategy using max_entry_position_adjustment: -1
+2026-01-23 05:23:19,140[90m - [0m[95mfreqtrade.resolvers.strategy_resolver[0m[90m - [0m[34mINFO[0m[90m - [0mStrategy using max_open_trades: 1
+2026-01-23 05:23:19,141[90m - [0m[95mfreqtrade.configuration.config_validation[0m[90m - [0m[34mINFO[0m[90m - [0mValidating configuration ...
+2026-01-23 05:23:19,148[90m - [0m[95mfreqtrade.resolvers.iresolver[0m[90m - [0m[34mINFO[0m[90m - [0mUsing resolved pairlist StaticPairList from '/freqtrade/freqtrade/plugins/pairlist/StaticPairList.py'...
+2026-01-23 05:23:19,157[90m - [0m[95mfreqtrade.optimize.backtesting[0m[90m - [0m[34mINFO[0m[90m - [0mUsing fee 0.0600% - worst case fee from exchange (lowest tier).
+2026-01-23 05:23:19,184[90m - [0m[95mfreqtrade.strategy.hyper[0m[90m - [0m[34mINFO[0m[90m - [0mNo params for buy found, using default values.
+2026-01-23 05:23:19,184[90m - [0m[95mfreqtrade.strategy.hyper[0m[90m - [0m[34mINFO[0m[90m - [0mStrategy Parameter(default): high = 200
+2026-01-23 05:23:19,185[90m - [0m[95mfreqtrade.strategy.hyper[0m[90m - [0m[34mINFO[0m[90m - [0mStrategy Parameter(default): low = 10
+2026-01-23 05:23:19,186[90m - [0m[95mfreqtrade.strategy.hyper[0m[90m - [0m[34mINFO[0m[90m - [0mStrategy Parameter(default): medium = 200
+2026-01-23 05:23:19,193[90m - [0m[95mfreqtrade.resolvers.iresolver[0m[90m - [0m[34mINFO[0m[90m - [0mUsing resolved hyperoptloss SharpeHyperOptLossDaily from '/freqtrade/freqtrade/optimize/hyperopt_loss/hyperopt_loss_sharpe_daily.py'...
+2026-01-23 05:23:20,473[90m - [0m[95mfreqtrade.optimize.hyperopt.hyperopt_optimizer[0m[90m - [0m[34mINFO[0m[90m - [0mmanager queue <class 'multiprocessing.managers.AutoProxy[Queue]'>
+2026-01-23 05:23:20,476[90m - [0m[95mfreqtrade.optimize.hyperopt.hyperopt[0m[90m - [0m[34mINFO[0m[90m - [0mUsing optimizer random state: 42233
+2026-01-23 05:23:20,477[90m - [0m[95mfreqtrade[0m[90m - [0m[1;31mERROR[0m[90m - [0mThe 'sell' space is included into the hyperoptimization but no parameter for this space was found in your Strategy. Please make sure to have parameters 
+for this space enabled for optimization or remove the 'sell' space from hyperoptimization.
