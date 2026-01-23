@@ -22,7 +22,7 @@ class AtlasEngine(IStrategy):
 
     stoploss = -1
 
-    trade_max_loss_allowed = 0.02
+    trade_max_loss_allowed = 0.005
 
     timeframe = '15m'
     tf = ""
@@ -44,20 +44,10 @@ class AtlasEngine(IStrategy):
         "stoploss_on_exchange_limit_ratio": 0.99,
     }
 
-    # buy_max_rsi = IntParameter(low=51, high=100, default=70, optimize=True, load=True)
-    # buy_min_rsi = IntParameter(low=1, high=50, default=30, optimize=True, load=True)
-    
-    # buy_long_pt = DecimalParameter(low=0.01, high=0.1,default=0.01, decimals=2, optimize=True, load=True)
-    # buy_long_tt = IntParameter(low=1, high=10, default=2, optimize=True, load=True)
 
-    # buy_short_pt = DecimalParameter(low=0.01, high=0.1,default=0.01, decimals=2, optimize=True, load=True)
-    # buy_short_tt = IntParameter(low=1, high=10, default=2, optimize=True, load=True)
-
-    # sell_long_pt = DecimalParameter(low=0.01, high=0.1,default=0.01, decimals=2, optimize=True, load=True)
-    # sell_long_tt = IntParameter(low=1, high=10, default=2, optimize=True, load=True)
-
-    # sell_short_pt = DecimalParameter(low=0.01, high=0.1,default=0.01, decimals=2, optimize=True, load=True)
-    # sell_short_tt = IntParameter(low=1, high=10, default=2, optimize=True, load=True)
+    low = IntParameter(low=5, high=50, default=10, optimize=True, load=True, space='buy')
+    medium = IntParameter(low=100, high=500, default=200, optimize=True, load=True, space='buy')
+    high = IntParameter(low=100, high=500, default=200, optimize=True, load=True, space='buy')
 
     def extract_features(self, dataframe, c1, c2, col, name, tt=0, pt=0, d="forward"):
         
@@ -117,27 +107,24 @@ class AtlasEngine(IStrategy):
     @informative('1h')
     def populate_indicators_1h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe["rsi"] = ta.RSI(dataframe["close"], timeperiod=14)
-        dataframe['sma_200'] = ta.SMA(dataframe["close"], timeperiod=200)
+        dataframe[f'sma_{medium}'] = ta.SMA(dataframe["close"], timeperiod=medium.value)
 
         return dataframe
     
     @informative('4h')
     def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe["rsi"] = ta.RSI(dataframe["close"], timeperiod=14)
-        dataframe['sma_200'] = ta.SMA(dataframe["close"], timeperiod=200)
+        dataframe[f'sma_{high}'] = ta.SMA(dataframe["close"], timeperiod=medium.high)
 
         return dataframe
 
     
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         
-        dataframe["rsi"] = ta.RSI(dataframe["close"], timeperiod=14)
-        dataframe['sma_200'] = ta.SMA(dataframe["close"], timeperiod=200)
+        dataframe[f'sma_{low}'] = ta.SMA(dataframe["close"], timeperiod=low.value)
 
-        c1 = qtpylib.crossed_above(dataframe["sma_200"], dataframe["sma_200_1h"])
-        c2 = qtpylib.crossed_below(dataframe["sma_200"], dataframe["sma_200_1h"])
+        c1 = qtpylib.crossed_above(dataframe[f"sma_{low}"], dataframe[f"sma_{medium}_1h"])
+        c2 = qtpylib.crossed_below(dataframe[f"sma_{low}"], dataframe[f"sma_{medium}_1h"])
         dataframe = self.extract_features(dataframe, c1, c2, "high", "max_high")
         dataframe = self.extract_features(dataframe, c2, c1, "low", "min_low")
 
@@ -147,16 +134,16 @@ class AtlasEngine(IStrategy):
 
         dataframe.loc[
             (   
-                (dataframe['sma_200_1h'] > dataframe['sma_200_4h']) & # Guard
-                (qtpylib.crossed_above(dataframe["rsi"], 30)) # Trigger
+                (dataframe[f"sma_{medium}_1h"] > dataframe[f"sma_{high}_4h"]) & # Guard
+                (qtpylib.crossed_above(dataframe[f"sma_{low}"], dataframe[f"sma_{medium}_1h"])) # Trigger
             ),
             "enter_long"
         ] = 1
 
         dataframe.loc[
             (
-                (dataframe['sma_200_1h'] < dataframe['sma_200_4h']) & # Guard
-                (qtpylib.crossed_below(dataframe["rsi"], 70)) # Trigger
+                dataframe[f"sma_{medium}_1h"] < dataframe[f"sma_{high}_4h"]) & # Guard
+                (qtpylib.crossed_below(dataframe[f"sma_{low}"], dataframe[f"sma_{medium}_1h"])) # Trigger
             ),
             "enter_short"
         ] = 1
@@ -167,14 +154,14 @@ class AtlasEngine(IStrategy):
 
         dataframe.loc[
             (   
-                (qtpylib.crossed_below(dataframe["sma_200_1h"], dataframe["sma_200_4h"]))
+                (qtpylib.crossed_below(dataframe[f"sma_{low}"], dataframe[f"sma_{medium}_1h"]))
             ),
             "exit_long"
         ] = 1
 
         dataframe.loc[
             (
-                (qtpylib.crossed_above(dataframe["sma_200_1h"], dataframe["sma_200_4h"]))
+                (qtpylib.crossed_above(dataframe[f"sma_{low}"], dataframe[f"sma_{medium}_1h"]))
             ),
             "exit_short"
         ] = 1
