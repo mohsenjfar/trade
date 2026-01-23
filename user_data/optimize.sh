@@ -2,7 +2,7 @@
 
 service="atlas_engine"
 func="SharpeHyperOptLossDaily"
-spaces="buy sell"
+spaces="buy"
 strategy="AtlasEngine"
 config="user_data/atlas_engine_test.json"
 epochs=1000
