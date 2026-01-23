@@ -107,24 +107,24 @@ class AtlasEngine(IStrategy):
     @informative('1h')
     def populate_indicators_1h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe[f'sma_{medium}'] = ta.SMA(dataframe["close"], timeperiod=medium.value)
+        dataframe[f'sma_{self.medium.value}'] = ta.SMA(dataframe["close"], timeperiod=self.medium.value)
 
         return dataframe
     
     @informative('4h')
     def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe[f'sma_{high}'] = ta.SMA(dataframe["close"], timeperiod=medium.high)
+        dataframe[f'sma_{self.high.value}'] = ta.SMA(dataframe["close"], timeperiod=self.high.value)
 
         return dataframe
 
     
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         
-        dataframe[f'sma_{low}'] = ta.SMA(dataframe["close"], timeperiod=low.value)
+        dataframe[f'sma_{self.low.value}'] = ta.SMA(dataframe["close"], timeperiod=self.low.value)
 
-        c1 = qtpylib.crossed_above(dataframe[f"sma_{low}"], dataframe[f"sma_{medium}_1h"])
-        c2 = qtpylib.crossed_below(dataframe[f"sma_{low}"], dataframe[f"sma_{medium}_1h"])
+        c1 = qtpylib.crossed_above(dataframe[f"sma_{self.low.value}"], dataframe[f"sma_{self.medium.value}_1h"])
+        c2 = qtpylib.crossed_below(dataframe[f"sma_{self.low.value}"], dataframe[f"sma_{self.medium.value}_1h"])
         dataframe = self.extract_features(dataframe, c1, c2, "high", "max_high")
         dataframe = self.extract_features(dataframe, c2, c1, "low", "min_low")
 
@@ -134,16 +134,16 @@ class AtlasEngine(IStrategy):
 
         dataframe.loc[
             (   
-                (dataframe[f"sma_{medium}_1h"] > dataframe[f"sma_{high}_4h"]) & # Guard
-                (qtpylib.crossed_above(dataframe[f"sma_{low}"], dataframe[f"sma_{medium}_1h"])) # Trigger
+                (dataframe[f"sma_{self.medium.value}_1h"] > dataframe[f"sma_{self.high.value}_4h"]) & # Guard
+                (qtpylib.crossed_above(dataframe[f"sma_{self.low.value}"], dataframe[f"sma_{self.medium.value}_1h"])) # Trigger
             ),
             "enter_long"
         ] = 1
 
         dataframe.loc[
             (
-                (dataframe[f"sma_{medium}_1h"] < dataframe[f"sma_{high}_4h"]) & # Guard
-                (qtpylib.crossed_below(dataframe[f"sma_{low}"], dataframe[f"sma_{medium}_1h"])) # Trigger
+                (dataframe[f"sma_{self.medium.value}_1h"] < dataframe[f"sma_{self.high.value}_4h"]) & # Guard
+                (qtpylib.crossed_below(dataframe[f"sma_{self.low.value}"], dataframe[f"sma_{self.medium.value}_1h"])) # Trigger
             ),
             "enter_short"
         ] = 1
@@ -154,14 +154,14 @@ class AtlasEngine(IStrategy):
 
         dataframe.loc[
             (   
-                (qtpylib.crossed_below(dataframe[f"sma_{low}"], dataframe[f"sma_{medium}_1h"]))
+                (qtpylib.crossed_below(dataframe[f"sma_{self.low.value}"], dataframe[f"sma_{self.medium.value}_1h"]))
             ),
             "exit_long"
         ] = 1
 
         dataframe.loc[
             (
-                (qtpylib.crossed_above(dataframe[f"sma_{low}"], dataframe[f"sma_{medium}_1h"]))
+                (qtpylib.crossed_above(dataframe[f"sma_{self.low.value}"], dataframe[f"sma_{self.medium.value}_1h"]))
             ),
             "exit_short"
         ] = 1
