@@ -1,0 +1,4 @@
+2026-01-23 05:21:04,793 - freqtrade - INFO - freqtrade 2025.12
+2026-01-23 05:21:06,289 - numexpr.utils - INFO - NumExpr defaulting to 4 threads.
+2026-01-23 05:21:08,989 - freqtrade.configuration.load_config - INFO - Using config: atlas_engine_test.json ...
+2026-01-23 05:21:08,991 - freqtrade - ERROR - Config file "atlas_engine_test.json" not found! Please create a config file or check whether it exists.
