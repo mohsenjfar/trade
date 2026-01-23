@@ -1,6 +1,5 @@
 #!/bin/bash
 
-tmux
 service="atlas_engine"
 func="SharpeHyperOptLossDaily"
 spaces="buy sell"
