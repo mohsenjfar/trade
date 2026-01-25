@@ -18,7 +18,7 @@ func="ShortTradeDurHyperOptLoss"
 spaces="buy"
 strategy="AtlasEngine"
 config="user_data/atlas_engine_test.json"
-epochs=1000
+epochs=500
 
 docker-compose run --rm $service hyperopt --hyperopt-loss $func --spaces $spaces --strategy $strategy --config $config -e $epochs --analyze-per-epoch
 git add . && git commit -m "optimize" && git push
