@@ -1,5 +1,5 @@
 {
-  "max_open_trades": 4,
+  "max_open_trades": 1,
   "stake_currency": "USDT",
   "stake_amount": "unlimited",
   "tradable_balance_ratio": 0.99,
@@ -34,21 +34,25 @@
     "name": "bybit",
     "ccxt_config": {},
     "ccxt_async_config": {},
+    "key": "",
+    "secret": "",
     "pair_whitelist": [
+      // "BTC/USDT:USDT",
+      // "ETH/USDT:USDT",
+      // "BNB/USDT:USDT",
+      "WIF/USDT:USDT",
+      // "SOL/USDT:USDT"
     ],
     "pair_blacklist": [
     ]
   },
   "pairlists": [
     {
-        "method": "VolumePairList",
-        "number_assets": 20,
-        "sort_key": "quoteVolume",
-        "refresh_period": 1800
+        "method": "StaticPairList"
     }
   ],
   "telegram": {
-    "enabled": true,
+    "enabled": false,
     "token": "",
     "chat_id": "",
     "keyboard": [
@@ -64,7 +68,7 @@
     "process_throttle_secs": 5
   },
   "api_server": {
-    "enabled": true,
+    "enabled": false,
     "listen_ip_address": "0.0.0.0",
     "listen_port": 8080,
     "verbosity": "error",

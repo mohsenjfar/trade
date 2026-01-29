@@ -1,7 +1,6 @@
 import freqtrade.vendor.qtpylib.indicators as qtpylib
 from pandas import DataFrame
 import numpy as np
-import pandas as pd
 import talib.abstract as ta
 from freqtrade.persistence import Trade
 from math import ceil
@@ -10,7 +9,8 @@ from freqtrade.strategy import (
     stoploss_from_absolute,
     IntParameter,
     DecimalParameter,
-    informative
+    informative,
+    BooleanParameter
 )
 from datetime import datetime
 from typing import Optional
@@ -22,10 +22,8 @@ class AtlasEngine(IStrategy):
 
     stoploss = -1
 
-    trade_max_loss_allowed = 0.005
+    timeframe = '5m'
 
-    timeframe = '15m'
-    tf = ""
     can_short: bool = True
     process_only_new_candles = True
 
@@ -33,6 +31,8 @@ class AtlasEngine(IStrategy):
     use_custom_stoploss = True
 
     position_adjustment_enable = True
+
+    exit_profit_only = False
 
     order_types = {
         "entry": "limit",
@@ -44,89 +44,56 @@ class AtlasEngine(IStrategy):
         "stoploss_on_exchange_limit_ratio": 0.99,
     }
 
-
     low = IntParameter(low=5, high=50, default=10, optimize=True, load=True, space='buy')
-    medium = IntParameter(low=100, high=500, default=200, optimize=True, load=True, space='buy')
-    high = IntParameter(low=100, high=500, default=200, optimize=True, load=True, space='buy')
+    medium = IntParameter(low=20, high=200, default=50, optimize=True, load=True, space='buy')
+    # high = IntParameter(low=100, high=500, default=200, optimize=True, load=True, space='buy')
+    atr = DecimalParameter(low=1, high=10, default=3, decimals=1, optimize=True, load=True, space='buy')
+    cooldown_lookback = IntParameter(2, 48, default=5, space="protection", optimize=True)
+    stop_duration = IntParameter(12, 200, default=5, space="protection", optimize=True)
+    use_stop_protection = BooleanParameter(default=True, space="protection", optimize=True)
+    allowed_loss = DecimalParameter(low=0.001, high=0.02, default=0.005, decimals=3, optimize=True, load=True, space='allowed_loss')
 
-    def extract_features(self, dataframe, c1, c2, col, name, tt=0, pt=0, d="forward"):
-        
-        df = dataframe.copy()
+    @property
+    def protections(self):
+        prot = []
 
-        starts = df.loc[c1].reset_index().rename(columns={"index": "start"})
-        ends   = df.loc[c2].reset_index().rename(columns={"index": "end"})
+        prot.append({
+            "method": "CooldownPeriod",
+            "stop_duration_candles": self.cooldown_lookback.value
+        })
+        if self.use_stop_protection.value:
+            prot.append({
+                "method": "StoplossGuard",
+                "lookback_period_candles": 24 * 3,
+                "trade_limit": 4,
+                "stop_duration_candles": self.stop_duration.value,
+                "only_per_pair": False
+            })
 
-        if starts.empty or ends.empty:
-            dataframe[name] = np.nan
-            dataframe[f"{name}_index_dist"] = np.nan
-            dataframe[f"{name}_price_dist"] = np.nan
-            return dataframe
+        return prot
 
-        pairs = pd.merge_asof(
-            starts[['start']].sort_values("start"),
-            ends[['end']].sort_values("end"),
-            left_on="start",
-            right_on="end",
-            direction=d,
-        ).dropna()[["start", "end"]]
-
-        if pairs.empty:
-            dataframe[name] = np.nan
-            dataframe[f"{name}_index_dist"] = np.nan
-            dataframe[f"{name}_price_dist"] = np.nan
-            return dataframe
-
-        intervals = pd.IntervalIndex.from_arrays(pairs["start"], pairs["end"], closed="both")
-        df["range_id"] = pd.cut(df.index, intervals)
-
-        e = 'max' if col == 'high' else 'min'
-        group = df.groupby("range_id", observed=True)
-        df[name] = group[col].transform(e)
-
-        df[f"{name}_index_dist"] = group.cumcount() + 1
-        df[f"{name}_index_dist"] = group[f"{name}_index_dist"].transform('max')
-
-        hi = group['high'].transform('max')
-        lo = group['low'].transform('min')
-        df[f"{name}_price_dist"] = np.abs(hi - lo)
-
-        df.loc[
-            (df[col] != df[name]),
-            [name, f"{name}_index_dist", f"{name}_price_dist"]
-        ] = np.nan
-
-        dataframe = dataframe.merge(df[[name, f"{name}_index_dist", f"{name}_price_dist"]],
-                            left_index=True, right_index=True, how="left")
-
-        c1 = (dataframe[f'{name}_index_dist'] >= tt)
-        c2 = (dataframe[f'{name}_price_dist'] >= dataframe['close'] * pt)
-        dataframe[name] = np.where((c1 & c2), dataframe[name], np.nan)
-        
-        return dataframe
     
-    @informative('1h')
-    def populate_indicators_1h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+    # @informative('1h')
+    # def populate_indicators_1h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe[f'sma_{self.medium.value}'] = ta.SMA(dataframe["close"], timeperiod=self.medium.value)
+    #     dataframe[f'sma_{self.medium.value}'] = ta.SMA(dataframe["close"], timeperiod=self.medium.value)
 
-        return dataframe
+    #     return dataframe
     
-    @informative('4h')
-    def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+    # @informative('4h')
+    # def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        dataframe[f'sma_{self.high.value}'] = ta.SMA(dataframe["close"], timeperiod=self.high.value)
+    #     dataframe[f'sma_{self.high.value}'] = ta.SMA(dataframe["close"], timeperiod=self.high.value)
 
-        return dataframe
+    #     return dataframe
 
     
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         
         dataframe[f'sma_{self.low.value}'] = ta.SMA(dataframe["close"], timeperiod=self.low.value)
-
-        c1 = qtpylib.crossed_above(dataframe[f"sma_{self.low.value}"], dataframe[f"sma_{self.medium.value}_1h"])
-        c2 = qtpylib.crossed_below(dataframe[f"sma_{self.low.value}"], dataframe[f"sma_{self.medium.value}_1h"])
-        dataframe = self.extract_features(dataframe, c1, c2, "high", "max_high")
-        dataframe = self.extract_features(dataframe, c2, c1, "low", "min_low")
+        dataframe[f'sma_{self.medium.value}'] = ta.SMA(dataframe["close"], timeperiod=self.medium.value)
+        # dataframe[f'sma_{self.high.value}'] = ta.SMA(dataframe["close"], timeperiod=self.high.value)
+        dataframe[f'atr'] = ta.ATR(dataframe, timeperiod=14) * self.atr.value
 
         return dataframe
 
@@ -134,16 +101,16 @@ class AtlasEngine(IStrategy):
 
         dataframe.loc[
             (   
-                (dataframe[f"sma_{self.medium.value}_1h"] > dataframe[f"sma_{self.high.value}_4h"]) & # Guard
-                (qtpylib.crossed_above(dataframe[f"sma_{self.low.value}"], dataframe[f"sma_{self.medium.value}_1h"])) # Trigger
+                # (dataframe[f"sma_{self.medium.value}"] > dataframe[f"sma_{self.high.value}"]) & # Guard
+                (qtpylib.crossed_above(dataframe[f"sma_{self.low.value}"], dataframe[f"sma_{self.medium.value}"])) # Trigger
             ),
             "enter_long"
         ] = 1
 
         dataframe.loc[
             (
-                (dataframe[f"sma_{self.medium.value}_1h"] < dataframe[f"sma_{self.high.value}_4h"]) & # Guard
-                (qtpylib.crossed_below(dataframe[f"sma_{self.low.value}"], dataframe[f"sma_{self.medium.value}_1h"])) # Trigger
+                # (dataframe[f"sma_{self.medium.value}"] < dataframe[f"sma_{self.high.value}"]) & # Guard
+                (qtpylib.crossed_below(dataframe[f"sma_{self.low.value}"], dataframe[f"sma_{self.medium.value}"])) # Trigger
             ),
             "enter_short"
         ] = 1
@@ -154,14 +121,14 @@ class AtlasEngine(IStrategy):
 
         dataframe.loc[
             (   
-                (qtpylib.crossed_below(dataframe[f"sma_{self.low.value}"], dataframe[f"sma_{self.medium.value}_1h"]))
+                (qtpylib.crossed_below(dataframe[f"sma_{self.low.value}"], dataframe[f"sma_{self.medium.value}"]))
             ),
             "exit_long"
         ] = 1
 
         dataframe.loc[
             (
-                (qtpylib.crossed_above(dataframe[f"sma_{self.low.value}"], dataframe[f"sma_{self.medium.value}_1h"]))
+                (qtpylib.crossed_above(dataframe[f"sma_{self.low.value}"], dataframe[f"sma_{self.medium.value}"]))
             ),
             "exit_short"
         ] = 1
@@ -170,12 +137,11 @@ class AtlasEngine(IStrategy):
 
     def get_initial_stop(self, pair, side):
         
-        dataframe_, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
-        dataframe = dataframe_.copy()
-        name = "max_high" if side == "short" else "min_low"
-        dataframe[name] = dataframe[name].ffill()
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
-        return float(last_candle[name])
+        side = 1 if side == "short" else -1
+        stop = last_candle['close'] + side * last_candle['atr']
+        return stop
 
     def leverage(self, pair: str, current_time: datetime, current_rate: float,
                  proposed_leverage: float, max_leverage: float, entry_tag: Optional[str], side: str,
@@ -185,7 +151,7 @@ class AtlasEngine(IStrategy):
         if stop is None or np.isnan(stop): return 1.0
         risk = abs(stop / current_rate - 1)
         if risk == 0: return 1.0
-        lev = self.trade_max_loss_allowed / risk
+        lev = self.allowed_loss.value / risk
         return float(max(1, min(ceil(lev), max_leverage)))
 
     def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
@@ -197,7 +163,7 @@ class AtlasEngine(IStrategy):
         if stop is None or np.isnan(stop): return 0
         risk = abs(stop / current_rate - 1)
         total_stake = max_stake + Trade.total_open_trades_stakes()
-        stake = total_stake * self.trade_max_loss_allowed / (risk * leverage)
+        stake = total_stake * self.allowed_loss.value / (risk * leverage)
         return float(min(stake, max_stake))
 
     def adjust_trade_position(self, trade: Trade, current_time: datetime,

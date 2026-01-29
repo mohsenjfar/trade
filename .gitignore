@@ -1,8 +1,8 @@
 .venv
 __pycache__
-hyperopts
 .env
 *.sqlite*
 models
-# hyperopt_results
+hyperopt_results
+backtest_results
 *.csv
