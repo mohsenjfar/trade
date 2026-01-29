@@ -18,14 +18,14 @@ func="ProfitDrawDownHyperOptLoss"
 
 spaces="buy roi allowed_loss protection"
 strategy="AtlasEngine"
-config="user_data/atlas_engine.json"
+config="user_data/config.json"
 epochs=1000
 timerange="20260101-"
 timeframe="5m 15m 1h 4h"
 
 docker-compose run --rm $service download-data -c $config -t $timeframe --timerange $timerange
 
-for i in {1..10}
+for i in {1..5}
 do
     docker-compose run --rm $service hyperopt --hyperopt-loss $func --spaces $spaces --strategy $strategy --config $config -e $epochs --analyze-per-epoch --timerange $timerange
     docker-compose run --rm $service backtesting --strategy $strategy --config $config --timerange $timerange --export trades
