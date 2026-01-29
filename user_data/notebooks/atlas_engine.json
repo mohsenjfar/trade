@@ -1,0 +1,38 @@
+{
+  "strategy_name": "AtlasEngine",
+  "params": {
+    "stoploss": {
+      "stoploss": -1.0
+    },
+    "trailing": {
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false
+    },
+    "max_open_trades": {
+      "max_open_trades": 1
+    },
+    "buy": {
+      "atr": 5.2,
+      "low": 49,
+      "medium": 32
+    },
+    "protection": {
+      "cooldown_lookback": 14,
+      "stop_duration": 151,
+      "use_stop_protection": false
+    },
+    "roi": {
+      "0": 0.093,
+      "29": 0.08,
+      "83": 0.034,
+      "170": 0
+    },
+    "allowed_loss": {
+      "allowed_loss": 0.02
+    }
+  },
+  "ft_stratparam_v": 1,
+  "export_time": "2026-01-29 13:10:28.601117+00:00"
+}
