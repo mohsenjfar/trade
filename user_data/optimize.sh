@@ -2,7 +2,7 @@
 
 service="atlas_engine"
 
-# func="ShortTradeDurHyperOptLoss"
+func="ShortTradeDurHyperOptLoss"
 # func="OnlyProfitHyperOptLoss"
 # func="SharpeHyperOptLoss"
 # func="SharpeHyperOptLossDaily"
@@ -10,7 +10,7 @@ service="atlas_engine"
 # func="SortinoHyperOptLossDaily"
 # func="CalmarHyperOptLoss"
 # func="MaxDrawDownHyperOptLoss"
-func="MaxDrawDownRelativeHyperOptLoss"
+# func="MaxDrawDownRelativeHyperOptLoss"
 # func="MaxDrawDownPerPairHyperOptLoss"
 # func="ProfitDrawDownHyperOptLoss"
 # func="MultiMetricHyperOptLoss"
