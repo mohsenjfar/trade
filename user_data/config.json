@@ -41,8 +41,8 @@
       // "ETH/USDT:USDT",
       // "BNB/USDT:USDT",
       // "WIF/USDT:USDT",
-      // "SOL/USDT:USDT",
-      "NEAR/USDT:USDT"
+      "SOL/USDT:USDT",
+      // "NEAR/USDT:USDT"
     ],
     "pair_blacklist": [
     ]
