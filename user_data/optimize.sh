@@ -16,7 +16,7 @@ func="SharpeHyperOptLossDaily"
 # func="MultiMetricHyperOptLoss"
 # func="SuperDuperHyperOptLoss"
 
-spaces="buy allowed_loss roi"
+spaces="buy allowed_loss"
 strategy="AtlasEngine"
 config="user_data/config.json"
 epochs=1000

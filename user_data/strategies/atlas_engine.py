@@ -102,7 +102,7 @@ class AtlasEngine(IStrategy):
         dataframe.loc[
             (   
                 # (dataframe[f"sma_{self.medium.value}"] > dataframe[f"sma_{self.high.value}"]) & # Guard
-                (dataframe[f"gradient"] > 0) & # Guard
+                (dataframe[f"gradient"] > dataframe[dataframe.gradient > 0].gradient.mean()) & # Guard
                 (dataframe[f"gradient"].shift(1) > dataframe[f"gradient"]) & # Guard
                 (qtpylib.crossed_above(dataframe[f"sma_{self.low.value}"], dataframe[f"sma_{self.medium.value}"])) # Trigger
             ),
@@ -112,7 +112,7 @@ class AtlasEngine(IStrategy):
         dataframe.loc[
             (
                 # (dataframe[f"sma_{self.medium.value}"] < dataframe[f"sma_{self.high.value}"]) & # Guard
-                (dataframe[f"gradient"] < 0) & # Guard
+                (dataframe[f"gradient"] < dataframe[dataframe.gradient < 0].gradient.mean()) & # Guard
                 (dataframe[f"gradient"].shift(1) < dataframe[f"gradient"]) & # Guard
                 (qtpylib.crossed_below(dataframe[f"sma_{self.low.value}"], dataframe[f"sma_{self.medium.value}"])) # Trigger
             ),
