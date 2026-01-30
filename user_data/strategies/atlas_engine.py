@@ -48,29 +48,29 @@ class AtlasEngine(IStrategy):
     medium = IntParameter(low=20, high=200, default=50, optimize=True, load=True, space='buy')
     # high = IntParameter(low=100, high=500, default=200, optimize=True, load=True, space='buy')
     atr = DecimalParameter(low=1, high=10, default=3, decimals=1, optimize=True, load=True, space='buy')
-    cooldown_lookback = IntParameter(2, 48, default=5, space="protection", optimize=True)
-    stop_duration = IntParameter(12, 200, default=5, space="protection", optimize=True)
-    use_stop_protection = BooleanParameter(default=True, space="protection", optimize=True)
+    # cooldown_lookback = IntParameter(2, 48, default=5, space="protection", optimize=True)
+    # stop_duration = IntParameter(12, 200, default=5, space="protection", optimize=True)
+    # use_stop_protection = BooleanParameter(default=True, space="protection", optimize=True)
     allowed_loss = DecimalParameter(low=0.001, high=0.02, default=0.005, decimals=3, optimize=True, load=True, space='allowed_loss')
 
-    @property
-    def protections(self):
-        prot = []
+    # @property
+    # def protections(self):
+    #     prot = []
 
-        prot.append({
-            "method": "CooldownPeriod",
-            "stop_duration_candles": self.cooldown_lookback.value
-        })
-        if self.use_stop_protection.value:
-            prot.append({
-                "method": "StoplossGuard",
-                "lookback_period_candles": 24 * 3,
-                "trade_limit": 4,
-                "stop_duration_candles": self.stop_duration.value,
-                "only_per_pair": False
-            })
+    #     prot.append({
+    #         "method": "CooldownPeriod",
+    #         "stop_duration_candles": self.cooldown_lookback.value
+    #     })
+    #     if self.use_stop_protection.value:
+    #         prot.append({
+    #             "method": "StoplossGuard",
+    #             "lookback_period_candles": 24 * 3,
+    #             "trade_limit": 4,
+    #             "stop_duration_candles": self.stop_duration.value,
+    #             "only_per_pair": False
+    #         })
 
-        return prot
+    #     return prot
 
     
     # @informative('1h')
