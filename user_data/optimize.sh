@@ -2,10 +2,10 @@
 
 service="atlas_engine"
 
-func="ShortTradeDurHyperOptLoss"
+# func="ShortTradeDurHyperOptLoss"
 # func="OnlyProfitHyperOptLoss"
 # func="SharpeHyperOptLoss"
-# func="SharpeHyperOptLossDaily"
+func="SharpeHyperOptLossDaily"
 # func="SortinoHyperOptLoss"
 # func="SortinoHyperOptLossDaily"
 # func="CalmarHyperOptLoss"
