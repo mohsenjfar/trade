@@ -51,7 +51,7 @@ class AtlasEngine(IStrategy):
     # cooldown_lookback = IntParameter(2, 48, default=5, space="protection", optimize=True)
     # stop_duration = IntParameter(12, 200, default=5, space="protection", optimize=True)
     # use_stop_protection = BooleanParameter(default=True, space="protection", optimize=True)
-    allowed_loss = DecimalParameter(low=0.001, high=0.02, default=0.005, decimals=3, optimize=True, load=True, space='allowed_loss')
+    allowed_loss = DecimalParameter(low=0.001, high=0.05, default=0.01, decimals=3, optimize=True, load=True, space='allowed_loss')
 
     # @property
     # def protections(self):
