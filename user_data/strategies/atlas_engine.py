@@ -52,6 +52,8 @@ class AtlasEngine(IStrategy):
     # stop_duration = IntParameter(12, 200, default=5, space="protection", optimize=True)
     # use_stop_protection = BooleanParameter(default=True, space="protection", optimize=True)
     allowed_loss = DecimalParameter(low=0.001, high=0.05, default=0.01, decimals=3, optimize=True, load=True, space='allowed_loss')
+    pos_grad_coef = DecimalParameter(low=0.01, high=1, default=0.1, decimals=2, optimize=True, load=True, space='buy')
+    neg_grad_coef = DecimalParameter(low=0.01, high=1, default=0.1, decimals=2, optimize=True, load=True, space='buy')
 
     # @property
     # def protections(self):
@@ -102,7 +104,7 @@ class AtlasEngine(IStrategy):
         dataframe.loc[
             (   
                 # (dataframe[f"sma_{self.medium.value}"] > dataframe[f"sma_{self.high.value}"]) & # Guard
-                (dataframe[f"gradient"] > dataframe[dataframe.gradient > 0].gradient.mean()) & # Guard
+                (dataframe[f"gradient"] > dataframe[dataframe.gradient > 0].gradient.mean() * self.pos_grad_coef.value) & # Guard
                 (dataframe[f"gradient"].shift(1) > dataframe[f"gradient"]) & # Guard
                 (qtpylib.crossed_above(dataframe[f"sma_{self.low.value}"], dataframe[f"sma_{self.medium.value}"])) # Trigger
             ),
@@ -112,7 +114,7 @@ class AtlasEngine(IStrategy):
         dataframe.loc[
             (
                 # (dataframe[f"sma_{self.medium.value}"] < dataframe[f"sma_{self.high.value}"]) & # Guard
-                (dataframe[f"gradient"] < dataframe[dataframe.gradient < 0].gradient.mean()) & # Guard
+                (dataframe[f"gradient"] < dataframe[dataframe.gradient < 0].gradient.mean() * self.neg_grad_coef.value) & # Guard
                 (dataframe[f"gradient"].shift(1) < dataframe[f"gradient"]) & # Guard
                 (qtpylib.crossed_below(dataframe[f"sma_{self.low.value}"], dataframe[f"sma_{self.medium.value}"])) # Trigger
             ),
