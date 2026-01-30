@@ -40,8 +40,8 @@
       // "BTC/USDT:USDT",
       // "ETH/USDT:USDT",
       // "BNB/USDT:USDT",
-      "WIF/USDT:USDT",
-      // "SOL/USDT:USDT"
+      // "WIF/USDT:USDT",
+      "SOL/USDT:USDT"
     ],
     "pair_blacklist": [
     ]
