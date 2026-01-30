@@ -92,7 +92,7 @@ class AtlasEngine(IStrategy):
         
         dataframe[f'sma_{self.low.value}'] = ta.SMA(dataframe["close"], timeperiod=self.low.value)
         dataframe[f'sma_{self.medium.value}'] = ta.SMA(dataframe["close"], timeperiod=self.medium.value)
-        # dataframe[f'sma_{self.high.value}'] = ta.SMA(dataframe["close"], timeperiod=self.high.value)
+        dataframe['gradient'] = dataframe[f'sma_{self.medium.value}'].diff()
         dataframe[f'atr'] = ta.ATR(dataframe, timeperiod=14) * self.atr.value
 
         return dataframe
@@ -102,6 +102,8 @@ class AtlasEngine(IStrategy):
         dataframe.loc[
             (   
                 # (dataframe[f"sma_{self.medium.value}"] > dataframe[f"sma_{self.high.value}"]) & # Guard
+                (dataframe[f"gradient"] > 0) & # Guard
+                (dataframe[f"gradient"].shift(1) > dataframe[f"gradient"]) & # Guard
                 (qtpylib.crossed_above(dataframe[f"sma_{self.low.value}"], dataframe[f"sma_{self.medium.value}"])) # Trigger
             ),
             "enter_long"
@@ -110,6 +112,8 @@ class AtlasEngine(IStrategy):
         dataframe.loc[
             (
                 # (dataframe[f"sma_{self.medium.value}"] < dataframe[f"sma_{self.high.value}"]) & # Guard
+                (dataframe[f"gradient"] < 0) & # Guard
+                (dataframe[f"gradient"].shift(1) < dataframe[f"gradient"]) & # Guard
                 (qtpylib.crossed_below(dataframe[f"sma_{self.low.value}"], dataframe[f"sma_{self.medium.value}"])) # Trigger
             ),
             "enter_short"
