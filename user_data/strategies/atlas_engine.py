@@ -8,13 +8,11 @@ from freqtrade.strategy import (
     IStrategy,
     stoploss_from_absolute,
     IntParameter,
-    DecimalParameter,
-    informative,
-    BooleanParameter
+    informative
 )
 from datetime import datetime
 from typing import Optional
-
+import user_data.utils.custom_indicators as ci
 
 class AtlasEngine(IStrategy):
 
@@ -26,6 +24,8 @@ class AtlasEngine(IStrategy):
 
     can_short: bool = True
     process_only_new_candles = True
+
+    allowed_loss = 0.02
 
     use_exit_signal = True
     use_custom_stoploss = True
@@ -46,56 +46,30 @@ class AtlasEngine(IStrategy):
 
     low = IntParameter(low=5, high=50, default=10, optimize=True, load=True, space='buy')
     medium = IntParameter(low=20, high=200, default=50, optimize=True, load=True, space='buy')
-    # high = IntParameter(low=100, high=500, default=200, optimize=True, load=True, space='buy')
-    atr = DecimalParameter(low=1, high=10, default=3, decimals=1, optimize=True, load=True, space='buy')
-    # cooldown_lookback = IntParameter(2, 48, default=5, space="protection", optimize=True)
-    # stop_duration = IntParameter(12, 200, default=5, space="protection", optimize=True)
-    # use_stop_protection = BooleanParameter(default=True, space="protection", optimize=True)
-    allowed_loss = DecimalParameter(low=0.001, high=0.02, default=0.01, decimals=3, optimize=True, load=True, space='allowed_loss')
-    pos_grad_coef = DecimalParameter(low=0.01, high=1, default=0.1, decimals=2, optimize=True, load=True, space='buy')
-    neg_grad_coef = DecimalParameter(low=0.01, high=1, default=0.1, decimals=2, optimize=True, load=True, space='buy')
-
-    # @property
-    # def protections(self):
-    #     prot = []
-
-    #     prot.append({
-    #         "method": "CooldownPeriod",
-    #         "stop_duration_candles": self.cooldown_lookback.value
-    #     })
-    #     if self.use_stop_protection.value:
-    #         prot.append({
-    #             "method": "StoplossGuard",
-    #             "lookback_period_candles": 24 * 3,
-    #             "trade_limit": 4,
-    #             "stop_duration_candles": self.stop_duration.value,
-    #             "only_per_pair": False
-    #         })
-
-    #     return prot
-
+    high = IntParameter(low=100, high=500, default=200, optimize=True, load=True, space='buy')
     
-    # @informative('1h')
-    # def populate_indicators_1h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+    @informative('1h')
+    def populate_indicators_1h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-    #     dataframe[f'sma_{self.medium.value}'] = ta.SMA(dataframe["close"], timeperiod=self.medium.value)
+        dataframe = ci.calculate_derivatives(dataframe, self.medium.value)
 
-    #     return dataframe
+        return dataframe
     
-    # @informative('4h')
-    # def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+    @informative('4h')
+    def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-    #     dataframe[f'sma_{self.high.value}'] = ta.SMA(dataframe["close"], timeperiod=self.high.value)
+        dataframe = ci.calculate_derivatives(dataframe, self.high.value)
 
-    #     return dataframe
-
+        return dataframe
     
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         
-        dataframe[f'sma_{self.low.value}'] = ta.SMA(dataframe["close"], timeperiod=self.low.value)
-        dataframe[f'sma_{self.medium.value}'] = ta.SMA(dataframe["close"], timeperiod=self.medium.value)
-        dataframe['gradient'] = dataframe[f'sma_{self.medium.value}'].diff()
-        dataframe[f'atr'] = ta.ATR(dataframe, timeperiod=14) * self.atr.value
+        dataframe = ci.calculate_derivatives(dataframe, self.low.value)
+        
+        c1 = qtpylib.crossed_above(dataframe['ema'], dataframe['ema_1h'])
+        c2 = qtpylib.crossed_below(dataframe['ema'], dataframe['ema_1h'])
+        dataframe = ci.extrema_extractor(dataframe, c1, c2, 'max', 'max_high')
+        dataframe = ci.extrema_extractor(dataframe, c2, c1, 'min', 'min_low')
 
         return dataframe
 
@@ -103,20 +77,22 @@ class AtlasEngine(IStrategy):
 
         dataframe.loc[
             (   
-                # (dataframe[f"sma_{self.medium.value}"] > dataframe[f"sma_{self.high.value}"]) & # Guard
-                (dataframe[f"gradient"] > dataframe[dataframe.gradient > 0].gradient.mean() * self.pos_grad_coef.value) & # Guard
-                (dataframe[f"gradient"].shift(1) > dataframe[f"gradient"]) & # Guard
-                (qtpylib.crossed_above(dataframe[f"sma_{self.low.value}"], dataframe[f"sma_{self.medium.value}"])) # Trigger
+                (dataframe['ema_first_derivative_1h'] > 0) & # Guard
+                (dataframe['ema_second_derivative_1h'] > 0) & # Guard
+                (dataframe['ema_first_derivative_4h'] > 0) & # Guard
+                (dataframe['ema_second_derivative_4h'] > 0) & # Guard
+                (qtpylib.crossed_above(dataframe["ema"], dataframe["ema_1h"])) # Trigger
             ),
             "enter_long"
         ] = 1
 
         dataframe.loc[
             (
-                # (dataframe[f"sma_{self.medium.value}"] < dataframe[f"sma_{self.high.value}"]) & # Guard
-                (dataframe[f"gradient"] < dataframe[dataframe.gradient < 0].gradient.mean() * self.neg_grad_coef.value) & # Guard
-                (dataframe[f"gradient"].shift(1) < dataframe[f"gradient"]) & # Guard
-                (qtpylib.crossed_below(dataframe[f"sma_{self.low.value}"], dataframe[f"sma_{self.medium.value}"])) # Trigger
+                (dataframe['ema_first_derivative_1h'] < 0) & # Guard
+                (dataframe['ema_second_derivative_1h'] < 0) & # Guard
+                (dataframe['ema_first_derivative_4h'] < 0) & # Guard
+                (dataframe['ema_second_derivative_4h'] < 0) & # Guard
+                (qtpylib.crossed_below(dataframe["ema"], dataframe["ema_1h"])) # Trigger
             ),
             "enter_short"
         ] = 1
@@ -126,15 +102,15 @@ class AtlasEngine(IStrategy):
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
         dataframe.loc[
-            (   
-                (qtpylib.crossed_below(dataframe[f"sma_{self.low.value}"], dataframe[f"sma_{self.medium.value}"]))
+            (
+                (qtpylib.crossed_below(dataframe["ema"], dataframe["ema_1h"]))
             ),
             "exit_long"
         ] = 1
 
         dataframe.loc[
             (
-                (qtpylib.crossed_above(dataframe[f"sma_{self.low.value}"], dataframe[f"sma_{self.medium.value}"]))
+                (qtpylib.crossed_above(dataframe["ema"], dataframe["ema_1h"]))
             ),
             "exit_short"
         ] = 1
@@ -145,9 +121,8 @@ class AtlasEngine(IStrategy):
         
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
-        side = 1 if side == "short" else -1
-        stop = last_candle['close'] + side * last_candle['atr']
-        return stop
+        col = 'min_low' if side == "short" else 'max_high'
+        return last_candle[col]
 
     def leverage(self, pair: str, current_time: datetime, current_rate: float,
                  proposed_leverage: float, max_leverage: float, entry_tag: Optional[str], side: str,
@@ -157,7 +132,7 @@ class AtlasEngine(IStrategy):
         if stop is None or np.isnan(stop): return 1.0
         risk = abs(stop / current_rate - 1)
         if risk == 0: return 1.0
-        lev = self.allowed_loss.value / risk
+        lev = self.allowed_loss / risk
         return float(max(1, min(ceil(lev), max_leverage)))
 
     def custom_stake_amount(self, pair: str, current_time: datetime, current_rate: float,
@@ -169,7 +144,7 @@ class AtlasEngine(IStrategy):
         if stop is None or np.isnan(stop): return 0
         risk = abs(stop / current_rate - 1)
         total_stake = max_stake + Trade.total_open_trades_stakes()
-        stake = total_stake * self.allowed_loss.value / (risk * leverage)
+        stake = total_stake * self.allowed_loss / (risk * leverage)
         return float(min(stake, max_stake))
 
     def adjust_trade_position(self, trade: Trade, current_time: datetime,
@@ -181,8 +156,8 @@ class AtlasEngine(IStrategy):
                               ) -> float | None | tuple[float | None, str | None]:
 
         risk = trade.get_custom_data(key='risk')
-        if (current_profit > 2 * risk) and (trade.nr_of_successful_exits == 0):
-            return - trade.stake_amount * 0.3
+        if (current_profit > risk) and (trade.nr_of_successful_exits == 0):
+            return - trade.stake_amount * 0.5
     
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
                         current_rate: float, current_profit: float, after_fill: bool,
@@ -192,7 +167,7 @@ class AtlasEngine(IStrategy):
         if stop is None:
             stop = self.get_initial_stop(pair, trade.trade_direction)
             trade.set_custom_data("stop", stop)
-            risk = abs(stop / trade.open_rate - 1)
+            risk = abs(stop / trade.open_rate - 1) * trade.leverage
             trade.set_custom_data("risk", risk)
             self.dp.send_msg(f"Trade risk ({pair}): {risk * 100:.2f} %")
 
