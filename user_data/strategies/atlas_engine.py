@@ -78,10 +78,10 @@ class AtlasEngine(IStrategy):
         dataframe.loc[
             (   
                 (dataframe['ema_first_derivative_1h'] > 0) & # Guard
-                (dataframe['ema_second_derivative_1h'] > 0) & # Guard
+                # (dataframe['ema_second_derivative_1h'] > 0) & # Guard
                 (dataframe['ema_first_derivative_4h'] > 0) & # Guard
-                (dataframe['ema_second_derivative_4h'] > 0) & # Guard
-                (qtpylib.crossed_above(dataframe["ema"], dataframe["ema_1h"])) # Trigger
+                # (dataframe['ema_second_derivative_4h'] > 0) & # Guard
+                (qtpylib.crossed_above(dataframe["close"], dataframe["ema_1h"])) # Trigger
             ),
             "enter_long"
         ] = 1
@@ -89,10 +89,10 @@ class AtlasEngine(IStrategy):
         dataframe.loc[
             (
                 (dataframe['ema_first_derivative_1h'] < 0) & # Guard
-                (dataframe['ema_second_derivative_1h'] < 0) & # Guard
+                # (dataframe['ema_second_derivative_1h'] < 0) & # Guard
                 (dataframe['ema_first_derivative_4h'] < 0) & # Guard
-                (dataframe['ema_second_derivative_4h'] < 0) & # Guard
-                (qtpylib.crossed_below(dataframe["ema"], dataframe["ema_1h"])) # Trigger
+                # (dataframe['ema_second_derivative_4h'] < 0) & # Guard
+                (qtpylib.crossed_below(dataframe["close"], dataframe["ema_1h"])) # Trigger
             ),
             "enter_short"
         ] = 1
