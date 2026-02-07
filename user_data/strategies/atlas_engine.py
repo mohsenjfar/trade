@@ -12,7 +12,7 @@ from freqtrade.strategy import (
 )
 from datetime import datetime
 from typing import Optional
-import user_data.utils.custom_indicators as ci
+import utils.custom_indicators as ci
 
 class AtlasEngine(IStrategy):
 
