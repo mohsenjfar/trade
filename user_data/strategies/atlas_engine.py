@@ -54,11 +54,11 @@ class AtlasEngine(IStrategy):
     high = IntParameter(low=100, high=500, default=200, optimize=True, load=True, space='buy')
 
     # Cluster multiplier for each cluster on EMA parameters (5 clusters → 5 optimal multipliers)
-    cluster_mult_0 = DecimalParameter(0.1, 2.0, default=1.0, decimals=1, optimize=True, load=True, space='buy')
-    cluster_mult_1 = DecimalParameter(0.1, 2.0, default=1.0, decimals=1, optimize=True, load=True, space='buy')
-    cluster_mult_2 = DecimalParameter(0.1, 2.0, default=1.0, decimals=1, optimize=True, load=True, space='buy')
-    cluster_mult_3 = DecimalParameter(0.1, 2.0, default=1.0, decimals=1, optimize=True, load=True, space='buy')
-    cluster_mult_4 = DecimalParameter(0.1, 2.0, default=1.0, decimals=1, optimize=True, load=True, space='buy')
+    cluster_mult_0 = DecimalParameter(0.2, 2.0, default=1.0, decimals=1, optimize=True, load=True, space='buy')
+    cluster_mult_1 = DecimalParameter(0.2, 2.0, default=1.0, decimals=1, optimize=True, load=True, space='buy')
+    cluster_mult_2 = DecimalParameter(0.2, 2.0, default=1.0, decimals=1, optimize=True, load=True, space='buy')
+    cluster_mult_3 = DecimalParameter(0.2, 2.0, default=1.0, decimals=1, optimize=True, load=True, space='buy')
+    cluster_mult_4 = DecimalParameter(0.2, 2.0, default=1.0, decimals=1, optimize=True, load=True, space='buy')
 
     def __init__(self, config: dict) -> None:
         super().__init__(config)
