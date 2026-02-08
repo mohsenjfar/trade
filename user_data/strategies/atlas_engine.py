@@ -11,7 +11,7 @@ from freqtrade.strategy import (
     IStrategy,
     stoploss_from_absolute,
     IntParameter,
-    FloatParameter,
+    DecimalParameter,
     informative
 )
 from datetime import datetime
@@ -53,12 +53,12 @@ class AtlasEngine(IStrategy):
     medium = IntParameter(low=20, high=200, default=50, optimize=True, load=True, space='buy')
     high = IntParameter(low=100, high=500, default=200, optimize=True, load=True, space='buy')
 
-    # ضریب هر کلاستر روی پارامترهای EMA (۵ کلاستر → ۵ ضریب بهینه‌شونده)
-    cluster_mult_0 = FloatParameter(0.5, 1.5, default=1.0, optimize=True, load=True, space='buy')
-    cluster_mult_1 = FloatParameter(0.5, 1.5, default=1.0, optimize=True, load=True, space='buy')
-    cluster_mult_2 = FloatParameter(0.5, 1.5, default=1.0, optimize=True, load=True, space='buy')
-    cluster_mult_3 = FloatParameter(0.5, 1.5, default=1.0, optimize=True, load=True, space='buy')
-    cluster_mult_4 = FloatParameter(0.5, 1.5, default=1.0, optimize=True, load=True, space='buy')
+    # Cluster multiplier for each cluster on EMA parameters (5 clusters → 5 optimal multipliers)
+    cluster_mult_0 = DecimalParameter(0.5, 1.5, default=1.0, decimals=2, optimize=True, load=True, space='buy')
+    cluster_mult_1 = DecimalParameter(0.5, 1.5, default=1.0, decimals=2, optimize=True, load=True, space='buy')
+    cluster_mult_2 = DecimalParameter(0.5, 1.5, default=1.0, decimals=2, optimize=True, load=True, space='buy')
+    cluster_mult_3 = DecimalParameter(0.5, 1.5, default=1.0, decimals=2, optimize=True, load=True, space='buy')
+    cluster_mult_4 = DecimalParameter(0.5, 1.5, default=1.0, decimals=2, optimize=True, load=True, space='buy')
 
     def __init__(self, config: dict) -> None:
         super().__init__(config)
@@ -71,7 +71,7 @@ class AtlasEngine(IStrategy):
                     cid = int(cluster_str)
                     for p in pairs:
                         self._pair_to_cluster[p] = cid
-                        # نرمال برای فرمت Freqtrade (مثلاً BTC/USDT:USDT)
+                        # Normalize for Freqtrade format (e.g. BTC/USDT:USDT)
                         norm = p.replace("/USDT/USDT:", "/USDT:")
                         if norm != p:
                             self._pair_to_cluster[norm] = cid
