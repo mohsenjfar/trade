@@ -22,8 +22,6 @@ class AtlasEngine(IStrategy):
 
     timeframe = '15m'
 
-    # ROI before leverage
-
     can_short: bool = True
     process_only_new_candles = True
 
