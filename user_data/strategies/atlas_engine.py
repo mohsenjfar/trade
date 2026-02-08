@@ -20,7 +20,7 @@ class AtlasEngine(IStrategy):
 
     stoploss = -1
 
-    timeframe = '5m'
+    timeframe = '15m'
 
     can_short: bool = True
     process_only_new_candles = True
