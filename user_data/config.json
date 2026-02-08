@@ -37,12 +37,12 @@
     "key": "",
     "secret": "",
     "pair_whitelist": [
-      "BTC/USDT:USDT",
-      "ETH/USDT:USDT",
-      "BNB/USDT:USDT",
+      // "BTC/USDT:USDT",
+      // "ETH/USDT:USDT",
+      // "BNB/USDT:USDT",
       "WIF/USDT:USDT",
-      "SOL/USDT:USDT",
-      "NEAR/USDT:USDT"
+      // "SOL/USDT:USDT",
+      // "NEAR/USDT:USDT"
     ],
     "pair_blacklist": [
     ]
