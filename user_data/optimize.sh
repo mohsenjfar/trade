@@ -20,7 +20,7 @@ spaces="buy trades roi"
 strategy="AtlasEngine"
 config="user_data/config.json"
 epochs=1000
-timerange="20260101-"
+timerange="20260201-"
 timeframe="15m 1h 4h"
 
 docker-compose run --rm $service download-data -c $config -t $timeframe --timerange $timerange
