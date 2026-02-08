@@ -6,3 +6,4 @@ models
 hyperopt_results
 backtest_results
 *.csv
+data

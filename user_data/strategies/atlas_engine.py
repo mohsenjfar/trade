@@ -1,3 +1,6 @@
+import json
+from pathlib import Path
+
 import freqtrade.vendor.qtpylib.indicators as qtpylib
 from pandas import DataFrame
 import numpy as np
@@ -8,10 +11,12 @@ from freqtrade.strategy import (
     IStrategy,
     stoploss_from_absolute,
     IntParameter,
+    FloatParameter,
     informative
 )
 from datetime import datetime
 from typing import Optional
+
 import user_data.utils.custom_indicators as ci
 
 class AtlasEngine(IStrategy):
@@ -47,24 +52,64 @@ class AtlasEngine(IStrategy):
     low = IntParameter(low=5, high=50, default=10, optimize=True, load=True, space='buy')
     medium = IntParameter(low=20, high=200, default=50, optimize=True, load=True, space='buy')
     high = IntParameter(low=100, high=500, default=200, optimize=True, load=True, space='buy')
-    
+
+    # ضریب هر کلاستر روی پارامترهای EMA (۵ کلاستر → ۵ ضریب بهینه‌شونده)
+    cluster_mult_0 = FloatParameter(0.5, 1.5, default=1.0, optimize=True, load=True, space='buy')
+    cluster_mult_1 = FloatParameter(0.5, 1.5, default=1.0, optimize=True, load=True, space='buy')
+    cluster_mult_2 = FloatParameter(0.5, 1.5, default=1.0, optimize=True, load=True, space='buy')
+    cluster_mult_3 = FloatParameter(0.5, 1.5, default=1.0, optimize=True, load=True, space='buy')
+    cluster_mult_4 = FloatParameter(0.5, 1.5, default=1.0, optimize=True, load=True, space='buy')
+
+    def __init__(self, config: dict) -> None:
+        super().__init__(config)
+        self._pair_to_cluster: dict[str, int] = {}
+        clusters_path = Path(__file__).parent / "token_clusters.json"
+        if clusters_path.exists():
+            try:
+                data = json.loads(clusters_path.read_text(encoding="utf-8"))
+                for cluster_str, pairs in data.items():
+                    cid = int(cluster_str)
+                    for p in pairs:
+                        self._pair_to_cluster[p] = cid
+                        # نرمال برای فرمت Freqtrade (مثلاً BTC/USDT:USDT)
+                        norm = p.replace("/USDT/USDT:", "/USDT:")
+                        if norm != p:
+                            self._pair_to_cluster[norm] = cid
+            except Exception:
+                pass
+
+    def _get_cluster_id(self, pair: str) -> Optional[int]:
+        cid = self._pair_to_cluster.get(pair)
+        if cid is not None:
+            return cid
+        alt = pair.replace("/USDT:", "/USDT/USDT:")
+        return self._pair_to_cluster.get(alt)
+
+    def _ema_period_for_cluster(self, base: int, cluster_id: Optional[int]) -> int:
+        if cluster_id is None:
+            return base
+        mult = (self.cluster_mult_0, self.cluster_mult_1, self.cluster_mult_2,
+                self.cluster_mult_3, self.cluster_mult_4)[cluster_id]
+        return max(1, round(base * mult.value))
+
     @informative('1h')
     def populate_indicators_1h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-
-        dataframe = ci.calculate_derivatives(dataframe, self.medium.value)
-
+        cid = self._get_cluster_id(metadata.get("pair", ""))
+        period = self._ema_period_for_cluster(self.medium.value, cid)
+        dataframe = ci.calculate_derivatives(dataframe, period)
         return dataframe
-    
+
     @informative('4h')
     def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-
-        dataframe = ci.calculate_derivatives(dataframe, self.high.value)
-
+        cid = self._get_cluster_id(metadata.get("pair", ""))
+        period = self._ema_period_for_cluster(self.high.value, cid)
+        dataframe = ci.calculate_derivatives(dataframe, period)
         return dataframe
-    
+
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        
-        dataframe = ci.calculate_derivatives(dataframe, self.low.value)
+        cid = self._get_cluster_id(metadata.get("pair", ""))
+        period = self._ema_period_for_cluster(self.low.value, cid)
+        dataframe = ci.calculate_derivatives(dataframe, period)
         
         c1 = qtpylib.crossed_above(dataframe['ema'], dataframe['ema_1h'])
         c2 = qtpylib.crossed_below(dataframe['ema'], dataframe['ema_1h'])
