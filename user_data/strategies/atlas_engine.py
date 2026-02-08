@@ -54,11 +54,11 @@ class AtlasEngine(IStrategy):
     high = IntParameter(low=100, high=500, default=200, optimize=True, load=True, space='buy')
 
     # Cluster multiplier for each cluster on EMA parameters (5 clusters → 5 optimal multipliers)
-    cluster_mult_0 = DecimalParameter(0.2, 2.0, default=1.0, decimals=1, optimize=True, load=True, space='buy')
-    cluster_mult_1 = DecimalParameter(0.2, 2.0, default=1.0, decimals=1, optimize=True, load=True, space='buy')
-    cluster_mult_2 = DecimalParameter(0.2, 2.0, default=1.0, decimals=1, optimize=True, load=True, space='buy')
-    cluster_mult_3 = DecimalParameter(0.2, 2.0, default=1.0, decimals=1, optimize=True, load=True, space='buy')
-    cluster_mult_4 = DecimalParameter(0.2, 2.0, default=1.0, decimals=1, optimize=True, load=True, space='buy')
+    cluster_mult_0 = DecimalParameter(0.5, 2.0, default=1.0, decimals=2, optimize=True, load=True, space='buy')
+    cluster_mult_1 = DecimalParameter(0.5, 2.0, default=1.0, decimals=2, optimize=True, load=True, space='buy')
+    cluster_mult_2 = DecimalParameter(0.5, 2.0, default=1.0, decimals=2, optimize=True, load=True, space='buy')
+    cluster_mult_3 = DecimalParameter(0.5, 2.0, default=1.0, decimals=2, optimize=True, load=True, space='buy')
+    cluster_mult_4 = DecimalParameter(0.5, 2.0, default=1.0, decimals=2, optimize=True, load=True, space='buy')
 
     def __init__(self, config: dict) -> None:
         super().__init__(config)
@@ -163,11 +163,15 @@ class AtlasEngine(IStrategy):
         return dataframe
 
     def get_initial_stop(self, pair, side):
-        
         dataframe, _ = self.dp.get_analyzed_dataframe(pair=pair, timeframe=self.timeframe)
+        if dataframe is None or dataframe.empty:
+            return None
         last_candle = dataframe.iloc[-1].squeeze()
         col = 'min_low' if side == "short" else 'max_high'
-        return last_candle[col]
+        stop = last_candle.get(col)
+        if stop is None or (hasattr(stop, '__float__') and np.isnan(float(stop))):
+            return None
+        return stop
 
     def leverage(self, pair: str, current_time: datetime, current_rate: float,
                  proposed_leverage: float, max_leverage: float, entry_tag: Optional[str], side: str,
@@ -201,6 +205,8 @@ class AtlasEngine(IStrategy):
                               ) -> float | None | tuple[float | None, str | None]:
 
         risk = trade.get_custom_data(key='risk')
+        if risk is None:
+            risk = self.allowed_loss
         if (current_profit > risk) and (trade.nr_of_successful_exits == 0):
             return - trade.stake_amount * 0.5
     
