@@ -92,27 +92,31 @@ class AtlasEngine(IStrategy):
                 self.cluster_mult_3, self.cluster_mult_4)[cluster_id]
         return max(1, round(base * mult.value))
 
-    @informative('1h')
-    def populate_indicators_1h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        cid = self._get_cluster_id(metadata.get("pair", ""))
-        period = self._ema_period_for_cluster(self.medium.value, cid)
-        dataframe = ci.calculate_derivatives(dataframe, period)
-        return dataframe
-
     @informative('4h')
     def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         cid = self._get_cluster_id(metadata.get("pair", ""))
         period = self._ema_period_for_cluster(self.high.value, cid)
-        dataframe = ci.calculate_derivatives(dataframe, period)
+        dataframe['ema'] = ta.EMA(dataframe["close"], timeperiod=period)
+        dataframe['ema_first_derivative'] = np.gradient(dataframe["ema"])
+        dataframe['ema_second_derivative'] = np.gradient(dataframe["ema_first_derivative"])
         return dataframe
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+
         cid = self._get_cluster_id(metadata.get("pair", ""))
         period = self._ema_period_for_cluster(self.low.value, cid)
-        dataframe = ci.calculate_derivatives(dataframe, period)
+        dataframe['ema_short'] = ta.EMA(dataframe["close"], timeperiod=period)
+        dataframe['ema_short_first_derivative'] = np.gradient(dataframe["ema_short"])
+        dataframe['ema_short_second_derivative'] = np.gradient(dataframe["ema_short_first_derivative"])
+
+        cid = self._get_cluster_id(metadata.get("pair", ""))
+        period = self._ema_period_for_cluster(self.medium.value, cid)
+        dataframe['ema_long'] = ta.EMA(dataframe["close"], timeperiod=period)
+        dataframe['ema_long_first_derivative'] = np.gradient(dataframe["ema_long"])
+        dataframe['ema_long_second_derivative'] = np.gradient(dataframe["ema_long_first_derivative"])
         
-        c1 = qtpylib.crossed_above(dataframe['ema'], dataframe['ema_1h'])
-        c2 = qtpylib.crossed_below(dataframe['ema'], dataframe['ema_1h'])
+        c1 = qtpylib.crossed_above(dataframe['ema_short'], dataframe['ema_long'])
+        c2 = qtpylib.crossed_below(dataframe['ema_short'], dataframe['ema_long'])
         dataframe = ci.extrema_extractor(dataframe, c1, c2, 'max', 'max_high')
         dataframe = ci.extrema_extractor(dataframe, c2, c1, 'min', 'min_low')
 
@@ -122,22 +126,18 @@ class AtlasEngine(IStrategy):
 
         dataframe.loc[
             (   
-                (dataframe['ema_first_derivative_1h'] > 0) & # Guard
-                # (dataframe['ema_second_derivative_1h'] > 0) & # Guard
                 (dataframe['ema_first_derivative_4h'] > 0) & # Guard
                 # (dataframe['ema_second_derivative_4h'] > 0) & # Guard
-                (qtpylib.crossed_above(dataframe["ema"], dataframe["ema_1h"])) # Trigger
+                (qtpylib.crossed_above(dataframe["ema_short"], dataframe["ema_long"])) # Trigger
             ),
             "enter_long"
         ] = 1
 
         dataframe.loc[
             (
-                (dataframe['ema_first_derivative_1h'] < 0) & # Guard
-                # (dataframe['ema_second_derivative_1h'] < 0) & # Guard
                 (dataframe['ema_first_derivative_4h'] < 0) & # Guard
                 # (dataframe['ema_second_derivative_4h'] < 0) & # Guard
-                (qtpylib.crossed_below(dataframe["ema"], dataframe["ema_1h"])) # Trigger
+                (qtpylib.crossed_below(dataframe["ema_short"], dataframe["ema_long"])) # Trigger
             ),
             "enter_short"
         ] = 1
@@ -148,14 +148,14 @@ class AtlasEngine(IStrategy):
 
         dataframe.loc[
             (
-                (qtpylib.crossed_below(dataframe["ema"], dataframe["ema_1h"]))
+                (qtpylib.crossed_below(dataframe["ema_short"], dataframe["ema_long"]))
             ),
             "exit_long"
         ] = 1
 
         dataframe.loc[
             (
-                (qtpylib.crossed_above(dataframe["ema"], dataframe["ema_1h"]))
+                (qtpylib.crossed_above(dataframe["ema_short"], dataframe["ema_long"]))
             ),
             "exit_short"
         ] = 1
