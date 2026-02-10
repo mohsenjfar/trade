@@ -95,24 +95,24 @@ class AtlasEngine(IStrategy):
 
     @informative(inf_tf)
     def populate_indicators_(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        cid = self._get_cluster_id(metadata.get("pair", ""))
-        period = self._ema_period_for_cluster(self.high.value, cid)
-        dataframe['ema'] = ta.EMA(dataframe["close"], timeperiod=period)
+        # cid = self._get_cluster_id(metadata.get("pair", ""))
+        # period = self._ema_period_for_cluster(self.high.value, cid)
+        dataframe['ema'] = ta.EMA(dataframe["close"], timeperiod=self.high.value)
         dataframe['ema_first_derivative'] = np.gradient(dataframe["ema"])
         dataframe['ema_second_derivative'] = np.gradient(dataframe["ema_first_derivative"])
         return dataframe
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
 
-        cid = self._get_cluster_id(metadata.get("pair", ""))
-        period = self._ema_period_for_cluster(self.low.value, cid)
-        dataframe['ema_short'] = ta.EMA(dataframe["close"], timeperiod=period)
+        # cid = self._get_cluster_id(metadata.get("pair", ""))
+        # period = self._ema_period_for_cluster(self.low.value, cid)
+        dataframe['ema_short'] = ta.EMA(dataframe["close"], timeperiod=self.low.value)
         dataframe['ema_short_first_derivative'] = np.gradient(dataframe["ema_short"])
         dataframe['ema_short_second_derivative'] = np.gradient(dataframe["ema_short_first_derivative"])
 
-        cid = self._get_cluster_id(metadata.get("pair", ""))
-        period = self._ema_period_for_cluster(self.medium.value, cid)
-        dataframe['ema_long'] = ta.EMA(dataframe["close"], timeperiod=period)
+        # cid = self._get_cluster_id(metadata.get("pair", ""))
+        # period = self._ema_period_for_cluster(self.medium.value, cid)
+        dataframe['ema_long'] = ta.EMA(dataframe["close"], timeperiod=self.medium.value)
         dataframe['ema_long_first_derivative'] = np.gradient(dataframe["ema_long"])
         dataframe['ema_long_second_derivative'] = np.gradient(dataframe["ema_long_first_derivative"])
         
