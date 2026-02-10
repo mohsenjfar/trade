@@ -26,6 +26,7 @@ class AtlasEngine(IStrategy):
     stoploss = -1
 
     timeframe = '15m'
+    inf_tf = '4h'
 
     can_short: bool = True
     process_only_new_candles = True
@@ -92,8 +93,8 @@ class AtlasEngine(IStrategy):
                 self.cluster_mult_3, self.cluster_mult_4)[cluster_id]
         return max(1, round(base * mult.value))
 
-    @informative('4h')
-    def populate_indicators_4h(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+    @informative(inf_tf)
+    def populate_indicators_(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         cid = self._get_cluster_id(metadata.get("pair", ""))
         period = self._ema_period_for_cluster(self.high.value, cid)
         dataframe['ema'] = ta.EMA(dataframe["close"], timeperiod=period)
@@ -126,8 +127,8 @@ class AtlasEngine(IStrategy):
 
         dataframe.loc[
             (   
-                (dataframe['ema_first_derivative_4h'] > 0) & # Guard
-                # (dataframe['ema_second_derivative_4h'] > 0) & # Guard
+                (dataframe[f'ema_first_derivative_{self.inf_tf}'] > 0) & # Guard
+                # (dataframe[f'ema_second_derivative_{self.inf_tf}'] > 0) & # Guard
                 (qtpylib.crossed_above(dataframe["ema_short"], dataframe["ema_long"])) # Trigger
             ),
             "enter_long"
@@ -135,8 +136,8 @@ class AtlasEngine(IStrategy):
 
         dataframe.loc[
             (
-                (dataframe['ema_first_derivative_4h'] < 0) & # Guard
-                # (dataframe['ema_second_derivative_4h'] < 0) & # Guard
+                (dataframe[f'ema_first_derivative_{self.inf_tf}'] < 0) & # Guard
+                # (dataframe[f'ema_first_derivative_{self.inf_tf}'] < 0) & # Guard
                 (qtpylib.crossed_below(dataframe["ema_short"], dataframe["ema_long"])) # Trigger
             ),
             "enter_short"

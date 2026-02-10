@@ -21,7 +21,7 @@ strategy="AtlasEngine"
 config="user_data/config.json"
 epochs=1000
 timerange="20260101-"
-timeframe="15m 1h 4h"
+timeframe="5m 15m 1h 4h"
 
 docker-compose run --rm $service download-data -c $config -t $timeframe --timerange $timerange
 
