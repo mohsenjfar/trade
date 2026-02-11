@@ -149,14 +149,14 @@ class AtlasEngine(IStrategy):
 
         dataframe.loc[
             (
-                (qtpylib.crossed_below(dataframe["ema_short"], dataframe["ema_long"]))
+                (qtpylib.crossed_below(dataframe["ema_short"], dataframe['ema_long']))
             ),
             "exit_long"
         ] = 1
 
         dataframe.loc[
             (
-                (qtpylib.crossed_above(dataframe["ema_short"], dataframe["ema_long"]))
+                (qtpylib.crossed_above(dataframe["ema_short"], dataframe['ema_long']))
             ),
             "exit_short"
         ] = 1
