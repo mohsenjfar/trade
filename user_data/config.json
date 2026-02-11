@@ -41,22 +41,22 @@
       // "BTC/USDT:USDT",
       // "SOL/USDT:USDT",
       // "XRP/USDT:USDT",
-      "HYPE/USDT:USDT",
+      // "HYPE/USDT:USDT",
       // "DOGE/USDT:USDT",
       // "LA/USDT:USDT",
       // "ADA/USDT:USDT",
       // "1000PEPE/USDT:USDT",
       // "SIREN/USDT:USDT",
-      "BNB/USDT:USDT",
+      // "BNB/USDT:USDT",
       // "SUI/USDT:USDT",
       // "ZEC/USDT:USDT",
       // "LINK/USDT:USDT",
-      "FARTCOIN/USDT:USDT",
+      // "FARTCOIN/USDT:USDT",
       // "LTC/USDT:USDT",
       // "BCH/USDT:USDT",
       // "BERA/USDT:USDT",
       // "RIVER/USDT:USDT",
-      "AVAX/USDT:USDT"
+      // "AVAX/USDT:USDT"
     ],
     "pair_blacklist": [
     ]
