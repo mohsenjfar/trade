@@ -212,7 +212,7 @@ class AtlasEngine(IStrategy):
         # Add all custom indicators
         dataframe = self.custom_indicators.add_all_indicators(
             dataframe=dataframe,
-            metadata=metadata,
+            pair=pair,
             btc_dom_data=None  # You can add BTC dominance data here
         )
         
