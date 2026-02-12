@@ -536,9 +536,9 @@ class CustomIndicators:
             return 'bull_run'
         elif not above_ema20 and not above_ema50 and not above_ema200 and ema_bearish and current_adx > 25:
             return 'bear_run'
-        elif above_ema50 and not above_ema200 and current_rsi between 40 and 60:
+        elif above_ema50 and not above_ema200 and 40 <= current_rsi <= 60:
             return 'accumulation'
-        elif not above_ema50 and above_ema200 and current_rsi between 40 and 60:
+        elif not above_ema50 and above_ema200 and 40 <= current_rsi <= 60:
             return 'distribution'
         else:
             return 'neutral'
