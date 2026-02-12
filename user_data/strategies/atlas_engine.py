@@ -1,629 +1,323 @@
-import json
-from pathlib import Path
-from typing import Optional, Dict, Tuple, List
-from datetime import datetime
-from math import ceil
-
+import logging
+from typing import Dict, Optional
 import numpy as np
 import pandas as pd
-from pandas import DataFrame
 import talib.abstract as ta
-import freqtrade.vendor.qtpylib.indicators as qtpylib
-
-from freqtrade.strategy import (
-    IStrategy,
-    stoploss_from_absolute,
-    stoploss_from_open,
-    IntParameter,
-    DecimalParameter,
-    informative
-)
+from pandas import DataFrame
+from technical import qtpylib
+from datetime import datetime
+from freqtrade.strategy import IStrategy, IntParameter, DecimalParameter
 from freqtrade.persistence import Trade
+from freqtrade.strategy import stoploss_from_open
 
-# Import custom indicators
-from user_data.utils.custom_indicators import CustomIndicators
+logger = logging.getLogger(__name__)
 
 
 class AtlasEngine(IStrategy):
-    """
-    Atlas Engine Strategy - Optimized for Crypto Bear Markets
     
-    Features:
-    - ATR-based dynamic stop loss
-    - Support/Resistance level detection
-    - Market regime detection
-    - CVD volume analysis
-    - Whale activity detection
-    - Composite momentum
-    """
     
-    INTERFACE_VERSION = 3
+    # ✅ تایم‌فریم 15m - بهترین تعادل بین دقت و مصرف RAM
+    timeframe = '15m'
     
-    # =========================================================================
-    # Strategy Configuration
-    # =========================================================================
-    
-    # Timeframes
-    timeframe = '5m'
-    inf_tf = '1h'
-    
-    # Trading settings
-    can_short: bool = True
+    # ✅ محدودیت هوشمند معاملات
+    max_open_trades = 3
     process_only_new_candles = True
     use_exit_signal = True
     use_custom_stoploss = True
-    position_adjustment_enable = False
-    exit_profit_only = False
+    can_short = True
     
-    # Risk management
-    stoploss = -0.05  # 5% default stop
-    trailing_stop = False  # We use custom trailing stop
-    allowed_loss = 0.015  # 1.5% risk per trade
-    max_leverage = 3.0
+    # ✅ استاپ لاس محافظه‌کارانه
+    stoploss = -0.03
+    trailing_stop = False
     
-    # Order types
-    order_types = {
-        "entry": "limit",
-        "exit": "limit",
-        "emergency_exit": "market",
-        "stoploss": "market",
-        "stoploss_on_exchange": False,
-        "stoploss_on_exchange_interval": 60,
-        "stoploss_on_exchange_limit_ratio": 0.99,
+    # ✅ ROI پویا و واقع‌بینانه
+    minimal_roi = {
+        "120": 0.02,   # ۲ ساعت: ۲٪ سود کافی است
+        "60": 0.025,   # ۱ ساعت: ۲.۵٪ سود
+        "30": 0.03,    # ۳۰ دقیقه: ۳٪ سود
+        "15": 0.035,   # ۱۵ دقیقه: ۳.۵٪ سود
+        "0": 0.04      # بلافاصله: ۴٪ سود
     }
     
-    # =========================================================================
-    # Hyperopt Parameters
-    # =========================================================================
     
-    # EMA periods
-    ema_short_period = IntParameter(5, 50, default=21, space='buy')
-    ema_long_period = IntParameter(50, 200, default=100, space='buy')
+    # آستانه پیش‌بینی سود
+    min_predicted_return = DecimalParameter(0.01, 0.02, default=0.012, space='buy')
     
-    # ATR stop multipliers
-    atr_stop_multiplier = DecimalParameter(1.0, 3.0, default=1.5, decimals=1, space='sell')
-    atr_trail_multiplier = DecimalParameter(1.0, 3.0, default=2.0, decimals=1, space='sell')
+    # حداقل ریوارد به ریسک
+    min_risk_reward = DecimalParameter(1.6, 2.2, default=1.8, space='buy')
     
-    # RSI thresholds
-    rsi_oversold = IntParameter(20, 40, default=30, space='buy')
-    rsi_overbought = IntParameter(60, 80, default=70, space='sell')
+    # آستانه اطمینان مدل
+    min_confidence = DecimalParameter(0.55, 0.75, default=0.65, space='buy')
     
-    # Volume threshold
-    volume_threshold = DecimalParameter(1.0, 2.0, default=1.2, decimals=1, space='buy')
+    # فیلترهای RSI
+    buy_rsi_min = IntParameter(35, 45, default=40, space='buy')
+    buy_rsi_max = IntParameter(60, 70, default=65, space='buy')
+    sell_rsi_min = IntParameter(35, 45, default=40, space='sell')
+    sell_rsi_max = IntParameter(60, 70, default=65, space='sell')
     
-    # Cluster multipliers
-    cluster_mult_0 = DecimalParameter(0.5, 2.0, default=1.0, decimals=2, space='buy')
-    cluster_mult_1 = DecimalParameter(0.5, 2.0, default=1.0, decimals=2, space='buy')
-    cluster_mult_2 = DecimalParameter(0.5, 2.0, default=1.0, decimals=2, space='buy')
-    cluster_mult_3 = DecimalParameter(0.5, 2.0, default=1.0, decimals=2, space='buy')
-    cluster_mult_4 = DecimalParameter(0.5, 2.0, default=1.0, decimals=2, space='buy')
+    # فیلتر حجم
+    min_volume_ratio = DecimalParameter(0.8, 1.2, default=0.9, space='buy')
     
-    # =========================================================================
-    # Initialization
-    # =========================================================================
+    # فیلتر نوسان
+    max_atr_pct = DecimalParameter(0.035, 0.05, default=0.04, space='buy')
     
-    def __init__(self, config: dict) -> None:
-        super().__init__(config)
+    # استاپ لاس
+    atr_stop_multiplier = DecimalParameter(1.8, 2.2, default=2.0, space='sell')
+    trail_profit_start = DecimalParameter(0.015, 0.025, default=0.02, space='sell')
+    trail_percent = DecimalParameter(0.5, 0.7, default=0.6, space='sell')
+    
+    # =====================================================================
+    # Feature Engineering - فقط ویژگی‌های حیاتی (۲۸ ویژگی)
+    # =====================================================================
+    
+    def feature_engineering_expand_all(self, dataframe: DataFrame, period: int,
+                                       metadata: Dict, **kwargs) -> DataFrame:
+        """
+        🎯 ۷ نوع ویژگی در ۴ دوره = ۲۸ ویژگی (عالی برای VPS 4GB)
+        """
         
-        # Initialize custom indicators
-        self.custom_indicators = CustomIndicators(
-            btc_dominance_pair="BTC.D",
-            use_onchain_data=False
+        # ================ 1. روند (Trend) ================
+        ema = ta.EMA(dataframe, timeperiod=period)
+        dataframe[f"%-trend-ema-{period}"] = ema
+        dataframe[f"%-trend-ema-dist-{period}"] = (dataframe['close'] - ema) / ema
+        
+        # ================ 2. مومنتوم (Momentum) ================
+        dataframe[f"%-mom-rsi-{period}"] = ta.RSI(dataframe, timeperiod=period) / 100
+        dataframe[f"%-mom-roc-{period}"] = ta.ROC(dataframe, timeperiod=period) / 100
+        
+        # ================ 3. نوسان (Volatility) ================
+        atr = ta.ATR(dataframe, timeperiod=period)
+        dataframe[f"%-vol-atr-{period}"] = atr
+        dataframe[f"%-vol-atr-pct-{period}"] = atr / dataframe['close']
+        
+        # ================ 4. حجم (Volume) ================
+        volume_ma = dataframe['volume'].rolling(period).mean()
+        dataframe[f"%-vol-ratio-{period}"] = dataframe['volume'] / volume_ma
+        
+        # ================ 5. قدرت (Strength) ================
+        dataframe[f"%-str-adx-{period}"] = ta.ADX(dataframe, timeperiod=period) / 100
+        
+        # ================ 6. بازده (Returns) ================
+        dataframe[f"%-ret-{period}"] = dataframe['close'].pct_change(period)
+        
+        # ================ 7. باند بولینگر (BB) ================
+        bb = qtpylib.bollinger_bands(dataframe['close'], window=period, stds=2)
+        dataframe[f"%-bb-width-{period}"] = (bb['upper'] - bb['lower']) / bb['mid']
+        dataframe[f"%-bb-pos-{period}"] = (dataframe['close'] - bb['lower']) / (bb['upper'] - bb['lower'])
+        
+        return dataframe
+    
+    def feature_engineering_expand_basic(self, dataframe: DataFrame,
+                                         metadata: Dict, **kwargs) -> DataFrame:
+        """ویژگی‌های پایه - حداقل ممکن"""
+        dataframe['%-ret-1'] = dataframe['close'].pct_change(1)
+        dataframe['%-ret-3'] = dataframe['close'].pct_change(3)
+        dataframe['%-hl-ratio'] = dataframe['high'] / dataframe['low']
+        return dataframe
+    
+    def feature_engineering_standard(self, dataframe: DataFrame,
+                                     metadata: Dict, **kwargs) -> DataFrame:
+        """ویژگی‌های زمانی - فقط ضروری"""
+        dataframe['%-hour'] = dataframe['date'].dt.hour
+        dataframe['%-day'] = dataframe['date'].dt.dayofweek
+        # ✅ تعطیلات آخر هفته - سود بیشتر!
+        dataframe['%-is_weekend'] = dataframe['date'].dt.dayofweek.apply(
+            lambda x: 0 if x >= 5 else 1
         )
-        
-        # Load token clusters
-        self._pair_to_cluster: Dict[str, int] = {}
-        self._stop_cache: Dict[str, float] = {}
-        self._support_cache: Dict[str, List[float]] = {}
-        
-        clusters_path = Path(__file__).parent / "token_clusters.json"
-        if clusters_path.exists():
-            try:
-                data = json.loads(clusters_path.read_text(encoding="utf-8"))
-                for cluster_str, pairs in data.items():
-                    cid = int(cluster_str)
-                    for p in pairs:
-                        self._pair_to_cluster[p] = cid
-                        # Normalize for Freqtrade format
-                        norm = p.replace("/USDT/USDT:", "/USDT:")
-                        if norm != p:
-                            self._pair_to_cluster[norm] = cid
-            except Exception as e:
-                print(f"Error loading clusters: {e}")
+        return dataframe
     
-    # =========================================================================
-    # Cluster Helpers
-    # =========================================================================
+    # =====================================================================
+    # تعریف تارگت - رگرسیون برای پیش‌بینی دقیق
+    # =====================================================================
     
-    def _get_cluster_id(self, pair: str) -> Optional[int]:
-        """Get cluster ID for a pair"""
-        cid = self._pair_to_cluster.get(pair)
-        if cid is not None:
-            return cid
-        alt = pair.replace("/USDT:", "/USDT/USDT:")
-        return self._pair_to_cluster.get(alt)
-    
-    def _ema_period_for_cluster(self, base: int, cluster_id: Optional[int]) -> int:
-        """Get EMA period adjusted for cluster"""
-        if cluster_id is None:
-            return base
-        mult = (self.cluster_mult_0, self.cluster_mult_1, self.cluster_mult_2,
-                self.cluster_mult_3, self.cluster_mult_4)[cluster_id]
-        return max(1, round(base * mult.value))
-    
-    # =========================================================================
-    # Informative Pair (Higher Timeframe)
-    # =========================================================================
-    
-    @informative(inf_tf)
-    def populate_indicators_inf(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        """Higher timeframe indicators for trend confirmation"""
-        pair = metadata.get("pair", "")
-        cid = self._get_cluster_id(pair)
+    def set_freqai_targets(self, dataframe: DataFrame, metadata: Dict, **kwargs) -> DataFrame:
+        """
+        🎯 تارگت رگرسیون - پیش‌بینی بازده ۵ کندل آینده
+        """
+        # بازده ۵ کندل آینده (۷۵ دقیقه)
+        target = dataframe['close'].pct_change(5).shift(-5)
         
-        # EMA trend
-        period = self._ema_period_for_cluster(self.ema_long_period.value * 2, cid)
-        dataframe['ema_trend'] = ta.EMA(dataframe["close"], timeperiod=period)
-        dataframe['ema_trend_slope'] = np.gradient(dataframe['ema_trend'])
+        # محدود کردن مقادیر پرت (winsorization)
+        upper = target.quantile(0.98)
+        lower = target.quantile(0.02)
+        target = target.clip(lower, upper)
         
-        # ADX for trend strength
-        dataframe['adx'] = ta.ADX(dataframe)
-        dataframe['di_plus'] = ta.PLUS_DI(dataframe)
-        dataframe['di_minus'] = ta.MINUS_DI(dataframe)
+        dataframe['&-target_return'] = target
+        return dataframe
+    
+    # =====================================================================
+    # Populate Indicators
+    # =====================================================================
+    
+    def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+        """اندیکاتورهای کلاسیک برای تأیید"""
         
-        # Volume trend
+        # 1. فراخوانی FreqAI
+        dataframe = self.freqai.start(dataframe, metadata, self)
+        
+        # 2. EMA برای روند
+        dataframe['ema_20'] = ta.EMA(dataframe, timeperiod=20)
+        dataframe['ema_50'] = ta.EMA(dataframe, timeperiod=50)
+        dataframe['ema_100'] = ta.EMA(dataframe, timeperiod=100)
+        
+        # 3. ATR برای استاپ
+        dataframe['atr'] = ta.ATR(dataframe, timeperiod=14)
+        dataframe['atr_pct'] = dataframe['atr'] / dataframe['close']
+        
+        # 4. RSI برای تأیید
+        dataframe['rsi'] = ta.RSI(dataframe, timeperiod=14)
+        
+        # 5. حجم
         dataframe['volume_ma'] = ta.SMA(dataframe['volume'], timeperiod=20)
         dataframe['volume_ratio'] = dataframe['volume'] / dataframe['volume_ma']
         
         return dataframe
     
-    # =========================================================================
-    # Populate Indicators (Main Timeframe)
-    # =========================================================================
-    
-    def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        """Populate all indicators"""
-        pair = metadata.get("pair", "")
-        cid = self._get_cluster_id(pair)
-        
-        # =====================================================================
-        # 1. EMA Indicators
-        # =====================================================================
-        
-        # Short EMA (for entry timing)
-        period_short = self._ema_period_for_cluster(self.ema_short_period.value, cid)
-        dataframe['ema_short'] = ta.EMA(dataframe["close"], timeperiod=period_short)
-        dataframe['ema_short_slope'] = np.gradient(dataframe['ema_short'])
-        dataframe['ema_short_accel'] = np.gradient(dataframe['ema_short_slope'])
-        
-        # Long EMA (for trend)
-        period_long = self._ema_period_for_cluster(self.ema_long_period.value, cid)
-        dataframe['ema_long'] = ta.EMA(dataframe["close"], timeperiod=period_long)
-        dataframe['ema_long_slope'] = np.gradient(dataframe['ema_long'])
-        
-        # EMA cross signals
-        dataframe['ema_cross_up'] = qtpylib.crossed_above(dataframe['ema_short'], dataframe['ema_long'])
-        dataframe['ema_cross_down'] = qtpylib.crossed_below(dataframe['ema_short'], dataframe['ema_long'])
-        
-        # =====================================================================
-        # 2. Custom Crypto Indicators
-        # =====================================================================
-        
-        # Add all custom indicators
-        dataframe = self.custom_indicators.add_all_indicators(
-            dataframe=dataframe,
-            pair=pair,
-            btc_dom_data=None  # You can add BTC dominance data here
-        )
-        
-        # =====================================================================
-        # 3. Additional TA Indicators
-        # =====================================================================
-        
-        # RSI
-        dataframe['rsi'] = ta.RSI(dataframe, timeperiod=14)
-        
-        # Bollinger Bands
-        bollinger = qtpylib.bollinger_bands(qtpylib.typical_price(dataframe), window=20, stds=2)
-        dataframe['bb_lowerband'] = bollinger['lower']
-        dataframe['bb_middleband'] = bollinger['mid']
-        dataframe['bb_upperband'] = bollinger['upper']
-        dataframe['bb_width'] = (dataframe['bb_upperband'] - dataframe['bb_lowerband']) / dataframe['bb_middleband']
-        
-        # Volume
-        dataframe['volume_mean'] = ta.SMA(dataframe['volume'], timeperiod=20)
-        dataframe['volume_ratio'] = dataframe['volume'] / dataframe['volume_mean']
-        
-        # =====================================================================
-        # 4. Extrema Extraction
-        # =====================================================================
-        
-        # Extract swing highs and lows
-        dataframe['swing_high'] = (
-            (dataframe['high'] > dataframe['high'].shift(1)) &
-            (dataframe['high'] > dataframe['high'].shift(-1)) &
-            (dataframe['high'] > dataframe['high'].shift(2)) &
-            (dataframe['high'] > dataframe['high'].shift(-2))
-        ).astype(int)
-        
-        dataframe['swing_low'] = (
-            (dataframe['low'] < dataframe['low'].shift(1)) &
-            (dataframe['low'] < dataframe['low'].shift(-1)) &
-            (dataframe['low'] < dataframe['low'].shift(2)) &
-            (dataframe['low'] < dataframe['low'].shift(-2))
-        ).astype(int)
-        
-        # Store swing points
-        dataframe.loc[dataframe['swing_high'] == 1, 'swing_high_price'] = dataframe['high']
-        dataframe.loc[dataframe['swing_low'] == 1, 'swing_low_price'] = dataframe['low']
-        
-        return dataframe
-    
-    # =========================================================================
-    # Entry Signals
-    # =========================================================================
+    # =====================================================================
+    # سیگنال ورود - محافظه‌کارانه اما نه خفه‌کننده
+    # =====================================================================
     
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        """Generate entry signals"""
-        pair = metadata.get("pair", "")
+        """
+        🟢 فلسفه ۱۰٪ ماهانه:
+        - نه آنقدر سخت که هیچ معامله‌ای نکنی
+        - نه آنقدر آسان که همه معاملات ضرر کنن
+        """
         
-        # Detect market regime
-        regime = self.custom_indicators.detect_market_regime(dataframe)
-        adjustments = self.custom_indicators.get_regime_adjustments(regime)
-        
-        # Get nearest support
-        support_levels = self.custom_indicators.identify_support_levels(dataframe)
-        nearest_support = support_levels[-1] if support_levels else None
-        
-        # =====================================================================
-        # Long Entry Conditions
-        # =====================================================================
-        
-        long_conditions = (
-            # EMA cross trigger
-            (dataframe['ema_cross_up'] == 1) &
-            
-            # Higher timeframe confirmation
-            (dataframe[f'ema_trend_slope_{self.inf_tf}'] > 0) &
-            (dataframe[f'adx_{self.inf_tf}'] > 20) &
-            (dataframe[f'di_plus_{self.inf_tf}'] > dataframe[f'di_minus_{self.inf_tf}']) &
-            
-            # Volume confirmation
-            (dataframe['volume_ratio'] > self.volume_threshold.value) &
-            
-            # Momentum confirmation
-            (dataframe['composite_momentum'] > -2) &
-            (dataframe['cvd_slope'] > 0) &
-            
-            # RSI not overbought
-            (dataframe['rsi'] < self.rsi_overbought.value) &
-            
-            # Whale activity (optional)
-            (dataframe['whale_accumulation'] >= 0) &
-            
-            # Price near support (in bear market)
-            ((regime in ['bear_run', 'distribution']) & 
-             (nearest_support is not None) & 
-             (abs(dataframe['close'] - nearest_support) / dataframe['close'] < 0.02)) |
-            
-            # Bull market - more aggressive
-            ((regime in ['bull_run', 'accumulation']) & 
-             (dataframe['ema_short'] > dataframe['ema_long']))
+        # ================ شرایط پایه ================
+        base_conditions = (
+            # 1. مدل اطمینان داره
+            (dataframe['do_predict'] == 1) &
+            # 2. حجم منطقی
+            (dataframe['volume_ratio'] > self.min_volume_ratio.value) &
+            # 3. نوسان کنترل شده
+            (dataframe['atr_pct'] < self.max_atr_pct.value) &
+            # 4. آخر هفته نیست
+            (dataframe['%-is_weekend'] == 1)
         )
         
-        # =====================================================================
-        # Short Entry Conditions
-        # =====================================================================
-        
-        short_conditions = (
-            # EMA cross trigger
-            (dataframe['ema_cross_down'] == 1) &
-            
-            # Higher timeframe confirmation
-            (dataframe[f'ema_trend_slope_{self.inf_tf}'] < 0) &
-            (dataframe[f'adx_{self.inf_tf}'] > 20) &
-            (dataframe[f'di_plus_{self.inf_tf}'] < dataframe[f'di_minus_{self.inf_tf}']) &
-            
-            # Volume confirmation
-            (dataframe['volume_ratio'] > self.volume_threshold.value) &
-            
-            # Momentum confirmation
-            (dataframe['composite_momentum'] < 2) &
-            (dataframe['cvd_slope'] < 0) &
-            
-            # RSI not oversold
-            (dataframe['rsi'] > self.rsi_oversold.value) &
-            
-            # Whale activity (optional)
-            (dataframe['whale_accumulation'] <= 0) &
-            
-            # Prefer short in bear markets
-            ((regime in ['bear_run', 'distribution']) & 
-             (dataframe['ema_short'] < dataframe['ema_long']))
+        # ================ شرایط لانگ ================
+        long_conditions = base_conditions & (
+            # 1. پیش‌بینی سود مثبت
+            (dataframe['&-target_return'] > self.min_predicted_return.value) &
+            # 2. ریوارد به ریسک مناسب
+            ((dataframe['&-target_return'] / dataframe['atr_pct']) > self.min_risk_reward.value) &
+            # 3. RSI مناسب
+            (dataframe['rsi'] > self.buy_rsi_min.value) &
+            (dataframe['rsi'] < self.buy_rsi_max.value) &
+            # 4. روند صعودی ملایم
+            (dataframe['ema_20'] > dataframe['ema_50'])
         )
         
-        # Apply conditions with regime preferences
-        if adjustments.get('prefer_long', True):
-            dataframe.loc[long_conditions, 'enter_long'] = 1
+        # ================ شرایط شورت ================
+        short_conditions = base_conditions & (
+            (dataframe['&-target_return'] < -self.min_predicted_return.value) &
+            ((abs(dataframe['&-target_return']) / dataframe['atr_pct']) > self.min_risk_reward.value) &
+            (dataframe['rsi'] > self.sell_rsi_min.value) &
+            (dataframe['rsi'] < self.sell_rsi_max.value) &
+            (dataframe['ema_20'] < dataframe['ema_50'])
+        )
         
-        if adjustments.get('prefer_short', False):
-            dataframe.loc[short_conditions, 'enter_short'] = 1
+        dataframe.loc[long_conditions, 'enter_long'] = 1
+        dataframe.loc[long_conditions, 'enter_tag'] = 'guardian_long'
         
-        # Store entry info
-        dataframe.loc[dataframe['enter_long'] == 1, 'entry_tag'] = 'long_signal'
-        dataframe.loc[dataframe['enter_short'] == 1, 'entry_tag'] = 'short_signal'
+        dataframe.loc[short_conditions, 'enter_short'] = 1
+        dataframe.loc[short_conditions, 'enter_tag'] = 'guardian_short'
         
         return dataframe
     
-    # =========================================================================
-    # Exit Signals
-    # =========================================================================
+    # =====================================================================
+    # سیگنال خروج - سریع و قاطع
+    # =====================================================================
     
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        """Generate exit signals"""
+        """🔴 خروج هوشمند - حفظ سود"""
         
-        # Long exit
-        dataframe.loc[
-            (
-                (qtpylib.crossed_below(dataframe["ema_short"], dataframe['ema_long'])) |
-                (dataframe['rsi'] > self.rsi_overbought.value) |
-                (dataframe['composite_momentum'] > 5)
-            ),
-            "exit_long"
-        ] = 1
+        # خروج از لانگ
+        exit_long = (
+            (dataframe['&-target_return'] < 0) |  # پیش‌بینی منفی
+            (dataframe['rsi'] > 75) |            # اشباع خرید
+            (dataframe['ema_20'] < dataframe['ema_50'])  # روند ضعیف
+        )
         
-        # Short exit
-        dataframe.loc[
-            (
-                (qtpylib.crossed_above(dataframe["ema_short"], dataframe['ema_long'])) |
-                (dataframe['rsi'] < self.rsi_oversold.value) |
-                (dataframe['composite_momentum'] < -5)
-            ),
-            "exit_short"
-        ] = 1
+        # خروج از شورت
+        exit_short = (
+            (dataframe['&-target_return'] > 0) |
+            (dataframe['rsi'] < 25) |
+            (dataframe['ema_20'] > dataframe['ema_50'])
+        )
+        
+        dataframe.loc[exit_long, 'exit_long'] = 1
+        dataframe.loc[exit_short, 'exit_short'] = 1
         
         return dataframe
     
-    # =========================================================================
-    # Custom Stop Loss - ATR Based Dynamic Stop
-    # =========================================================================
     
-    def custom_stoploss(self,
-                       pair: str,
-                       trade: Trade,
-                       current_time: datetime,
-                       current_rate: float,
-                       current_profit: float,
-                       after_fill: bool,
-                       **kwargs) -> Optional[float]:
+    def custom_stoploss(self, pair: str, trade: Trade, current_time: datetime,
+                        current_rate: float, current_profit: float, after_fill: bool,
+                        **kwargs) -> Optional[float]:
         """
-        Dynamic ATR-based stoploss with trailing
+        🛑 استاپ لاس ۲ لایه:
+        لایه 1: استاپ فیزیکی بر اساس ATR
+        لایه 2: تریلینگ در سود
         """
-        # Get current dataframe
+        
         dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
         if dataframe is None or dataframe.empty:
-            return -0.05  # Default stop
+            return -0.03
         
-        # Get or calculate initial stop
-        stop_key = f"{pair}_stop"
-        initial_stop = trade.get_custom_data(stop_key)
+        last_candle = dataframe.iloc[-1]
+        atr_pct = last_candle['atr_pct']
         
-        if initial_stop is None:
-            # Calculate dynamic stop using ATR
-            side = 'short' if trade.is_short else 'long'
-            initial_stop = self.custom_indicators.calculate_dynamic_stop(
-                dataframe=dataframe,
-                entry_price=trade.open_rate,
-                side=side,
-                current_profit=current_profit
-            )
-            trade.set_custom_data(stop_key, initial_stop)
-            
-            # Calculate and store risk
-            risk = abs(initial_stop / trade.open_rate - 1) * trade.leverage
-            trade.set_custom_data("risk", risk)
-            
-            # Send alert
-            self.dp.send_msg(f"🛑 {pair} - Initial Stop: {initial_stop:.2f}, Risk: {risk:.2%}")
+        # استاپ پایه
+        initial_stop = atr_pct * self.atr_stop_multiplier.value
         
-        # Trailing stop for profitable trades
-        if current_profit > 0.01:  # 1% profit
-            # Get market regime adjustments
-            regime = self.custom_indicators.detect_market_regime(dataframe)
-            adjustments = self.custom_indicators.get_regime_adjustments(regime)
-            
-            # Dynamic trailing based on profit and regime
-            if current_profit > 0.05:  # 5% profit
-                trail_percent = 0.5  # Lock 50% of profit
-            elif current_profit > 0.03:  # 3% profit
-                trail_percent = 0.6  # Lock 40% of profit
+        # تریلینگ در سود
+        if current_profit > self.trail_profit_start.value:
+            if current_profit > 0.04:
+                trail = 0.5
+            elif current_profit > 0.03:
+                trail = 0.55
             else:
-                trail_percent = adjustments.get('trail_percent', 0.7)  # Lock 30% of profit
+                trail = self.trail_percent.value
             
-            return stoploss_from_open(trail_percent * current_profit, current_profit)
+            trailing_stop = stoploss_from_open(current_profit * (1 - trail), current_profit)
+            return max(trailing_stop, -initial_stop)
         
-        # Convert absolute stop to relative
-        return stoploss_from_absolute(
-            initial_stop,
-            current_rate,
-            is_short=trade.is_short,
-            leverage=trade.leverage
-        )
+        return -initial_stop
     
-    # =========================================================================
-    # Position Sizing and Leverage
-    # =========================================================================
     
-    def leverage(self,
-                pair: str,
-                current_time: datetime,
-                current_rate: float,
-                proposed_leverage: float,
-                max_leverage: float,
-                entry_tag: Optional[str],
-                side: str,
-                **kwargs) -> float:
+    def confirm_trade_entry(self, pair: str, current_time: datetime,
+                            current_rate: float, proposed_stake: float,
+                            min_stake: float, max_stake: float,
+                            leverage: float, entry_tag: Optional[str],
+                            side: str, **kwargs) -> bool:
         """
-        Dynamic leverage based on market conditions
+        ✅ تأیید نهایی - فقط معاملات با کیفیت
         """
-        # Get market regime
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.inf_tf)
-        if dataframe is not None and len(dataframe) > 0:
-            regime = self.custom_indicators.detect_market_regime(dataframe)
-            adjustments = self.custom_indicators.get_regime_adjustments(regime)
-            max_allowed = adjustments.get('max_leverage', 3)
-        else:
-            max_allowed = 3
         
-        # Calculate risk-based leverage
-        stop = self.custom_indicators.calculate_dynamic_stop(
-            dataframe=dataframe if dataframe is not None else DataFrame(),
-            entry_price=current_rate,
-            side=side
-        )
-        
-        if stop is not None and not np.isnan(stop):
-            risk = abs(stop / current_rate - 1)
-            if risk > 0:
-                lev = self.allowed_loss / risk
-                return float(max(1, min(ceil(lev), max_allowed, max_leverage)))
-        
-        return 1.0
-    
-    def custom_stake_amount(self,
-                           pair: str,
-                           current_time: datetime,
-                           current_rate: float,
-                           proposed_stake: float,
-                           min_stake: Optional[float],
-                           max_stake: float,
-                           leverage: float,
-                           entry_tag: Optional[str],
-                           side: str,
-                           **kwargs) -> float:
-        """
-        Dynamic position sizing based on risk
-        """
-        # Get market regime adjustments
-        dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.inf_tf)
-        if dataframe is not None and len(dataframe) > 0:
-            regime = self.custom_indicators.detect_market_regime(dataframe)
-            adjustments = self.custom_indicators.get_regime_adjustments(regime)
-            risk_multiplier = adjustments.get('risk_multiplier', 1.0)
-            max_position_size = adjustments.get('max_position_size', 0.8)
-        else:
-            risk_multiplier = 1.0
-            max_position_size = 0.8
-        
-        # Calculate stop-based risk
-        stop = self.custom_indicators.calculate_dynamic_stop(
-            dataframe=dataframe if dataframe is not None else DataFrame(),
-            entry_price=current_rate,
-            side=side
-        )
-        
-        if stop is not None and not np.isnan(stop):
-            risk = abs(stop / current_rate - 1)
-            if risk > 0:
-                # Calculate stake based on risk
-                total_stake = max_stake + Trade.total_open_trades_stakes()
-                stake = total_stake * self.allowed_loss * risk_multiplier / (risk * leverage)
-                
-                # Apply position size limits
-                max_allowed_stake = max_stake * max_position_size
-                stake = min(stake, max_allowed_stake)
-                
-                return float(max(stake, min_stake if min_stake else 0))
-        
-        return 0
-    
-    # =========================================================================
-    # Trade Position Adjustment (DCA)
-    # =========================================================================
-    
-    def adjust_trade_position(self,
-                             trade: Trade,
-                             current_time: datetime,
-                             current_rate: float,
-                             current_profit: float,
-                             min_stake: float | None,
-                             max_stake: float,
-                             current_entry_rate: float,
-                             current_exit_rate: float,
-                             current_entry_profit: float,
-                             current_exit_profit: float,
-                             **kwargs) -> float | None | Tuple[float | None, str | None]:
-        """
-        DCA at support levels
-        """
-        # Only DCA in bear market at support levels
-        dataframe, _ = self.dp.get_analyzed_dataframe(trade.pair, self.timeframe)
-        if dataframe is None or dataframe.empty:
-            return None
-        
-        regime = self.custom_indicators.detect_market_regime(dataframe)
-        
-        # Only DCA in accumulation or bear markets
-        if regime not in ['bear_run', 'accumulation']:
-            return None
-        
-        # Check if price is at support
-        support_levels = self.custom_indicators.identify_support_levels(dataframe)
-        if not support_levels:
-            return None
-        
-        nearest_support = support_levels[-1]
-        distance_to_support = abs(current_rate - nearest_support) / current_rate
-        
-        # If price is within 1% of support and we have less than 3 entries
-        if distance_to_support < 0.01 and trade.nr_of_successful_entries < 3:
-            # Add 50% of initial stake
-            return trade.stake_amount * 0.5
-        
-        return None
-    
-    # =========================================================================
-    # Helper Methods
-    # =========================================================================
-    
-    def get_btc_dominance_data(self) -> Optional[DataFrame]:
-        """
-        Get BTC dominance data for altcoin analysis
-        """
-        try:
-            dataframe, _ = self.dp.get_analyzed_dataframe("BTC.D/1H", '1h')
-            return dataframe
-        except:
-            return None
-    
-    def confirm_trade_entry(self,
-                           pair: str,
-                           current_time: datetime,
-                           current_rate: float,
-                           proposed_stake: float,
-                           min_stake: Optional[float],
-                           max_stake: float,
-                           leverage: float,
-                           entry_tag: Optional[str],
-                           side: str,
-                           **kwargs) -> bool:
-        """
-        Final trade confirmation
-        """
-        # Get market summary
         dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
         if dataframe is None or len(dataframe) < 10:
             return False
         
-        summary = self.custom_indicators.get_indicator_summary(dataframe)
+        last_candle = dataframe.iloc[-1]
         
-        # Log trade attempt
-        self.dp.send_msg(
-            f"📝 Attempting {side} entry for {pair}\n"
-            f"Price: {current_rate:.2f}\n"
-            f"Regime: {summary.get('market_regime', 'unknown')}\n"
-            f"Momentum: {summary.get('momentum', 0):.2f}\n"
-            f"CVD: {summary.get('cvd_status', 'neutral')}"
-        )
+        # 1. بررسی پیش‌بینی
+        pred = last_candle['&-target_return']
+        if side == 'long' and pred < 0:
+            return False
+        if side == 'short' and pred > 0:
+            return False
         
+        # 2. بررسی ریوارد به ریسک
+        rr = abs(pred) / last_candle['atr_pct']
+        if rr < self.min_risk_reward.value:
+            return False
+        
+        # 3. بررسی نوسان لحظه‌ای
+        if last_candle['atr_pct'] > 0.06:
+            return False
+        
+        logger.info(f"✅ {pair}: ورود تأیید شد | RR: {rr:.2f} | Pred: {pred:.2%}")
         return True
+    
