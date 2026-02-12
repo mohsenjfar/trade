@@ -28,6 +28,9 @@ class CustomIndicators:
     - BTC Dominance Analysis
     - Session-based Volatility
     - Whale Detection
+    - Market Regime Detection
+    - Dynamic Support/Resistance
+    - ATR-based Stop Loss
     """
     
     def __init__(self, 
@@ -100,6 +103,124 @@ class CustomIndicators:
         
         return df
     
+    # =========================================================================
+    # 2. اندیکاتورهای ATR و استاپ لاس
+    # =========================================================================
+    
+    def add_atr_stop_levels(self, 
+                           dataframe: DataFrame, 
+                           period: int = 14,
+                           long_multiplier: float = 1.5,
+                           short_multiplier: float = 1.5) -> DataFrame:
+        """
+        محاسبه سطوح استاپ داینامیک بر اساس ATR
+        
+        Args:
+            dataframe: دیتافریم قیمت
+            period: دوره ATR
+            long_multiplier: ضریب برای پوزیشن لانگ
+            short_multiplier: ضریب برای پوزیشن شورت
+        """
+        df = dataframe.copy()
+        
+        # ATR استاندارد
+        df['atr'] = ta.ATR(df, timeperiod=period)
+        df['atr_pct'] = df['atr'] / df['close'] * 100
+        
+        # نوسان بر اساس سشن
+        if isinstance(df.index, pd.DatetimeIndex):
+            df['hour'] = df.index.hour
+        else:
+            df['hour'] = range(len(df))
+        
+        # محاسبه ضرایب نوسان سشن
+        session_vol = {
+            'asia': df[df['hour'].between(0, 7)]['atr_pct'].mean() if len(df) > 0 else 1,
+            'london': df[df['hour'].between(8, 15)]['atr_pct'].mean() if len(df) > 0 else 1,
+            'ny': df[df['hour'].between(16, 23)]['atr_pct'].mean() if len(df) > 0 else 1
+        }
+        
+        # ضریب تعدیل سشن
+        df['session'] = df['hour'].apply(
+            lambda x: 'ny' if 16 <= x <= 23 else ('london' if 8 <= x <= 15 else 'asia')
+        )
+        df['vol_multiplier'] = df['session'].map(
+            lambda s: session_vol.get(s, 1) / session_vol.get('london', 1)
+        )
+        
+        # ATR تعدیل شده بر اساس سشن
+        df['atr_adjusted'] = df['atr'] * df['vol_multiplier']
+        
+        # سطوح استاپ داینامیک
+        df['long_stop_price'] = df['close'] - (df['atr_adjusted'] * long_multiplier)
+        df['short_stop_price'] = df['close'] + (df['atr_adjusted'] * short_multiplier)
+        
+        # سطوح تریلینگ استاپ
+        df['trailing_stop_long'] = df['close'].rolling(window=20).max() - (df['atr_adjusted'] * 2)
+        df['trailing_stop_short'] = df['close'].rolling(window=20).min() + (df['atr_adjusted'] * 2)
+        
+        # رژیم نوسان
+        df['volatility_regime'] = 'normal'
+        df.loc[df['atr_pct'] > df['atr_pct'].rolling(50).mean() * 1.5, 'volatility_regime'] = 'high'
+        df.loc[df['atr_pct'] < df['atr_pct'].rolling(50).mean() * 0.5, 'volatility_regime'] = 'low'
+        
+        return df
+    
+    def calculate_dynamic_stop(self,
+                              dataframe: DataFrame,
+                              entry_price: float,
+                              side: str,
+                              current_profit: float = 0) -> float:
+        """
+        محاسبه استاپ داینامیک بر اساس ATR و شرایط بازار
+        
+        Args:
+            dataframe: دیتافریم جاری
+            entry_price: قیمت ورود
+            side: 'long' یا 'short'
+            current_profit: درصد سود جاری
+        """
+        if len(dataframe) == 0:
+            return entry_price * (0.95 if side == 'long' else 1.05)
+        
+        last_candle = dataframe.iloc[-1]
+        atr = last_candle.get('atr_adjusted', last_candle.get('atr', entry_price * 0.02))
+        
+        # فاصله پایه استاپ
+        if side == 'long':
+            base_stop = entry_price - (atr * 1.5)
+        else:
+            base_stop = entry_price + (atr * 1.5)
+        
+        # تعدیل استاپ بر اساس سود
+        if current_profit > 0:
+            if side == 'long':
+                trail_stop = max(
+                    base_stop,
+                    entry_price * (1 + current_profit * 0.5)  # قفل کردن 50% سود
+                )
+            else:
+                trail_stop = min(
+                    base_stop,
+                    entry_price * (1 - current_profit * 0.5)  # قفل کردن 50% سود
+                )
+            return trail_stop
+        
+        # تعدیل استاپ بر اساس رژیم نوسان
+        volatility_regime = last_candle.get('volatility_regime', 'normal')
+        if volatility_regime == 'high':
+            if side == 'long':
+                return entry_price - (atr * 2.0)
+            else:
+                return entry_price + (atr * 2.0)
+        elif volatility_regime == 'low':
+            if side == 'long':
+                return entry_price - (atr * 1.0)
+            else:
+                return entry_price + (atr * 1.0)
+        
+        return base_stop
+    
     def add_volume_profile(self, dataframe: DataFrame, levels: int = 10) -> DataFrame:
         """
         Volume Profile - سطوح قیمتی با بیشترین حجم
@@ -137,7 +258,7 @@ class CustomIndicators:
         return df
     
     # =========================================================================
-    # 2. اندیکاتورهای مخصوص بیت‌کوین و آلتکوین‌ها
+    # 3. اندیکاتورهای مخصوص بیت‌کوین و آلتکوین‌ها
     # =========================================================================
     
     def add_mvrv(self, dataframe: DataFrame, pair: str) -> DataFrame:
@@ -233,7 +354,7 @@ class CustomIndicators:
         return df
     
     # =========================================================================
-    # 3. اندیکاتورهای Dominance و همبستگی
+    # 4. اندیکاتورهای Dominance و همبستگی
     # =========================================================================
     
     def add_btc_dominance_impact(self, 
@@ -288,7 +409,7 @@ class CustomIndicators:
         return 0
     
     # =========================================================================
-    # 4. اندیکاتورهای نوسان و ریسک
+    # 5. اندیکاتورهای نوسان و ریسک
     # =========================================================================
     
     def add_crypto_volatility(self, 
@@ -361,7 +482,134 @@ class CustomIndicators:
         return df
     
     # =========================================================================
-    # 5. اندیکاتورهای مومنتوم و قدرت روند
+    # 6. تشخیص رژیم بازار (Market Regime Detection)
+    # =========================================================================
+    
+    def detect_market_regime(self, dataframe: DataFrame) -> str:
+        """
+        تشخیص رژیم فعلی بازار (bull, bear, accumulation, distribution, neutral)
+        
+        Args:
+            dataframe: دیتافریم قیمت
+        
+        Returns:
+            str: رژیم بازار - 'bull_run', 'bear_run', 'accumulation', 'distribution', 'neutral'
+        """
+        df = dataframe.tail(50).copy()
+        
+        if len(df) < 50:
+            return 'neutral'
+        
+        # محاسبه اندیکاتورهای کلیدی
+        df['ema_20'] = ta.EMA(df['close'], timeperiod=20)
+        df['ema_50'] = ta.EMA(df['close'], timeperiod=50)
+        df['ema_200'] = ta.EMA(df['close'], timeperiod=200)
+        
+        current_price = df['close'].iloc[-1]
+        ema_20 = df['ema_20'].iloc[-1]
+        ema_50 = df['ema_50'].iloc[-1]
+        ema_200 = df['ema_200'].iloc[-1]
+        
+        # موقعیت قیمت نسبت به EMAها
+        above_ema20 = current_price > ema_20
+        above_ema50 = current_price > ema_50
+        above_ema200 = current_price > ema_200
+        
+        # ترتیب EMAها
+        ema_bullish = ema_20 > ema_50 > ema_200
+        ema_bearish = ema_20 < ema_50 < ema_200
+        
+        # روند حجم
+        volume_ma = df['volume'].rolling(20).mean()
+        volume_trend = df['volume'].iloc[-5:].mean() > volume_ma.iloc[-5:].mean()
+        
+        # محاسبه ADX برای قدرت روند
+        df['adx'] = ta.ADX(df)
+        current_adx = df['adx'].iloc[-1]
+        
+        # محاسبه RSI
+        df['rsi'] = ta.RSI(df, timeperiod=14)
+        current_rsi = df['rsi'].iloc[-1]
+        
+        # طبقه‌بندی رژیم
+        if above_ema20 and above_ema50 and above_ema200 and ema_bullish and volume_trend and current_adx > 25:
+            return 'bull_run'
+        elif not above_ema20 and not above_ema50 and not above_ema200 and ema_bearish and current_adx > 25:
+            return 'bear_run'
+        elif above_ema50 and not above_ema200 and current_rsi between 40 and 60:
+            return 'accumulation'
+        elif not above_ema50 and above_ema200 and current_rsi between 40 and 60:
+            return 'distribution'
+        else:
+            return 'neutral'
+    
+    def get_regime_adjustments(self, regime: str) -> Dict:
+        """
+        دریافت تنظیمات استراتژی بر اساس رژیم بازار
+        
+        Args:
+            regime: رژیم بازار
+        
+        Returns:
+            Dict: تنظیمات استراتژی
+        """
+        adjustments = {
+            'bull_run': {
+                'risk_multiplier': 1.3,
+                'min_profit': 0.015,
+                'trail_percent': 0.6,
+                'max_position_size': 1.0,
+                'prefer_long': True,
+                'prefer_short': False,
+                'atr_multiplier': 1.2,
+                'max_leverage': 5
+            },
+            'bear_run': {
+                'risk_multiplier': 0.5,
+                'min_profit': 0.025,
+                'trail_percent': 0.8,
+                'max_position_size': 0.3,
+                'prefer_long': False,
+                'prefer_short': True,
+                'atr_multiplier': 1.8,
+                'max_leverage': 2
+            },
+            'accumulation': {
+                'risk_multiplier': 0.8,
+                'min_profit': 0.02,
+                'trail_percent': 0.7,
+                'max_position_size': 0.6,
+                'prefer_long': True,
+                'prefer_short': False,
+                'atr_multiplier': 1.5,
+                'max_leverage': 3
+            },
+            'distribution': {
+                'risk_multiplier': 0.6,
+                'min_profit': 0.022,
+                'trail_percent': 0.7,
+                'max_position_size': 0.5,
+                'prefer_long': False,
+                'prefer_short': True,
+                'atr_multiplier': 1.5,
+                'max_leverage': 3
+            },
+            'neutral': {
+                'risk_multiplier': 1.0,
+                'min_profit': 0.02,
+                'trail_percent': 0.7,
+                'max_position_size': 0.8,
+                'prefer_long': True,
+                'prefer_short': True,
+                'atr_multiplier': 1.5,
+                'max_leverage': 3
+            }
+        }
+        
+        return adjustments.get(regime, adjustments['neutral'])
+    
+    # =========================================================================
+    # 7. اندیکاتورهای مومنتوم و قدرت روند
     # =========================================================================
     
     def add_market_structure(self, dataframe: DataFrame, swing_length: int = 5) -> DataFrame:
@@ -440,7 +688,7 @@ class CustomIndicators:
         return df
     
     # =========================================================================
-    # 6. اندیکاتورهای فاندامنتال و آنچین (پیشرفته)
+    # 8. اندیکاتورهای فاندامنتال و آنچین (پیشرفته)
     # =========================================================================
     
     def get_onchain_indicators(self, pair: str, lookback_days: int = 30) -> Dict:
@@ -496,6 +744,10 @@ class CustomIndicators:
         
         return df
 
+    # =========================================================================
+    # 9. اندیکاتورهای حمایت و مقاومت
+    # =========================================================================
+    
     def identify_horizontal_support(self, dataframe: DataFrame, lookback: int = 200) -> list:
         """
         شناسایی سطوح حمایتی افقی بر اساس کف‌های قیمتی قبلی
@@ -522,6 +774,33 @@ class CustomIndicators:
                 support_levels.append(low)
         
         return support_levels[-5:]  # ۵ سطح حمایتی آخر
+    
+    def identify_horizontal_resistance(self, dataframe: DataFrame, lookback: int = 200) -> list:
+        """
+        شناسایی سطوح مقاومتی افقی بر اساس سقف‌های قیمتی قبلی
+        """
+        df = dataframe.tail(lookback).copy()
+        
+        # پیدا کردن سقف‌های قیمتی
+        df['swing_high'] = (
+            (df['high'] > df['high'].shift(1)) & 
+            (df['high'] > df['high'].shift(-1)) &
+            (df['high'] > df['high'].shift(2)) & 
+            (df['high'] > df['high'].shift(-2))
+        )
+        
+        # استخراج قیمت سقف‌ها
+        swing_highs = df[df['swing_high']]['high'].tolist()
+        
+        # خوشه‌بندی سطوح نزدیک به هم
+        resistance_levels = []
+        threshold = df['close'].iloc[-1] * 0.005  # 0.5% آستانه
+        
+        for high in sorted(swing_highs, reverse=True):
+            if not resistance_levels or abs(high - resistance_levels[-1]) > threshold:
+                resistance_levels.append(high)
+        
+        return resistance_levels[-5:]  # ۵ سطح مقاومتی آخر
 
     def add_fibonacci_support(self, dataframe: DataFrame) -> DataFrame:
         """
@@ -588,7 +867,6 @@ class CustomIndicators:
         allocation = []
         
         remaining_capital = total_capital
-        risk_per_level = 0.02  # 2% ریسک در هر سطح
         
         for i, level in enumerate(levels):
             if level < current_price and remaining_capital > 0:
@@ -613,83 +891,18 @@ class CustomIndicators:
             'remaining_capital': remaining_capital
         }
     
-    def smart_entry_at_support(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        """
-        ورود هوشمند فقط در نقاط حمایتی معتبر
-        """
-        df = dataframe.copy()
-        
-        # شناسایی سطوح حمایتی
-        supports = self.identify_horizontal_support(df)
-        current_price = df['close'].iloc[-1]
-        
-        # پیدا کردن نزدیکترین حمایت
-        nearest_support = min(supports, key=lambda x: abs(x - current_price))
-        distance_to_support = (current_price - nearest_support) / current_price * 100
-        
-        # اعتبارسنجی حمایت
-        valid_support = self.validate_support_with_volume(df, nearest_support)
-        
-        # شرایط ورود در بازار خرسی
-        entry_conditions = (
-            # قیمت به حمایت نزدیک است (کمتر از 2% فاصله)
-            (abs(distance_to_support) < 2) &
-            
-            # حمایت معتبر است
-            (valid_support) &
-            
-            # اشباع فروش
-            (df['rsi_14'] < 30) &
-            
-            # واگرایی مثبت (قیمت کف پایین‌تر، RSI کف بالاتر)
-            (df['close'] < df['close'].shift(5)) &
-            (df['rsi_14'] > df['rsi_14'].shift(5)) &
-            
-            # کاهش سرعت نزول
-            (df['ema_short_slope'] > df['ema_short_slope'].shift(1))
-        )
-        
-        df.loc[entry_conditions, 'enter_long'] = 1
-        
-        # ذخیره سطح حمایت در custom data
-        if entry_conditions.iloc[-1]:
-            self.set_custom_data(f"{metadata['pair']}_support", nearest_support)
-        
-        return df
-    
-    def smart_stop_below_support(self, 
-                                pair: str, 
-                                trade, 
-                                current_rate: float) -> float:
-        """
-        قرار دادن استاپ زیر سطح حمایتی
-        """
-        support = self.get_custom_data(f"{pair}_support")
-        
-        if support is None:
-            return -0.05  # استاپ 5% پیش‌فرض
-        
-        # استاپ 2-3% زیر حمایت
-        if trade.is_short:
-            stop_price = support * 1.03  # بالای حمایت برای شورت
-        else:
-            stop_price = support * 0.97  # زیر حمایت برای لانگ
-        
-        return stop_price
-    
     # =========================================================================
-    # 7. متد جامع: اضافه کردن همه اندیکاتورها
+    # 10. متد جامع: اضافه کردن همه اندیکاتورها
     # =========================================================================
     
     def add_all_indicators(self, 
                            dataframe: DataFrame, 
-                           metadata: Dict,
+                           pair: str,
                            btc_dom_data: Optional[DataFrame] = None) -> DataFrame:
         """
         اضافه کردن همه اندیکاتورهای کریپتو به دیتافریم
         """
         df = dataframe.copy()
-        pair = metadata.get('pair', '')
         
         print(f"📊 در حال محاسبه اندیکاتورهای کریپتو برای {pair}...")
         
@@ -699,6 +912,9 @@ class CustomIndicators:
         
         print("  - محاسبه نوسان...")
         df = self.add_crypto_volatility(df, pair)
+        
+        print("  - محاسبه ATR و استاپ لول...")
+        df = self.add_atr_stop_levels(df)
         
         print("  - محاسبه فعالیت نهنگ‌ها...")
         df = self.add_whale_activity(df)
@@ -729,10 +945,27 @@ class CustomIndicators:
         print("  - محاسبه Volume Profile...")
         df = self.add_volume_profile(df)
         
-        # 5. اندیکاتورهای فاندامنتال
-        df = self.add_stablecoin_flow(df)
+        # 5. تشخیص رژیم بازار
+        print("  - تشخیص رژیم بازار...")
+        df['market_regime'] = self.detect_market_regime(df)
         
-        # 6. سیگنال‌های ترکیبی
+        # 6. حمایت و مقاومت
+        print("  - شناسایی سطوح حمایت...")
+        support_levels = self.identify_horizontal_support(df)
+        if support_levels:
+            df['nearest_support'] = support_levels[-1]
+        
+        print("  - شناسایی سطوح مقاومت...")
+        resistance_levels = self.identify_horizontal_resistance(df)
+        if resistance_levels:
+            df['nearest_resistance'] = resistance_levels[-1]
+        
+        # 7. اندیکاتورهای فاندامنتال
+        df = self.add_stablecoin_flow(df)
+        df = self.add_fibonacci_support(df)
+        df = self.add_ma_support(df)
+        
+        # 8. سیگنال‌های ترکیبی
         df = self.add_consensus_signals(df)
         
         print("✅ محاسبه اندیکاتورها کامل شد.")
@@ -777,7 +1010,7 @@ class CustomIndicators:
         return df
     
     # =========================================================================
-    # 8. متدهای کمکی
+    # 11. متدهای کمکی
     # =========================================================================
     
     def get_indicator_summary(self, dataframe: DataFrame) -> Dict:
@@ -793,8 +1026,11 @@ class CustomIndicators:
             'cvd_status': 'bullish' if last.get('cvd_slope', 0) > 0 else 'bearish',
             'momentum': last.get('composite_momentum', 0),
             'volatility': last.get('atr_pct', 0),
+            'volatility_regime': last.get('volatility_regime', 'normal'),
             'whale_activity': 'high' if last.get('whale_trade', 0) else 'normal',
             'consensus': last.get('consensus_signal', 0),
+            'market_regime': last.get('market_regime', 'neutral'),
+            'rsi': last.get('rsi_14', 50),
         }
         
         if 'market_phase' in last:
@@ -805,6 +1041,12 @@ class CustomIndicators:
         
         if 'alt_season' in last:
             summary['alt_season'] = bool(last['alt_season'])
+        
+        if 'nearest_support' in last:
+            summary['nearest_support'] = last['nearest_support']
+        
+        if 'nearest_resistance' in last:
+            summary['nearest_resistance'] = last['nearest_resistance']
         
         return summary
     
@@ -841,15 +1083,19 @@ def example_usage():
     }, index=dates)
     
     # اضافه کردن اندیکاتورها
-    df = crypto_indicators.add_cvd(df)
-    df = crypto_indicators.add_crypto_volatility(df)
-    df = crypto_indicators.add_crypto_momentum(df)
+    df = crypto_indicators.add_all_indicators(df, pair="BTC/USDT")
     
     # خلاصه وضعیت
     summary = crypto_indicators.get_indicator_summary(df)
     print("\n📈 خلاصه وضعیت بازار:")
     for key, value in summary.items():
         print(f"  {key}: {value}")
+    
+    # تشخیص رژیم بازار
+    regime = crypto_indicators.detect_market_regime(df)
+    adjustments = crypto_indicators.get_regime_adjustments(regime)
+    print(f"\n🎯 رژیم بازار: {regime}")
+    print(f"📊 تنظیمات: {adjustments}")
     
     return df, crypto_indicators
 
