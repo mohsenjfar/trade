@@ -191,9 +191,7 @@ class AtlasEngine(IStrategy):
             # 2. حجم منطقی
             (dataframe['volume_ratio'] > self.min_volume_ratio.value) &
             # 3. نوسان کنترل شده
-            (dataframe['atr_pct'] < self.max_atr_pct.value) &
-            # 4. آخر هفته نیست
-            (dataframe['%-is_weekend'] == 1)
+            (dataframe['atr_pct'] < self.max_atr_pct.value)
         )
         
         # ================ شرایط لانگ ================
