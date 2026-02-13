@@ -58,44 +58,55 @@
   "freqai": {
     "enabled": true,
     "purge_old_models": true,
-    "train_period_days": 45,
-    "backtest_period_days": 15,
-    "live_retrain_hours": 1,
-    "identifier": "atlas_engine",
+    "train_period_days": 30,
+    "backtest_period_days": 7,
+    "live_retrain_hours": 4,
+    "identifier": "atlas_vps",
+    "live_trained_timerange": "720h",
+    "auto_training_window": true,
+    "data_kitchen_thread_count": 1,
+    "optuna_hyperopt": false,
+    "fit_live_predictions_candles": 100,
+    
     "feature_parameters": {
-        "principal_component_analysis": false,
-        "use_SVM_to_remove_outliers": false,
-        "shift": 1,
-        "include_shifted_candles": 1,
-        "label_period_candles": 5,
-        "DI_threshold": 0.95,
-        "weight_factor": 0.9,
-        "indicator_periods_candles": [10, 20, 30, 50, 100, 200],
-        "include_corr_pairlist": [],
-        "include_timeframes": ["15m", "4h", "1d"]
+      "principal_component_analysis": true,
+      "n_components": 0.85,
+      "use_SVM_to_remove_outliers": false,
+      "shift": 1,
+      "include_shifted_candles": 2,
+      "label_period_candles": 40,
+      "DI_threshold": 30,
+      "weight_factor": 0.95,
+      "balance_weights": true,
+      "indicator_periods_candles": [16, 32],
+      "include_corr_pairlist": [
+        "BTC/USDT:USDT",
+        "ETH/USDT:USDT"
+      ],
+      "include_timeframes": ["15m", "1h"],
+      "shuffle_after_split": false
     },
+    
     "data_split_parameters": {
-        "test_size": 0.2,
-        "random_state": 42,
-        "shuffle": false
+      "test_size": 0.15,
+      "random_state": 42,
+      "shuffle": false
     },
+    
     "model_training_parameters": {
-        "n_estimators": 300,
-        "learning_rate": 0.05,
-        "max_depth": 5,
-        "subsample": 0.7,
-        "colsample_bytree": 0.7,
-        "min_child_weight": 5,
-        "gamma": 0.2,
-        "reg_alpha": 0.5,
-        "reg_lambda": 1.5,
-        "objective": "reg:squarederror",
-        "eval_metric": "rmse",
-        "early_stopping_rounds": 20,
-        "tree_method": "hist",
-        "verbosity": 0,
-        "n_jobs": 2,
-        "random_state": 42
+      "n_estimators": 200,
+      "learning_rate": 0.03,
+      "max_depth": 4,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8,
+      "min_child_weight": 8,
+      "gamma": 0.1,
+      "reg_alpha": 0.8,
+      "reg_lambda": 1.8,
+      "objective": "reg:squarederror",
+      "eval_metric": "rmse",
+      "early_stopping_rounds": 15,
+      "seed": 42
     }
   },
   "bot_name": "freqtrade",
