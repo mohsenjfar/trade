@@ -25,6 +25,7 @@ class AtlasEngineVPS(IStrategy):
     """
     
     # =========== تنظیمات پایه ===========
+    timeframe = "15m"
     position_adjustment_enable = False
     stoploss = -0.035  # کاهش استاپ لاس برای ریسک کمتر
     can_short = True
