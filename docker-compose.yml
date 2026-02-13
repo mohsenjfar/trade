@@ -39,6 +39,7 @@ services:
       
       # کانفیگ فقط خواندنی
       - ./user_data/config.json:/freqtrade/config.json:ro
+      - ./user_data/secrets.json:/freqtrade/secrets.json:ro
       
       # لاگ‌ها
       - ./user_data/logs:/freqtrade/user_data/logs:rw
