@@ -35,16 +35,36 @@
     "ccxt_config": {},  
     "ccxt_async_config": {},
     "pair_whitelist": [
+      "BTC/USDT:USDT",
+      "ETH/USDT:USDT",
+      "SOL/USDT:USDT",
+      "XRP/USDT:USDT",
+      "HYPE/USDT:USDT",
+      "XAUT/USDT:USDT",
+      "BERA/USDT:USDT",
+      "RIVER/USDT:USDT",
+      "PIPPIN/USDT:USDT",
+      "ME/USDT:USDT",
+      "DOGE/USDT:USDT",
+      "ZRO/USDT:USDT",
+      "1000PEPE/USDT:USDT",
+      "BTR/USDT:USDT",
+      "ASTER/USDT:USDT",
+      "MOODENG/USDT:USDT",
+      "AAVE/USDT:USDT",
+      "ADA/USDT:USDT",
+      "SUI/USDT:USDT",
+      "FARTCOIN/USDT:USDT"
     ],
     "pair_blacklist": [
     ]
   },
   "pairlists": [
     {
-      "method": "VolumePairList",
-      "number_assets": 20,
-      "sort_key": "quoteVolume",
-      "refresh_period": 1800
+      "method": "StaticPairList",
+      // "number_assets": 20,
+      // "sort_key": "quoteVolume",
+      // "refresh_period": 1800
     }
   ],
   "telegram": {
