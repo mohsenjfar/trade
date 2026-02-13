@@ -49,12 +49,11 @@ services:
     # =========== پورت‌ها ===========
     ports:
       - "8080:8080"    # API Server
-      # - "8081:8081"  # Tensorboard (غیرفعال)
     
     # =========== فرمان اجرا ===========
     command: >
       trade
-      --logfile /freqtrade/user_data/logs/freqtrade_$(date +%Y%m%d).log
+      --logfile /freqtrade/user_data/logs/freqtrade.log
       --db-url sqlite:////freqtrade/user_data/db/trades_vps.sqlite
       --config /freqtrade/config.json
       --strategy AtlasEngineVPS
