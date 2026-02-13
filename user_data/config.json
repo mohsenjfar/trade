@@ -44,7 +44,10 @@
   
   "pairlists": [
     {
-      "method": "StaticPairList"
+      "method": "VolumePairList",
+      "number_assets": 20,
+      "sort_key": "quoteVolume",
+      "refresh_period": 1800
     }
   ],
   
@@ -79,7 +82,8 @@
       "balance_weights": true,
       "indicator_periods_candles": [16, 32],
       "include_corr_pairlist": [
-        "BTC/USDT:USDT"
+        "BTC/USDT:USDT",
+        "ETH/USDT:USDT"
       ],
       "include_timeframes": ["15m", "1h"],
       "shuffle_after_split": false
