@@ -1,47 +1,44 @@
 {
-  "max_open_trades": 2,
+  "max_open_trades": 3,
   "stake_currency": "USDT",
   "stake_amount": "unlimited",
-  "tradable_balance_ratio": 0.95,
+  "tradable_balance_ratio": 0.99,
+  "fiat_display_currency": "USD",
   "dry_run": true,
-  "dry_run_wallet": 1000,
+  "dry_run_wallet": 300,
   "cancel_open_orders_on_exit": false,
   "trading_mode": "futures",
   "margin_mode": "isolated",
-  
   "unfilledtimeout": {
-    "entry": 10,
-    "exit": 10,
+    "entry": 5,
+    "exit": 5,
     "exit_timeout_count": 0,
     "unit": "minutes"
   },
-  
   "entry_pricing": {
     "price_side": "other",
     "use_order_book": true,
     "order_book_top": 1,
-    "price_last_balance": 0.0
+    "price_last_balance": 0.0,
+    "check_depth_of_market": {
+      "enabled": false,
+      "bids_to_ask_delta": 1
+    }
   },
-  
   "exit_pricing": {
     "price_side": "other",
     "use_order_book": true,
     "order_book_top": 1
   },
-  
   "exchange": {
     "name": "bybit",
-    "ccxt_config": {},
+    "ccxt_config": {},  
     "ccxt_async_config": {},
-    "key": "",
-    "secret": "",
     "pair_whitelist": [
-      "BTC/USDT:USDT",
-      "ETH/USDT:USDT"
     ],
-    "pair_blacklist": []
+    "pair_blacklist": [
+    ]
   },
-  
   "pairlists": [
     {
       "method": "VolumePairList",
@@ -50,84 +47,72 @@
       "refresh_period": 1800
     }
   ],
-  
   "telegram": {
-    "enabled": false,
-    "token": "",
-    "chat_id": ""
+    "enabled": true,
+    "keyboard": [
+        ["/status table","/reload_config"],
+        ["/forcelong","/forceshort", "/forceexit"],
+        ["/stop", "/start", "/profit", "/logs"]
+    ]
   },
-  
   "freqai": {
     "enabled": true,
     "purge_old_models": true,
-    "train_period_days": 30,
-    "backtest_period_days": 7,
-    "live_retrain_hours": 4,
-    "identifier": "atlas_vps",
-    "live_trained_timerange": "720h",
-    "auto_training_window": true,
-    "data_kitchen_thread_count": 1,
-    "optuna_hyperopt": false,
-    "fit_live_predictions_candles": 100,
-    
+    "train_period_days": 45,
+    "backtest_period_days": 15,
+    "live_retrain_hours": 1,
+    "identifier": "atlas_engine",
     "feature_parameters": {
-      "principal_component_analysis": true,
-      "n_components": 0.85,
-      "use_SVM_to_remove_outliers": false,
-      "shift": 1,
-      "include_shifted_candles": 2,
-      "label_period_candles": 40,
-      "DI_threshold": 30,
-      "weight_factor": 0.95,
-      "balance_weights": true,
-      "indicator_periods_candles": [16, 32],
-      "include_corr_pairlist": [
-        "BTC/USDT:USDT",
-        "ETH/USDT:USDT"
-      ],
-      "include_timeframes": ["15m", "1h"],
-      "shuffle_after_split": false
+        "principal_component_analysis": false,
+        "use_SVM_to_remove_outliers": false,
+        "shift": 1,
+        "include_shifted_candles": 1,
+        "label_period_candles": 5,
+        "DI_threshold": 0.95,
+        "weight_factor": 0.9,
+        "indicator_periods_candles": [10, 20, 30, 50, 100, 200],
+        "include_corr_pairlist": [],
+        "include_timeframes": ["15m", "4h", "1d"]
     },
-    
     "data_split_parameters": {
-      "test_size": 0.15,
-      "random_state": 42,
-      "shuffle": false
+        "test_size": 0.2,
+        "random_state": 42,
+        "shuffle": false
     },
-    
     "model_training_parameters": {
-      "n_estimators": 200,
-      "learning_rate": 0.03,
-      "max_depth": 4,
-      "subsample": 0.8,
-      "colsample_bytree": 0.8,
-      "min_child_weight": 8,
-      "gamma": 0.1,
-      "reg_alpha": 0.8,
-      "reg_lambda": 1.8,
-      "objective": "reg:squarederror",
-      "eval_metric": "rmse",
-      "early_stopping_rounds": 15,
-      "seed": 42
+        "n_estimators": 300,
+        "learning_rate": 0.05,
+        "max_depth": 5,
+        "subsample": 0.7,
+        "colsample_bytree": 0.7,
+        "min_child_weight": 5,
+        "gamma": 0.2,
+        "reg_alpha": 0.5,
+        "reg_lambda": 1.5,
+        "objective": "reg:squarederror",
+        "eval_metric": "rmse",
+        "early_stopping_rounds": 20,
+        "tree_method": "hist",
+        "verbosity": 0,
+        "n_jobs": 2,
+        "random_state": 42
     }
   },
-  
-  "bot_name": "freqtrade-vps",
+  "bot_name": "freqtrade",
   "initial_state": "running",
-  "force_entry_enable": false,
+  "force_entry_enable": true,
   "internals": {
     "process_throttle_secs": 5
   },
-  
   "api_server": {
-    "enabled": false,
-    "listen_ip_address": "127.0.0.1",
+    "enabled": true,
+    "listen_ip_address": "0.0.0.0",
     "listen_port": 8080,
     "verbosity": "error",
     "enable_openapi": false,
-    "jwt_secret_key": "",
-    "CORS_origins": [],
-    "username": "",
-    "password": ""
-  }
+    "CORS_origins": []
+  },
+  "add_config_files": [
+    "secrets.json"
+  ]
 }
