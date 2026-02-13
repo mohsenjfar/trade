@@ -1,20 +1,85 @@
 ---
-version: '3'
+version: '3.8'
+
 services:
-  atlas_engine:
-      image: freqtradeorg/freqtrade:stable_freqai
-      restart: unless-stopped
-      container_name: AtlasEngine
-      volumes:
-        - "./user_data:/freqtrade/user_data"
-      environment:
-        - PYTHONPATH=/freqtrade
-      ports:
-        - "8080:8080"
-      command: >
-        trade
-        --logfile /freqtrade/user_data/logs/atlas_engine.log
-        --db-url sqlite:////freqtrade/user_data/atlas_engine.sqlite
-        --config /freqtrade/user_data/config.json
-        --strategy AtlasEngine
-        --freqaimodel XGBoostRegressor
+  freqtrade_vps:
+    image: freqtradeorg/freqtrade:develop_freqai
+    container_name: freqtrade_atlas_vps
+    restart: unless-stopped
+    
+    # =========== محدودیت منابع برای VPS 4GB ===========
+    deploy:
+      resources:
+        limits:
+          memory: 3.5G
+          cpus: '3.5'
+        reservations:
+          memory: 2G
+          cpus: '2.0'
+    
+    # =========== تنظیمات حافظه و پردازش ===========
+    environment:
+      - PYTHONPATH=/freqtrade
+      - PYTHONUNBUFFERED=1
+      
+      # محدودیت تردهای OpenMP و MKL (حیاتی برای XGBoost)
+      - OMP_NUM_THREADS=2
+      - MKL_NUM_THREADS=2
+      - OPENBLAS_NUM_THREADS=2
+      
+      # تنظیمات حافظه
+      - FREQTRADE__LOGLEVEL=INFO
+      - FREQTRADE__MAX_OPEN_TRADES=2
+      - FREQTRADE__DRY_RUN_WALLET=1000
+    
+    # =========== حجم‌های داده (Data Volumes) ===========
+    volumes:
+      # دیتای اصلی و مدل‌ها (حیاتی برای پایداری)
+      - ./user_data:/freqtrade/user_data:rw
+      
+      # کانفیگ فقط خواندنی
+      - ./user_data/config.json:/freqtrade/config.json:ro
+      
+      # لاگ‌ها
+      - ./user_data/logs:/freqtrade/user_data/logs:rw
+      
+      # دیتابیس
+      - ./user_data/db:/freqtrade/user_data/db:rw
+    
+    # =========== پورت‌ها ===========
+    ports:
+      - "8080:8080"    # API Server
+      # - "8081:8081"  # Tensorboard (غیرفعال)
+    
+    # =========== فرمان اجرا ===========
+    command: >
+      trade
+      --logfile /freqtrade/user_data/logs/freqtrade_$(date +%Y%m%d).log
+      --db-url sqlite:////freqtrade/user_data/db/trades_vps.sqlite
+      --config /freqtrade/config.json
+      --strategy AtlasEngineVPS
+      --freqaimodel XGBVPS
+    
+    # =========== سلامت سنجی ===========
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/v1/ping"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    
+    # =========== شبکه ===========
+    networks:
+      - freqtrade_net
+    
+    # =========== لاگینگ ===========
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+# =========== شبکه ===========
+networks:
+  freqtrade_net:
+    driver: bridge
