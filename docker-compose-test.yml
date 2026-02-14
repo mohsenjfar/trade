@@ -1,0 +1,27 @@
+version: '3'
+services:
+  freqtrade:
+    image: freqtradeorg/freqtrade:stable
+    container_name: freqtrade-adaptive
+    restart: unless-stopped
+    volumes:
+      - "./user_data:/freqtrade/user_data"
+    ports:
+      - "127.0.0.1:8080:8080"  # برای دسترسی به FreqUI
+    environment:
+      - TZ=Asia/Tehran  # یا منطقه زمانی خودت
+    command: >
+      trade
+      --strategy AdaptiveEntropySimpleStrategy
+      --config /freqtrade/user_data/config_test.json
+      --db-url sqlite:////freqtrade/user_data/tradesv3.sqlite
+
+  # برای پلات (اختیاری)
+  freqtrade-plot:
+    image: freqtradeorg/freqtrade:develop_plot
+    container_name: freqtrade-plot
+    profiles:
+      - plot
+    volumes:
+      - "./user_data:/freqtrade/user_data"
+    command: list-strategies  # این فقط برای حفظ ساختار، موقع استفاده override می‌کنیم

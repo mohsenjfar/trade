@@ -215,7 +215,7 @@ class AtlasEngineVPS(IStrategy):
             df["do_predict"] == 1,
             df["DI_catch"] == 1,
             df["&s-extrema"] < df["minima_sort_threshold"],
-            df['&-s_max'] >= 1.5  # حداقل سود مورد انتظار ۱.۵%
+            df['&-s_max'] >= 1.5
         ]
         
         df.loc[
@@ -228,7 +228,7 @@ class AtlasEngineVPS(IStrategy):
             df["do_predict"] == 1,
             df["DI_catch"] == 1,
             df["&s-extrema"] > df["maxima_sort_threshold"],
-            abs(df['&-s_min']) >= 1.5  # حداقل سود مورد انتظار ۱.۵%
+            abs(df['&-s_min']) >= 1.5
         ]
         
         df.loc[
