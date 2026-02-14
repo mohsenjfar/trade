@@ -21,13 +21,12 @@ NC='\033[0m' # No Color
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 USER_DATA_DIR="${SCRIPT_DIR}/user_data"
 STRATEGY_NAME="AdaptiveEntropySimpleStrategy"
-CONFIG_FILE="${USER_DATA_DIR}/config_test.json"
+CONFIG_FILE="config_test.json"
 DOCKER_COMPOSE_FILE="docker-compose.yml"
 RESULTS_DIR="${USER_DATA_DIR}/backtest_results"
 LOG_FILE="${USER_DATA_DIR}/logs/backtest_$(date +%Y%m%d_%H%M%S).log"
 
 # Create only log directory (other directories already exist)
-mkdir -p "${USER_DATA_DIR}/logs"
 mkdir -p "${RESULTS_DIR}"
 
 # ============================================
