@@ -266,9 +266,9 @@ create_sample_config() {
             "enableRateLimit": true
         },
         "pair_whitelist": [
-            "BTC/USDT",
-            "ETH/USDT",
-            "BNB/USDT"
+            "BTC/USDT:USDT",
+            "ETH/USDT:USDT",
+            "BNB/USDT:USDT"
         ]
     },
     "pairlists": [
@@ -300,7 +300,7 @@ run_download_data() {
         log "INFO" "Downloading ${pair}..."
         
         $DOCKER_COMPOSE run --rm freqtrade download-data \
-            --exchange binance \
+            --exchange bybit \
             -t "$timeframe" \
             -p "$pair" \
             --days "$days" \
@@ -324,7 +324,7 @@ run_backtest() {
     
     $DOCKER_COMPOSE run --rm freqtrade backtesting \
         --strategy "$STRATEGY_NAME" \
-        --config "/freqtrade/user_data/../${CONFIG_FILE}" \
+        --config "/freqtrade/user_data/${CONFIG_FILE}" \
         --timerange "$timerange" \
         --timeframe "$timeframe" \
         --pairs "$pairs" \
@@ -355,7 +355,7 @@ run_hyperopt() {
     
     $DOCKER_COMPOSE run --rm freqtrade hyperopt \
         --strategy "$STRATEGY_NAME" \
-        --config "/freqtrade/user_data/../${CONFIG_FILE}" \
+        --config "/freqtrade/user_data/${CONFIG_FILE}" \
         --hyperopt-loss "$loss_function" \
         --epochs "$epochs" \
         --timerange "$timerange" \
@@ -541,9 +541,9 @@ main() {
     check_config
     
     # Default settings
-    DEFAULT_PAIRS="BTC/USDT,ETH/USDT"
+    DEFAULT_PAIRS="BTC/USDT:USDT,ETH/USDT:USDT"
     DEFAULT_TIMEFRAME="1h"
-    DEFAULT_TIMERANGE="20240101-"
+    DEFAULT_TIMERANGE="20250101-"
     
     while true; do
         show_menu
