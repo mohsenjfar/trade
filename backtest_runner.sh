@@ -229,7 +229,7 @@ EOF
 check_config() {
     log "STEP" "Checking configuration file..."
     
-    if [ ! -f "${SCRIPT_DIR}/${CONFIG_FILE}" ]; then
+    if [ ! -f "${USER_DATA_DIR}/${CONFIG_FILE}" ]; then
         log "WARN" "Configuration file ${CONFIG_FILE} not found."
         
         echo -e "\n${YELLOW}Do you want to create a sample config file? (y/n)${NC}"
@@ -248,7 +248,7 @@ check_config() {
 create_sample_config() {
     log "INFO" "Creating sample configuration file..."
     
-    cat > "${SCRIPT_DIR}/${CONFIG_FILE}" << EOF
+    cat > "${USER_DATA_DIR}/${CONFIG_FILE}" << EOF
 {
     "max_open_trades": 3,
     "stake_currency": "USDT",
