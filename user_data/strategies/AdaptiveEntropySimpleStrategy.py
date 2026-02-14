@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 from freqtrade.strategy import IStrategy, IntParameter
 from pandas import DataFrame
+import talib.abstract as ta
 
 class AdaptiveEntropySimpleStrategy(IStrategy):
     """
