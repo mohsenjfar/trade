@@ -296,20 +296,18 @@ run_download_data() {
     # Convert comma-separated string to array
     IFS=',' read -ra PAIR_ARRAY <<< "$pairs"
     
-    for pair in "${PAIR_ARRAY[@]}"; do
-        log "INFO" "Downloading ${pair}..."
+    log "INFO" "Downloading ${pair}..."
         
-        $DOCKER_COMPOSE run --rm freqtrade download-data \
-            --exchange bybit \
-            -t "$timeframe" \
-            -p "$pair" \
-            --days "$days" \
-            --userdir /freqtrade/user_data
-        
-        if [ $? -ne 0 ]; then
-            log "WARN" "Error downloading ${pair}, continuing..."
-        fi
-    done
+    $DOCKER_COMPOSE run --rm freqtrade download-data \
+        --exchange bybit \
+        -t "$timeframe" \
+        -p "$pairs" \
+        --days "$days" \
+        --userdir /freqtrade/user_data
+    
+    if [ $? -ne 0 ]; then
+        log "WARN" "Error downloading ${pairs}, continuing..."
+    fi
     
     log "INFO" "Data download completed successfully ✓"
 }
