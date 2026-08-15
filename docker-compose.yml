@@ -5,6 +5,8 @@ services:
       image: freqtradeorg/freqtrade:develop_freqai
       restart: unless-stopped
       container_name: Trader
+      env_file:
+        - .env
       dns:
         - 8.8.8.8
         - 1.1.1.1

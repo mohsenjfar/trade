@@ -7,3 +7,7 @@ backtest_results
 models
 hyperopt_results
 *.csv
+secrets*.json
+**/secrets*.json
+*.key
+**/*.key
